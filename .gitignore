@@ -1,0 +1,15 @@
+# MkDocs build output
+/site/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

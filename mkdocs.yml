@@ -1,0 +1,145 @@
+site_name: Agentic Engineering
+site_url: https://agentic-engineering.work/
+site_description: >-
+  An honest, curated reference on building with agents. Every claim is labelled
+  by how grounded it is. The recurring question: who makes the decision, the
+  model or your code?
+site_author: Abhiram Dwivedi
+copyright: >-
+  Prose CC-BY (final terms TBD) · Code MIT/Apache-2.0 · A crowd-sourced,
+  maintainer-curated reference.
+
+repo_name: AbhiramDwivedi/agentic-engineering
+repo_url: https://github.com/AbhiramDwivedi/agentic-engineering
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - navigation.footer
+    - toc.follow
+    - content.tabs.link
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - md_in_html
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets:
+      check_paths: true
+      base_path:
+        - .
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Start Here:
+      - The Litmus Test: about/litmus-test.md
+      - How We Label: about/how-we-label.md
+      - How to Read This: about/how-to-read.md
+  - Part I — Foundations:
+      - foundations/index.md
+      - "1.1 It's Still Engineering": foundations/its-still-engineering.md
+      - "1.2 Who Decides?": foundations/who-decides.md
+      - "1.3 Workflow or Agent?": foundations/workflow-or-agent.md
+      - "1.4 The Augmented LLM": foundations/the-augmented-llm.md
+      - "1.5 Context Engineering": foundations/context-engineering.md
+      - "1.6 Do You Even Need a Framework?": foundations/do-you-need-a-framework.md
+  - Part II — The Unit:
+      - the-unit/index.md
+      - "2.1 Giving the Model Hands": the-unit/tool-use.md
+      - "2.2 The Machine-Checkable Contract": the-unit/structured-output.md
+      - "2.3 Skills & MCP": the-unit/skills-and-mcp.md
+  - Part III — Composition:
+      - composition/index.md
+      - "3.1 Why Not One Big Prompt": composition/prompt-chaining.md
+      - "3.2 The Router That Isn't One": composition/the-router-that-isnt.md
+      - "3.3 Fan-Out": composition/fan-out.md
+      - "3.4 Grading Its Own Homework": composition/evaluator-optimizer.md
+      - "3.5 The Specialist Panel": composition/specialist-panel.md
+  - Part IV — The Craft of Control:
+      - craft/index.md
+      - "4.1 Prompts Are Source Code": craft/prompts-are-source-code.md
+      - "4.2 Proving It Works": craft/proving-it-works.md
+      - "4.3 Knowing When to Ask (planned)": craft/human-in-the-loop.md
+      - "4.4 Guardrails & Safety (planned)": craft/guardrails-and-safety.md
+  - Part V — Knowledge & Memory:
+      - knowledge/index.md
+      - "5.1 State, Not Memory": knowledge/state-not-memory.md
+      - "5.2 Retrieval Done Honestly (planned)": knowledge/retrieval-rag.md
+      - "5.3 Real Memory (planned)": knowledge/real-memory.md
+      - "5.4 Compaction & the Window (planned)": knowledge/compaction-and-the-window.md
+  - Part VI — The I/O Boundary:
+      - io-boundary/index.md
+      - "6.1 Getting the Mess In (planned)": io-boundary/getting-the-mess-in.md
+      - "6.2 Producing the Deliverable (planned)": io-boundary/producing-the-deliverable.md
+  - Part VII — Reliability:
+      - reliability/index.md
+      - "7.1 Which Failures Sink the Ship (planned)": reliability/which-failures-sink-the-ship.md
+      - "7.2 A Silent Failure Is Worse (planned)": reliability/a-silent-failure-is-worse.md
+      - "7.3 Stopping Gracefully (planned)": reliability/stopping-gracefully.md
+  - Part VIII — Operating in Production:
+      - production/index.md
+      - "8.1 Seeing Inside (planned)": production/seeing-inside.md
+      - "8.2 Which Model? (planned)": production/which-model.md
+      - "8.3 To Train or to Prompt (planned)": production/train-or-prompt.md
+      - "8.4 Controlling Cost (planned)": production/controlling-cost.md
+      - "8.5 Locks, PII & Identity (planned)": production/locks-pii-identity.md
+      - "8.6 Governance & Compliance (planned)": production/governance-and-compliance.md
+  - Part IX — The Frontier:
+      - frontier/index.md
+      - "9.1 When You Actually Want Autonomy (planned)": frontier/when-you-want-autonomy.md
+      - "9.2 More Than One Agent (planned)": frontier/more-than-one-agent.md
+      - "9.3 The Protocol Landscape (planned)": frontier/protocol-landscape.md
+      - "9.4 Sandboxing (planned)": frontier/sandboxing.md
+  - Catalogs & Appendices:
+      - "A. The Anti-Patterns Catalog": catalogs/anti-patterns.md
+      - "B. Pattern Quick-Reference": catalogs/quick-reference.md
+      - "C. Decision Frameworks (planned)": catalogs/decision-frameworks.md
+      - "D. State of Play 2026 (planned)": catalogs/state-of-play.md
+      - "E. Glossary (planned)": catalogs/glossary.md
+  - Contributing: contributing.md

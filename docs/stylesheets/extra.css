@@ -1,0 +1,76 @@
+/*
+ * Trust model styling — deliberately quiet (Fowler-style, NOT a Tech Radar).
+ *
+ * 1. The maturity verdict + metadata is a small muted line under the title
+ *    (.chapter-meta), never a coloured ring or badge dashboard.
+ * 2. "From production:" and "In the companion repo:" are the only coloured
+ *    callouts — first-hand experience, layered on top of researched coverage.
+ */
+
+/* --- Chapter metadata line (maturity · who-decides · grounding) ---------- */
+.chapter-meta {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--md-default-fg-color--light);
+  border-left: 2px solid var(--md-default-fg-color--lightest);
+  padding: 0.1rem 0 0.1rem 0.8rem;
+  margin: 0 0 1.2rem 0;
+}
+.chapter-meta .maturity { font-weight: 700; }
+
+/* A quiet inline maturity tag, when one is wanted in running prose. */
+.maturity-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.05rem 0.35rem;
+  border-radius: 0.2rem;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+.maturity-tag.standard    { color: #2e7d32; }
+.maturity-tag.established { color: #1565c0; }
+.maturity-tag.emerging    { color: #f9a825; }
+.maturity-tag.contested   { color: #c62828; }
+
+/* --- "From production:" callout ------------------------------------------ */
+.md-typeset .admonition.production,
+.md-typeset details.production {
+  border-color: #2e7d32;
+}
+.md-typeset .production > .admonition-title,
+.md-typeset .production > summary {
+  background-color: rgba(46, 125, 50, 0.1);
+}
+.md-typeset .production > .admonition-title::before,
+.md-typeset .production > summary::before {
+  background-color: #2e7d32;
+  -webkit-mask-image: var(--md-admonition-icon--production);
+          mask-image: var(--md-admonition-icon--production);
+}
+
+/* --- "In the companion repo:" callout ------------------------------------ */
+.md-typeset .admonition.inrepo,
+.md-typeset details.inrepo {
+  border-color: #1565c0;
+}
+.md-typeset .inrepo > .admonition-title,
+.md-typeset .inrepo > summary {
+  background-color: rgba(21, 101, 192, 0.1);
+}
+.md-typeset .inrepo > .admonition-title::before,
+.md-typeset .inrepo > summary::before {
+  background-color: #1565c0;
+  -webkit-mask-image: var(--md-admonition-icon--inrepo);
+          mask-image: var(--md-admonition-icon--inrepo);
+}
+
+:root {
+  --md-admonition-icon--production: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2 1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2v-2zm0-6h2v4h-2v-4z"/></svg>');
+  --md-admonition-icon--inrepo:     url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>');
+}
+
+/* "Planned" nav items render slightly muted so the full map is visible
+   without implying every chapter is written yet. */
+.md-nav__item .md-nav__link[href*="#planned"] { opacity: 0.6; }
