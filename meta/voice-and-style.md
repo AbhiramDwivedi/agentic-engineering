@@ -45,7 +45,7 @@ A draft fails if it shows these. The prose-critic agent flags each by line.
 - **Hedge with no verdict.** "There are trade-offs to consider" and then no recommendation.
 - **List-itis.** Bullets doing the work that argued prose should do.
 - **Restatement.** The intro, body, and conclusion saying the same thing. Low information density.
-- **Generic example.** "Imagine an online store" instead of the heater in Listing Studio.
+- **Generic example.** "Imagine an online store" instead of the standing desk in Listing Studio.
 - **False balance.** Every option presented as equally good. A reference weights; it recommends.
 - **No throughline.** Sections that do not build on each other toward the chapter's point.
 - **Surface tells.** See the list below.

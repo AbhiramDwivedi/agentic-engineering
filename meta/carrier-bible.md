@@ -16,7 +16,7 @@
 
 ## 1. The company
 
-**Stockwell** *(provisional name — see Open choices)* is a commerce platform. Mid-market
+**Stockwell** is a commerce platform. Mid-market
 merchants run their online storefronts on it: catalog, pricing, content, fulfilment hooks. It is
 a SaaS product, multi-tenant, the kind of company with a few hundred engineers and real revenue,
 not a hyperscaler and not a two-person startup. That scale is deliberate. It is the scale where
@@ -48,8 +48,8 @@ and prose):
 | `supplier_sku` | string | the supplier's identifier; the join key on the raw feed |
 | `gtin` | string? | barcode; often missing or malformed in the feed |
 | `title` | string | merchandised product title |
-| `attributes` | map | typed key-values: `wattage`, `coverage_sqft`, `color`, ... |
-| `category_path` | string | e.g. `home/heating-cooling/space-heaters` |
+| `attributes` | map | typed key-values: `height_range_in`, `weight_capacity_lbs`, `desktop_size_in`, `color`, ... |
+| `category_path` | string | e.g. `office/desks/standing-desks` |
 | `copy` | object | the written product page: `description`, `bullets[]` |
 | `content_blocks` | list | page sections: hero, specs, FAQ, comparison |
 | `price_cents` | int | the listed price |
@@ -88,21 +88,26 @@ The **front door** that maps the *Generate listing* event to this graph is the d
 
 ## 4. The hero example
 
-Reuse one product across chapters so the reader builds familiarity. *(Provisional — see Open
-choices.)*
+Reuse one product across chapters so the reader builds familiarity.
 
-**The Aldsworth 1500W ceramic tower heater**, from supplier *Northvale Home*. It is a good
-teaching object because it exercises everything at once:
+**The Aldsworth dual-motor sit-stand desk**, from supplier *Northvale Furnishings*. It is a good
+teaching object because it exercises everything at once and is mundane enough not to distract:
 
-- **Attributes** that matter and are often missing: `wattage` (1500), `coverage_sqft` (~150),
-  `oscillating` (true), `color`.
-- **Compliance** with teeth: `safety_claims` (tip-over cutoff, overheat protection), a Prop 65
-  warning, and `map_enforced` pricing. Get a claim wrong and it is a recall, not a typo.
-- **Pricing** nuance: a minimum advertised price the model must not undercut.
-- **Images**: a hero shot, a lifestyle shot, and a spec sheet to read.
+- **Attributes** that matter and are often missing or messy in the feed: `height_range_in`
+  (25–50), `desktop_size_in` (60×30), `weight_capacity_lbs` (250), `motor` (dual), `presets` (4),
+  `color` (walnut / white / black).
+- **Compliance** with real teeth, even for furniture: a BIFMA stability/durability claim, a
+  `weight_capacity_lbs` rating you must not overstate (a wrong number is a liability and a returns
+  wave), pinch-point warnings, and a Prop 65 warning (formaldehyde in the MDF top). Plus
+  `map_enforced` pricing, which is near-universal in this category.
+- **Pricing** nuance: a minimum advertised price the model must not undercut, and margin rules.
+- **Logistics**: assembly required, bulky/oversized shipping. These shape the copy and the price.
+- **Images**: a hero shot, a lifestyle shot (a real office), and a spec sheet with the dimension
+  diagram to read.
 
 When a chapter needs a second product (to show variety), use **a kids' bunk bed** from the same
-supplier (compliance-heavy, assembly instructions, bulky-shipping pricing).
+supplier: compliance-heavy in a different way (entrapment and guardrail rules), assembly-
+intensive, bulky-shipping.
 
 ---
 
@@ -158,10 +163,10 @@ They reason independently, then a reconcile step merges them.
 
 ---
 
-## Open choices (need your sign-off)
+## Settled choices
 
-1. **Company name:** *Stockwell* is provisional. Alternatives: Meridian, Tidewell, Keystone.
-2. **Hero product:** the *Aldsworth ceramic tower heater*. It was chosen for the compliance +
-   pricing + attributes + images mix. Happy to swap the product if a different category teaches
-   better (a standing desk, a car seat, a blender).
-3. **Persona first names:** Maya / Devon are placeholders for warmth without identifying anyone.
+1. **Company name:** **Stockwell** (decided 2026-06-03).
+2. **Hero product:** the **Aldsworth dual-motor sit-stand desk** from Northvale Furnishings
+   (decided 2026-06-03). Secondary product for variety: a kids' bunk bed.
+3. **Persona first names:** Maya (merchandiser) / Devon (Stockwell platform engineer) are
+   placeholders for warmth without identifying anyone. Change freely if better ones come up.
