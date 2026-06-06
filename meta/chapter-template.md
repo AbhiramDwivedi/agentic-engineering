@@ -10,7 +10,7 @@
 
 <!-- HEAD: the scan. A reader who reads only this knows what it is and whether they need it. -->
 <div class="chapter-meta" markdown>
-**Maturity: <Standard|Established|Emerging|Contested|n/a>** — <half-sentence justification> · *Who decides:* <the model | your code | a feature | n/a> · *Grounding:* <production | companion repo | research | reasoned>
+**Maturity: <Standard|Established|Emerging|Contested|n/a>** (<half-sentence justification>) · *Who decides:* <the model | your code | a feature | n/a> · *Grounding:* <production | companion repo | research | reasoned>
 <!-- add for fast-moving topics:  · *Last reviewed:* YYYY-MM -->
 </div>
 
