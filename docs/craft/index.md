@@ -1,4 +1,4 @@
-# Part IV — The Craft of Control
+# Part IV: The Craft of Control
 
 Engineering non-deterministic behaviour: managing prompts like source code, proving the system works, knowing when to ask a human, and guardrails. Eval is pulled forward on purpose.
 

@@ -1,4 +1,4 @@
-# Part VI — The I/O Boundary
+# Part VI: The I/O Boundary
 
 Messy reality in, polished artifacts out: ingestion and multimodal input, and assembling many model outputs into one deliverable.
 

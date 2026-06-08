@@ -1,6 +1,6 @@
-# Part VII — Reliability
+# Part VII: Reliability
 
-The demo-to-system gap — mostly 'just engineering': which failures actually sink the ship, the enforced observer rule, and stopping gracefully.
+The demo-to-system gap, mostly 'just engineering': which failures actually sink the ship, the enforced observer rule, and stopping gracefully.
 
 ## In this part
 

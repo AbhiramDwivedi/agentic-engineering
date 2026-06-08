@@ -1,4 +1,4 @@
-# Part V — Knowledge & Memory
+# Part V: Knowledge & Memory
 
 How the system knows things: the state-vs-memory distinction, retrieval, real memory, and living within the context window.
 

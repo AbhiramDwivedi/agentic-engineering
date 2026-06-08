@@ -11,7 +11,7 @@ The system has five layers.
 
 The fixed chapter flow: **HEAD → Why → What → How → Gotchas → Foot**. Why comes first; the head
 carries the one-line definition. Start every chapter from [`chapter-template.md`](chapter-template.md).
-Parts and numbering: Part I–IX (roman), chapters `N.M`. Later chapters render muted ("planned") in
+Parts and numbering: Part I-IX (roman), chapters `N.M`. Later chapters render muted ("planned") in
 the nav so the full map is visible without implying it is all written.
 
 ## 2. Components
@@ -20,8 +20,8 @@ The named, reusable blocks. Use them as defined; do not invent variants.
 
 | Component | Markdown | Job |
 |---|---|---|
-| Verdict line | `<div class="chapter-meta" markdown>` | maturity · who-decides · grounding · last-reviewed |
-| Maturity verdict | prose, one line | Standard / Established / Emerging / Contested. Never a radar. |
+| Lens line | `<div class="chapter-meta" markdown>` | maturity · who-decides · grounding · last-reviewed |
+| Maturity lens | prose, one line | Standard / Established / Emerging / Contested. Never a radar. |
 | From production | `!!! production` | a first-hand scar. Only if true. |
 | In the companion repo | `!!! inrepo` | demonstrated, not shipped |
 | In Listing Studio | `!!! example "In Listing Studio"` | the carrier instance |
@@ -44,8 +44,8 @@ point. If it starts to look like a technology radar, it is wrong.
 ## 5. Taxonomy and evidence
 
 Defined once, linked everywhere:
-- **Litmus verdict** (classification): the model decides / your code decides / a feature / a draw.
-- **Maturity verdict** (trust): Standard / Established / Emerging / Contested.
+- **Litmus test** (classification): the model decides / your code decides / a feature / a draw.
+- **Maturity lens** (trust): Standard / Established / Emerging / Contested.
 - **Grounding** (evidence): production / companion repo / research / reasoned.
 - **The carrier**: all specifics come from [`carrier-bible.md`](carrier-bible.md). Numbers come
   from the code, never invented.
@@ -55,10 +55,10 @@ Defined once, linked everywhere:
 How a chapter is actually made, in order:
 
 1. **Research** (agent fan-out) → a cited evidence pack; unsupported claims flagged.
-2. **Interview the author** (informed by the research) → stance, the verdict, the war stories.
+2. **Interview the author** (informed by the research) → stance, the call, the war stories.
 3. **Build and run the companion example** for any chapter that shows code → real artifacts.
-4. **Draft** in the reference register, anchored on 1–3.
-5. **Adversarial QA panel** (independent agents): fact-checker, skeptic on the verdicts,
+4. **Draft** in the reference register, anchored on 1-3.
+5. **Adversarial QA panel** (independent agents): fact-checker, skeptic on the lenses,
    confidentiality scrubber, code-drift checker, prose-critic against the voice spec.
 6. **Revise**, cutting hard.
 7. **Author read** (taste gate): boring dies, overclaims get pulled.

@@ -18,11 +18,11 @@ it. Do not try to make a reference chapter sing. Make it true, clear, and commit
 
 ## The rules
 
-1. **Lead with the claim, then the evidence.** Never bury the verdict under throat-clearing.
+1. **Lead with the claim, then the evidence.** Never bury the point under throat-clearing.
 2. **A concrete instance within two sentences of any abstraction.** Every general claim lands on a
    specific: a Listing Studio field, a real number, a named failure. No claim travels alone.
 3. **Commit.** State a position. "It depends" is only allowed if you immediately say *on what*, and
-   then pick. The maturity and litmus verdicts are mandatory commitments.
+   then pick. The maturity lens and litmus test are mandatory commitments.
 4. **Hedge once, plainly, or not at all.** Honest uncertainty is good: "I don't know whether X;
    here is what we know." Reflexive hedging on every sentence is the enemy.
 5. **Prose for argument, bullets for enumerations.** If a list is making an argument, it should be
@@ -42,7 +42,7 @@ it. Do not try to make a reference chapter sing. Make it true, clear, and commit
 A draft fails if it shows these. The prose-critic agent flags each by line.
 
 - **Abstraction with no instance.** A general claim with no concrete anchor nearby.
-- **Hedge with no verdict.** "There are trade-offs to consider" and then no recommendation.
+- **Hedge with no recommendation.** "There are trade-offs to consider" and then no recommendation.
 - **List-itis.** Bullets doing the work that argued prose should do.
 - **Restatement.** The intro, body, and conclusion saying the same thing. Low information density.
 - **Generic example.** "Imagine an online store" instead of the standing desk in Listing Studio.

@@ -21,7 +21,7 @@ we've always used, with a model now sitting in one of the slots.**
 
 So, for any pattern in your system, ask one question:
 
-> **Who makes the decision — the model, or your code?**
+> **Who makes the decision: the model, or your code?**
 
 **If the model makes the call, it's genuinely new.** It decides to reach for a tool. It judges
 whether its own draft is good enough and loops if not. It reads a list and decides how many
@@ -39,12 +39,12 @@ Sort a realistic pattern set this way and the result is humbling.
 | The model decides (new) | Your code decides (engineering you knew) | A feature, or a coined name |
 |---|---|---|
 | Tool use | Dispatch / front controller | Structured output |
-| Evaluator–optimizer | Retry with backoff | Two-pass generation |
-| Orchestrator–workers | Graceful degradation | The humanizer pass |
+| Evaluator-optimizer | Retry with backoff | Two-pass generation |
+| Orchestrator-workers | Graceful degradation | The humanizer pass |
 | Specialist-hat panel | The observer rule | |
 
 And one honest draw: **prompt chaining**. Your code controls the order, so by the test it's just
-a pipeline — an old idea. But you split the work up *because one model call couldn't hold the
+a pipeline, an old idea. But you split the work up *because one model call couldn't hold the
 whole task reliably*. An old structure, used for a new reason.
 
 That gap is the point of this reference. Not which patterns you used. **Which ones the model
@@ -52,7 +52,7 @@ actually changed.**
 
 ## Why this matters beyond pedantry
 
-Mislabelling a dictionary as "intelligent routing" isn't just imprecise — it sets the wrong
+Mislabelling a dictionary as "intelligent routing" isn't just imprecise. It sets the wrong
 expectations for cost, failure modes, and testing. A dispatch table is deterministic and you
 test it like any branch. A model making the routing call is non-deterministic and needs evals.
 Calling them the same thing hides exactly the risk a technical leader needs to see.

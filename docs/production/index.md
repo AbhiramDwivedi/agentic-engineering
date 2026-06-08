@@ -1,6 +1,6 @@
-# Part VIII — Operating in Production
+# Part VIII: Operating in Production
 
-The operator's part — thinner ground truth, more weather: observability, model selection, train-vs-prompt, cost, identity/security, and governance.
+The operator's part, thinner ground truth, more weather: observability, model selection, train-vs-prompt, cost, identity/security, and governance.
 
 ## In this part
 

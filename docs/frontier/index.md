@@ -1,4 +1,4 @@
-# Part IX — The Frontier
+# Part IX: The Frontier
 
 The least-settled edge, explicitly dated: real autonomy, multi-agent systems, the protocol landscape, and sandboxing.
 

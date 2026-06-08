@@ -1,11 +1,11 @@
 # Pattern Quick-Reference
 
-> **The decision it resolves:** at a glance, what is each pattern — and should you trust it?
+> **The decision it resolves:** at a glance, what is each pattern, and should you trust it?
 
-One row per pattern: its litmus verdict (new, or engineering you already knew?) and its maturity
-verdict (standard, or hype?). Click through for the full chapter.
+One row per pattern: its litmus test (new, or engineering you already knew?) and its maturity
+lens (standard, or hype?). Click through for the full chapter.
 
-!!! note "Stub — rows fill in and link up as chapters land."
+!!! note "Stub: rows fill in and link up as chapters land."
 
 | Pattern | Who decides | Maturity |
 |---|---|---|
@@ -20,5 +20,5 @@ verdict (standard, or hype?). Click through for the full chapter.
 | [The observer rule](../reliability/a-silent-failure-is-worse.md) | your code | Standard |
 | [Multi-agent](../frontier/more-than-one-agent.md) | the model | Contested |
 
-The pattern is only the vocabulary. The judgement of which one a given step actually needs — and
-the honesty to admit when the real answer is "this is just a retry loop" — is the job.
+The pattern is only the vocabulary. The judgement of which one a given step actually needs, and
+the honesty to admit when the real answer is "this is just a retry loop", is the job.

@@ -1,6 +1,6 @@
-# Part I — Foundations
+# Part I: Foundations
 
-The pure, durable core — read these first. What agentic engineering is, the litmus test applied to everything later, where your system sits on the workflow-to-agent spectrum, the augmented LLM as the base unit, context engineering, and the build-vs-buy question.
+The pure, durable core, read these first. What agentic engineering is, the litmus test applied to everything later, where your system sits on the workflow-to-agent spectrum, the augmented LLM as the base unit, context engineering, and the build-vs-buy question.
 
 ## In this part
 

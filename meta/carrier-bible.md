@@ -1,4 +1,4 @@
-# The Carrier Bible — Listing Studio and its world
+# The Carrier Bible: Listing Studio and its world
 
 > **Why this exists:** every chapter draws its examples from one consistent world. A reference
 > that invents a fresh example per chapter reads as assembled, not authored. This file is the
@@ -60,7 +60,7 @@ and prose):
 
 ---
 
-## 3. Listing Studio — the nine-step pipeline
+## 3. Listing Studio: the nine-step pipeline
 
 The flagship. Maya uploads a supplier's spreadsheet, drags in a folder of product photos and spec
 sheets, and clicks **Generate listing**. Behind that one click, roughly **thirty model calls fire
@@ -94,7 +94,7 @@ Reuse one product across chapters so the reader builds familiarity.
 teaching object because it exercises everything at once and is mundane enough not to distract:
 
 - **Attributes** that matter and are often missing or messy in the feed: `height_range_in`
-  (25–50), `desktop_size_in` (60×30), `weight_capacity_lbs` (250), `motor` (dual), `presets` (4),
+  (25-50), `desktop_size_in` (60×30), `weight_capacity_lbs` (250), `motor` (dual), `presets` (4),
   `color` (walnut / white / black).
 - **Compliance** with real teeth, even for furniture: a BIFMA stability/durability claim, a
   `weight_capacity_lbs` rating you must not overstate (a wrong number is a liability and a returns
@@ -146,9 +146,9 @@ one bake-off, not as parallel maintained codebases.
 For step 5 (content blocks) and anywhere multi-persona reasoning appears, the three recast
 personas are commerce ones (never the real product's personas):
 
-- **the SEO specialist** — discoverability, search terms, titles;
-- **the pricing analyst** — margin, MAP, competitive position;
-- **the compliance reviewer** — safety claims, required warnings, category rules.
+- **the SEO specialist**: discoverability, search terms, titles;
+- **the pricing analyst**: margin, MAP, competitive position;
+- **the compliance reviewer**: safety claims, required warnings, category rules.
 
 They reason independently, then a reconcile step merges them.
 

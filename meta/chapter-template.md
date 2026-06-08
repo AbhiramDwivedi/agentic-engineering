@@ -25,7 +25,7 @@
 
 ## What it actually is
 <!--
-  A crisp, quotable definition (one paragraph). Then commit to both verdicts:
+  A crisp, quotable definition (one paragraph). Then commit to both labels:
     - Litmus: does the model decide, or your code? Genuinely new, or familiar?
     - Maturity: which tier, and the cited basis for it.
   Then disambiguate from neighbours: "this is X, not Y" (e.g. dispatch is not LLM routing).
@@ -52,7 +52,7 @@
 ## Gotchas
 <!--
   The real costs: latency, spend, complexity, non-determinism.
-  When NOT to use it, and the simpler thing instead — name the anti-pattern it feeds.
+  When NOT to use it, and the simpler thing instead. Name the anti-pattern it feeds.
   Failure modes, with a production scar where one exists:
 -->
 

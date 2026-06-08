@@ -1,6 +1,6 @@
-# Part III — Composition
+# Part III: Composition
 
-Arranging many units into a system — the patterns. The most-developed material, and where the litmus test earns its keep.
+Arranging many units into a system, the patterns. The most-developed material, and where the litmus test earns its keep.
 
 ## In this part
 
