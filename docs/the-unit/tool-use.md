@@ -20,140 +20,115 @@ So reach for a tool when the model needs something it cannot get on its own: a f
 
 ## 2. What it actually is
 
-A tool is a typed function the model can call. The contract is small:
+A tool is two things: a function in your code, and a description of that function the model can read. You give the model the description as a JSON schema, the same shape on every major API:
 
 ```python
-class PriceCheckRequest(BaseModel):
-    """What the model fills in when it decides to call the tool."""
-
-    supplier_sku: str
-    proposed_price_cents: int = Field(gt=0)
-
-
-class PriceVerdict(BaseModel):
-    """The structured verdict your code hands back to the model."""
-
-    ok: bool
-    proposed_price_cents: int
-    map_floor_cents: int  # minimum advertised price
-    margin_floor_cents: int  # lowest price that clears the margin rule
-    floor_cents: int  # max(map, margin): the binding floor
-    reason: str
+# What you describe to the model. It reads this, never your code, so the
+# description and the schema have to be good. The same shape works on every
+# major API.
+PRICE_CHECK_TOOL = {
+    "name": "check_price",
+    "description": (
+        "Check a proposed price for a product against the supplier's minimum "
+        "advertised price (MAP) and margin floor. Call this before quoting a price."
+    ),
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "supplier_sku": {"type": "string"},
+            "proposed_price_cents": {"type": "integer"},
+        },
+        "required": ["supplier_sku", "proposed_price_cents"],
+        "additionalProperties": False,
+    },
+}
 ```
 
-`PriceCheckRequest` is what the model fills in. `PriceVerdict` is what your code returns. Two things make a contract the model can actually use. The schema should be strict, so the model cannot invent fields or skip required ones, which on the major APIs means `additionalProperties: false` and every field marked required.[^3] The descriptions have to be good, because the model picks a tool by reading its description, never its code. And keep the set small. Vendors put the comfortable ceiling around twenty tools, past which the model starts choosing from a crowd.[^3]
+The model never sees the function body. It picks a tool from the `description` and fills in arguments that fit the schema, so both have to be right. Mark every field required, forbid extras with `additionalProperties: false`, and keep the set small; vendors put the comfortable ceiling around twenty tools.[^3]
+
+Behind the schema is ordinary code:
+
+```python
+# The tool itself: plain code the model cannot argue with. The floor is
+# hardcoded here for one desk; in production it is a lookup in your pricing rules.
+def check_price(supplier_sku: str, proposed_price_cents: int) -> dict:
+    floor_cents = 39900  # $399.00 MAP for the Aldsworth desk
+    ok = proposed_price_cents >= floor_cents
+    return {"ok": ok, "floor_cents": floor_cents}
+```
+
+`check_price` returns a plain result the model cannot talk past. The floor is hardcoded here for one desk; in production it is a lookup in your pricing rules. Either way the number comes from your code, not the model.
 
 **Maturity: Standard.** Every major vendor ships tool use, and Anthropic places it at the base of the augmented LLM, the unit it treats as the foundation of an agentic system.[^1] The benchmarks bear this out: on suites like SWE-bench, giving a model even basic tools produces large jumps in what it can do.[^2]
 
 ## 3. How to do it
 
-Start with the tool your code owns. It is a plain function with a typed input and a typed output, and the answer it returns is arithmetic:
+Wiring it up is a short loop. With an Anthropic client in hand (`client = anthropic.Anthropic()`), you offer the tool, the model decides whether to call it, you run the call and hand back the result, and the model carries on until it has an answer:
 
 ```python
-def check_price(req: PriceCheckRequest) -> PriceVerdict:
-    """A typed tool. A deterministic guardrail your code owns, not the model.
+messages = [
+    {
+        "role": "user",
+        "content": "Set a price for the Aldsworth sit-stand desk, SKU NV-ALDSWORTH-DM.",
+    }
+]
 
-    The model decides whether to call this, and with what price. The verdict
-    is something it cannot argue with: math, not opinion.
-    """
-    rule = RULES[req.supplier_sku]
-    margin_floor = round(rule.cost_cents / (1 - rule.min_margin_pct))
-    floor = max(rule.map_floor_cents, margin_floor)
-    ok = req.proposed_price_cents >= floor
-    reason = (
-        "clears MAP and margin floor"
-        if ok
-        else (
-            f"below binding floor of {floor} cents "
-            f"(MAP {rule.map_floor_cents}, margin {margin_floor})"
-        )
-    )
-    return PriceVerdict(
-        ok=ok,
-        proposed_price_cents=req.proposed_price_cents,
-        map_floor_cents=rule.map_floor_cents,
-        margin_floor_cents=margin_floor,
-        floor_cents=floor,
-        reason=reason,
-    )
-```
+# Offer the tool. The model decides whether to use it.
+reply = client.messages.create(
+    model="claude-sonnet-4-6",
+    max_tokens=1024,
+    tools=[PRICE_CHECK_TOOL],
+    messages=messages,
+)
 
-The floor is the larger of the MAP price and the margin floor. A proposed price either clears it or gets sent back. Because the rule lives in code, the model cannot talk its way past it.
-
-Next, decide how much say the model gets. With the default `tool_choice` of `auto`, it chooses each turn whether to call a tool or just answer. You can demand a call with `required`, pin it to one specific tool, or shut tools off with `none`.[^3] Auto invites two opposite mistakes, and you will see both: the model skips a tool it needed, or it reaches for one it did not, spending latency and tokens to look up what it already knew.[^8]
-
-The model itself is mocked behind a small `Protocol`, so the loop can be tested without a real model call:
-
-```python
-class ToolCall(BaseModel):
-    """The model's decision: call this tool with these typed args."""
-
-    name: str
-    request: PriceCheckRequest
-
-
-class ModelClient(Protocol):
-    """The boundary. A real impl wraps an LLM; the fake returns a script.
-
-    propose() returns a ToolCall when the model decides to use a tool, or a
-    final price in cents (int) when it decides to answer directly.
-    """
-
-    def propose(
-        self, prompt: str, last_verdict: Optional[dict]
-    ) -> "ToolCall | int": ...
-```
-
-A real implementation wraps an LLM. A test passes in a fake that returns a scripted decision. The loop does not care which it gets.
-
-Then the loop itself, where the model calls a tool and reacts to what comes back:
-
-```python
-def price_listing(model: ModelClient, prompt: str, max_steps: int = 4) -> dict:
-    """The model decides each step: call the typed tool, or just answer.
-
-    Returns {"price_cents", "checked", "verdict"}. `checked` is False when the
-    model skipped the tool, which is the demonstrable failure mode.
-    """
-    last_verdict = None
-    for _ in range(max_steps):
-        decision = model.propose(prompt, last_verdict)
-        if isinstance(decision, ToolCall):
-            verdict: PriceVerdict = check_price(decision.request)
-            last_verdict = verdict.model_dump()
-            if verdict.ok:
-                return {
-                    "price_cents": verdict.proposed_price_cents,
-                    "checked": True,
-                    "verdict": verdict,
+# While the model asks for the tool, run it and hand back the result.
+while reply.stop_reason == "tool_use":
+    messages.append({"role": "assistant", "content": reply.content})
+    results = []
+    for block in reply.content:
+        if block.type == "tool_use":
+            output = check_price(**block.input)  # your code runs, not the model
+            results.append(
+                {
+                    "type": "tool_result",
+                    "tool_use_id": block.id,
+                    "content": str(output),
                 }
-            # not ok: loop, so the model sees the floor and adjusts
-            continue
-        # decision is an int: the model answered without checking
-        return {"price_cents": decision, "checked": False, "verdict": None}
-    raise RuntimeError("model did not converge on an in-policy price")
+            )
+    messages.append({"role": "user", "content": results})
+    reply = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=1024,
+        tools=[PRICE_CHECK_TOOL],
+        messages=messages,
+    )
+
+# No more tool calls: the model has settled on an answer.
+print(reply.content[0].text)
 ```
 
-The `isinstance(decision, ToolCall)` branch is where the model's choice becomes code. Return a tool call and your code runs the guardrail and hands the result back. If the result rejects the price, the loop comes around again with the binding floor in hand, and the model tries a new number. That read-then-act rhythm is the idea behind ReAct, which threads reasoning through tool calls instead of forcing an answer in one shot.[^4] A model can also return several calls at once; the loop runs them and feeds the results back together.
+Three things in that loop are worth naming. The model decides: `reply.stop_reason` is `tool_use` only when it chooses to call the tool. Your code runs the function and returns a `tool_result`; the model never executes anything itself. And the loop repeats, so when the model proposes $379, reads the $399 floor in the result, and tries again, the same code handles the next call. That read-then-act cycle is the pattern ReAct named: interleave reasoning with tool calls instead of forcing an answer in one shot.[^4]
+
+You set how much choice the model has. The default `tool_choice` of `auto` lets it decide each turn; `required` forces a call, a named tool pins one, and `none` turns tools off.[^3] Auto invites two opposite mistakes: the model skips a tool it needed, or it calls one it did not and pays for the round trip.[^8]
 
 !!! example "In Listing Studio"
-    This is step 6 of the pipeline, **price**. The model proposes `price_cents` for the Aldsworth listing, and `check_price` enforces `compliance.map_enforced` and the margin floor before the listing's `status` can move from `draft` to `review`. Devon's code owns that gate. The model only proposes the number.
+    This is step 6 of the pipeline, **price**. The model proposes `price_cents` for the Aldsworth listing, and `check_price` gates it against `compliance.map_enforced` and the margin floor before the listing's `status` can move from `draft` to `review`. Devon's code owns that gate. The model only proposes the number.
 
-The companion code runs as plain Python, which keeps the loop testable on its own. In the real pipeline the same loop runs inside a LangGraph node. That changes two things. The `ModelClient` wraps a real LLM rather than the scripted fake, and the listing is read from and written to Postgres rather than held in memory. The tool, the contract, and the loop are the same code.
+In the real pipeline this loop runs inside a LangGraph node, and the listing is read from and written to Postgres rather than held in a variable. The call and the tool are the same code.
 
 ## 4. Gotchas
 
 An agent with tools can do real damage, so most of the work is in the failure modes.
 
-1. **The model fabricates arguments.** It calls the right tool with a wrong value: a made-up SKU, a price with an extra zero, a date that never existed. Inventing plausible arguments is among the most common tool failures in the research, and a stronger model shrinks it without closing it.[^5] So validate every argument before you act on it. `PriceCheckRequest` rejects a non-positive price at the type boundary, and a real tool checks that the SKU exists and the value is in range before it touches anything.
+1. **The model fabricates arguments.** It calls the right tool with a wrong value: a made-up SKU, a price with an extra zero, a date that never existed. Inventing plausible arguments is among the most common tool failures in the research, and a stronger model shrinks it without closing it.[^5] So validate every argument inside the tool before you act on it: confirm the SKU exists and the price is in range. The schema's types and `required` list catch shape errors; your code catches the rest.
 
 2. **Tool results are untrusted input.** A product description you fetch, a row you read, a web page a tool returns: any of it can carry text that reads to the model as an instruction. Treat tool output as data, never as a command, and never let raw output trigger another action unchecked. This is indirect prompt injection, the first entry on the OWASP Top 10 for LLM applications, and injected text can make the agent leak your data or take an action you did not intend.[^6]
 
-3. **The model can skip the tool.** With `tool_choice: auto` it decides each turn, and sometimes it just answers. In the companion loop that is the bare-integer path, and the failure-mode test pins it down: the model returns $379 directly, never calls the guardrail, and a sub-MAP price ships with `checked` set to `False`. The fix is a gate your code enforces before `status` moves to `review`, not a sterner prompt. An unchecked price cannot reach the storefront when reaching it requires a passing check. This is the anti-pattern the chapter feeds the catalog: the model left to police a rule the code should own.
+3. **The model can skip the tool.** With `tool_choice: auto` the model can answer without ever calling `check_price` and hand you a price straight from the text. The fix is a gate in your code: a price reaches `review` only after `check_price` has passed, whatever the model did. Forcing the call with `tool_choice` helps, but a forced call still trusts the model to act on the result. This is the anti-pattern the chapter feeds the catalog: the model left to police a rule the code should own.
 
 4. **Give each tool the least power that works.** A tool scoped to read one table cannot drop another. Keep the destructive, irreversible actions, the refunds and deletes and publishes, behind a person rather than behind a model's confidence. OWASP calls this excessive agency: the more an over-scoped tool can do, the more damage a single wrong call does.[^6] [Knowing When to Ask](../craft/human-in-the-loop.md) covers the human gate, and [Guardrails & Safety](../craft/guardrails-and-safety.md) covers enforcing it.
 
-5. **Plan for the call to fail.** Tools time out and return half an answer. Make retries idempotent so a repeat does not double-charge. Cap the loop so a model stuck proposing rejected prices fails loudly instead of spinning. And remember that tools writing shared state race with people. When Maya edits the same desk the agent is pricing, two writers fight over one row, and the locking and isolation are your code's job.[^6]
+5. **Plan for the call to fail.** Tools time out and return half an answer. Make retries idempotent so a repeat does not double-charge. Cap the loop so a model stuck calling the tool fails loudly instead of spinning. And remember that tools writing shared state race with people. When Maya edits the same desk the agent is pricing, two writers fight over one row, and the locking and isolation are your code's job.[^6]
 
 6. **Know how often this works.** On realistic multi-step tasks, even frontier models finish fewer than half, and they hold up worse than that across repeated runs.[^7] That is the case for gating every consequential action and keeping each agent's scope narrow. These models are fluent enough that the unreliability is easy to miss. Design for it anyway.
 

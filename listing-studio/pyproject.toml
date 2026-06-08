@@ -2,7 +2,7 @@
 name = "listing-studio"
 version = "0.0.0"
 requires-python = ">=3.11"
-dependencies = ["pydantic>=2.6"]
+dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]

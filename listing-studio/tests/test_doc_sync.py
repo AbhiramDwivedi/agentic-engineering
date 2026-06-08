@@ -1,8 +1,8 @@
 """Guarantee the code shown in the docs matches the tested source.
 
 The chapters inline their code (rather than using build-time includes) so they
-read cleanly on GitHub and everywhere else. This test is what keeps that inline
-code honest: each ``# --8<-- [start:NAME] ... [end:NAME]`` region in the pricing
+read cleanly on GitHub and everywhere else. This test keeps that inline code
+honest: each ``# --8<-- [start:NAME] ... [end:NAME]`` region in the pricing
 package must appear verbatim as a fenced ```python block in the chapter. Edit the
 source and forget the doc (or vice versa) and CI fails here.
 """
@@ -16,10 +16,9 @@ PRICING = os.path.join(ROOT, "listing-studio", "pricing")
 
 # anchor name -> source file that defines it
 ANCHORS = {
-    "contract": "models.py",
+    "schema": "tools.py",
     "tool": "tools.py",
-    "protocol": "model_client.py",
-    "loop": "agent.py",
+    "flow": "tool_use_example.py",
 }
 
 

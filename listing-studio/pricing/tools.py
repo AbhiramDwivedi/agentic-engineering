@@ -1,40 +1,31 @@
-from .models import PriceCheckRequest, PriceVerdict, PricingRule
-
-# Aldsworth dual-motor sit-stand desk, supplier Northvale Furnishings.
-ALDSWORTH_RULE = PricingRule(
-    supplier_sku="NV-ALDSWORTH-DM",
-    cost_cents=28000,
-    map_floor_cents=39900,  # MAP: must not advertise below $399.00
-    min_margin_pct=0.25,
-)
-RULES = {ALDSWORTH_RULE.supplier_sku: ALDSWORTH_RULE}
+# --8<-- [start:schema]
+# What you describe to the model. It reads this, never your code, so the
+# description and the schema have to be good. The same shape works on every
+# major API.
+PRICE_CHECK_TOOL = {
+    "name": "check_price",
+    "description": (
+        "Check a proposed price for a product against the supplier's minimum "
+        "advertised price (MAP) and margin floor. Call this before quoting a price."
+    ),
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "supplier_sku": {"type": "string"},
+            "proposed_price_cents": {"type": "integer"},
+        },
+        "required": ["supplier_sku", "proposed_price_cents"],
+        "additionalProperties": False,
+    },
+}
+# --8<-- [end:schema]
 
 
 # --8<-- [start:tool]
-def check_price(req: PriceCheckRequest) -> PriceVerdict:
-    """A typed tool. A deterministic guardrail your code owns, not the model.
-
-    The model decides whether to call this, and with what price. The verdict
-    is something it cannot argue with: math, not opinion.
-    """
-    rule = RULES[req.supplier_sku]
-    margin_floor = round(rule.cost_cents / (1 - rule.min_margin_pct))
-    floor = max(rule.map_floor_cents, margin_floor)
-    ok = req.proposed_price_cents >= floor
-    reason = (
-        "clears MAP and margin floor"
-        if ok
-        else (
-            f"below binding floor of {floor} cents "
-            f"(MAP {rule.map_floor_cents}, margin {margin_floor})"
-        )
-    )
-    return PriceVerdict(
-        ok=ok,
-        proposed_price_cents=req.proposed_price_cents,
-        map_floor_cents=rule.map_floor_cents,
-        margin_floor_cents=margin_floor,
-        floor_cents=floor,
-        reason=reason,
-    )
+# The tool itself: plain code the model cannot argue with. The floor is
+# hardcoded here for one desk; in production it is a lookup in your pricing rules.
+def check_price(supplier_sku: str, proposed_price_cents: int) -> dict:
+    floor_cents = 39900  # $399.00 MAP for the Aldsworth desk
+    ok = proposed_price_cents >= floor_cents
+    return {"ok": ok, "floor_cents": floor_cents}
 # --8<-- [end:tool]
