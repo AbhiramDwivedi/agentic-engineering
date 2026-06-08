@@ -25,7 +25,7 @@ The named, reusable blocks. Use them as defined; do not invent variants.
 | From production | `!!! production` | a first-hand scar. Only if true. |
 | In the companion repo | `!!! inrepo` | demonstrated, not shipped |
 | In Listing Studio | `!!! example "In Listing Studio"` | the carrier instance |
-| Code | `--8<--` snippet include | extracted from a tested file, never pasted |
+| Code | inline, synced to a tested file by `tests/test_doc_sync.py` | shown in full, cannot drift |
 | Framework differences | `=== "tabs"` | only where implementations differ |
 | Citation | footnote | every non-obvious claim |
 | See also | links | cross-links to related chapters |

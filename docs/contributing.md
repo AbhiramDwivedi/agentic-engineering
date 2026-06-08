@@ -48,9 +48,9 @@ The standard is high so the surface can stay open. Every PR must:
     prose about something untested. No coined label sold as canon. When in doubt, **downgrade the
     claim.**
 
-2. **Back code claims with a tested snippet.** Code samples are included from real files in the
-    repo (via MkDocs snippet includes), not pasted as assertions. If you add a code claim, add
-    the file it's extracted from.
+2. **Back code claims with a tested snippet.** Code samples are shown inline and kept in sync with the
+    tested source files by `tests/test_doc_sync.py`, so they cannot drift. If you add a code
+    claim, add the source file it comes from and a test.
 
 ## Confidentiality
 
