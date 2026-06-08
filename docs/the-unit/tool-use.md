@@ -4,17 +4,21 @@
 **Maturity: Standard** (every major vendor ships it, and the base of the augmented LLM) · *Grounding:* production + research
 </div>
 
-*A tool is a typed function the model can choose to call. Tool use is the model making that choice. Your code owns what the tool does, and whether its result is allowed to matter.*
+> "Tool access is one of the highest-leverage primitives you can give an agent."[^2]
+>
+> Anthropic, *Tool use with Claude*
 
-## Why you'd reach for it
+## 1. Why you'd reach for it
 
-Ask a model to set the price on the Aldsworth sit-stand desk and it gives you a number that looks reasonable. Sometimes that number is $379. The supplier sets a minimum advertised price of $399, and the model cannot know that. The floor lives in your pricing rules and never appeared in its training. So the $379 ships to the storefront, and now you have a MAP violation. A supplier can pull your catalog over one of those.
+A language model is a brilliant talker with no hands and a frozen memory. It can reason about almost anything you put in front of it, yet it cannot look up a fact that appeared after training, read a row from your database, or change anything in the world. Left alone, it can only produce text. Tool use is how it stops talking and starts doing.
 
-The fix is to stop asking the model to recall the floor and let it look the floor up instead. You give it a function that checks a proposed price against the rules. The model calls the function, reads the result, and revises its number.
+Pricing shows the gap. Ask a model to set the price on a sit-stand desk in your catalog and it hands you a confident number, say $379. The desk's supplier enforces a minimum advertised price of $399, and that floor lives in your pricing rules, not in anything the model ever read. The number looks fine, ships to the storefront, and becomes a contract violation that can get your catalog pulled.
 
-Reach for a tool when the model needs something it cannot reliably produce on its own. A current fact. A ruling from your pricing rules. A read from the catalog, or an action on a record. If your code already knows what to call and when, that part does not need a tool.
+The model never had a chance, because the floor was never in front of it. Give it a tool and the blindness lifts: a function that checks a price against the rules. It proposes $379, the tool answers that the floor is $399, and it tries again. The model still does the talking. Your code keeps the facts.
 
-## What it actually is
+So reach for a tool whenever the model needs something it cannot produce on its own. A fact that changes. A ruling from your rules. A read from your data, or an action on a record. When your code already holds the answer, skip the model and run the code.
+
+## 2. What it actually is
 
 A tool is a typed function the model can call. The contract is small:
 
@@ -22,64 +26,64 @@ A tool is a typed function the model can call. The contract is small:
 --8<-- "listing-studio/pricing/models.py:contract"
 ```
 
-`PriceCheckRequest` is what the model fills in. `PriceVerdict` is what your code returns. Two things make a contract the model can use well. The schema should be strict, so the model cannot invent fields or omit required ones. On the major APIs that means setting `additionalProperties: false` and marking every field required.[^3] The descriptions also have to be good. The model chooses a tool from its description, not from its code. Vendors suggest keeping the number of tools small, under about twenty, so the model is not picking from a crowd.[^3]
+`PriceCheckRequest` is what the model fills in. `PriceVerdict` is what your code returns. Two things make a contract the model can actually use. The schema should be strict, so the model cannot invent fields or skip required ones, which on the major APIs means `additionalProperties: false` and every field marked required.[^3] The descriptions have to be good, because the model picks a tool by reading its description, never its code. And keep the set small. Vendors put the comfortable ceiling around twenty tools, past which the model starts choosing from a crowd.[^3]
 
-**Maturity: Standard.** Every major model vendor ships tool use. Anthropic places it at the base of the augmented LLM, the unit it treats as the foundation of an agentic system.[^1] Anthropic calls tool access "one of the highest-leverage primitives you can give an agent," and reports that on benchmarks like SWE-bench, adding even basic tools produces large jumps in capability.[^2]
+**Maturity: Standard.** Every major vendor ships tool use, and Anthropic places it at the base of the augmented LLM, the unit it treats as the foundation of an agentic system.[^1] The benchmarks back the enthusiasm: on suites like SWE-bench, giving a model even basic tools produces large jumps in what it can do.[^2]
 
-## How to do it
+## 3. How to do it
 
-Start with the tool your code owns. It is a plain function with a typed input and a typed output, and the result it returns is arithmetic:
+Start with the tool your code owns. It is a plain function with a typed input and a typed output, and the answer it returns is arithmetic:
 
 ```python
 --8<-- "listing-studio/pricing/tools.py:tool"
 ```
 
-The floor is the larger of the MAP price and the margin floor. The proposed price either clears it or it does not. Because the rule lives in code, the model cannot talk its way past it.
+The floor is the larger of the MAP price and the margin floor. A proposed price either clears it or gets sent back. Because the rule lives in code, the model cannot talk its way past it.
 
-You also decide how much say the model gets. With the default `tool_choice` of `auto`, the model chooses on each turn whether to call a tool or answer directly. You can require a call with `required`, force one specific tool, or forbid tools with `none`.[^3] The default invites two opposite failures, and you will meet both. The model skips a tool it needed. Or it calls tools it did not need, paying latency and tokens to look up something it already knew.[^8]
+Next, decide how much say the model gets. With the default `tool_choice` of `auto`, it chooses each turn whether to call a tool or just answer. You can demand a call with `required`, pin it to one specific tool, or shut tools off with `none`.[^3] Auto invites two opposite mistakes, and you will see both: the model skips a tool it needed, or it reaches for one it did not, spending latency and tokens to look up what it already knew.[^8]
 
-The seam that keeps this testable is a small `Protocol` in front of the model:
+The seam that keeps this testable is a small `Protocol` standing in front of the model:
 
 ```python
 --8<-- "listing-studio/pricing/model_client.py:protocol"
 ```
 
-A real implementation wraps an LLM. A test passes in a fake that returns a scripted decision. The loop does not care which it gets, so you can test the decision logic without a model call.
+A real one wraps an LLM. A test passes in a fake that returns a scripted decision. The loop does not care which it gets, so you can exercise the decision logic with no model call at all.
 
-Then the loop, where the model calls the tool and reacts to the result:
+Then the loop itself, where the model calls a tool and reacts to what comes back:
 
 ```python
 --8<-- "listing-studio/pricing/agent.py:loop"
 ```
 
-The `isinstance(decision, ToolCall)` branch is where the model's choice shows up in code. If the model returns a tool call, you run the guardrail and pass the result back. If the result rejects the price, the loop goes around again with the binding floor in hand, and the model proposes a new number. This read-then-act cycle is the idea behind ReAct, which interleaves reasoning with tool calls instead of making the model answer in one shot.[^4] A model can also return several calls at once; the loop runs them and feeds the results back together.
+The `isinstance(decision, ToolCall)` branch is where the model's choice becomes code. Return a tool call and your code runs the guardrail and hands the result back. If the result rejects the price, the loop comes around again with the binding floor in hand, and the model tries a new number. That read-then-act rhythm is the idea behind ReAct, which threads reasoning through tool calls instead of forcing an answer in one shot.[^4] A model can also fire several calls at once; the loop runs them and feeds the results back together.
 
 !!! example "In Listing Studio"
     This is step 6 of the pipeline, **price**. The model proposes `price_cents` for the Aldsworth listing, and `check_price` enforces `compliance.map_enforced` and the margin floor before the listing's `status` can move from `draft` to `review`. Devon's code owns that gate. The model only proposes the number.
 
-The companion code runs as plain Python so it stays testable in isolation. In the real pipeline the same loop runs inside a LangGraph node. That changes two things. The `ModelClient` wraps a real LLM rather than the scripted fake, and the listing is read from and written to Postgres rather than held in memory. The tool, the contract, and the loop are the same code.
+The companion code runs as plain Python, which keeps the loop testable on its own. In the real pipeline the same loop runs inside a LangGraph node. That changes two things. The `ModelClient` wraps a real LLM rather than the scripted fake, and the listing is read from and written to Postgres rather than held in memory. The tool, the contract, and the loop are the same code.
 
-## Gotchas
+## 4. Gotchas
 
-Tool use is where an agent stops being a chatbot and can do real damage, so most of the work is in the failure modes.
+Tool use is the moment an agent stops being a chatbot and gets the power to do real harm, so most of the craft is in the failure modes.
 
-**The model fabricates arguments.** It will call the right tool with a wrong value: a made-up SKU, a price with an extra zero, a date that does not exist. Inventing plausible arguments is one of the most common tool failures measured in the research, and a better model reduces it without removing it.[^5] Validate every argument before you act on it. `PriceCheckRequest` rejects a non-positive price at the type boundary, and a real tool checks that the SKU exists and the value is in range before it touches anything.
+1. **The model fabricates arguments.** It calls the right tool with a wrong value: a made-up SKU, a price with an extra zero, a date that never existed. Inventing plausible arguments is among the most common tool failures in the research, and a stronger model shrinks it without closing it.[^5] So validate every argument before you act on it. `PriceCheckRequest` rejects a non-positive price at the type boundary, and a real tool checks that the SKU exists and the value is in range before it touches anything.
 
-**Tool results are untrusted input.** A product description you fetch, a row you read, a web page a tool returns: any of it can carry text that reads as an instruction to the model. Treat tool output as data, never as a command, and do not let raw output trigger another action without a check. This is indirect prompt injection, the first item on the OWASP Top 10 for LLM applications. It is the failure that turns a helpful agent into a way to exfiltrate data.[^6]
+2. **Tool results are untrusted input.** A product description you fetch, a row you read, a web page a tool returns: any of it can carry text that reads to the model as an instruction. Treat tool output as data, never as a command, and never let raw output trigger another action unchecked. This is indirect prompt injection, the first entry on the OWASP Top 10 for LLM applications, and it is what turns a helpful agent into a way out for your data.[^6]
 
-**The model can skip the tool.** With `tool_choice: auto` it decides each turn, and sometimes it just answers. In the companion loop that is the bare-integer path. The failure-mode test makes it concrete: the model returns $379 directly, never calls the guardrail, and a sub-MAP price ships with `checked` set to `False`. The fix is a gate your code enforces before `status` moves to `review`, not a sterner prompt. An unchecked price cannot reach the storefront if reaching it requires a passing check. This is the anti-pattern the chapter feeds the catalog: letting the model self-police a rule the code should own.
+3. **The model can skip the tool.** With `tool_choice: auto` it decides each turn, and sometimes it just answers. In the companion loop that is the bare-integer path, and the failure-mode test pins it down: the model returns $379 directly, never calls the guardrail, and a sub-MAP price ships with `checked` set to `False`. The fix is a gate your code enforces before `status` moves to `review`, not a sterner prompt. An unchecked price cannot reach the storefront when reaching it requires a passing check. This is the anti-pattern the chapter feeds the catalog: the model left to police a rule the code should own.
 
-**Give each tool the least power that works.** A tool scoped to read one table cannot drop another. Keep destructive or irreversible actions, the refunds and deletes and publishes, behind a human approval rather than behind a model's confidence. OWASP files this under excessive agency, and it is the line between a bug and an incident.[^6] [Knowing When to Ask](../craft/human-in-the-loop.md) covers the human gate, and [Guardrails & Safety](../craft/guardrails-and-safety.md) covers enforcing it.
+4. **Give each tool the least power that works.** A tool scoped to read one table cannot drop another. Keep the destructive, irreversible actions, the refunds and deletes and publishes, behind a person rather than behind a model's confidence. OWASP calls this excessive agency, and it is the line between a bug and an incident.[^6] [Knowing When to Ask](../craft/human-in-the-loop.md) covers the human gate, and [Guardrails & Safety](../craft/guardrails-and-safety.md) covers enforcing it.
 
-**Plan for the call to fail.** Tools time out and return partial results. Make retries idempotent so a repeat does not double-charge. Bound the loop with a step cap, so a model that keeps proposing rejected prices fails loudly rather than spinning. And remember that tools writing shared state race with people. When Maya edits the same desk the agent is pricing, two writers contend for one row, and the locking and isolation are your code's job.[^6]
+5. **Plan for the call to fail.** Tools time out and return half an answer. Make retries idempotent so a repeat does not double-charge. Cap the loop so a model stuck proposing rejected prices fails loudly instead of spinning. And remember that tools writing shared state race with people. When Maya edits the same desk the agent is pricing, two writers fight over one row, and the locking and isolation are your code's job.[^6]
 
-**Know how often this works.** The honest number matters more than the demo. On realistic multi-step tasks, even frontier models finish fewer than half, and they are less consistent than that across repeated attempts.[^7] That is the argument for gating every consequential action and keeping each agent's scope narrow. A fluent tool-using agent is useful and unreliable at once, and the design has to answer for the second half.
+6. **Know how often this works.** The honest number matters more than the demo. On realistic multi-step tasks, even frontier models finish fewer than half, and they hold up worse than that across repeated runs.[^7] That is the case for gating every consequential action and keeping each agent's scope narrow. A fluent tool-using agent is useful and unreliable at the same time, and the design has to answer for the second half.
 
-**Tools cost tokens and time.** The schemas ride in the input on every request, and each call is another round trip.[^2] Trace every tool call, because a run you cannot replay is a run you cannot debug.
+7. **Tools cost tokens and time.** The schemas ride along in the input on every request, and each call is one more round trip.[^2] Trace every call, because a run you cannot replay is a run you cannot debug.
 
-## In short
+## 5. In short
 
-Give the model the price-check tool, but never let an unchecked price reach `review`. The model owns the proposal and the retry. Your code owns the schema, the validation, the permissions, and the final say on whether anything the tool returns is allowed to matter.
+Give the model the price-check tool, but never let an unchecked price reach `review`. The model owns the proposal and the retry. Your code owns the schema, the validation, the permissions, and the last word on whether anything the tool returns is allowed to matter.
 
 ## Sources
 
