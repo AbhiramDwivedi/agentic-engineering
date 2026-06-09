@@ -78,6 +78,10 @@
   Code is shown INLINE in a ```python block, copied verbatim from a tested source file that
   carries `# --8<-- [start:name] / [end:name]` anchors; `tests/test_doc_sync.py` fails CI if
   the chapter and the source drift. Never paste code that has no anchored, tested source.
+  EXPANDABLE LISTINGS: code the argument needs stays visible (roughly 20 lines or less, and
+  any structural delta). A longer listing whose story the diagram and trace already tell goes
+  inside `<details markdown><summary>...</summary>` so newcomers read past it and
+  practitioners click through. Never collapse the schema/contract or the structural delta.
   Show it in the carrier:
 -->
 

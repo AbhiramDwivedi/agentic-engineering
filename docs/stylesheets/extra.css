@@ -77,3 +77,9 @@
 /* "Planned" nav items render slightly muted so the full map is visible
    without implying every chapter is written yet. */
 .md-nav__item .md-nav__link[href*="#planned"] { opacity: 0.6; }
+
+/* --- Expandable listing (plain <details>, dual-renders on GitHub) -------- */
+.md-typeset details > summary {
+  cursor: pointer;
+  margin-bottom: 0.6rem;
+}

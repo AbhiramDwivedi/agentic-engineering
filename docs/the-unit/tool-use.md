@@ -80,7 +80,10 @@ flowchart LR
     M -- "final answer" --> F["Priced listing"]
 ```
 
-With an Anthropic client in hand (`client = anthropic.Anthropic()`), the same loop in code:
+The diagram and the trace below it carry the idea; expand the code when you want the real thing.
+
+<details markdown>
+<summary><b>The same loop in code</b> (Anthropic Messages API; <code>client = anthropic.Anthropic()</code>)</summary>
 
 ```python
 messages = [
@@ -123,6 +126,8 @@ while reply.stop_reason == "tool_use":
 # No more tool calls: the model has settled on an answer.
 print(reply.content[0].text)
 ```
+
+</details>
 
 One run of that loop, for the desk:
 

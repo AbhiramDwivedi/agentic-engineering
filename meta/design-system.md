@@ -39,6 +39,7 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 | In Listing Studio | `> **In Listing Studio.** …` blockquote | the carrier instance, three sentences max |
 | Stub notice | `> **Stub.** …` blockquote | scaffolding, not finished writing |
 | Code | inline, synced to a tested file by `tests/test_doc_sync.py` | shown in full, cannot drift |
+| Expandable listing | `<details markdown><summary>…</summary>` around a code fence | long listings whose story the diagram + trace already tell; collapses on GitHub and the site both |
 | Shape diagram | ` ```mermaid ` flowchart in How | the pattern's runtime shape, in the shared visual language |
 | Framework differences | short `####` subsections | only where implementations differ (tabs are Material-only) |
 | Citation | footnote | every non-obvious claim |
