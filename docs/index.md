@@ -25,9 +25,9 @@ you're looking at a pattern you already know, and calling it "agentic" is market
 
 ## 2. Every technique is labelled by how proven it is, and cites its evidence
 
-The field is full of people dressing up minor work as breakthroughs, with no reliable way to
-tell what's standard from what's hype. This reference is the cure. Two quiet signals on every
-technique, in plain prose (no rings, no radar):
+Plenty of minor work gets dressed up as a breakthrough, and there's no reliable way to tell
+what's standard from what's hype. So every technique here carries two quiet signals, in plain
+prose (no rings, no radar):
 
 - **A maturity lens.** One honest line: is this the accepted default, proven-but-niche, still
   settling, or overclaimed?
@@ -106,8 +106,8 @@ Start at [Foundations](foundations/index.md) if the field is new to you; jump st
 
 The judgement here is meant to be argued with. Anyone can open a pull request: to add a
 pattern, contribute a use case, sharpen a lens, or correct an error. One maintainer reviews
-and merges everything. What's non-negotiable is the discipline, not the conclusions: every
-contribution carries a maturity lens and cites its evidence. [Contributing →](contributing.md)
+everything, and holds each contribution to the same discipline the rest of the reference
+follows: a maturity lens, and cited evidence. [Contributing →](contributing.md)
 
 ---
 
