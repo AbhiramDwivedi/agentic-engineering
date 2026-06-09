@@ -6,8 +6,7 @@ site_description: >-
   model or your code?
 site_author: Abhiram Dwivedi
 copyright: >-
-  Prose CC-BY (final terms TBD) · Code MIT/Apache-2.0 · A crowd-sourced,
-  maintainer-curated reference.
+  Prose CC BY 4.0 · Code MIT · A crowd-sourced, maintainer-curated reference.
 
 repo_name: AbhiramDwivedi/agentic-engineering
 repo_url: https://github.com/AbhiramDwivedi/agentic-engineering
