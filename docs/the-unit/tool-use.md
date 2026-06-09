@@ -12,13 +12,20 @@
 
 ## 1. Why you'd reach for it
 
-A language model can reason about almost anything you put in the prompt, but it cannot reach outside it. It has no way to look up a fact that postdates its training, read a row from your database, or change anything in the world. Whatever it produces is text. A tool lets it act on the real system instead.
+A language model can reason about almost anything you put in the prompt, but it cannot reach outside it. It has no way to look up a fact that postdates its training, read a row from your database, or change anything in the world. And here is the part that does the damage: when a task needs one of those things, the model does not stop and say so. It produces something plausible instead.
 
-Take pricing. You ask the model to set the price on a sit-stand desk in your catalog, and it gives you a confident $379. The supplier's contract sets a minimum advertised price of $399, but that floor lives in your pricing rules, and the model has never seen it. So the $379 goes live, the price is now below the contract floor, and a sub-MAP price can get your catalog dropped.
+Take pricing. You ask the model to set the price on a sit-stand desk in your catalog, and it gives you a confident $379. The supplier's contract sets a minimum advertised price of $399, but that floor lives in your pricing rules, and the model has never seen it. It did not refuse; it guessed. So the $379 goes live, the price is now below the contract floor, and a sub-MAP price can get your catalog dropped.
 
 Give the model a tool and the problem goes away. You hand it a function that checks a proposed price against the rules. It proposes $379, the function reports a floor of $399, and the model revises. The model still writes the number, but the floor comes from your code.
 
-So reach for a tool when the model needs something it cannot get on its own: a fact that has changed, a value from your data, a check it cannot run, an action in the world. When your own code already holds the answer, call the code and leave the model out of it.
+That is the trigger in general: reach for a tool when the answer lives outside the model's weights and your prompt. Four cases cover most of it:
+
+- **A fact that changes.** Today's competitor prices, current stock, anything past the training cutoff.
+- **A value from your systems.** The supplier's contract floor, a customer's order history, a row in Postgres.
+- **A check the model cannot run.** Margin math, address validation, anything where "close" is wrong.
+- **An action in the world.** Writing the listing, issuing the refund, sending the email.
+
+And the counter-trigger: when your own code already holds the answer and no judgement is needed, call the code and leave the model out of it.
 
 ## 2. What it actually is
 
@@ -65,7 +72,7 @@ def check_price(supplier_sku: str, proposed_price_cents: int) -> dict:
 
 ## 3. How to do it
 
-Wiring it up is a short loop. You offer the tool, the model decides whether to call it, you run the call and hand back the result, and the model carries on until it has an answer. The shape, before the code (rounded boxes are where the model decides; rectangles are your code, a convention every diagram in this reference keeps):
+Wiring it up is a short loop: offer the tool, let the model decide, run the call, hand back the result, repeat until it answers. Rounded boxes are the model deciding; rectangles are your code:
 
 ```mermaid
 flowchart LR
@@ -119,14 +126,54 @@ while reply.stop_reason == "tool_use":
 print(reply.content[0].text)
 ```
 
-Three things in that loop are worth naming. The model decides: `reply.stop_reason` is `tool_use` only when it chooses to call the tool. Your code runs the function and returns a `tool_result`; the model never executes anything itself. And the loop repeats, so when the model proposes $379, reads the $399 floor in the result, and tries again, the same code handles the next call. That read-then-act cycle is the pattern ReAct named: interleave reasoning with tool calls instead of forcing an answer in one shot.[^4]
+One run of that loop, for the desk:
+
+1. The model calls `check_price` with `proposed_price_cents=37900`.
+2. Your code answers `{"ok": False, "floor_cents": 39900}`.
+3. The model reads the floor and calls again with `39900`.
+4. Your code answers `{"ok": True, "floor_cents": 39900}`.
+5. No more tool calls. The model writes the price: $399.
+
+Note who did what. The model decided, both times: `stop_reason` is `tool_use` only when it chooses the tool. Your code ran the function; the model never executes anything itself. That read-then-act cycle is the pattern ReAct named: interleave reasoning with tool calls instead of forcing an answer in one shot.[^4]
+
+### More than one tool
+
+A real surface offers several tools, and the model picks among them by `description`; this is why the descriptions have to earn their keep. Ask it to price the desk competitively, give it both `get_competitor_prices` and `check_price`, and it will fetch the market, land on a number, then check that number against the floor: two different tools, chosen in an order you never specified. When calls are independent of each other, one reply can also carry several `tool_use` blocks at once, and each gets its own `tool_result`, matched by `tool_use_id`.[^2]
+
+The structural change in your code is small: a registry, and dispatch by the name the model chose.
+
+```python
+# Several tools: the model picks by description; your code dispatches by name.
+TOOLS = {
+    "check_price": check_price,
+    "get_competitor_prices": get_competitor_prices,
+}
+
+
+def run_tools(reply) -> list:
+    """One tool_result per tool_use block, matched by id."""
+    results = []
+    for block in reply.content:
+        if block.type == "tool_use":
+            output = TOOLS[block.name](**block.input)
+            results.append(
+                {
+                    "type": "tool_result",
+                    "tool_use_id": block.id,
+                    "content": str(output),
+                }
+            )
+    return results
+```
+
+The loop itself does not change; `run_tools(reply)` replaces the inline for-loop above. What does change is the model's burden: every tool you add is one more choice it can get wrong, which is the real reason behind the twenty-tool ceiling in §2.
+
+### How much choice to give it
 
 You set how much choice the model has. The default `tool_choice` of `auto` lets it decide each turn; `required` forces a call, a named tool pins one, and `none` turns tools off.[^3] Auto invites two opposite mistakes: the model skips a tool it needed, or it calls one it did not and pays for the round trip.[^8]
 
 !!! example "In Listing Studio"
-    This is step 6 of the pipeline, **price**. The model proposes `price_cents` for the Aldsworth listing, and `check_price` gates it against `compliance.map_enforced` and the margin floor before the listing's `status` can move from `draft` to `review`. Devon's code owns that gate. The model only proposes the number.
-
-In the real pipeline this loop runs inside a LangGraph node, and the listing is read from and written to Postgres rather than held in a variable. The call and the tool are the same code.
+    This is step 6 of the pipeline, **price**. The model proposes the number, `check_price` rules on it, and a listing cannot leave `draft` until the check passes. Devon's code owns that gate.
 
 ## 4. Gotchas
 

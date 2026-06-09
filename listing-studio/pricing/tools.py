@@ -29,3 +29,24 @@ def check_price(supplier_sku: str, proposed_price_cents: int) -> dict:
     ok = proposed_price_cents >= floor_cents
     return {"ok": ok, "floor_cents": floor_cents}
 # --8<-- [end:tool]
+
+
+# A second tool, used by multi_tool_example.py. Hardcoded for the illustration;
+# in production this hits your market-data feed.
+COMPETITOR_PRICE_TOOL = {
+    "name": "get_competitor_prices",
+    "description": (
+        "Fetch the current competitor prices for a product, in cents, "
+        "from the market-data feed."
+    ),
+    "input_schema": {
+        "type": "object",
+        "properties": {"supplier_sku": {"type": "string"}},
+        "required": ["supplier_sku"],
+        "additionalProperties": False,
+    },
+}
+
+
+def get_competitor_prices(supplier_sku: str) -> dict:
+    return {"prices_cents": [41900, 44500, 39900]}

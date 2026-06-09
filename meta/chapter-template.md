@@ -4,6 +4,17 @@
   WHY comes first so a reader deciding whether they need this chapter is served; the HEAD
   carries the one-line definition so a reader who already knows they need it is served too.
   Pull every concrete specific from meta/carrier-bible.md. Obey meta/voice-and-style.md.
+
+  COMPLETENESS CHECK (the classic pattern form, kept as content, not as headings).
+  The Alexandrian fields map onto our flow; before a chapter ships, confirm each is answered:
+    Context + Problem  -> Why (the gap, the cost story)
+    Forces             -> Why (trigger list) + Gotchas (the tensions and costs)
+    Solution           -> What (the concept) + How (the working minimum, then the scale-up)
+    Resulting context  -> Gotchas (liabilities) + In short (the weighted recommendation)
+    Related patterns   -> See also (and SAY WHY each link relates, never a bare list)
+    Example            -> the carrier callout + the companion repo
+  We deliberately do NOT use those headings: this is a read-through reference in prose, not
+  a form-filled catalog. The form is the checklist; the prose is the page.
 -->
 
 # N.M Canonical Pattern Name
@@ -24,9 +35,15 @@
 
 ## Why you'd reach for it
 <!--
-  Motivation. The problem it solves and what breaks without it. The cost of getting it wrong,
-  in time / money / risk (the leadership framing). The trigger: when you need it, when you don't.
-  A brief "From production" opening is allowed here when a real scar is the best way in.
+  Fixed shape, four beats:
+    1. THE GAP: what is missing without this, stated plainly. Include the sharp edge, what
+       the system does WRONG (not just can't do) when the gap is hit.
+    2. THE COST STORY: one concrete carrier scenario where the gap burns you, with the cost
+       in time / money / risk (the leadership framing).
+    3. THE FIX, in miniature: how this pattern closes the gap, two or three sentences.
+    4. THE TRIGGER LIST: when you need it, as a short scannable bulleted list, then the
+       counter-trigger (when you don't, and the simpler thing instead).
+  A brief "From production" opening is allowed when a real scar is the best way in.
 -->
 
 ## What it actually is
@@ -48,7 +65,16 @@
       flowchart LR
           A["your code"] --> B("the model decides") --> C["your code"]
       ```
-  Then the minimal code version (the cheapest thing that works), then scale up.
+  Then the minimal code version (the cheapest thing that works). AFTER THE CODE, ONE RUN
+  AS A NUMBERED TRACE: what the model called, what the code answered, how it ended. Five
+  plain steps teach the runtime behaviour faster than a paragraph about the code does.
+  THEN THE MULTIPLICITY SCALE-UP: the singular-to-plural step every production reader hits
+  (one tool -> several tools, one worker -> a pool, one turn -> a conversation). A chapter
+  that shows only the toy singular is incomplete; show the structural delta, not a second
+  full listing.
+  SIMPLICITY RULE: the example exists to teach the concept, never to show off the system.
+  No internal field names or infra detail beyond what the point needs; the carrier callout
+  is three sentences at most. When in doubt, cut the apparatus and keep the trace.
   Code is shown INLINE in a ```python block, copied verbatim from a tested source file that
   carries `# --8<-- [start:name] / [end:name]` anchors; `tests/test_doc_sync.py` fails CI if
   the chapter and the source drift. Never paste code that has no anchored, tested source.

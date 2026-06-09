@@ -19,6 +19,7 @@ ANCHORS = {
     "schema": "tools.py",
     "tool": "tools.py",
     "flow": "tool_use_example.py",
+    "many": "multi_tool_example.py",
 }
 
 
