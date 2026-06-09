@@ -1,12 +1,10 @@
 # 7.3 Stopping Gracefully
 
-<div class="chapter-meta" markdown>
-**Maturity: Established** (cancellation and checkpointing/resumption are proven) · *Grounding:* production
-</div>
+<small class="chapter-meta">**Maturity: Established** (cancellation and checkpointing/resumption are proven) · *Grounding:* production</small>
 
-!!! note "Stub: scaffolding, not finished writing · planned for a later release"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing · planned for a later release.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

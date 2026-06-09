@@ -1,12 +1,10 @@
 # 5.1 State, Not Memory
 
-<div class="chapter-meta" markdown>
-**Maturity: Standard** (the distinction is fundamental and widely under-appreciated) · *Grounding:* production
-</div>
+<small class="chapter-meta">**Maturity: Standard** (the distinction is fundamental and widely under-appreciated) · *Grounding:* production</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

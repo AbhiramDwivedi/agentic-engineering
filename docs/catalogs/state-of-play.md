@@ -2,7 +2,7 @@
 
 > **The decision it resolves:** what does the fast-moving landscape look like *right now*?
 
-!!! note "Stub: planned. This page is disposable and dated by design."
+> **Stub: planned. This page is disposable and dated by design.**
 
 *Last reviewed: 2026-06.*
 

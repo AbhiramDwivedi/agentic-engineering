@@ -33,16 +33,16 @@ on this month's model landscape is only as good as its date.
 Every non-obvious claim footnotes a source: a paper, a primary doc, or a benchmark. Two kinds of
 evidence both count, and the chapter is explicit about which it's leaning on:
 
-!!! production "From production"
-    Where I've actually shipped a technique in a real, revenue-bearing system, you'll see a
-    callout like this, with the first-hand detail: the failure that taught the lesson, the
-    number that mattered, the thing that broke at 2 a.m. This is the strongest evidence on the
-    site, but it is *added on top of* researched coverage, never a substitute for it.
+> **From production.**
+> Where I've actually shipped a technique in a real, revenue-bearing system, you'll see a
+> callout like this, with the first-hand detail: the failure that taught the lesson, the
+> number that mattered, the thing that broke at 2 a.m. This is the strongest evidence on the
+> site, but it is *added on top of* researched coverage, never a substitute for it.
 
-!!! inrepo "In the companion repo"
-    Where a technique is demonstrated in **Listing Studio** (the public commerce code this site
-    teaches through) rather than drawn from production, it's marked like this. The code is real
-    and runs; it just didn't carry real money.
+> **In the companion repo.**
+> Where a technique is demonstrated in **Listing Studio** (the public commerce code this site
+> teaches through) rather than drawn from production, it's marked like this. The code is real
+> and runs; it just didn't carry real money.
 
 Everything else is grounded in cited research. **Sources are mandatory**. That requirement is the
 single thing that most separates this reference from the overclaimers.

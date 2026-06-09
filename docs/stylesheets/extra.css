@@ -8,7 +8,10 @@
  */
 
 /* --- Chapter metadata line (maturity · who-decides · grounding) ---------- */
+/* Written as a single-line <small class="chapter-meta"> so it renders as
+   markdown on GitHub too (block-level divs suppress markdown there). */
 .chapter-meta {
+  display: block;
   font-size: 0.8rem;
   line-height: 1.5;
   color: var(--md-default-fg-color--light);

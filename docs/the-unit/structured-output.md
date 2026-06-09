@@ -1,12 +1,10 @@
 # 2.2 The Machine-Checkable Contract
 
-<div class="chapter-meta" markdown>
-**Maturity: Standard** (a settled capability you should default to) · *Grounding:* production + research
-</div>
+<small class="chapter-meta">**Maturity: Standard** (a settled capability you should default to) · *Grounding:* production + research</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

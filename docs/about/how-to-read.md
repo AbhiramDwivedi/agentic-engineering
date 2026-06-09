@@ -51,7 +51,7 @@ Each chapter hits the same beats, so you always know where to look:
 - **The deflations:** [The Router That Isn't One](../composition/the-router-that-isnt.md), then
   the [Anti-Patterns Catalog](../catalogs/anti-patterns.md).
 
-!!! note "This site is a work in progress"
-    The v1 launch slice (Foundations, The Unit, Composition, a little Craft, State-Not-Memory,
-    and the Anti-Patterns Catalog) is being filled in chapter by chapter. Pages marked *stub*
-    are scaffolding, not finished writing. [Contributions welcome.](../contributing.md)
+> **This site is a work in progress.**
+> The v1 launch slice (Foundations, The Unit, Composition, a little Craft, State-Not-Memory,
+> and the Anti-Patterns Catalog) is being filled in chapter by chapter. Pages marked *stub*
+> are scaffolding, not finished writing. [Contributions welcome.](../contributing.md)

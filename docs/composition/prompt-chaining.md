@@ -1,12 +1,10 @@
 # 3.1 Why Not One Big Prompt
 
-<div class="chapter-meta" markdown>
-**Maturity: Standard** (decomposition is an accepted default) · *Grounding:* production + research
-</div>
+<small class="chapter-meta">**Maturity: Standard** (decomposition is an accepted default) · *Grounding:* production + research</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

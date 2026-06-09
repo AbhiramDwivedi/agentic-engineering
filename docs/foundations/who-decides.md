@@ -1,12 +1,10 @@
 # 1.2 Who Decides?
 
-<div class="chapter-meta" markdown>
-**Maturity: n/a** (this *is* the test) · *Grounding:* the lens itself
-</div>
+<small class="chapter-meta">**Maturity: n/a** (this *is* the test) · *Grounding:* the lens itself</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

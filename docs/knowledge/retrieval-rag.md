@@ -1,12 +1,10 @@
 # 5.2 Retrieval Done Honestly
 
-<div class="chapter-meta" markdown>
-**Maturity: Standard** (RAG is an accepted default for semantic memory) · *Grounding:* companion repo + research
-</div>
+<small class="chapter-meta">**Maturity: Standard** (RAG is an accepted default for semantic memory) · *Grounding:* companion repo + research</small>
 
-!!! note "Stub: scaffolding, not finished writing · planned for a later release"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing · planned for a later release.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

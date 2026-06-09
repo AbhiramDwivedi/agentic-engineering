@@ -10,18 +10,14 @@ This reference is an attempt to fix that. Two rules hold it together.
 
 ## 1. One question sorts every pattern
 
-<div class="ae-litmus" markdown>
+> **Who makes the structural decision: the model, or your code?**
+>
+> If the *model* decides (it calls a tool, judges its own draft and loops, sizes its own work,
+> picks a persona), you're looking at something genuinely new. If your *code* decides and the
+> model is just the worker inside the structure (a dispatch table, a retry loop, a callback),
+> you're looking at a pattern you already know, and calling it "agentic" is marketing.
 
-**Who makes the structural decision: the model, or your code?**
-
-If the *model* decides (it calls a tool, judges its own draft and loops, sizes its own work,
-picks a persona), you're looking at something genuinely new. If your *code* decides and the
-model is just the worker inside the structure (a dispatch table, a retry loop, a callback),
-you're looking at a pattern you already know, and calling it "agentic" is marketing.
-
-</div>
-
-[Read the litmus test →](about/litmus-test.md){ .md-button .md-button--primary }
+**[Read the litmus test →](about/litmus-test.md)**
 
 ## 2. Every technique is labelled by how proven it is, and cites its evidence
 
@@ -43,7 +39,7 @@ prose (no rings, no radar):
   benchmark. Where I've shipped something myself, a **From production** callout adds the
   first-hand war story on top. Research and experience both count; sources are mandatory.
 
-[How the labelling works →](about/how-we-label.md){ .md-button }
+**[How the labelling works →](about/how-we-label.md)**
 
 ## The map
 

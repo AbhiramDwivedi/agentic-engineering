@@ -1,12 +1,10 @@
 # 2.3 Skills & MCP
 
-<div class="chapter-meta" markdown>
-**Maturity: Established** (MCP is the settled tool-layer standard; Agent Skills are emerging) · *Grounding:* companion repo + research · *Last reviewed:* 2026-06
-</div>
+<small class="chapter-meta">**Maturity: Established** (MCP is the settled tool-layer standard; Agent Skills are emerging) · *Grounding:* companion repo + research · *Last reviewed:* 2026-06</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

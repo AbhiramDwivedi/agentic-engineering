@@ -6,7 +6,7 @@ Every chapter has a "when NOT to" section. This page aggregates them, the failur
 turn a slick demo into a system that quietly lies, burns money, or can't be trusted in production.
 It's meant to be the most shareable page on the site: skim it before you build.
 
-!!! note "Stub: the entries below are the spine; full write-ups land as each chapter does."
+> **Stub: the entries below are the spine; full write-ups land as each chapter does.**
 
 ## The catalog
 

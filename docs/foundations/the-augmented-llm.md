@@ -1,12 +1,10 @@
 # 1.4 The Augmented LLM
 
-<div class="chapter-meta" markdown>
-**Maturity: Standard** (the accepted base unit of agentic systems) · *Grounding:* production + research
-</div>
+<small class="chapter-meta">**Maturity: Standard** (the accepted base unit of agentic systems) · *Grounding:* production + research</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

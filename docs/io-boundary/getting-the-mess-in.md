@@ -1,12 +1,10 @@
 # 6.1 Getting the Mess In
 
-<div class="chapter-meta" markdown>
-**Maturity: Established** (multi-format/multimodal ingestion is proven and common) · *Grounding:* production
-</div>
+<small class="chapter-meta">**Maturity: Established** (multi-format/multimodal ingestion is proven and common) · *Grounding:* production</small>
 
-!!! note "Stub: scaffolding, not finished writing · planned for a later release"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing · planned for a later release.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

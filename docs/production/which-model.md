@@ -1,12 +1,10 @@
 # 8.2 Which Model?
 
-<div class="chapter-meta" markdown>
-**Maturity: Emerging** (selection axes are stable; the specific models change monthly) · *Grounding:* research · *Last reviewed:* 2026-06
-</div>
+<small class="chapter-meta">**Maturity: Emerging** (selection axes are stable; the specific models change monthly) · *Grounding:* research · *Last reviewed:* 2026-06</small>
 
-!!! note "Stub: scaffolding, not finished writing · planned for a later release"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing · planned for a later release.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

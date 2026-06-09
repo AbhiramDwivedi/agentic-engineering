@@ -1,12 +1,10 @@
 # 1.1 It's Still Engineering
 
-<div class="chapter-meta" markdown>
-**Maturity: n/a** (a framing chapter, not a technique) · *Grounding:* production + reflection
-</div>
+<small class="chapter-meta">**Maturity: n/a** (a framing chapter, not a technique) · *Grounding:* production + reflection</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

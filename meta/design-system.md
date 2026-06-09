@@ -23,16 +23,24 @@ patterns index.
 
 The named, reusable blocks. Use them as defined; do not invent variants.
 
+**Dual rendering is a hard constraint.** Every page must read correctly in two places: the
+built site and GitHub's own file view (where readers and contributors will actually meet the
+markdown). That rules out Material-only syntax in content: no `!!!` admonitions, no content
+tabs, no attr_list buttons, no markdown inside block-level `<div>`s. Callouts are
+bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams are mermaid
+(GitHub renders it natively).
+
 | Component | Markdown | Job |
 |---|---|---|
-| Lens line | `<div class="chapter-meta" markdown>` | maturity · who-decides · grounding · last-reviewed |
+| Lens line | one-line `<small class="chapter-meta">…</small>` | maturity · who-decides · grounding · last-reviewed |
 | Maturity lens | prose, one line | Standard / Established / Emerging / Contested. Never a radar. |
-| From production | `!!! production` | a first-hand scar. Only if true. |
-| In the companion repo | `!!! inrepo` | demonstrated, not shipped |
-| In Listing Studio | `!!! example "In Listing Studio"` | the carrier instance |
+| From production | `> **From production.** …` blockquote | a first-hand scar. Only if true. |
+| In the companion repo | `> **In the companion repo.** …` blockquote | demonstrated, not shipped |
+| In Listing Studio | `> **In Listing Studio.** …` blockquote | the carrier instance, three sentences max |
+| Stub notice | `> **Stub.** …` blockquote | scaffolding, not finished writing |
 | Code | inline, synced to a tested file by `tests/test_doc_sync.py` | shown in full, cannot drift |
 | Shape diagram | ` ```mermaid ` flowchart in How | the pattern's runtime shape, in the shared visual language |
-| Framework differences | `=== "tabs"` | only where implementations differ |
+| Framework differences | short `####` subsections | only where implementations differ (tabs are Material-only) |
 | Citation | footnote | every non-obvious claim |
 | See also | links | cross-links to related chapters |
 
@@ -44,8 +52,9 @@ checklist, the tell-list. The lyrical voice goes to the distribution posts, not 
 ## 4. Visual
 
 Material theme, indigo, light/dark. The maturity treatment is quiet text, not a badge dashboard.
-Two callout colours only: green for production, blue for the companion repo. Restraint is the
-point. If it starts to look like a technology radar, it is wrong.
+Callouts are bold-labelled blockquotes (the dual-rendering constraint above); any colour styling
+is a site-side CSS enhancement that must degrade cleanly on GitHub. Restraint is the point. If
+it starts to look like a technology radar, it is wrong.
 
 **Diagrams are mermaid** (diffable, PR-able) and share one visual language sitewide: **rounded
 nodes = the model decides; rectangles = your code decides; hexagons = a capability, not a

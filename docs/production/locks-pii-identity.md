@@ -1,12 +1,10 @@
 # 8.5 Locks, PII & Identity
 
-<div class="chapter-meta" markdown>
-**Maturity: Emerging** (advisory locks are standard; agent authN/authZ is unsettled) · *Grounding:* production + research
-</div>
+<small class="chapter-meta">**Maturity: Emerging** (advisory locks are standard; agent authN/authZ is unsettled) · *Grounding:* production + research</small>
 
-!!! note "Stub: scaffolding, not finished writing · planned for a later release"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing · planned for a later release.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

@@ -1,12 +1,10 @@
 # 3.5 The Specialist Panel
 
-<div class="chapter-meta" markdown>
-**Maturity: Emerging** (multi-persona reasoning works but isn't a settled, named industry pattern) · *Grounding:* companion repo
-</div>
+<small class="chapter-meta">**Maturity: Emerging** (multi-persona reasoning works but isn't a settled, named industry pattern) · *Grounding:* companion repo</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

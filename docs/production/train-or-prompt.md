@@ -1,12 +1,10 @@
 # 8.3 To Train or to Prompt
 
-<div class="chapter-meta" markdown>
-**Maturity: Established** (the prompt-then-tune ladder is a settled decision framework) · *Grounding:* research
-</div>
+<small class="chapter-meta">**Maturity: Established** (the prompt-then-tune ladder is a settled decision framework) · *Grounding:* research</small>
 
-!!! note "Stub: scaffolding, not finished writing · planned for a later release"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing · planned for a later release.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

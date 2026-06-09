@@ -1,12 +1,10 @@
 # 3.3 Fan-Out
 
-<div class="chapter-meta" markdown>
-**Maturity: Established** (parallelization is common; the model sizing its own work is the new part) · *Grounding:* production + research
-</div>
+<small class="chapter-meta">**Maturity: Established** (parallelization is common; the model sizing its own work is the new part) · *Grounding:* production + research</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

@@ -26,10 +26,10 @@
 -->
 
 <!-- HEAD: the scan. A reader who reads only this knows what it is and whether they need it. -->
-<div class="chapter-meta" markdown>
-**Maturity: <Standard|Established|Emerging|Contested|n/a>** (<half-sentence justification>) · *Who decides:* <the model | your code | a feature | n/a> · *Grounding:* <production | companion repo | research | reasoned>
-<!-- add for fast-moving topics:  · *Last reviewed:* YYYY-MM -->
-</div>
+<small class="chapter-meta">**Maturity: <Standard|Established|Emerging|Contested|n/a>** (<half-sentence justification>) · *Who decides:* <the model | your code | a feature | n/a> · *Grounding:* <production | companion repo | research | reasoned></small>
+<!-- add for fast-moving topics:  · *Last reviewed:* YYYY-MM. Keep the <small> on ONE line:
+     Material-only syntax (divs with markdown, !!! admonitions, tabs) breaks GitHub rendering,
+     and every page must read correctly in both places. -->
 
 *<The gloss: optionally open with the evocative phrase, then the definition in miniature, problem to solution, in one or two sentences. This line is also the chapter's entry in the patterns index, so it must stand alone.>*
 
@@ -81,13 +81,10 @@
   Show it in the carrier:
 -->
 
-!!! example "In Listing Studio"
-    <Where this lives in the pipeline or a sibling surface, with real field names from the bible.>
+> **In Listing Studio.** <Where this lives in the pipeline or a sibling surface. Three sentences max.>
 
-<!-- Framework differences, where they matter, go in tabs:
-=== "LangGraph"
-=== "Plain Python"
--->
+<!-- Framework differences, where they matter, go in short #### subsections
+     (content tabs are Material-only and render broken on GitHub). -->
 
 ## Gotchas
 <!--
@@ -96,8 +93,7 @@
   Failure modes, with a production scar where one exists:
 -->
 
-!!! production "From production"
-    <A real failure and what it taught. Only if true and first-hand. Otherwise delete.>
+> **From production.** <A real failure and what it taught. Only if true and first-hand. Otherwise delete.>
 
 ## In short
 <!-- A weighted recommendation, not a summary. What you would actually do. -->

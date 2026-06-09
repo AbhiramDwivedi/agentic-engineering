@@ -1,12 +1,10 @@
 # 4.3 Knowing When to Ask
 
-<div class="chapter-meta" markdown>
-**Maturity: Standard** (checkpointing a human into the loop is accepted practice) · *Grounding:* production
-</div>
+<small class="chapter-meta">**Maturity: Standard** (checkpointing a human into the loop is accepted practice) · *Grounding:* production</small>
 
-!!! note "Stub: scaffolding, not finished writing · planned for a later release"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing · planned for a later release.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

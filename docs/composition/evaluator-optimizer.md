@@ -1,12 +1,10 @@
 # 3.4 Grading Its Own Homework
 
-<div class="chapter-meta" markdown>
-**Maturity: Established** (a recognized, named workflow) · *Grounding:* production + research
-</div>
+<small class="chapter-meta">**Maturity: Established** (a recognized, named workflow) · *Grounding:* production + research</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

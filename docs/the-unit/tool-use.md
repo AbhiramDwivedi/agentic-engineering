@@ -1,8 +1,6 @@
 # 2.1 Tool Use
 
-<div class="chapter-meta" markdown>
-**Maturity: Standard** (every major vendor ships it, and the base of the augmented LLM) · *Grounding:* production + research
-</div>
+<small class="chapter-meta">**Maturity: Standard** (every major vendor ships it, and the base of the augmented LLM) · *Grounding:* production + research</small>
 
 *Giving the model hands. You describe a function to the model; the model decides when to call it; your code runs the call and owns the result.*
 
@@ -140,6 +138,16 @@ Note who did what. The model decided, both times: `stop_reason` is `tool_use` on
 
 A real surface offers several tools, and the model picks among them by `description`; this is why the descriptions have to earn their keep. Ask it to price the desk competitively, give it both `get_competitor_prices` and `check_price`, and it will fetch the market, land on a number, then check that number against the floor: two different tools, chosen in an order you never specified. When calls are independent of each other, one reply can also carry several `tool_use` blocks at once, and each gets its own `tool_result`, matched by `tool_use_id`.[^2]
 
+```mermaid
+flowchart LR
+    U["User request"] --> M("Model decides:<br>which tool next, or answer?")
+    M -- "tool_use" --> T1["get_competitor_prices<br>your code runs"]
+    M -- "tool_use" --> T2["check_price<br>your code runs"]
+    T1 -- "tool_result" --> M
+    T2 -- "tool_result" --> M
+    M -- "final answer" --> F["Priced listing"]
+```
+
 The structural change in your code is small: a registry, and dispatch by the name the model chose.
 
 ```python
@@ -170,10 +178,9 @@ The loop itself does not change; `run_tools(reply)` replaces the inline for-loop
 
 ### How much choice to give it
 
-You set how much choice the model has. The default `tool_choice` of `auto` lets it decide each turn; `required` forces a call, a named tool pins one, and `none` turns tools off.[^3] Auto invites two opposite mistakes: the model skips a tool it needed, or it calls one it did not and pays for the round trip.[^8]
+The default `tool_choice` of `auto` lets the model decide each turn; `required` forces a call, a named tool pins one, and `none` turns tools off.[^3] Auto invites two opposite mistakes: the model skips a tool it needed, or it calls one it did not and pays for the round trip.[^8]
 
-!!! example "In Listing Studio"
-    This is step 6 of the pipeline, **price**. The model proposes the number, `check_price` rules on it, and a listing cannot leave `draft` until the check passes. Devon's code owns that gate.
+> **In Listing Studio.** This is step 6 of the pipeline, **price**. The model proposes the number, `check_price` rules on it, and a listing cannot leave `draft` until the check passes. Devon's code owns that gate.
 
 ## 4. Gotchas
 

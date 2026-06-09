@@ -1,12 +1,10 @@
 # 4.1 Prompts Are Source Code
 
-<div class="chapter-meta" markdown>
-**Maturity: Standard** (treating prompts as versioned artifacts is accepted practice) · *Grounding:* production
-</div>
+<small class="chapter-meta">**Maturity: Standard** (treating prompts as versioned artifacts is accepted practice) · *Grounding:* production</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

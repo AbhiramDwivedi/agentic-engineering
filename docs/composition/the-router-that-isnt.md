@@ -1,12 +1,10 @@
 # 3.2 The Router That Isn't One
 
-<div class="chapter-meta" markdown>
-**Maturity: Standard** (dispatch is decades-old; *LLM* routing is the newer, narrower thing) · *Grounding:* production
-</div>
+<small class="chapter-meta">**Maturity: Standard** (dispatch is decades-old; *LLM* routing is the newer, narrower thing) · *Grounding:* production</small>
 
-!!! note "Stub: scaffolding, not finished writing"
-    The skeleton below shows the beats this chapter will hit.
-    [Contributions welcome.](../contributing.md)
+> **Stub: scaffolding, not finished writing.**
+> The skeleton below shows the beats this chapter will hit.
+> [Contributions welcome.](../contributing.md)
 
 ## 1. Why you'd reach for it
 

@@ -5,7 +5,7 @@
 One row per pattern: its litmus test (new, or engineering you already knew?) and its maturity
 lens (standard, or hype?). Click through for the full chapter.
 
-!!! note "Stub: rows fill in and link up as chapters land."
+> **Stub: rows fill in and link up as chapters land.**
 
 | Pattern | Who decides | Maturity |
 |---|---|---|
