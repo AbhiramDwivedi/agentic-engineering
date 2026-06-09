@@ -1,8 +1,10 @@
-# 2.1 Giving the Model Hands
+# 2.1 Tool Use
 
 <div class="chapter-meta" markdown>
 **Maturity: Standard** (every major vendor ships it, and the base of the augmented LLM) · *Grounding:* production + research
 </div>
+
+*Giving the model hands. You describe a function to the model; the model decides when to call it; your code runs the call and owns the result.*
 
 > "Tool access is one of the highest-leverage primitives you can give an agent."[^2]
 >
@@ -63,7 +65,17 @@ def check_price(supplier_sku: str, proposed_price_cents: int) -> dict:
 
 ## 3. How to do it
 
-Wiring it up is a short loop. With an Anthropic client in hand (`client = anthropic.Anthropic()`), you offer the tool, the model decides whether to call it, you run the call and hand back the result, and the model carries on until it has an answer:
+Wiring it up is a short loop. You offer the tool, the model decides whether to call it, you run the call and hand back the result, and the model carries on until it has an answer. The shape, before the code (rounded boxes are where the model decides; rectangles are your code, a convention every diagram in this reference keeps):
+
+```mermaid
+flowchart LR
+    U["User request"] --> M("Model decides:<br>call the tool?")
+    M -- "tool_use" --> T["check_price<br>your code runs"]
+    T -- "tool_result" --> M
+    M -- "final answer" --> F["Priced listing"]
+```
+
+With an Anthropic client in hand (`client = anthropic.Anthropic()`), the same loop in code:
 
 ```python
 messages = [

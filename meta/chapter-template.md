@@ -6,7 +6,13 @@
   Pull every concrete specific from meta/carrier-bible.md. Obey meta/voice-and-style.md.
 -->
 
-# N.M Chapter Title
+# N.M Canonical Pattern Name
+
+<!--
+  TITLE: the canonical noun the field searches for ("Tool Use", "Fan-Out"), never the evocative
+  phrase. The evocative phrase opens the gloss line below instead. References get cited and
+  Googled by their nouns.
+-->
 
 <!-- HEAD: the scan. A reader who reads only this knows what it is and whether they need it. -->
 <div class="chapter-meta" markdown>
@@ -14,7 +20,7 @@
 <!-- add for fast-moving topics:  · *Last reviewed:* YYYY-MM -->
 </div>
 
-*<One or two sentences: the decision this chapter resolves, and the definition in miniature.>*
+*<The gloss: optionally open with the evocative phrase, then the definition in miniature, problem to solution, in one or two sentences. This line is also the chapter's entry in the patterns index, so it must stand alone.>*
 
 ## Why you'd reach for it
 <!--
@@ -33,11 +39,19 @@
 
 ## How to do it
 <!--
-  Minimal version first (the cheapest thing that works), then scale up.
-  Code is INCLUDED from a tested file, never pasted:
-      ```python
-      --8<-- "listing-studio/path/to/file.py:anchor"
+  THE SHAPE DIAGRAM comes first: one mermaid flowchart of the pattern's runtime shape.
+  The visual language, on every diagram in the reference:
+    - rounded nodes ( )   = the model decides
+    - rectangles   [ ]    = your code decides
+    - hexagons     {{ }}  = a capability, not a pattern
+      ```mermaid
+      flowchart LR
+          A["your code"] --> B("the model decides") --> C["your code"]
       ```
+  Then the minimal code version (the cheapest thing that works), then scale up.
+  Code is shown INLINE in a ```python block, copied verbatim from a tested source file that
+  carries `# --8<-- [start:name] / [end:name]` anchors; `tests/test_doc_sync.py` fails CI if
+  the chapter and the source drift. Never paste code that has no anchored, tested source.
   Show it in the carrier:
 -->
 

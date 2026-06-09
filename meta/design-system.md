@@ -14,6 +14,11 @@ carries the one-line definition. Start every chapter from [`chapter-template.md`
 Parts and numbering: Part I-IX (roman), chapters `N.M`. Later chapters render muted ("planned") in
 the nav so the full map is visible without implying it is all written.
 
+**Titles are canonical nouns** ("Tool Use", "Fan-Out"), in the H1 and the nav both: a reference
+gets cited and searched by its nouns. The evocative phrase the chapter used to carry as a title
+moves into the gloss line under the head, which doubles as the chapter's one-line entry in the
+patterns index.
+
 ## 2. Components
 
 The named, reusable blocks. Use them as defined; do not invent variants.
@@ -26,6 +31,7 @@ The named, reusable blocks. Use them as defined; do not invent variants.
 | In the companion repo | `!!! inrepo` | demonstrated, not shipped |
 | In Listing Studio | `!!! example "In Listing Studio"` | the carrier instance |
 | Code | inline, synced to a tested file by `tests/test_doc_sync.py` | shown in full, cannot drift |
+| Shape diagram | ` ```mermaid ` flowchart in How | the pattern's runtime shape, in the shared visual language |
 | Framework differences | `=== "tabs"` | only where implementations differ |
 | Citation | footnote | every non-obvious claim |
 | See also | links | cross-links to related chapters |
@@ -40,6 +46,12 @@ checklist, the tell-list. The lyrical voice goes to the distribution posts, not 
 Material theme, indigo, light/dark. The maturity treatment is quiet text, not a badge dashboard.
 Two callout colours only: green for production, blue for the companion repo. Restraint is the
 point. If it starts to look like a technology radar, it is wrong.
+
+**Diagrams are mermaid** (diffable, PR-able) and share one visual language sitewide: **rounded
+nodes = the model decides; rectangles = your code decides; hexagons = a capability, not a
+pattern.** That is the litmus test drawn. Every pattern chapter carries one shape diagram in
+How; the homepage carries the overall map in the same language. Plain theme colours, no custom
+palettes per diagram.
 
 ## 5. Taxonomy and evidence
 

@@ -58,7 +58,11 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -91,7 +95,7 @@ nav:
       - "1.6 Do You Even Need a Framework?": foundations/do-you-need-a-framework.md
   - Part II — The Unit:
       - the-unit/index.md
-      - "2.1 Giving the Model Hands": the-unit/tool-use.md
+      - "2.1 Tool Use": the-unit/tool-use.md
       - "2.2 The Machine-Checkable Contract": the-unit/structured-output.md
       - "2.3 Skills & MCP": the-unit/skills-and-mcp.md
   - Part III — Composition:

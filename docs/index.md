@@ -45,6 +45,53 @@ technique, in plain prose (no rings, no radar):
 
 [How the labelling works →](about/how-we-label.md){ .md-button }
 
+## The map
+
+The whole reference on one diagram. **Rounded nodes are patterns where the model makes the
+structural decision** (the genuinely new ones). **Rectangles are patterns where your code
+decides** (engineering you already know, with a model in one slot). **Hexagons are
+capabilities**, not patterns. Every diagram in this reference keeps that convention.
+
+```mermaid
+flowchart TB
+    F["Part I · Foundations<br>the litmus test · workflow or agent ·<br>the augmented LLM · context engineering"]
+
+    subgraph UNIT["Part II · The Unit — one augmented LLM"]
+        direction LR
+        TU("2.1 Tool Use")
+        SO{{"2.2 Structured Output"}}
+        MCP("2.3 Skills & MCP")
+    end
+
+    subgraph COMP["Part III · Composition — arranging many of them"]
+        direction LR
+        PC["3.1 Prompt Chaining"]
+        RT["3.2 Dispatcher"]
+        FO("3.3 Fan-Out")
+        EO("3.4 Evaluator-Optimizer")
+        SP("3.5 Specialist Panel")
+    end
+
+    subgraph OPS["Running it for real"]
+        direction LR
+        C["IV · Craft of Control"]
+        K["V · Knowledge & Memory"]
+        IO["VI · The I/O Boundary"]
+        R["VII · Reliability"]
+        P["VIII · Production"]
+    end
+
+    FR("Part IX · The Frontier<br>autonomy · multi-agent · protocols · sandboxing")
+
+    F --> UNIT
+    UNIT --> COMP
+    COMP --> OPS
+    OPS --> FR
+```
+
+Start at [Foundations](foundations/index.md) if the field is new to you; jump straight to
+[The Unit](the-unit/index.md) if you're here for the patterns.
+
 ## Where to start
 
 - **New here?** Read [The Litmus Test](about/litmus-test.md), then
