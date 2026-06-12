@@ -58,14 +58,17 @@ when it is semantically load-bearing.
 
 | Agent | Model | Job |
 |---|---|---|
+| `coverage-researcher` | Opus | pre-writing deep research; emits the coverage map that sets scope |
 | `chapter-writer` | Opus | drafts/revises chapters against the meta/ constitution |
 | `prose-critic` | Opus | adversarial voice review; line-referenced findings, never rewrites |
 | `fact-checker` | Sonnet | verifies every citation and claim; argues the maturity verdict |
 | `coder-tester` | Sonnet | builds the anchored, tested companion code in `listing-studio/` |
 
-The editor is always a different agent than the writer (see `meta/voice-and-style.md`). A
-substantial chapter runs the full panel: writer → coder-tester (if new code) → prose-critic +
-fact-checker in parallel → author reconciles → gates.
+The editor is always a different agent than the writer (see `meta/voice-and-style.md`).
+**`/new-chapter <N.M Title>`** (`.claude/commands/new-chapter.md`) runs the whole pipeline:
+coverage-researcher → **author signs off the must-cover list** → coder-tester → chapter-writer
+→ prose-critic + fact-checker in parallel → reconcile → gates → ship. Scope sign-off is a hard
+stop; never skip it.
 
 ## Layout
 
