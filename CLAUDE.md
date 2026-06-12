@@ -54,6 +54,19 @@ A `humanizer` skill is checked in at `.claude/skills/humanizer/` — run it on s
 prose before it ships. Soft lint flags default to rewrite; keep a flagged construction only
 when it is semantically load-bearing.
 
+## Agents — the production pipeline, checked in at `.claude/agents/`
+
+| Agent | Model | Job |
+|---|---|---|
+| `chapter-writer` | Opus | drafts/revises chapters against the meta/ constitution |
+| `prose-critic` | Opus | adversarial voice review; line-referenced findings, never rewrites |
+| `fact-checker` | Sonnet | verifies every citation and claim; argues the maturity verdict |
+| `coder-tester` | Sonnet | builds the anchored, tested companion code in `listing-studio/` |
+
+The editor is always a different agent than the writer (see `meta/voice-and-style.md`). A
+substantial chapter runs the full panel: writer → coder-tester (if new code) → prose-critic +
+fact-checker in parallel → author reconciles → gates.
+
 ## Layout
 
 ```

@@ -102,7 +102,7 @@ it.
   signposting) with line numbers, and prints stylometric metrics (contrast rate, nominalization
   density, sentence-length variance). High recall: it over-flags, and a judgment pass rules on
   each. A regex does not forgive a tell the way an LLM reviewer does.
-- The **humanizer skill** (`~/.claude/skills/humanizer`, based on Wikipedia's "Signs of AI
+- The **humanizer skill** (`.claude/skills/humanizer/`, checked into this repo; based on Wikipedia's "Signs of AI
   writing") runs as a tell-audit on the draft. Note its own guidance: for reference and technical
   text, plain and neutral is the correct human voice, so do not let it inject opinion or first
   person where the register does not call for it.
