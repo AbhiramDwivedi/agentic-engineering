@@ -1,2 +1,4 @@
-mkdocs-material>=9.5
-pymdown-extensions>=10.7
+# Pinned to the versions the site is verified against; CI and every fresh
+# checkout build with exactly these. Bump deliberately, then re-run the gates.
+mkdocs-material==9.7.6
+pymdown-extensions==10.21.3

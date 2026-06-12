@@ -39,9 +39,12 @@ unverified items.
 
 ## Stage 4 — Adversarial QA (parallel)
 
-Spawn **prose-critic** and **fact-checker** on the draft at the same time. The critic returns
-line-referenced voice findings; the fact-checker returns per-citation verdicts and its own
-read on the maturity verdict.
+Spawn **prose-critic** and **fact-checker** on the draft at the same time. Both get the
+chapter path; the fact-checker also gets the coverage-map path. The critic returns
+line-referenced voice and carrier-continuity findings; the fact-checker returns per-citation
+verdicts, the must-cover completeness walk (covered / partial / missing per signed-off item),
+and its own read on the maturity verdict. A **missing** must-cover item sends the draft back
+to stage 3; it is not reconcilable away.
 
 ## Stage 5 — Reconcile
 

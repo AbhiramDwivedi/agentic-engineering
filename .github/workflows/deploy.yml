@@ -1,5 +1,8 @@
 name: Deploy site to GitHub Pages
 
+# pull_request has no path filter on purpose: "build" is a required status check,
+# and a path-filtered required check never reports on PRs outside its paths,
+# which blocks the merge forever.
 on:
   push:
     branches: [main]
@@ -7,7 +10,9 @@ on:
       - "docs/**"
       - "mkdocs.yml"
       - "requirements.txt"
+      - "meta/prose_lint.py"
       - ".github/workflows/deploy.yml"
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -30,12 +35,15 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
+      # hard prose rules + the dual-rendering constraint; strict build can't catch these
+      - run: python meta/prose_lint.py $(find docs -name '*.md') --hard-only
       - run: mkdocs build --strict
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:

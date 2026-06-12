@@ -26,6 +26,14 @@ whatever was cited from memory.
 Flag it. Either it needs a citation, a downgrade to defensible wording ("widely cited",
 "common in practice"), or deletion. Universal quantifiers and statistics are automatic flags.
 
+## Coverage completeness (when a coverage map exists)
+
+If `meta/coverage/<chapter-slug>.md` exists, walk its must-cover list item by item and rule on
+each: **covered** (where in the draft), **partial** (what's present, what's missing), or
+**missing**. The map is the chapter's signed-off contract; a draft that silently drops a
+must-cover item passes every other gate, so you are the only check that catches it. Also flag
+anything the draft teaches at length that the map marked mention-and-link or out-of-scope.
+
 ## For the maturity verdict
 
 Argue it independently from the evidence you just verified: does Standard / Established /

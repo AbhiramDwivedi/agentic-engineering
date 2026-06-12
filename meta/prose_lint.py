@@ -9,8 +9,14 @@ The point: an LLM reviewer reads for sense and forgives patterns (it missed an
 em-dash this project shipped once). A regex does not forgive. Run this in the
 gates next to the build.
 
-Usage:  python meta/prose_lint.py docs/the-unit/tool-use.md
-Exit:   non-zero if any HARD tell is present (em/en dash, curly quotes).
+It also enforces the dual-rendering constraint (design-system.md §2): Material-only
+syntax that the strict build happily passes but GitHub's file view renders as
+garbage. Those are HARD fails.
+
+Usage:  python meta/prose_lint.py <file.md> [more.md ...] [--hard-only]
+        --hard-only: report and fail on hard rules only (the CI mode; soft
+        flags need human judgment and would over-flag stubs).
+Exit:   non-zero if any HARD tell is present in any file.
 """
 from __future__ import annotations
 
@@ -51,6 +57,15 @@ PATTERNS = [
     ("intensifier", r"\b(very|really|truly|entirely|genuinely|simply|clearly|obviously|vast(ly)?|incredibly)\b", SOFT),
     # colon-zinger: ': a/the <short restatement>' at clause end
     ("colon-zinger", r":\s+(a|an|the)\s+\w+(\s+\w+){0,6}\.", SOFT),
+]
+
+# --- dual-rendering violations (design-system.md §2): Material-only syntax that
+# --- breaks on GitHub's file view. mkdocs build --strict does NOT catch these.
+DUAL_RENDER = [
+    ("admonition (!!!/???)", re.compile(r"^\s*(!{3}|\?{3}\+?)(\s|$)")),
+    ('content tab (=== "...")', re.compile(r'^\s*===\s+"')),
+    ("attr_list button ({ .md-button })", re.compile(r"\{\s*\.md-button")),
+    ("markdown inside <div>", re.compile(r"<div[^>]*\bmarkdown\b", re.I)),
 ]
 
 AI_HEADER_FILLER = re.compile(r"^#{1,6}\s")
@@ -95,7 +110,23 @@ def sentences(text: str) -> list[str]:
     return [p.strip() for p in parts if p.strip()]
 
 
-def main(path: str) -> int:
+def dual_render_hits(lines: list[str]) -> dict[str, list[int]]:
+    """Scan raw lines (code fences excluded) for Material-only syntax."""
+    hits: dict[str, list[int]] = {}
+    in_fence = False
+    for i, raw in enumerate(lines, 1):
+        if raw.strip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        for label, rx in DUAL_RENDER:
+            if rx.search(raw):
+                hits.setdefault(label, []).append(i)
+    return hits
+
+
+def main(path: str, hard_only: bool = False) -> int:
     with open(path, encoding="utf-8") as f:
         lines = f.readlines()
     prose = strip_noise(lines)
@@ -123,6 +154,20 @@ def main(path: str) -> int:
             if len(words) >= 3 and len(caps) >= max(3, int(0.8 * len(words))):
                 hits.setdefault("title-case header", []).append(ln)
 
+    # dual-rendering: HARD, scanned on raw lines (these live outside prose too)
+    dr = dual_render_hits(lines)
+    for label, lns in dr.items():
+        hits.setdefault(label, []).extend(lns)
+        hard_count += len(lns)
+
+    if hard_only:
+        for label, lns in sorted(hits.items()):
+            is_hard = label in ("em/en dash", "curly quote") or label in dr
+            if is_hard:
+                shown = ", ".join(map(str, lns[:12])) + (" ..." if len(lns) > 12 else "")
+                print(f"  {path}: [HARD] {label} x{len(lns)}: lines {shown}")
+        return 1 if hard_count else 0
+
     # --- metrics ---
     words = re.findall(r"[A-Za-z'’]+", prose_text)
     wc = len(words)
@@ -148,7 +193,8 @@ def main(path: str) -> int:
     print("\n--- flags (review each; high recall, not all are wrong) ---")
     if not hits:
         print("  none")
-    for label, _pat, hard in PATTERNS + [("title-case header", "", SOFT)]:
+    labelled = PATTERNS + [("title-case header", "", SOFT)] + [(lab, "", HARD) for lab, _ in DUAL_RENDER]
+    for label, _pat, hard in labelled:
         if label in hits:
             lns = hits[label]
             tag = "HARD" if hard else "soft"
@@ -157,14 +203,22 @@ def main(path: str) -> int:
 
     print()
     if hard_count:
-        print(f"FAIL: {hard_count} hard tell(s) present (em/en dash or curly quotes). Fix before shipping.")
+        print(f"FAIL: {hard_count} hard tell(s) present (dash/quote or dual-render violation). Fix before shipping.")
         return 1
     print("OK: no hard tells. Review soft flags with judgment.")
     return 0
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("usage: python meta/prose_lint.py <file.md>")
+    args = sys.argv[1:]
+    hard_only = "--hard-only" in args
+    paths = [a for a in args if a != "--hard-only"]
+    if not paths:
+        print("usage: python meta/prose_lint.py <file.md> [more.md ...] [--hard-only]")
         sys.exit(2)
-    sys.exit(main(sys.argv[1]))
+    rc = 0
+    for p in paths:
+        rc |= main(p, hard_only=hard_only)
+    if hard_only:
+        print("OK: no hard tells in any file." if rc == 0 else "FAIL: hard tell(s) present (see above).")
+    sys.exit(rc)

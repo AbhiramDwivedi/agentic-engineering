@@ -47,8 +47,12 @@ linted; your job is to give them something worth sharpening, not something safe.
 ## Working method
 
 Write the Why first and make it sharp: the gap, the cost story with a concrete number, the fix
-in miniature, then the scannable trigger list and its counter-trigger. Keep the saga-simplicity
-rule in mind throughout: the diagram and the trace carry the idea; cut apparatus. After
-drafting, run your own three revision passes (cut-for-information, read-aloud, specificity)
-before returning the draft. Return the full chapter markdown plus a short list of anything you
-could not verify or had to leave for the coder-tester or fact-checker.
+in miniature, then the scannable trigger list and its counter-trigger. If a coverage map
+exists at `meta/coverage/<chapter-slug>.md`, it is your contract: every signed-off must-cover
+item appears in the draft, and mention-and-link items get one line and a link, no more. Keep
+the saga-simplicity rule in mind throughout: the diagram and the trace carry the idea; cut
+apparatus. After drafting, run your own three revision passes (cut-for-information,
+read-aloud, specificity), then run `python meta/prose_lint.py <draft>` and fix every HARD flag
+before returning (soft flags are the critic's call, not yours to pre-empt). Return the full
+chapter markdown plus a short list of anything you could not verify or had to leave for the
+coder-tester or fact-checker.
