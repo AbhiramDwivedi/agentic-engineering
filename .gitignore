@@ -7,6 +7,9 @@ venv/
 __pycache__/
 *.pyc
 
+# Claude Code: machine-local permission grants (the shared setup is tracked)
+.claude/settings.local.json
+
 # OS / editor cruft
 .DS_Store
 Thumbs.db
