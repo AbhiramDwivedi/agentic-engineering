@@ -43,7 +43,10 @@ linted; your job is to give them something worth sharpening, not something safe.
   (`> **In Listing Studio.**`) is three sentences max.
 - **No em-dashes.** Anywhere.
 - **Titles are canonical nouns** ("Tool Use", "Fan-Out"); the evocative phrase goes in the
-  italic gloss line under the head.
+  italic gloss line under the head, with an `*Also called: …*` line of common aliases beneath it.
+- **Define named techniques.** The first time a chapter uses a named technique, pattern, or acronym
+  (ReAct, RAG, MCP, evaluator-optimizer), give it a one-clause definition or link its entry in
+  `docs/catalogs/glossary.md`. A citation is not a definition.
 - **Diagram language:** rounded `( )` = the model decides; rectangle `[ ]` = your code decides;
   hexagon `{{ }}` = a capability. One shape diagram in How; a numbered run trace after the code.
 

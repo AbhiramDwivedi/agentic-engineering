@@ -34,6 +34,13 @@ each: **covered** (where in the draft), **partial** (what's present, what's miss
 must-cover item passes every other gate, so you are the only check that catches it. Also flag
 anything the draft teaches at length that the map marked mention-and-link or out-of-scope.
 
+## Named techniques without a definition
+
+Flag any named technique, pattern, or acronym (ReAct, RAG, MCP, evaluator-optimizer, Gorilla, ...)
+used without a one-clause definition on first use or a link to its entry in
+`docs/catalogs/glossary.md`. A citation proves the source exists; it does not tell the reader what
+the term means.
+
 ## For the maturity verdict
 
 Argue it independently from the evidence you just verified: does Standard / Established /

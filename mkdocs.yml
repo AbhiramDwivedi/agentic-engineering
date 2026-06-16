@@ -144,6 +144,6 @@ nav:
       - "B. Pattern Quick-Reference": catalogs/quick-reference.md
       - "C. Decision Frameworks (planned)": catalogs/decision-frameworks.md
       - "D. State of Play 2026 (planned)": catalogs/state-of-play.md
-      - "E. Glossary (planned)": catalogs/glossary.md
+      - "E. Glossary": catalogs/glossary.md
       - "F. The Hardening Checklist (planned)": catalogs/hardening-checklist.md
   - Contributing: contributing.md
