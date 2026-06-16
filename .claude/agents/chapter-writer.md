@@ -31,6 +31,9 @@ linted; your job is to give them something worth sharpening, not something safe.
   inside block-level `<div>`s. Callouts are bold-labelled blockquotes; the lens line is a
   single-line `<small class="chapter-meta">…</small>`; diagrams are Mermaid; long listings may
   collapse in `<details markdown><summary>`.
+- **Multi-provider code.** Default to **LangGraph**, shown inline; put the raw-SDK versions in
+  collapsed `<details markdown><summary>` panes, OpenAI Responses first, then Anthropic Messages
+  (never tabs). Do not explain the framework's internals. See `design-system.md`.
 - **Code is never invented.** Every code block must be copied verbatim from an anchored region
   (`# --8<-- [start:NAME]`) of a tested file in `listing-studio/`. If the code you need does not
   exist yet, say so in your report and describe what the coder-tester agent must build; do not

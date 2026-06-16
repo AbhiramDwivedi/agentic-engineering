@@ -16,10 +16,15 @@ PRICING = os.path.join(ROOT, "listing-studio", "pricing")
 
 # anchor name -> source file that defines it
 ANCHORS = {
-    "schema": "tools.py",
-    "tool": "tools.py",
-    "flow": "tool_use_example.py",
-    "many": "multi_tool_example.py",
+    "tool": "tool_use_langgraph.py",
+    "flow": "tool_use_langgraph.py",
+    "many": "tool_use_langgraph.py",
+    "schema_responses": "tools.py",
+    "flow_responses": "tool_use_responses.py",
+    "many_responses": "multi_tool_responses.py",
+    "schema_anthropic": "tools.py",
+    "flow_anthropic": "tool_use_example.py",
+    "many_anthropic": "multi_tool_example.py",
 }
 
 

@@ -152,15 +152,17 @@ The coding-agent archetype is referenced as an external category, not built into
 Generic on purpose (confidentiality: keep infra ordinary, drop fingerprints). The graph and nodes
 run in **LangGraph** (matches the real stack we recast from). State persists in **Postgres**. Work
 runs on an **async pool**. Models come through a **multi-provider** layer, so "swap the model" is a
-config change. No proprietary, identifying artifacts. Other frameworks appear as prose asides and
+config change. Example code defaults to **LangGraph** (the carrier's real stack), with the raw
+OpenAI Responses API (`gpt-5.5`) and Anthropic Messages API (`claude-sonnet-4-6`) shown as
+`<details>` panes. No proprietary, identifying artifacts. Other frameworks appear as prose asides and
 one bake-off, not as parallel maintained codebases.
 
 ---
 
 ## 7. The specialist panel personas
 
-For step 5 (content blocks) and anywhere multi-persona reasoning appears, the three recast
-personas are commerce ones (never the real product's personas):
+For step 5 (content blocks) and anywhere multi-persona reasoning appears, the three specialist
+personas are commerce ones:
 
 - **the SEO specialist**: discoverability, search terms, titles;
 - **the pricing analyst**: margin, MAP, competitive position;

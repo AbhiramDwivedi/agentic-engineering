@@ -38,6 +38,11 @@ tested.
    cap, a validation step, an idempotency key), the anchored code demonstrates it, or carries a
    one-line comment marking the deliberate omission and pointing to where it lives. Runnable
    teaching code must not contradict the failure modes the chapter teaches.
+7. **Multi-provider examples.** The default is **LangGraph** (`create_agent` and
+   `init_chat_model("openai:gpt-5.5")`, from `langchain.agents` / `langchain.tools`), shown inline.
+   Also provide the raw-SDK versions for the `<details>` panes: OpenAI Responses (`gpt-5.5`) then
+   Anthropic Messages (`claude-sonnet-4-6`). All anchored and kept in sync. Verify any framework or
+   provider wire shape against live docs before coding it, never from memory.
 
 ## Definition of done
 

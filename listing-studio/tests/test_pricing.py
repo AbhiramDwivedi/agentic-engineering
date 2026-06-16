@@ -6,6 +6,8 @@ from pricing.tools import check_price, get_competitor_prices
 HERE = os.path.dirname(os.path.abspath(__file__))
 EXAMPLE = os.path.join(HERE, "..", "pricing", "tool_use_example.py")
 MULTI_EXAMPLE = os.path.join(HERE, "..", "pricing", "multi_tool_example.py")
+RESPONSES_EXAMPLE = os.path.join(HERE, "..", "pricing", "tool_use_responses.py")
+MULTI_RESPONSES_EXAMPLE = os.path.join(HERE, "..", "pricing", "multi_tool_responses.py")
 
 
 def test_guardrail_rejects_sub_map_price():
@@ -31,3 +33,5 @@ def test_examples_are_valid_python():
     # them. We do guarantee they stay valid, importable Python.
     py_compile.compile(EXAMPLE, doraise=True)
     py_compile.compile(MULTI_EXAMPLE, doraise=True)
+    py_compile.compile(RESPONSES_EXAMPLE, doraise=True)
+    py_compile.compile(MULTI_RESPONSES_EXAMPLE, doraise=True)

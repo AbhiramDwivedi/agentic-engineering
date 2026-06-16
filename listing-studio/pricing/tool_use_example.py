@@ -1,19 +1,19 @@
-"""The real tool-use loop against the Anthropic Messages API.
+"""The tool-use loop against the Anthropic Messages API.
 
 This is an illustration, not part of the test suite: it needs an API key and a
 network call. The tool's own logic lives in tools.py and is unit-tested; this
-file shows how the model and the tool talk to each other. The same shape applies
-to other vendors' tool-calling APIs.
+file shows how the model and the tool talk to each other. The default loop uses
+the OpenAI Responses API (tool_use_responses.py); this is the Anthropic variant.
 """
 import json
 
 import anthropic
 
-from .tools import PRICE_CHECK_TOOL, check_price
+from .tools import PRICE_CHECK_TOOL_ANTHROPIC, check_price
 
 client = anthropic.Anthropic()
 
-# --8<-- [start:flow]
+# --8<-- [start:flow_anthropic]
 messages = [
     {
         "role": "user",
@@ -25,7 +25,7 @@ messages = [
 reply = client.messages.create(
     model="claude-sonnet-4-6",
     max_tokens=1024,
-    tools=[PRICE_CHECK_TOOL],
+    tools=[PRICE_CHECK_TOOL_ANTHROPIC],
     messages=messages,
 )
 
@@ -53,10 +53,10 @@ while reply.stop_reason == "tool_use":
     reply = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=1024,
-        tools=[PRICE_CHECK_TOOL],
+        tools=[PRICE_CHECK_TOOL_ANTHROPIC],
         messages=messages,
     )
 
 # No more tool calls: the model has settled on an answer.
 print(reply.content[0].text)
-# --8<-- [end:flow]
+# --8<-- [end:flow_anthropic]

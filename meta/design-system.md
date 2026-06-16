@@ -45,6 +45,16 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 | Citation | footnote | every non-obvious claim |
 | See also | links | cross-links to related chapters |
 
+### Multi-provider code examples
+
+Code that differs only by SDK or framework is shown **stacked, not in tabs** (tabs are
+Material-only and break GitHub). The default is **LangGraph**, the framework most practitioners
+reach for and the carrier's real stack, shown inline. The raw-SDK versions follow in collapsed
+`<details markdown><summary>…</summary>` panes, **OpenAI Responses API** first, then the
+**Anthropic Messages API**; they show what the framework wraps. Do not explain the framework's
+internals, the audience can read its docs. Every block is tested companion code under doc-sync,
+like any other code.
+
 ## 3. Language
 
 [`voice-and-style.md`](voice-and-style.md): the reference register, the rules, the blandness

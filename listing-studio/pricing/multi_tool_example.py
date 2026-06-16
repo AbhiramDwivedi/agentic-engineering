@@ -1,24 +1,26 @@
-"""The tool-use loop with more than one tool on offer.
+"""The multi-tool loop against the Anthropic Messages API.
 
 Same illustration caveats as tool_use_example.py: needs an API key and a
 network call, so it is compile-checked but not executed in CI. The structural
-difference from the single-tool loop is small and lives in the `many` region:
-a registry, and dispatch by the name the model chose.
+difference from the single-tool loop is small and lives in the `many_anthropic`
+region: a registry, and dispatch by the name the model chose. The default loop
+uses the OpenAI Responses API (multi_tool_responses.py); this is the Anthropic
+variant.
 """
 import json
 
 import anthropic
 
 from .tools import (
-    COMPETITOR_PRICE_TOOL,
-    PRICE_CHECK_TOOL,
+    COMPETITOR_PRICE_TOOL_ANTHROPIC,
+    PRICE_CHECK_TOOL_ANTHROPIC,
     check_price,
     get_competitor_prices,
 )
 
 client = anthropic.Anthropic()
 
-# --8<-- [start:many]
+# --8<-- [start:many_anthropic]
 # Several tools: the model picks by description; your code dispatches by name.
 TOOLS = {
     "check_price": check_price,
@@ -40,7 +42,7 @@ def run_tools(reply) -> list:
                 }
             )
     return results
-# --8<-- [end:many]
+# --8<-- [end:many_anthropic]
 
 messages = [
     {
@@ -55,7 +57,7 @@ messages = [
 reply = client.messages.create(
     model="claude-sonnet-4-6",
     max_tokens=1024,
-    tools=[PRICE_CHECK_TOOL, COMPETITOR_PRICE_TOOL],
+    tools=[PRICE_CHECK_TOOL_ANTHROPIC, COMPETITOR_PRICE_TOOL_ANTHROPIC],
     messages=messages,
 )
 
@@ -69,7 +71,7 @@ while reply.stop_reason == "tool_use":
     reply = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=1024,
-        tools=[PRICE_CHECK_TOOL, COMPETITOR_PRICE_TOOL],
+        tools=[PRICE_CHECK_TOOL_ANTHROPIC, COMPETITOR_PRICE_TOOL_ANTHROPIC],
         messages=messages,
     )
 
