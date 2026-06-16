@@ -5,6 +5,8 @@ network call. The tool's own logic lives in tools.py and is unit-tested; this
 file shows how the model and the tool talk to each other. The same shape applies
 to other vendors' tool-calling APIs.
 """
+import json
+
 import anthropic
 
 from .tools import PRICE_CHECK_TOOL, check_price
@@ -28,7 +30,13 @@ reply = client.messages.create(
 )
 
 # While the model asks for the tool, run it and hand back the result.
+# Cap the loop so a stuck model fails loudly instead of spinning (Gotcha 5).
+MAX_STEPS = 5
+steps = 0
 while reply.stop_reason == "tool_use":
+    steps += 1
+    if steps > MAX_STEPS:
+        raise RuntimeError("tool loop hit MAX_STEPS; the model may be stuck")
     messages.append({"role": "assistant", "content": reply.content})
     results = []
     for block in reply.content:
@@ -38,7 +46,7 @@ while reply.stop_reason == "tool_use":
                 {
                     "type": "tool_result",
                     "tool_use_id": block.id,
-                    "content": str(output),
+                    "content": json.dumps(output),
                 }
             )
     messages.append({"role": "user", "content": results})

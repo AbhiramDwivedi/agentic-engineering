@@ -36,6 +36,22 @@ Stockwell ships several AI surfaces. The reference teaches through them. Only th
 - **Devon, a platform engineer at Stockwell.** Builds and operates the AI surfaces. The "you" of
   most How-to sections.
 
+**How the reference uses these people** (settled 2026-06-16; supersedes the placeholder note in
+Settled choices). A reference is read one page at a time, landed on from search, so every name is a
+pointer to a definition the reader may never have loaded. Artifacts are not: the Aldsworth desk, a
+`supplier_sku`, `price_cents`, `draft → review` define themselves, and they carry the concreteness.
+Names cost a lookup, so spend them carefully.
+
+- **Devon is the second person.** In How-to and reference prose the platform engineer is *you* and
+  *your code*, never "Devon" in the third person. Naming him beside "your code" makes two labels for
+  one role. His first name belongs in the warmer distribution blog posts, not the chapters.
+- **Name a human only where a human is in the mechanism:** a review gate, a person racing the agent
+  for the same row. If the sentence still works with "your code" or "a person," the name is
+  decoration; cut it.
+- **Introduce by role on first mention, every page.** Prefer the role noun, which defines itself:
+  "a merchandiser edits the same desk," not "Maya edits the same desk." Attach the name only when
+  the person recurs on the page and the recurrence carries meaning ("Maya, a merchandiser, ...").
+
 ---
 
 ## 2. The data model
@@ -160,6 +176,8 @@ They reason independently, then a reconcile step merges them.
 - Code identifiers match section 2 exactly.
 - Numbers are measured from `listing-studio/`, never invented (see the warning up top).
 - If a chapter needs a new specific, add it here first, then use it.
+- People follow the usage policy in §1: Devon is *you*; introduce a named human by role on first
+  mention; prefer the role noun; cut decorative names.
 
 ---
 

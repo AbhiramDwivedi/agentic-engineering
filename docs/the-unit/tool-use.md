@@ -14,7 +14,7 @@ A language model can reason about almost anything you put in the prompt, but it 
 
 Take pricing. You ask the model to set the price on a sit-stand desk in your catalog, and it gives you a confident $379. The supplier's contract sets a minimum advertised price of $399, but that floor lives in your pricing rules, and the model has never seen it. It did not refuse; it guessed. So the $379 goes live, the price is now below the contract floor, and a sub-MAP price can get your catalog dropped.
 
-Give the model a tool and the problem goes away. You hand it a function that checks a proposed price against the rules. It proposes $379, the function reports a floor of $399, and the model revises. The model still writes the number, but the floor comes from your code.
+Give the model a tool and the failure mode changes. You hand it a function that checks a proposed price against the rules; it proposes $379, the function reports a floor of $399, and the model revises. The model still writes the number, but the floor now comes from your code, as long as the model calls the tool and you act on what it returns.
 
 That is the trigger in general: reach for a tool when the answer lives outside the model's weights and your prompt. Four cases cover most of it:
 
@@ -23,16 +23,16 @@ That is the trigger in general: reach for a tool when the answer lives outside t
 - **A check the model cannot run.** Margin math, address validation, anything where "close" is wrong.
 - **An action in the world.** Writing the listing, issuing the refund, sending the email.
 
-And the counter-trigger: when your own code already holds the answer and no judgement is needed, call the code and leave the model out of it.
+And the counter-trigger: when your own code already holds the answer and no judgement is needed, call the code and leave the model out of it. That line also separates this from the next chapter: a tool reaches outside the model, while [structured output](structured-output.md) just shapes what the model already produced. Both lean on the same JSON-schema machinery; only tool use runs a function.
 
 ## 2. What it actually is
 
-A tool is two things: a function in your code, and a description of that function the model can read. You give the model the description as a JSON schema, the same shape on every major API:
+A tool is two things: a function in your code, and a description of that function the model can read. You give the model the description as a JSON schema. The mental model is the same on every major API, a named function with a described, typed input, though the field names differ; this is Anthropic's `input_schema`, and OpenAI nests the same idea under `parameters`:
 
 ```python
 # What you describe to the model. It reads this, never your code, so the
-# description and the schema have to be good. The same shape works on every
-# major API.
+# description and the schema have to be good. This is Anthropic's shape
+# (input_schema); other vendors use the same idea with different field names.
 PRICE_CHECK_TOOL = {
     "name": "check_price",
     "description": (
@@ -102,7 +102,13 @@ reply = client.messages.create(
 )
 
 # While the model asks for the tool, run it and hand back the result.
+# Cap the loop so a stuck model fails loudly instead of spinning (Gotcha 5).
+MAX_STEPS = 5
+steps = 0
 while reply.stop_reason == "tool_use":
+    steps += 1
+    if steps > MAX_STEPS:
+        raise RuntimeError("tool loop hit MAX_STEPS; the model may be stuck")
     messages.append({"role": "assistant", "content": reply.content})
     results = []
     for block in reply.content:
@@ -112,7 +118,7 @@ while reply.stop_reason == "tool_use":
                 {
                     "type": "tool_result",
                     "tool_use_id": block.id,
-                    "content": str(output),
+                    "content": json.dumps(output),
                 }
             )
     messages.append({"role": "user", "content": results})
@@ -173,7 +179,7 @@ def run_tools(reply) -> list:
                 {
                     "type": "tool_result",
                     "tool_use_id": block.id,
-                    "content": str(output),
+                    "content": json.dumps(output),
                 }
             )
     return results
@@ -185,7 +191,7 @@ The loop itself does not change; `run_tools(reply)` replaces the inline for-loop
 
 The default `tool_choice` of `auto` lets the model decide each turn; `required` forces a call, a named tool pins one, and `none` turns tools off.[^3] Auto invites two opposite mistakes: the model skips a tool it needed, or it calls one it did not and pays for the round trip.[^8]
 
-> **In Listing Studio.** This is step 6 of the pipeline, **price**. The model proposes the number, `check_price` rules on it, and a listing cannot leave `draft` until the check passes. Devon's code owns that gate.
+> **In Listing Studio.** This is step 6 of the pipeline, **price**. The model proposes the number, `check_price` rules on it, and a listing cannot leave `draft` until the check passes. Your code owns that gate.
 
 ## 4. Gotchas
 
@@ -199,11 +205,11 @@ An agent with tools can do real damage, so most of the work is in the failure mo
 
 4. **Give each tool the least power that works.** A tool scoped to read one table cannot drop another. Keep the destructive, irreversible actions, the refunds and deletes and publishes, behind a person rather than behind a model's confidence. OWASP calls this excessive agency: the more an over-scoped tool can do, the more damage a single wrong call does.[^6] [Knowing When to Ask](../craft/human-in-the-loop.md) covers the human gate, and [Guardrails & Safety](../craft/guardrails-and-safety.md) covers enforcing it.
 
-5. **Plan for the call to fail.** Tools time out and return half an answer. Make retries idempotent so a repeat does not double-charge. Cap the loop so a model stuck calling the tool fails loudly instead of spinning. And remember that tools writing shared state race with people. When Maya edits the same desk the agent is pricing, two writers fight over one row, and the locking and isolation are your code's job.[^6]
+5. **Plan for the call to fail.** Tools time out and return half an answer. When one fails, hand the model a result it can act on, not a stack trace: `{"error": "SKU not found; try search_catalog"}` lets it recover, where a raw `KeyError` just ends the run. Make retries idempotent so a repeat does not double-charge. Cap the loop so a model stuck calling the tool fails loudly instead of spinning, as the loop in §3 does. And remember that tools writing shared state race with people. When a merchandiser edits the same desk the agent is pricing, two writers fight over one row, and the locking and isolation are your code's job.[^6]
 
 6. **Know how often this works.** On realistic multi-step tasks, even frontier models finish fewer than half, and they hold up worse than that across repeated runs.[^7] That is the case for gating every consequential action and keeping each agent's scope narrow. These models are fluent enough that the unreliability is easy to miss. Design for it anyway.
 
-7. **Tools cost tokens and time.** The schemas ride along in the input on every request, and each call is one more round trip.[^2] Trace every call, so a run that fails can be replayed and debugged.
+7. **Tools cost tokens, attention, and time.** Every schema rides in the input on every request, so a large tool surface taxes every call: fifty tools can fill the window with JSON before the model reads the task, and a longer menu is also a harder choice, so selection accuracy falls as the set grows. Keep the visible set small, and once the catalog outgrows the window, send only the tools relevant to the step instead of the whole registry. Revealing the relevant subset on demand rather than the whole catalog upfront is *progressive disclosure*, the same idea Agent Skills use to stay cheap; [Skills & MCP](skills-and-mcp.md) covers it and connecting tools at that scale. Each call is also one more round trip, so trace every call and a failed run can be replayed.[^2]
 
 ## 5. In short
 

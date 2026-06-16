@@ -1,7 +1,7 @@
 # --8<-- [start:schema]
 # What you describe to the model. It reads this, never your code, so the
-# description and the schema have to be good. The same shape works on every
-# major API.
+# description and the schema have to be good. This is Anthropic's shape
+# (input_schema); other vendors use the same idea with different field names.
 PRICE_CHECK_TOOL = {
     "name": "check_price",
     "description": (

@@ -36,6 +36,15 @@ it. Do not try to make a reference chapter sing. Make it true, clear, and commit
    lost.
 9. **Use the carrier.** Examples come from Listing Studio (see the carrier bible), consistently.
 10. **Earn every paragraph.** If a paragraph does not add information or move the argument, cut it.
+11. **The hook cannot outrun the Gotchas.** The strongest capability claim in the opening must
+    survive the failure-modes section. If the chapter later says the pattern fails half the time,
+    the hook cannot say the problem "goes away." State the capability and its boundary together.
+    *Test: take the boldest sentence in the opening, then find where Gotchas qualifies it. If
+    nothing does, one of the two is wrong.*
+12. **Concept is portable; wire format is not.** Do not write that a mechanism is "the same on
+    every API." The mental model is shared; the concrete fields differ by vendor (Anthropic
+    `input_schema`, OpenAI `parameters` / `strict`), and any code sample is one vendor's shape, so
+    label it. A schema validates *shape*, never *business truth*; say which you mean.
 
 ## The blandness checklist (the critic scores against this)
 
@@ -48,6 +57,8 @@ A draft fails if it shows these. The prose-critic agent flags each by line.
 - **Generic example.** "Imagine an online store" instead of the standing desk in Listing Studio.
 - **False balance.** Every option presented as equally good. A reference weights; it recommends.
 - **No throughline.** Sections that do not build on each other toward the chapter's point.
+- **Hook outruns the chapter.** An opening claim the Gotchas later contradict (the pattern "just
+  works", then a section on how often it does not).
 - **Surface tells.** See the list below.
 
 ## The tell-list (avoid)

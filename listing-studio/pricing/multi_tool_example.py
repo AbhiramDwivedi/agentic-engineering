@@ -5,6 +5,8 @@ network call, so it is compile-checked but not executed in CI. The structural
 difference from the single-tool loop is small and lives in the `many` region:
 a registry, and dispatch by the name the model chose.
 """
+import json
+
 import anthropic
 
 from .tools import (
@@ -34,7 +36,7 @@ def run_tools(reply) -> list:
                 {
                     "type": "tool_result",
                     "tool_use_id": block.id,
-                    "content": str(output),
+                    "content": json.dumps(output),
                 }
             )
     return results
@@ -57,7 +59,11 @@ reply = client.messages.create(
     messages=messages,
 )
 
+steps = 0
 while reply.stop_reason == "tool_use":
+    steps += 1
+    if steps > 5:
+        raise RuntimeError("tool loop hit the step cap; the model may be stuck")
     messages.append({"role": "assistant", "content": reply.content})
     messages.append({"role": "user", "content": run_tools(reply)})
     reply = client.messages.create(

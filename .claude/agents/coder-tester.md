@@ -34,6 +34,10 @@ tested.
    freely. Changing inside an anchor means the chapter changes too: flag it in your report.
 5. **Current models only.** When example code names a model, use a current ID (e.g.
    `claude-sonnet-4-6`); never invent one.
+6. **Show the guardrail the prose insists on.** If a chapter's gotchas name a safety rail (a loop
+   cap, a validation step, an idempotency key), the anchored code demonstrates it, or carries a
+   one-line comment marking the deliberate omission and pointing to where it lives. Runnable
+   teaching code must not contradict the failure modes the chapter teaches.
 
 ## Definition of done
 

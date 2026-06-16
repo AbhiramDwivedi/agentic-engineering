@@ -52,5 +52,13 @@ Contested); **Sources**; and a **verify-before-quoting** note flagging anything 
   cite the finding and the live source, not a snapshot value.
 - **Respect the spine.** Anything a sibling chapter owns becomes a mention-and-link, not a
   section. Check `mkdocs.yml` for what exists.
+- **Context economy is a standing lens.** Any pattern that puts content in the model's window
+  (tool schemas, retrieved chunks, memory, few-shot, inter-agent messages) pays twice: in tokens
+  and in degraded attention. The map names both costs and the mitigation (inject the minimal
+  relevant subset). Where a sibling chapter owns the depth, make it a mention-and-link, but never
+  silently skip it.
+- **Loop and feedback patterns cover the failure path.** Wherever the model consumes the result of
+  a step, the map requires the failure-return contract: how a failed step comes back to the model
+  as a recoverable, structured message rather than a raw exception, not only the happy path.
 - **Your map is a recommendation.** The author trims the must-cover list and signs off; scope is a
   human decision. End your report with the open questions the author must rule on.
