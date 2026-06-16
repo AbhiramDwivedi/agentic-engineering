@@ -56,7 +56,8 @@ flowchart TB
         direction LR
         TU("2.1 Tool Use")
         SO{{"2.2 Structured Output"}}
-        MCP("2.3 Skills & MCP")
+        SK("2.3 Skills")
+        MCP("2.4 MCP")
     end
 
     subgraph COMP["Part III · Composition — arranging many of them"]

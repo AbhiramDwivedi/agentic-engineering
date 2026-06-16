@@ -95,7 +95,8 @@ nav:
       - the-unit/index.md
       - "2.1 Tool Use": the-unit/tool-use.md
       - "2.2 The Machine-Checkable Contract": the-unit/structured-output.md
-      - "2.3 Skills & MCP": the-unit/skills-and-mcp.md
+      - "2.3 Skills": the-unit/skills.md
+      - "2.4 MCP": the-unit/mcp.md
   - III. Composition:
       - composition/index.md
       - "3.1 Why Not One Big Prompt": composition/prompt-chaining.md

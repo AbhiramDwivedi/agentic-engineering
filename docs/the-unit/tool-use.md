@@ -344,7 +344,7 @@ An agent with tools can do real damage, so most of the work is in the failure mo
 
 6. **Know how often this works.** On realistic multi-step tasks, even frontier models finish fewer than half, and they hold up worse than that across repeated runs.[^7] That is the case for gating every consequential action and keeping each agent's scope narrow. These models are fluent enough that the unreliability is easy to miss. Design for it anyway.
 
-7. **Tools cost tokens, attention, and time.** Every schema rides in the input on every request, so a large tool surface taxes every call: fifty tools can fill the window with JSON before the model reads the task, and a longer menu is also a harder choice, so selection accuracy falls as the set grows. Keep the visible set small, and once the catalog outgrows the window, send only the tools relevant to the step instead of the whole registry. Revealing the relevant subset on demand rather than the whole catalog upfront is *progressive disclosure*, the same idea Agent Skills use to stay cheap; [Skills & MCP](skills-and-mcp.md) covers it and connecting tools at that scale. Each call is also one more round trip, so trace every call and a failed run can be replayed.[^2]
+7. **Tools cost tokens, attention, and time.** Every schema rides in the input on every request, so a large tool surface taxes every call: fifty tools can fill the window with JSON before the model reads the task, and a longer menu is also a harder choice, so selection accuracy falls as the set grows. Keep the visible set small, and once the catalog outgrows the window, send only the tools relevant to the step instead of the whole registry. Revealing the relevant subset on demand rather than the whole catalog upfront is *progressive disclosure*, the same idea Agent Skills use to stay cheap; [Skills](skills.md) covers it, and [MCP](mcp.md) covers connecting tools at that scale. Each call is also one more round trip, so trace every call and a failed run can be replayed.[^2]
 
 ## 5. In short
 
@@ -364,7 +364,8 @@ Give the model the price-check tool, but never let an unchecked price reach `rev
 ## See also
 
 - [2.2 The Machine-Checkable Contract](structured-output.md), the typed-output side of the same boundary.
-- [2.3 Skills & MCP](skills-and-mcp.md), for connecting tools at scale.
+- [2.3 Skills](skills.md), for packaging procedural know-how and progressive disclosure.
+- [2.4 MCP](mcp.md), for connecting tools at scale.
 - [4.3 Knowing When to Ask](../craft/human-in-the-loop.md), on gating destructive actions behind a human.
 - [4.4 Guardrails & Safety](../craft/guardrails-and-safety.md), on enforcing the check as a gate and defending against injection.
 - [The Anti-Patterns Catalog](../catalogs/anti-patterns.md), for "the model self-polices a rule the code should own."
