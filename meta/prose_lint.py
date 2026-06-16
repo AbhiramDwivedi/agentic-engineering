@@ -63,7 +63,9 @@ PATTERNS = [
 # --- breaks on GitHub's file view. mkdocs build --strict does NOT catch these.
 DUAL_RENDER = [
     ("admonition (!!!/???)", re.compile(r"^\s*(!{3}|\?{3}\+?)(\s|$)")),
-    ('content tab (=== "...")', re.compile(r'^\s*===\s+"')),
+    # Content tabs are banned EXCEPT the sanctioned multi-provider labels (design-system.md):
+    ('content tab (=== "...")',
+     re.compile(r'^\s*===\s+"(?!(?:LangGraph|OpenAI Responses API|Anthropic Messages API)")')),
     ("attr_list button ({ .md-button })", re.compile(r"\{\s*\.md-button")),
     ("markdown inside <div>", re.compile(r"<div[^>]*\bmarkdown\b", re.I)),
 ]

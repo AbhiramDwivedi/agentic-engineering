@@ -25,8 +25,10 @@ The named, reusable blocks. Use them as defined; do not invent variants.
 
 **Dual rendering is a hard constraint.** Every page must read correctly in two places: the
 built site and GitHub's own file view (where readers and contributors will actually meet the
-markdown). That rules out Material-only syntax in content: no `!!!` admonitions, no content
-tabs, no attr_list buttons, no markdown inside block-level `<div>`s. Callouts are
+markdown). That rules out Material-only syntax in content: no `!!!` admonitions, no attr_list buttons, no
+markdown inside block-level `<div>`s. Content tabs are banned except for the multi-provider code
+blocks below (the one accepted exception): there they render as clickable tabs on the site and
+degrade to literal markers on GitHub's raw view, a tradeoff taken for the code-switching experience. Callouts are
 bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams are mermaid
 (GitHub renders it natively).
 
@@ -47,13 +49,13 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 
 ### Multi-provider code examples
 
-Code that differs only by SDK or framework is shown **stacked, not in tabs** (tabs are
-Material-only and break GitHub). The default is **LangGraph**, the framework most practitioners
-reach for and the carrier's real stack, shown inline. The raw-SDK versions follow in collapsed
-`<details markdown><summary>…</summary>` panes, **OpenAI Responses API** first, then the
-**Anthropic Messages API**; they show what the framework wraps. Do not explain the framework's
-internals, the audience can read its docs. Every block is tested companion code under doc-sync,
-like any other code.
+Code that differs only by SDK or framework is shown in **Material content tabs** (`=== "…"`), the
+**LangGraph** tab first and active by default, then **OpenAI Responses API**, then the **Anthropic
+Messages API**. Reuse the same tab labels across a page so the tabs link. They render as clickable
+tabs on the site (the intended reading experience) and degrade to literal markers on GitHub; that
+tradeoff is accepted. Do not explain the framework's internals, the audience can read its docs.
+Every tab's code is tested companion code under doc-sync, which dedents the tab indentation before
+matching.
 
 ## 3. Language
 

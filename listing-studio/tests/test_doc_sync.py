@@ -44,7 +44,11 @@ def _region(src: str, name: str) -> str:
 
 
 def _python_blocks(md: str) -> list[str]:
-    return [b.strip("\n") for b in re.findall(r"```python\n(.*?)```", md, re.S)]
+    import textwrap
+    blocks = []
+    for b in re.findall(r"[ \t]*```python\n(.*?)[ \t]*```", md, re.S):
+        blocks.append(textwrap.dedent(b).strip("\n"))
+    return blocks
 
 
 def test_chapter_code_matches_tested_source():

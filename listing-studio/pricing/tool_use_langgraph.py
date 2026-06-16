@@ -10,7 +10,7 @@ from langchain.tools import tool
 
 # --8<-- [start:tool]
 # A tool is just your function. LangGraph reads a description generated from the
-# type hints and the docstring; underneath it is a JSON schema (see the panes).
+# type hints and the docstring; underneath it is a JSON schema (see the other tabs).
 @tool(parse_docstring=True)
 def check_price(supplier_sku: str, proposed_price_cents: int) -> dict:
     """Check a proposed price against the supplier's minimum advertised price.

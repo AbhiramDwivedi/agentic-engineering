@@ -29,74 +29,70 @@ And the counter-trigger: when your own code already holds the answer and no judg
 
 A tool is two things: a function in your code, and a description of that function the model can read. You give the model the description as a JSON schema. With LangGraph, you decorate the function and the framework generates the schema from your type hints and docstring:
 
-```python
-# A tool is just your function. LangGraph reads a description generated from the
-# type hints and the docstring; underneath it is a JSON schema (see the panes).
-@tool(parse_docstring=True)
-def check_price(supplier_sku: str, proposed_price_cents: int) -> dict:
-    """Check a proposed price against the supplier's minimum advertised price.
+=== "LangGraph"
 
-    Args:
-        supplier_sku: the product SKU.
-        proposed_price_cents: the price to check, in cents.
-    """
-    floor_cents = 39900  # $399.00 MAP for the Aldsworth desk
-    return {"ok": proposed_price_cents >= floor_cents, "floor_cents": floor_cents}
-```
+    ```python
+    # A tool is just your function. LangGraph reads a description generated from the
+    # type hints and the docstring; underneath it is a JSON schema (see the other tabs).
+    @tool(parse_docstring=True)
+    def check_price(supplier_sku: str, proposed_price_cents: int) -> dict:
+        """Check a proposed price against the supplier's minimum advertised price.
 
-<details markdown>
-<summary><b>The raw tool, OpenAI Responses API</b></summary>
+        Args:
+            supplier_sku: the product SKU.
+            proposed_price_cents: the price to check, in cents.
+        """
+        floor_cents = 39900  # $399.00 MAP for the Aldsworth desk
+        return {"ok": proposed_price_cents >= floor_cents, "floor_cents": floor_cents}
+    ```
 
-```python
-# What you describe to the model. It reads this, never your code, so the
-# description and the schema have to be good. This is the OpenAI Responses
-# shape; the Anthropic Messages API uses the same idea under `input_schema`.
-PRICE_CHECK_TOOL = {
-    "type": "function",
-    "name": "check_price",
-    "description": (
-        "Check a proposed price for a product against the supplier's minimum "
-        "advertised price (MAP) and margin floor. Call this before quoting a price."
-    ),
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "supplier_sku": {"type": "string"},
-            "proposed_price_cents": {"type": "integer"},
+=== "OpenAI Responses API"
+
+    ```python
+    # What you describe to the model. It reads this, never your code, so the
+    # description and the schema have to be good. This is the OpenAI Responses
+    # shape; the Anthropic Messages API uses the same idea under `input_schema`.
+    PRICE_CHECK_TOOL = {
+        "type": "function",
+        "name": "check_price",
+        "description": (
+            "Check a proposed price for a product against the supplier's minimum "
+            "advertised price (MAP) and margin floor. Call this before quoting a price."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "supplier_sku": {"type": "string"},
+                "proposed_price_cents": {"type": "integer"},
+            },
+            "required": ["supplier_sku", "proposed_price_cents"],
+            "additionalProperties": False,
         },
-        "required": ["supplier_sku", "proposed_price_cents"],
-        "additionalProperties": False,
-    },
-}
-```
+    }
+    ```
 
-</details>
+=== "Anthropic Messages API"
 
-<details markdown>
-<summary><b>The raw tool, Anthropic Messages API</b></summary>
-
-```python
-# The same tool, Anthropic Messages API shape: `input_schema` instead of
-# `parameters`, and no top-level `type`.
-PRICE_CHECK_TOOL_ANTHROPIC = {
-    "name": "check_price",
-    "description": (
-        "Check a proposed price for a product against the supplier's minimum "
-        "advertised price (MAP) and margin floor. Call this before quoting a price."
-    ),
-    "input_schema": {
-        "type": "object",
-        "properties": {
-            "supplier_sku": {"type": "string"},
-            "proposed_price_cents": {"type": "integer"},
+    ```python
+    # The same tool, Anthropic Messages API shape: `input_schema` instead of
+    # `parameters`, and no top-level `type`.
+    PRICE_CHECK_TOOL_ANTHROPIC = {
+        "name": "check_price",
+        "description": (
+            "Check a proposed price for a product against the supplier's minimum "
+            "advertised price (MAP) and margin floor. Call this before quoting a price."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "supplier_sku": {"type": "string"},
+                "proposed_price_cents": {"type": "integer"},
+            },
+            "required": ["supplier_sku", "proposed_price_cents"],
+            "additionalProperties": False,
         },
-        "required": ["supplier_sku", "proposed_price_cents"],
-        "additionalProperties": False,
-    },
-}
-```
-
-</details>
+    }
+    ```
 
 The model never sees the function body. It picks a tool from the `description` and fills in arguments that fit the schema, so both have to be right. Mark every field required, forbid extras with `additionalProperties: false`, and keep the set small; vendors put the comfortable ceiling around twenty tools.[^3]
 
@@ -114,110 +110,78 @@ flowchart LR
     M -- "final answer" --> F["Priced listing"]
 ```
 
-With LangGraph, the loop is handled for you:
+With LangGraph, the loop is handled for you; the raw-SDK tabs show what it runs. The shape is the same in any SDK, and one fact drives it: the model's API is stateless, so each turn you resend the whole conversation. The history grows as you append the model's tool call and then your result, you cap the loop so a stuck model fails loudly instead of spinning, and you stop once the model answers with no more calls.
 
-```python
-# LangGraph runs the loop for you: build the agent, then invoke it.
-agent = create_agent("openai:gpt-5.5", tools=[check_price])
+=== "LangGraph"
 
-result = agent.invoke(
-    {"messages": [{"role": "user",
-                   "content": "Set a price for the Aldsworth sit-stand desk, SKU NV-ALDSWORTH-DM."}]}
-)
-print(result["messages"][-1].content)
-```
+    ```python
+    # LangGraph runs the loop for you: build the agent, then invoke it.
+    agent = create_agent("openai:gpt-5.5", tools=[check_price])
 
-Open a pane to see the loop it runs for you. The shape is the same in any SDK, and one fact drives it: the model's API is stateless, so each turn you resend the whole conversation. The history grows as you append the model's tool call and then your result, you cap the loop so a stuck model fails loudly instead of spinning, and you stop once the model answers with no more calls.
+    result = agent.invoke(
+        {"messages": [{"role": "user",
+                       "content": "Set a price for the Aldsworth sit-stand desk, SKU NV-ALDSWORTH-DM."}]}
+    )
+    print(result["messages"][-1].content)
+    ```
 
-<details markdown>
-<summary><b>The raw loop, OpenAI Responses API</b></summary>
+=== "OpenAI Responses API"
 
-```python
-input_list = [
-    {
-        "role": "user",
-        "content": "Set a price for the Aldsworth sit-stand desk, SKU NV-ALDSWORTH-DM.",
-    }
-]
+    ```python
+    input_list = [
+        {
+            "role": "user",
+            "content": "Set a price for the Aldsworth sit-stand desk, SKU NV-ALDSWORTH-DM.",
+        }
+    ]
 
-# Offer the tool. The model decides whether to use it.
-response = client.responses.create(
-    model="gpt-5.5",
-    input=input_list,
-    tools=[PRICE_CHECK_TOOL],
-)
-
-# While the model asks for the tool, run it and hand back the result.
-# Cap the loop so a stuck model fails loudly instead of spinning (Gotcha 5).
-MAX_STEPS = 5
-steps = 0
-while any(item.type == "function_call" for item in response.output):
-    steps += 1
-    if steps > MAX_STEPS:
-        raise RuntimeError("tool loop hit MAX_STEPS; the model may be stuck")
-    input_list += response.output
-    for item in response.output:
-        if item.type == "function_call":
-            output = check_price(**json.loads(item.arguments))  # your code runs, not the model
-            input_list.append(
-                {
-                    "type": "function_call_output",
-                    "call_id": item.call_id,
-                    "output": json.dumps(output),
-                }
-            )
+    # Offer the tool. The model decides whether to use it.
     response = client.responses.create(
         model="gpt-5.5",
         input=input_list,
         tools=[PRICE_CHECK_TOOL],
     )
 
-# No more function calls: the model has settled on an answer.
-print(response.output_text)
-```
+    # While the model asks for the tool, run it and hand back the result.
+    # Cap the loop so a stuck model fails loudly instead of spinning (Gotcha 5).
+    MAX_STEPS = 5
+    steps = 0
+    while any(item.type == "function_call" for item in response.output):
+        steps += 1
+        if steps > MAX_STEPS:
+            raise RuntimeError("tool loop hit MAX_STEPS; the model may be stuck")
+        input_list += response.output
+        for item in response.output:
+            if item.type == "function_call":
+                output = check_price(**json.loads(item.arguments))  # your code runs, not the model
+                input_list.append(
+                    {
+                        "type": "function_call_output",
+                        "call_id": item.call_id,
+                        "output": json.dumps(output),
+                    }
+                )
+        response = client.responses.create(
+            model="gpt-5.5",
+            input=input_list,
+            tools=[PRICE_CHECK_TOOL],
+        )
 
-</details>
+    # No more function calls: the model has settled on an answer.
+    print(response.output_text)
+    ```
 
-<details markdown>
-<summary><b>The raw loop, Anthropic Messages API</b></summary>
+=== "Anthropic Messages API"
 
-```python
-messages = [
-    {
-        "role": "user",
-        "content": "Set a price for the Aldsworth sit-stand desk, SKU NV-ALDSWORTH-DM.",
-    }
-]
+    ```python
+    messages = [
+        {
+            "role": "user",
+            "content": "Set a price for the Aldsworth sit-stand desk, SKU NV-ALDSWORTH-DM.",
+        }
+    ]
 
-# Offer the tool. The model decides whether to use it.
-reply = client.messages.create(
-    model="claude-sonnet-4-6",
-    max_tokens=1024,
-    tools=[PRICE_CHECK_TOOL_ANTHROPIC],
-    messages=messages,
-)
-
-# While the model asks for the tool, run it and hand back the result.
-# Cap the loop so a stuck model fails loudly instead of spinning (Gotcha 5).
-MAX_STEPS = 5
-steps = 0
-while reply.stop_reason == "tool_use":
-    steps += 1
-    if steps > MAX_STEPS:
-        raise RuntimeError("tool loop hit MAX_STEPS; the model may be stuck")
-    messages.append({"role": "assistant", "content": reply.content})
-    results = []
-    for block in reply.content:
-        if block.type == "tool_use":
-            output = check_price(**block.input)  # your code runs, not the model
-            results.append(
-                {
-                    "type": "tool_result",
-                    "tool_use_id": block.id,
-                    "content": json.dumps(output),
-                }
-            )
-    messages.append({"role": "user", "content": results})
+    # Offer the tool. The model decides whether to use it.
     reply = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=1024,
@@ -225,11 +189,37 @@ while reply.stop_reason == "tool_use":
         messages=messages,
     )
 
-# No more tool calls: the model has settled on an answer.
-print(reply.content[0].text)
-```
+    # While the model asks for the tool, run it and hand back the result.
+    # Cap the loop so a stuck model fails loudly instead of spinning (Gotcha 5).
+    MAX_STEPS = 5
+    steps = 0
+    while reply.stop_reason == "tool_use":
+        steps += 1
+        if steps > MAX_STEPS:
+            raise RuntimeError("tool loop hit MAX_STEPS; the model may be stuck")
+        messages.append({"role": "assistant", "content": reply.content})
+        results = []
+        for block in reply.content:
+            if block.type == "tool_use":
+                output = check_price(**block.input)  # your code runs, not the model
+                results.append(
+                    {
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": json.dumps(output),
+                    }
+                )
+        messages.append({"role": "user", "content": results})
+        reply = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=1024,
+            tools=[PRICE_CHECK_TOOL_ANTHROPIC],
+            messages=messages,
+        )
 
-</details>
+    # No more tool calls: the model has settled on an answer.
+    print(reply.content[0].text)
+    ```
 
 One run of that loop, for the desk:
 
@@ -255,70 +245,66 @@ flowchart LR
     M -- "final answer" --> F["Priced listing"]
 ```
 
-With LangGraph the structural change is one line: pass both tools to the agent. Without a framework you own the registry and the dispatch-by-name yourself, which the raw panes show.
+With LangGraph the structural change is one line: pass both tools to the agent. Without a framework you own the registry and the dispatch-by-name yourself, which the raw-SDK tabs show.
 
-```python
-# Several tools: hand them all to the agent; it routes by description.
-agent = create_agent("openai:gpt-5.5", tools=[check_price, get_competitor_prices])
-```
+=== "LangGraph"
 
-<details markdown>
-<summary><b>The raw multi-tool loop, OpenAI Responses API</b></summary>
+    ```python
+    # Several tools: hand them all to the agent; it routes by description.
+    agent = create_agent("openai:gpt-5.5", tools=[check_price, get_competitor_prices])
+    ```
 
-```python
-# Several tools: the model picks by description; your code dispatches by name.
-TOOLS = {
-    "check_price": check_price,
-    "get_competitor_prices": get_competitor_prices,
-}
+=== "OpenAI Responses API"
 
-
-def run_tools(response) -> list:
-    """One function_call_output per function_call item, matched by call_id."""
-    results = []
-    for item in response.output:
-        if item.type == "function_call":
-            output = TOOLS[item.name](**json.loads(item.arguments))
-            results.append(
-                {
-                    "type": "function_call_output",
-                    "call_id": item.call_id,
-                    "output": json.dumps(output),
-                }
-            )
-    return results
-```
-
-</details>
-
-<details markdown>
-<summary><b>The raw multi-tool loop, Anthropic Messages API</b></summary>
-
-```python
-# Several tools: the model picks by description; your code dispatches by name.
-TOOLS = {
-    "check_price": check_price,
-    "get_competitor_prices": get_competitor_prices,
-}
+    ```python
+    # Several tools: the model picks by description; your code dispatches by name.
+    TOOLS = {
+        "check_price": check_price,
+        "get_competitor_prices": get_competitor_prices,
+    }
 
 
-def run_tools(reply) -> list:
-    """One tool_result per tool_use block, matched by id."""
-    results = []
-    for block in reply.content:
-        if block.type == "tool_use":
-            output = TOOLS[block.name](**block.input)
-            results.append(
-                {
-                    "type": "tool_result",
-                    "tool_use_id": block.id,
-                    "content": json.dumps(output),
-                }
-            )
-    return results
-```
+    def run_tools(response) -> list:
+        """One function_call_output per function_call item, matched by call_id."""
+        results = []
+        for item in response.output:
+            if item.type == "function_call":
+                output = TOOLS[item.name](**json.loads(item.arguments))
+                results.append(
+                    {
+                        "type": "function_call_output",
+                        "call_id": item.call_id,
+                        "output": json.dumps(output),
+                    }
+                )
+        return results
+    ```
 
-</details>
+=== "Anthropic Messages API"
+
+    ```python
+    # Several tools: the model picks by description; your code dispatches by name.
+    TOOLS = {
+        "check_price": check_price,
+        "get_competitor_prices": get_competitor_prices,
+    }
+
+
+    def run_tools(reply) -> list:
+        """One tool_result per tool_use block, matched by id."""
+        results = []
+        for block in reply.content:
+            if block.type == "tool_use":
+                output = TOOLS[block.name](**block.input)
+                results.append(
+                    {
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": json.dumps(output),
+                    }
+                )
+        return results
+    ```
 
 Adding a tool is one line either way: another entry in the agent's `tools` list, or another branch in your own dispatch. What changes is the model's burden: every tool you add is one more choice it can get wrong, which is the real reason behind the twenty-tool ceiling in §2.
 

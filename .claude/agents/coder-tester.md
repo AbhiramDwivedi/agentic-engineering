@@ -39,10 +39,11 @@ tested.
    one-line comment marking the deliberate omission and pointing to where it lives. Runnable
    teaching code must not contradict the failure modes the chapter teaches.
 7. **Multi-provider examples.** The default is **LangGraph** (`create_agent` and
-   `init_chat_model("openai:gpt-5.5")`, from `langchain.agents` / `langchain.tools`), shown inline.
-   Also provide the raw-SDK versions for the `<details>` panes: OpenAI Responses (`gpt-5.5`) then
-   Anthropic Messages (`claude-sonnet-4-6`). All anchored and kept in sync. Verify any framework or
-   provider wire shape against live docs before coding it, never from memory.
+   `init_chat_model("openai:gpt-5.5")`, from `langchain.agents` / `langchain.tools`). Show the three
+   providers in Material content tabs (`=== "…"`), LangGraph first, then OpenAI Responses (`gpt-5.5`),
+   then Anthropic Messages (`claude-sonnet-4-6`). All anchored and kept in sync; the doc-sync test
+   dedents the tab indentation before matching, so keep tab code at a single 4-space indent. Verify
+   any framework or provider wire shape against live docs before coding it, never from memory.
 
 ## Definition of done
 
