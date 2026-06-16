@@ -1,6 +1,10 @@
-# 7.2 A Silent Failure Is Worse
+# 7.2 Observer
 
 <small class="chapter-meta">**Maturity: Standard** (the observer/callback rule is standard engineering) · *Grounding:* production</small>
+
+*A silent failure is worse: emit progress and errors on every step, so nothing fails where no one can see it.*
+
+*Also called: callbacks, hooks, event listeners.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

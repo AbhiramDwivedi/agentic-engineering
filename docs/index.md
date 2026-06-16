@@ -63,8 +63,8 @@ flowchart TB
     subgraph COMP["Part III · Composition — arranging many of them"]
         direction LR
         PC["3.1 Prompt Chaining"]
-        RT["3.2 Dispatcher"]
-        FO("3.3 Fan-Out")
+        RT["3.2 Front Controller"]
+        FO("3.3 Orchestrator-Workers")
         EO("3.4 Evaluator-Optimizer")
         SP("3.5 Specialist Panel")
     end

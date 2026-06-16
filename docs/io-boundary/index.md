@@ -4,5 +4,5 @@ Messy reality in, polished artifacts out: ingestion and multimodal input, and as
 
 ## In this part
 
-- **6.1 Getting the Mess In** *(planned)*
-- **6.2 Producing the Deliverable** *(planned)*
+- **6.1 Ingestion** *(planned)*
+- **6.2 Output Assembly** *(planned)*

@@ -2,6 +2,10 @@
 
 <small class="chapter-meta">**Maturity: Emerging** (multi-persona reasoning works but isn't a settled, named industry pattern) · *Grounding:* companion repo</small>
 
+*The specialist panel: run the same input past several expert personas and reconcile their verdicts.*
+
+*Also called: multi-persona reasoning, mixture-of-roles, council/debate.*
+
 > **Stub: scaffolding, not finished writing.**
 > The skeleton below shows the beats this chapter will hit.
 > [Contributions welcome.](../contributing.md)

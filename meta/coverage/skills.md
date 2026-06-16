@@ -100,9 +100,9 @@ Ranked. Each: why it matters, the failure mode if skipped, maturity, lead citati
 - **Tool Use** — the contract, schema design, `tool_choice`, treating results as untrusted; a skill
   often packages the workflow that calls tools, so don't re-teach the loop → 2.1 Tool Use.
 - **Structured output** — validating a skill script's output against a schema (a poisoning
-  mitigation) → 2.2 The Machine-Checkable Contract.
+  mitigation) → 2.2 Structured Output.
 - **Guardrails & human-in-the-loop** — destructive-action approval, allowlisting, blast-radius for
-  what a skill's scripts may touch → 4.4 Guardrails & Safety, 4.3 Knowing When to Ask.
+  what a skill's scripts may touch → 4.4 Guardrails & Safety, 4.3 Human-in-the-Loop.
 - **Live adoption/benchmark numbers** (skill counts, marketplace stats) → link to source, never
   hardcode; they rot.
 

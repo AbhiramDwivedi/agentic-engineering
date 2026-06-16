@@ -1,6 +1,10 @@
-# 7.1 Which Failures Sink the Ship
+# 7.1 Retry & Graceful Degradation
 
 <small class="chapter-meta">**Maturity: Standard** (retry & graceful degradation are standard resilience engineering) · *Grounding:* production</small>
+
+*Which failures sink the ship: decide what to retry, what to fall back on, and what should just stop the run.*
+
+*Also called: resilience, backoff, fallback.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

@@ -47,8 +47,8 @@ Each chapter hits the same beats, so you always know where to look:
   [The Unit](../the-unit/index.md) → [Composition](../composition/index.md).
 - **Just the genuinely-new patterns:** [Tool Use](../the-unit/tool-use.md),
   [Evaluator-Optimizer](../composition/evaluator-optimizer.md),
-  [Fan-Out](../composition/fan-out.md), [The Specialist Panel](../composition/specialist-panel.md).
-- **The deflations:** [The Router That Isn't One](../composition/the-router-that-isnt.md), then
+  [Orchestrator-Workers](../composition/fan-out.md), [The Specialist Panel](../composition/specialist-panel.md).
+- **The deflations:** [Front Controller](../composition/the-router-that-isnt.md), then
   the [Anti-Patterns Catalog](../catalogs/anti-patterns.md).
 
 > **This site is a work in progress.**

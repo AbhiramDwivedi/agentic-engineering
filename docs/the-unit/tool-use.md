@@ -324,7 +324,7 @@ An agent with tools can do real damage, so most of the work is in the failure mo
 
 3. **The model can skip the tool.** With `tool_choice: auto` the model can answer without ever calling `check_price` and hand you a price straight from the text. The fix is a gate in your code: a price reaches `review` only after `check_price` has passed, whatever the model did. Forcing the call with `tool_choice` helps, but a forced call still trusts the model to act on the result. This is the anti-pattern the chapter feeds the catalog: the model left to police a rule the code should own.
 
-4. **Give each tool the least power that works.** A tool scoped to read one table cannot drop another. Keep the destructive, irreversible actions, the refunds and deletes and publishes, behind a person rather than behind a model's confidence. OWASP calls this excessive agency: the more an over-scoped tool can do, the more damage a single wrong call does.[^6] [Knowing When to Ask](../craft/human-in-the-loop.md) covers the human gate, and [Guardrails & Safety](../craft/guardrails-and-safety.md) covers enforcing it.
+4. **Give each tool the least power that works.** A tool scoped to read one table cannot drop another. Keep the destructive, irreversible actions, the refunds and deletes and publishes, behind a person rather than behind a model's confidence. OWASP calls this excessive agency: the more an over-scoped tool can do, the more damage a single wrong call does.[^6] [Human-in-the-Loop](../craft/human-in-the-loop.md) covers the human gate, and [Guardrails & Safety](../craft/guardrails-and-safety.md) covers enforcing it.
 
 5. **Plan for the call to fail.** Tools time out and return half an answer. When one fails, hand the model a result it can act on, not a stack trace: `{"error": "SKU not found; try search_catalog"}` lets it recover, where a raw `KeyError` just ends the run. Make retries idempotent so a repeat does not double-charge. Cap the loop so a model stuck calling the tool fails loudly instead of spinning, as the loop in §3 does. And remember that tools writing shared state race with people. When a merchandiser edits the same desk the agent is pricing, two writers fight over one row, and the locking and isolation are your code's job.[^6]
 
@@ -349,9 +349,9 @@ Give the model the price-check tool, but never let an unchecked price reach `rev
 
 ## See also
 
-- [2.2 The Machine-Checkable Contract](structured-output.md), the typed-output side of the same boundary.
+- [2.2 Structured Output](structured-output.md), the typed-output side of the same boundary.
 - [2.3 Skills](skills.md), for packaging procedural know-how and progressive disclosure.
 - [2.4 MCP](mcp.md), for connecting tools at scale.
-- [4.3 Knowing When to Ask](../craft/human-in-the-loop.md), on gating destructive actions behind a human.
+- [4.3 Human-in-the-Loop](../craft/human-in-the-loop.md), on gating destructive actions behind a human.
 - [4.4 Guardrails & Safety](../craft/guardrails-and-safety.md), on enforcing the check as a gate and defending against injection.
 - [The Anti-Patterns Catalog](../catalogs/anti-patterns.md), for "the model self-polices a rule the code should own."

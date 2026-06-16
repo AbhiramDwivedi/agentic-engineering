@@ -4,8 +4,8 @@ Arranging many units into a system, the patterns. The most-developed material, a
 
 ## In this part
 
-- **3.1 Why Not One Big Prompt**
-- **3.2 The Router That Isn't One**
-- **3.3 Fan-Out**
-- **3.4 Grading Its Own Homework**
+- **3.1 Prompt Chaining**
+- **3.2 Front Controller**
+- **3.3 Orchestrator-Workers**
+- **3.4 Evaluator-Optimizer**
 - **3.5 The Specialist Panel**

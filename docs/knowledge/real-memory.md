@@ -1,6 +1,10 @@
-# 5.3 Real Memory
+# 5.3 Memory
 
 <small class="chapter-meta">**Maturity: Emerging** (episodic/procedural memory is real but unsettled, and often not needed) · *Grounding:* research</small>
+
+*Real memory: when the system genuinely needs to remember across sessions, not just carry state within one.*
+
+*Also called: episodic / procedural memory, long-term memory.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

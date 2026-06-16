@@ -1,6 +1,10 @@
-# 6.2 Producing the Deliverable
+# 6.2 Output Assembly
 
 <small class="chapter-meta">**Maturity: Established** (assembling many outputs is common; the humanizer pass is our coinage) · *Grounding:* production</small>
+
+*Producing the deliverable: assemble many model outputs into one polished artifact a human will actually use.*
+
+*Also called: deliverable assembly, aggregation, composition.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

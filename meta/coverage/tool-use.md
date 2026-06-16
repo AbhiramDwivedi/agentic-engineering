@@ -54,7 +54,7 @@ chapter already covers it; `[+]` = gap in the current 2.1.
 
 ## Mention-and-link (one line, a pointer, not a section)
 
-- **MCP** as the cross-vendor tool-connectivity standard (now under the Linux Foundation) → 2.3 Skills & MCP.
+- **MCP** as the cross-vendor tool-connectivity standard (now under the Linux Foundation) → 2.4 MCP.
 - **Structured output / constrained decoding** internals (function calling *is* structured output) → 2.2.
 - **Fine-tuning / RLVR for tool use** → 8.3 To Train or to Prompt.
 - **RAG-based tool retrieval** for very large tool catalogs → one line + link.

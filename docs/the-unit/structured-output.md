@@ -1,6 +1,10 @@
-# 2.2 The Machine-Checkable Contract
+# 2.2 Structured Output
 
 <small class="chapter-meta">**Maturity: Standard** (a settled capability you should default to) · *Grounding:* production + research</small>
+
+*The machine-checkable contract: a schema the model must fill, so its output is something your code can trust.*
+
+*Also called: function calling (for outputs), constrained decoding, JSON/structured-output mode.*
 
 > **Stub: scaffolding, not finished writing.**
 > The skeleton below shows the beats this chapter will hit.

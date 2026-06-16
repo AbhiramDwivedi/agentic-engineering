@@ -1,6 +1,10 @@
-# 8.1 Seeing Inside
+# 8.1 Observability
 
 <small class="chapter-meta">**Maturity: Established** (tracing non-deterministic runs; the tooling is consolidating) · *Grounding:* research + production · *Last reviewed:* 2026-06</small>
+
+*Seeing inside: trace and monitor non-deterministic runs so you can debug what the model actually did.*
+
+*Also called: tracing, monitoring, telemetry.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

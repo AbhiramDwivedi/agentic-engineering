@@ -1,6 +1,10 @@
-# 4.1 Prompts Are Source Code
+# 4.1 Prompt Management
 
 <small class="chapter-meta">**Maturity: Standard** (treating prompts as versioned artifacts is accepted practice) · *Grounding:* production</small>
+
+*Prompts are source code: version them, review them, and roll them back like any other artifact.*
+
+*Also called: prompt versioning, PromptOps, prompts-as-code.*
 
 > **Stub: scaffolding, not finished writing.**
 > The skeleton below shows the beats this chapter will hit.

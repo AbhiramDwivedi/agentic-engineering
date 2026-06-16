@@ -1,6 +1,10 @@
-# 9.2 More Than One Agent
+# 9.2 Multi-Agent
 
 <small class="chapter-meta">**Maturity: Contested** (heavily hyped; most 'multi-agent' systems are one orchestrator with workers) · *Grounding:* research · *Last reviewed:* 2026-06</small>
+
+*More than one agent: separate agents that hand off to each other — often hype for what is really one orchestrator with workers.*
+
+*Also called: multi-agent systems, agent handoffs, swarms.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

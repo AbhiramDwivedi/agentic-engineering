@@ -4,7 +4,7 @@ The operator's part, thinner ground truth, more weather: observability, model se
 
 ## In this part
 
-- **8.1 Seeing Inside** *(planned)*
+- **8.1 Observability** *(planned)*
 - **8.2 Which Model?** *(planned)*
 - **8.3 To Train or to Prompt** *(planned)*
 - **8.4 Controlling Cost** *(planned)*

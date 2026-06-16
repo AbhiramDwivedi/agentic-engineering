@@ -1,6 +1,10 @@
-# 3.2 The Router That Isn't One
+# 3.2 Front Controller
 
 <small class="chapter-meta">**Maturity: Standard** (dispatch is decades-old; *LLM* routing is the newer, narrower thing) · *Grounding:* production</small>
+
+*The router that isn't one: a static lookup from event type to handler — your code decides, not the model.*
+
+*Also called: dispatcher, request dispatch (distinct from LLM "routing").*
 
 > **Stub: scaffolding, not finished writing.**
 > The skeleton below shows the beats this chapter will hit.

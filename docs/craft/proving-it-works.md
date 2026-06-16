@@ -1,6 +1,10 @@
-# 4.2 Proving It Works
+# 4.2 Evaluation
 
 <small class="chapter-meta">**Maturity: Established** (eval and LLM-as-judge are proven; the discipline is still maturing) · *Grounding:* production + research</small>
+
+*Proving it works: measure non-deterministic behavior against golden sets and judges instead of trusting vibes.*
+
+*Also called: evals, LLM-as-judge, golden sets.*
 
 > **Stub: scaffolding, not finished writing.**
 > The skeleton below shows the beats this chapter will hit.

@@ -94,40 +94,40 @@ nav:
   - II. The Unit:
       - the-unit/index.md
       - "2.1 Tool Use": the-unit/tool-use.md
-      - "2.2 The Machine-Checkable Contract": the-unit/structured-output.md
+      - "2.2 Structured Output": the-unit/structured-output.md
       - "2.3 Skills": the-unit/skills.md
       - "2.4 MCP": the-unit/mcp.md
   - III. Composition:
       - composition/index.md
-      - "3.1 Why Not One Big Prompt": composition/prompt-chaining.md
-      - "3.2 The Router That Isn't One": composition/the-router-that-isnt.md
-      - "3.3 Fan-Out": composition/fan-out.md
-      - "3.4 Grading Its Own Homework": composition/evaluator-optimizer.md
+      - "3.1 Prompt Chaining": composition/prompt-chaining.md
+      - "3.2 Front Controller": composition/the-router-that-isnt.md
+      - "3.3 Orchestrator-Workers": composition/fan-out.md
+      - "3.4 Evaluator-Optimizer": composition/evaluator-optimizer.md
       - "3.5 The Specialist Panel": composition/specialist-panel.md
   - IV. The Craft of Control:
       - craft/index.md
-      - "4.1 Prompts Are Source Code": craft/prompts-are-source-code.md
-      - "4.2 Proving It Works": craft/proving-it-works.md
-      - "4.3 Knowing When to Ask (planned)": craft/human-in-the-loop.md
+      - "4.1 Prompt Management": craft/prompts-are-source-code.md
+      - "4.2 Evaluation": craft/proving-it-works.md
+      - "4.3 Human-in-the-Loop (planned)": craft/human-in-the-loop.md
       - "4.4 Guardrails & Safety (planned)": craft/guardrails-and-safety.md
   - V. Knowledge & Memory:
       - knowledge/index.md
       - "5.1 State, Not Memory": knowledge/state-not-memory.md
-      - "5.2 Retrieval Done Honestly (planned)": knowledge/retrieval-rag.md
-      - "5.3 Real Memory (planned)": knowledge/real-memory.md
-      - "5.4 Compaction & the Window (planned)": knowledge/compaction-and-the-window.md
+      - "5.2 Retrieval (RAG) (planned)": knowledge/retrieval-rag.md
+      - "5.3 Memory (planned)": knowledge/real-memory.md
+      - "5.4 Compaction (planned)": knowledge/compaction-and-the-window.md
   - VI. The I/O Boundary:
       - io-boundary/index.md
-      - "6.1 Getting the Mess In (planned)": io-boundary/getting-the-mess-in.md
-      - "6.2 Producing the Deliverable (planned)": io-boundary/producing-the-deliverable.md
+      - "6.1 Ingestion (planned)": io-boundary/getting-the-mess-in.md
+      - "6.2 Output Assembly (planned)": io-boundary/producing-the-deliverable.md
   - VII. Reliability:
       - reliability/index.md
-      - "7.1 Which Failures Sink the Ship (planned)": reliability/which-failures-sink-the-ship.md
-      - "7.2 A Silent Failure Is Worse (planned)": reliability/a-silent-failure-is-worse.md
-      - "7.3 Stopping Gracefully (planned)": reliability/stopping-gracefully.md
+      - "7.1 Retry & Graceful Degradation (planned)": reliability/which-failures-sink-the-ship.md
+      - "7.2 Observer (planned)": reliability/a-silent-failure-is-worse.md
+      - "7.3 Checkpointing (planned)": reliability/stopping-gracefully.md
   - VIII. Operating in Production:
       - production/index.md
-      - "8.1 Seeing Inside (planned)": production/seeing-inside.md
+      - "8.1 Observability (planned)": production/seeing-inside.md
       - "8.2 Which Model? (planned)": production/which-model.md
       - "8.3 To Train or to Prompt (planned)": production/train-or-prompt.md
       - "8.4 Controlling Cost (planned)": production/controlling-cost.md
@@ -135,8 +135,8 @@ nav:
       - "8.6 Governance & Compliance (planned)": production/governance-and-compliance.md
   - IX. The Frontier:
       - frontier/index.md
-      - "9.1 When You Actually Want Autonomy (planned)": frontier/when-you-want-autonomy.md
-      - "9.2 More Than One Agent (planned)": frontier/more-than-one-agent.md
+      - "9.1 Autonomous Agents (planned)": frontier/when-you-want-autonomy.md
+      - "9.2 Multi-Agent (planned)": frontier/more-than-one-agent.md
       - "9.3 The Protocol Landscape (planned)": frontier/protocol-landscape.md
       - "9.4 Sandboxing (planned)": frontier/sandboxing.md
   - Catalogs & Appendices:

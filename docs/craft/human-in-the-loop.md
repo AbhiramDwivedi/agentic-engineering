@@ -1,6 +1,10 @@
-# 4.3 Knowing When to Ask
+# 4.3 Human-in-the-Loop
 
 <small class="chapter-meta">**Maturity: Standard** (checkpointing a human into the loop is accepted practice) · *Grounding:* production</small>
+
+*Knowing when to ask: route the high-stakes decisions to a person, and gate the agent behind their approval.*
+
+*Also called: HITL, approval gates, escalation.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

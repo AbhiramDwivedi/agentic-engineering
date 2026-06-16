@@ -153,8 +153,8 @@ Generic on purpose (confidentiality: keep infra ordinary, drop fingerprints). Th
 run in **LangGraph** (matches the real stack we recast from). State persists in **Postgres**. Work
 runs on an **async pool**. Models come through a **multi-provider** layer, so "swap the model" is a
 config change. Example code defaults to **LangGraph** (the carrier's real stack), with the raw
-OpenAI Responses API (`gpt-5.5`) and Anthropic Messages API (`claude-sonnet-4-6`) shown as
-`<details>` panes. No proprietary, identifying artifacts. Other frameworks appear as prose asides and
+OpenAI Responses API (`gpt-5.5`) and Anthropic Messages API (`claude-sonnet-4-6`) shown in
+Material content tabs. No proprietary, identifying artifacts. Other frameworks appear as prose asides and
 one bake-off, not as parallel maintained codebases.
 
 ---

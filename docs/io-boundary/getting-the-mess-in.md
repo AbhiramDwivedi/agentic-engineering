@@ -1,6 +1,10 @@
-# 6.1 Getting the Mess In
+# 6.1 Ingestion
 
 <small class="chapter-meta">**Maturity: Established** (multi-format/multimodal ingestion is proven and common) · *Grounding:* production</small>
+
+*Getting the mess in: turn messy, multi-format, real-world inputs into something the model can actually work with.*
+
+*Also called: parsing, ETL, document / multimodal ingestion.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

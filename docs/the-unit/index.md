@@ -4,7 +4,7 @@ The augmented LLM up close: a single model with tools, a machine-checkable contr
 
 ## In this part
 
-- **2.1 Giving the Model Hands**
-- **2.2 The Machine-Checkable Contract**
+- **2.1 Tool Use**
+- **2.2 Structured Output**
 - **2.3 Skills**
 - **2.4 MCP**

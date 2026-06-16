@@ -1,6 +1,10 @@
-# 5.4 Compaction & the Window
+# 5.4 Compaction
 
 <small class="chapter-meta">**Maturity: Emerging** (summarization works; 'context rot' is a newer, important finding) · *Grounding:* research · *Last reviewed:* 2026-06</small>
+
+*Compaction and the window: summarize and prune the context so it stays useful, because a full window isn't a healthy one.*
+
+*Also called: context compression, summarization, context-window management.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

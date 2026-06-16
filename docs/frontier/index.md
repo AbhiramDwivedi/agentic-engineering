@@ -4,7 +4,7 @@ The least-settled edge, explicitly dated: real autonomy, multi-agent systems, th
 
 ## In this part
 
-- **9.1 When You Actually Want Autonomy** *(planned)*
-- **9.2 More Than One Agent** *(planned)*
+- **9.1 Autonomous Agents** *(planned)*
+- **9.2 Multi-Agent** *(planned)*
 - **9.3 The Protocol Landscape** *(planned)*
 - **9.4 Sandboxing** *(planned)*

@@ -4,6 +4,6 @@ The demo-to-system gap, mostly 'just engineering': which failures actually sink 
 
 ## In this part
 
-- **7.1 Which Failures Sink the Ship** *(planned)*
-- **7.2 A Silent Failure Is Worse** *(planned)*
-- **7.3 Stopping Gracefully** *(planned)*
+- **7.1 Retry & Graceful Degradation** *(planned)*
+- **7.2 Observer** *(planned)*
+- **7.3 Checkpointing** *(planned)*

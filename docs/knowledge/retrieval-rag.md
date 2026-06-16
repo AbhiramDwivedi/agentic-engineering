@@ -1,6 +1,10 @@
-# 5.2 Retrieval Done Honestly
+# 5.2 Retrieval (RAG)
 
 <small class="chapter-meta">**Maturity: Standard** (RAG is an accepted default for semantic memory) · *Grounding:* companion repo + research</small>
+
+*Retrieval done honestly: fetch the relevant context at query time and ground the model in it, with its limits named.*
+
+*Also called: retrieval-augmented generation, semantic search.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

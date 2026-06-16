@@ -12,8 +12,8 @@ lens (standard, or hype?). Click through for the full chapter.
 | [Tool use](../the-unit/tool-use.md) | the model | Standard |
 | [Structured output](../the-unit/structured-output.md) | a feature | Standard |
 | [Prompt chaining](../composition/prompt-chaining.md) | your code (a draw) | Standard |
-| [Dispatch ("the router that isn't")](../composition/the-router-that-isnt.md) | your code | Standard |
-| [Fan-out / orchestrator-workers](../composition/fan-out.md) | the model (sizes its work) | Established |
+| [Front Controller](../composition/the-router-that-isnt.md) | your code | Standard |
+| [Orchestrator-workers](../composition/fan-out.md) | the model (sizes its work) | Established |
 | [Evaluator-optimizer](../composition/evaluator-optimizer.md) | the model | Established |
 | [Specialist panel](../composition/specialist-panel.md) | the model | Emerging |
 | [Retry & graceful degradation](../reliability/which-failures-sink-the-ship.md) | your code | Standard |

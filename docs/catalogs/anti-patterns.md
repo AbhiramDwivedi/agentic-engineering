@@ -30,7 +30,7 @@ and the fix.
 - **Trusting structured output without validation:** assuming a schema-shaped response is a
   *correct* response.
 - **Over-orchestration:** spawning agents and roles where one well-structured call would do;
-  see [More Than One Agent](../frontier/more-than-one-agent.md).
+  see [Multi-Agent](../frontier/more-than-one-agent.md).
 
 ## How to use this page
 

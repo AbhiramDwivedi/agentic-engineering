@@ -1,6 +1,10 @@
-# 3.1 Why Not One Big Prompt
+# 3.1 Prompt Chaining
 
 <small class="chapter-meta">**Maturity: Standard** (decomposition is an accepted default) · *Grounding:* production + research</small>
+
+*Why not one big prompt: split the work into a sequence of steps because one model call can't hold the whole task.*
+
+*Also called: prompt pipelines, sequential workflows.*
 
 > **Stub: scaffolding, not finished writing.**
 > The skeleton below shows the beats this chapter will hit.

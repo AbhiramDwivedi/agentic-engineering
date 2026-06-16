@@ -1,6 +1,10 @@
-# 3.4 Grading Its Own Homework
+# 3.4 Evaluator-Optimizer
 
 <small class="chapter-meta">**Maturity: Established** (a recognized, named workflow) · *Grounding:* production + research</small>
+
+*Grading its own homework: the model judges its own draft against a rubric and loops until the draft passes.*
+
+*Also called: generator-critic, self-refine, reflexion-style loops.*
 
 > **Stub: scaffolding, not finished writing.**
 > The skeleton below shows the beats this chapter will hit.

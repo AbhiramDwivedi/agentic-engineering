@@ -1,6 +1,10 @@
-# 7.3 Stopping Gracefully
+# 7.3 Checkpointing
 
 <small class="chapter-meta">**Maturity: Established** (cancellation and checkpointing/resumption are proven) · *Grounding:* production</small>
+
+*Stopping gracefully: save durable state at each step so a long run can be cancelled and resumed without starting over.*
+
+*Also called: cancellation / resumption, durable state, save points.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

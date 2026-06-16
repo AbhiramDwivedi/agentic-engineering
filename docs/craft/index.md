@@ -4,7 +4,7 @@ Engineering non-deterministic behaviour: managing prompts like source code, prov
 
 ## In this part
 
-- **4.1 Prompts Are Source Code**
-- **4.2 Proving It Works**
-- **4.3 Knowing When to Ask** *(planned)*
+- **4.1 Prompt Management**
+- **4.2 Evaluation**
+- **4.3 Human-in-the-Loop** *(planned)*
 - **4.4 Guardrails & Safety** *(planned)*
