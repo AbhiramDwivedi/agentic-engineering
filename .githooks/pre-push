@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+# Pre-push validation gate. Runs the SAME checks CI runs (deploy.yml's build job
+# + test.yml), so a red build never leaves the machine. Enable once per clone:
+#   git config core.hooksPath .githooks
+# Bypass only in a true emergency with `git push --no-verify` (don't make a habit of it).
+
+ROOT="$(git rev-parse --show-toplevel)" || exit 1
+cd "$ROOT" || exit 1
+fail=0
+
+echo "[pre-push] prose_lint (docs, --hard-only) ..."
+python meta/prose_lint.py $(find docs -name '*.md') --hard-only || fail=1
+
+echo "[pre-push] pytest (companion code + doc-sync) ..."
+( cd listing-studio && python -m pytest -q ) || fail=1
+
+if python -c "import mkdocs" 2>/dev/null; then
+  echo "[pre-push] mkdocs build --strict ..."
+  python -m mkdocs build --strict --quiet || fail=1
+else
+  echo "[pre-push] NOTE: mkdocs not installed locally; CI still runs 'mkdocs build --strict'."
+  echo "[pre-push]       install it with 'pip install -r requirements.txt' for a full local gate."
+fi
+
+if [ "$fail" -ne 0 ]; then
+  echo "" >&2
+  echo "[pre-push] BLOCKED: a validation failed above. Fix it before pushing." >&2
+  echo "[pre-push] (emergency override: git push --no-verify)" >&2
+  exit 1
+fi
+
+echo "[pre-push] all local validations passed."
+exit 0

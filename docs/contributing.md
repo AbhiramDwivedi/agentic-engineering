@@ -64,8 +64,13 @@ internal artifacts. Recast it into the commerce setting so the idea travels with
 python -m venv .venv
 # Windows: .venv\Scripts\activate   ·   macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
+git config core.hooksPath .githooks   # enable the pre-push validation gate
 mkdocs serve          # live preview at http://127.0.0.1:8000
 ```
+
+The pre-push hook runs the same gates CI does (`prose_lint --hard-only`, `pytest`, and
+`mkdocs build --strict`) and blocks a push that would fail the build. Run them yourself any time
+with `sh .githooks/pre-push`.
 
 Then open a PR against `main`. Keep it focused: one pattern, one fix, or one chapter per PR
 makes review fast.
