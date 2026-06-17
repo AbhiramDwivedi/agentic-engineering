@@ -23,7 +23,7 @@ The counter-trigger: this test tells you whether a pattern is *new*, not whether
 
 ## What it actually is
 
-The litmus test is a single question applied to a single pattern: **does the model make the structural decision, or does your code?** A structural decision is one that changes the control flow: which step runs next, whether to loop again, how many parallel branches to spawn, which path to take. Ask who owns that decision and the pattern sorts itself.
+The litmus test is that one question applied to a single pattern at a time. A structural decision is one that changes the control flow: which step runs next, whether to loop again, how many parallel branches to spawn, which path to take. Ask who owns that decision, the model or your code, and the pattern sorts itself.
 
 When the model owns it, the pattern is genuinely new. There are four tells, and each is a real model-made decision you can point to in running code:
 
@@ -93,7 +93,7 @@ The litmus is a sorting tool, and like any sorting tool it can be misread. Three
 
 **Classifying a pattern is not classifying a system.** The other misread runs the boundary from the What section the wrong way. A pipeline can contain four model-made decisions and still be, by the higher autonomy bar, a workflow rather than an agent. Do not let a passing litmus on one component tempt you into calling the whole system "an agent." That argument lives in [1.3 Workflow or Agent?](workflow-or-agent.md), and it has a different answer.
 
-**The cost of getting it wrong is concrete, which is why it is worth the care.** Mislabel a deterministic dispatch table as "intelligent routing" and you set three wrong expectations at once. You budget for model calls a `dict` will never make. You plan for a non-deterministic failure mode that cannot occur, and miss the one that can. Worst, you reach for the wrong test: a dispatch table is deterministic and you unit-test it like any branch, while a model making the call is non-deterministic and needs **evals**, not unit tests, to know it works at all.[^anthropic] [4.2 Evaluation](../craft/proving-it-works.md) covers that distinction. The label is not a word game; it is the thing that tells a technical leader where the real risk sits.
+**The cost of getting it wrong is concrete, which is why it is worth the care.** Mislabel a deterministic dispatch table as "intelligent routing" and you set three wrong expectations at once. You budget for model calls a `dict` will never make. You plan for a non-deterministic failure mode that cannot occur, and miss the one that can. Worst, you reach for the wrong test entirely: the deterministic branch needs only a unit test, while the model-made call needs **evals** to know it works at all.[^anthropic] [4.2 Evaluation](../craft/proving-it-works.md) covers that distinction. The label is not a word game; it is the thing that tells a technical leader where the real risk sits.
 
 The discipline that falls out of all three: **when in doubt, downgrade the claim.** If you cannot point to the specific model-made decision, the honest default is to classify the pattern as "your code decides," and a coinage as a coinage, not as canon. This is also the contribution rule. A pull request that sells a "code decides" pattern as agentic, or a local coinage as a discovered pattern, gets sent back, however good the writing. ([Contributing](../contributing.md).)
 
