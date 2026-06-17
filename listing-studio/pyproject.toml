@@ -7,6 +7,15 @@ dependencies = []
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
 
+# Each chapter's companion code is its own top-level package (pricing/,
+# augmented_llm/, ...). Declare them explicitly so the editable install does not
+# trip setuptools' flat-layout auto-discovery, which refuses to guess once there
+# is more than one top-level package. New chapter packages are picked up
+# automatically; only tests are excluded.
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["tests*"]
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
