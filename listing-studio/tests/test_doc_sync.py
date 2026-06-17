@@ -27,6 +27,20 @@ ANCHORS = {
     "many_anthropic": "multi_tool_example.py",
 }
 
+# Chapter 1.4 — The Augmented LLM
+AUGMENTED_LLM_CHAPTER = os.path.join(ROOT, "docs", "foundations", "the-augmented-llm.md")
+AUGMENTED_LLM_PKG = os.path.join(ROOT, "listing-studio", "augmented_llm")
+
+AUGMENTED_LLM_ANCHORS = {
+    "state":           "state.py",
+    "unit":            "augmented_llm_langgraph.py",
+    "node":            "augmented_llm_langgraph.py",
+    "unit_responses":  "augmented_llm_responses.py",
+    "node_responses":  "augmented_llm_responses.py",
+    "unit_anthropic":  "augmented_llm_example.py",
+    "node_anthropic":  "augmented_llm_example.py",
+}
+
 
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
@@ -58,4 +72,15 @@ def test_chapter_code_matches_tested_source():
         assert region in blocks, (
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/the-unit/tool-use.md with listing-studio/pricing/{fname}."
+        )
+
+
+def test_augmented_llm_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(AUGMENTED_LLM_CHAPTER))
+    for name, fname in AUGMENTED_LLM_ANCHORS.items():
+        region = _region(_read(os.path.join(AUGMENTED_LLM_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/foundations/the-augmented-llm.md with "
+            f"listing-studio/augmented_llm/{fname}."
         )

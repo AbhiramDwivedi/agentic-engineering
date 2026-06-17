@@ -37,6 +37,13 @@ Spawn **chapter-writer** with: the signed-off coverage map, the anchor names and
 stage 2, and the chapter path. It returns the full chapter markdown plus its list of
 unverified items.
 
+> **Maintainer enhancement (optional).** The draft may instead be produced by a multi-engine
+> fusion step: several engines draft the same full-chapter brief and an Opus reviewer fuses their
+> coverage onto the chapter-writer draft as the spine (which alone carries the anchored, tested
+> code). This runs only from the private planning workspace, where the extra engines' CLIs are
+> authed. Contributors without it use **chapter-writer** alone, the portable default. Either way
+> the output is one draft at the chapter path; everything from Stage 4 on is identical.
+
 ## Stage 4 — Adversarial QA (parallel)
 
 Spawn **prose-critic** and **fact-checker** on the draft at the same time. Both get the
