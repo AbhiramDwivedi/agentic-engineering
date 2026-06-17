@@ -2,7 +2,7 @@
 
 <small class="chapter-meta">**Maturity: Established** (parallelization is common; the model sizing its own work is the new part) · *Grounding:* production + research</small>
 
-*Fan-out, fan-in: split the work across parallel workers and gather the results — and let the model size its own work.*
+*Fan-out, fan-in: split the work across parallel workers and gather the results; the model sizes its own work.*
 
 *Also called: fan-out / fan-in, parallelization, scatter-gather, manager-workers.*
 

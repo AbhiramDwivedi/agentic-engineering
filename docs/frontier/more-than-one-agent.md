@@ -2,7 +2,7 @@
 
 <small class="chapter-meta">**Maturity: Contested** (heavily hyped; most 'multi-agent' systems are one orchestrator with workers) · *Grounding:* research · *Last reviewed:* 2026-06</small>
 
-*More than one agent: separate agents that hand off to each other — often hype for what is really one orchestrator with workers.*
+*More than one agent: separate agents that hand off to each other, often hype for what is really one orchestrator with workers.*
 
 *Also called: multi-agent systems, agent handoffs, swarms.*
 

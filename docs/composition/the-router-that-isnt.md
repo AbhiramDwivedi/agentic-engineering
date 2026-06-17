@@ -2,7 +2,7 @@
 
 <small class="chapter-meta">**Maturity: Standard** (dispatch is decades-old; *LLM* routing is the newer, narrower thing) · *Grounding:* production</small>
 
-*The router that isn't one: a static lookup from event type to handler — your code decides, not the model.*
+*The router that isn't one: a static lookup from event type to handler; your code decides, not the model.*
 
 *Also called: dispatcher, request dispatch (distinct from LLM "routing").*
 

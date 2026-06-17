@@ -2,7 +2,7 @@
 
 <small class="chapter-meta">**Maturity: Emerging** (real model-driven autonomy is promising and still risky in production) · *Grounding:* companion repo + research · *Last reviewed:* 2026-06</small>
 
-*When you actually want autonomy: the model plans its own steps and loops until done — the one genuine agent loop.*
+*When you actually want autonomy: the model plans its own steps and loops until done, the one genuine agent loop.*
 
 *Also called: the agent loop, self-directed agents.*
 
