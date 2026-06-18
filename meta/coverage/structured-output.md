@@ -18,6 +18,13 @@
 > mention only** inside item 5, not taught. *Grounding caveat:* the pricing step is real, but the
 > chosen example is less first-hand than attribute extraction — prefer "In Listing Studio." /
 > "In the companion repo." framing over first-hand "From production." claims unless verified.
+>
+> *Editorial (2026-06-17, author review):* lead with a clean **Standard** verdict (there is no real
+> reason to avoid structured output when code consumes the output). The "guarantees correct content"
+> overclaim and the reasoning-degradation debate are framed as "use it well" guidance, not adoption
+> caveats. §3 also now covers the schema vehicles (raw JSON Schema / TypedDict / Pydantic, with
+> Pydantic the default because the libraries consume it directly) and the format point (JSON is the
+> settled default; constrained decoding can target other grammars such as YAML or XML).
 
 ## The mental model (what the reader must leave with)
 
