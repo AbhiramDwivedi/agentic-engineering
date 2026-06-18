@@ -119,3 +119,12 @@
 
 ## See also
 <!-- Cross-links to related chapters. -->
+
+## Further reading
+<!--
+  A SHORT curated set of external deep-dives for the reader who wants more: the spec, the key
+  paper, the primary doc, the best skeptical take. Roughly 4-6 items, each with a one-line "what
+  it gives you". Distinct from Sources (per-claim footnotes) and See also (internal cross-links).
+  Point to the canonical primary source, not a blog aggregator; prefer links already verified in
+  Sources. Omit the section only if no good external deep-dive exists.
+-->

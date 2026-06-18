@@ -59,6 +59,7 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 | Framework differences | short `####` subsections | only where implementations differ (tabs are Material-only) |
 | Citation | footnote | every non-obvious claim |
 | See also | links | cross-links to related chapters |
+| Further reading | links, annotated | a short curated set of external deep-dives (the spec, the key paper, the primary doc, the best skeptical take), each with a one-line reason. Distinct from Sources (per-claim footnotes) and See also (internal cross-links); points to canonical primary sources, not aggregators. |
 
 ### Multi-provider code examples
 

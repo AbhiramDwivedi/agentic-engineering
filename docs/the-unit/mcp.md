@@ -28,7 +28,7 @@ Now run the litmus test the rest of this reference runs: who makes the structura
 
 The maturity verdict splits along the same line. As connectivity, MCP is **Standard**: the settled cross-vendor default, governed under a neutral foundation, shipped by the major providers.[^lf-aaif] Treating tool descriptions and results as untrusted, and asking for consent before a privileged action, are also Standard practice, written into the spec.[^mcp-spec] The supply-chain risk of consuming a third-party server, and the gap between connecting an agent and making it good, are **Established**: known, measured, and not yet solved. Stronger defences against the rug pull, such as signed tool definitions, are **Emerging**.[^etdi] And the reliability overclaim is **Contested**: the skeptical read in Gotchas takes it apart.
 
-Two neighbours are worth disambiguating. MCP tools are tools, and they obey the same call-execute-return contract as [Tool Use](tool-use.md); MCP is the standard wire that carries them across vendors, so this chapter does not re-teach the loop. A Skill packages knowledge the model reads; an MCP server provides connectivity the model reaches. They compose. A Skill can teach a workflow that drives MCP tools, so it is not a versus.
+Two neighbours need disambiguating. MCP tools are tools, and they obey the same call-execute-return contract as [Tool Use](tool-use.md); MCP is the standard wire that carries them across vendors, so this chapter does not re-teach the loop. A Skill packages knowledge the model reads; an MCP server provides connectivity the model reaches. They compose. A Skill can teach a workflow that drives MCP tools, so it is not a versus.
 
 ## How to do it
 
@@ -462,7 +462,7 @@ This is the consumer trust model extended to provider duties, not a full server 
 
 The security spine is the reason consuming someone else's server earns its risk, so it gets its own section rather than living in Gotchas. Three failure modes carry it: tool poisoning, the third-party-server trust boundary, and skipped consent.
 
-**Tool descriptions and results are both untrusted input. This is tool poisoning.** The poisoned result the opening described, and a description that embeds imperative text to redirect the model, are both the indirect prompt injection that [2.1](tool-use.md) warns about, now arriving over the wire. The spec itself says tool descriptions and annotations should be considered untrusted unless obtained from a trusted server.[^mcp-spec] Both map to OWASP's LLM01 Prompt Injection and LLM06 Excessive Agency.[^owasp-poison][^owasp-llm] The mitigation is the one the consumer wires in: scan descriptions on connect, and validate every result against an expected shape before it enters context. That second guard is small.
+**Tool descriptions and results are both untrusted input. This is tool poisoning.** The poisoned result the opening described, and a description that embeds imperative text to redirect the model, are both the indirect prompt injection that [2.1](tool-use.md) warns about, now arriving over the wire. The spec itself says tool descriptions and annotations should be considered untrusted unless obtained from a trusted server.[^mcp-spec] Both map to OWASP's LLM01 Prompt Injection and LLM06 Excessive Agency.[^owasp-poison][^owasp-llm] The mitigation is the one the consumer wires in: scan descriptions on connect, and validate every result against an expected shape before it enters context. The second guard takes only a few lines.
 
 ```python
 @dataclass
@@ -605,7 +605,7 @@ One honest caution: client-side token *reporting* can overstate the real MCP cos
 
 ## Ecosystem & tooling
 
-The tooling around MCP has grown faster than the standard itself, and most of it answers the Cost and Security sections above. The parts worth knowing:
+The tooling around MCP has grown faster than the standard itself, and most of it answers the Cost and Security sections above. The main parts:
 
 - the **official MCP registry** is a metadata catalog. It verifies that a publisher controls the namespace it claims through GitHub or DNS verification, which establishes provenance rather than quality or safety. It is still in preview, and a listing tells you only who published a server;[^mcp-registry]
 - discovery is fragmented across directories whose listing counts track inversely with how hard they vet. Docker's signed catalog is strict and small; open hubs are loose and large. Read a high count as a sign of loose curation;[^owasp-mcp-cheat]
@@ -651,3 +651,14 @@ Use MCP when you need connectivity, and reach for a Skill when you need knowledg
 - [4.3 Human-in-the-Loop](../craft/human-in-the-loop.md): the consent gate and the destructive-action approval the consumer wires in.
 - [4.4 Guardrails & Safety](../craft/guardrails-and-safety.md): blast-radius scoping, allowlisting, and remote-server authorization, the general machinery this chapter points to.
 - [9.3 The Protocol Landscape](../frontier/protocol-landscape.md): A2A and the competing protocols, out of scope here and a pointer only.
+
+## Further reading
+
+External deep-dives, beyond the per-claim footnotes in Sources. Each points at a primary source.
+
+- **The protocol itself:** [MCP specification, revision 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25) and its [security best-practices page](https://modelcontextprotocol.io/specification/2025-11-25/basic/security_best_practices). The authoritative definition of the roles, transports, and the consent and server-security MUSTs this chapter builds on.
+- **The threat catalog:** [OWASP MCP Security Cheat Sheet](https://cheatsheetseries.owasp.org/) and the [OWASP MCP Top 10](https://owasp.org/www-project-mcp-top-10/). The named failure modes (rug pull, confused deputy, token passthrough) and the mitigations, written as a checklist.
+- **The token cost:** Anthropic's [Code execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) and [Advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use). Where the context-bloat numbers come from, and the mitigations ladder from allowlisting to code execution.
+- **Why composition is dangerous:** Simon Willison's [The lethal trifecta for AI agents](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/). The one-paragraph frame for why connecting servers quietly assembles an exfiltration risk no scanner can catch.
+- **How well models actually use it:** the [MCP-Universe benchmark](https://arxiv.org/abs/2508.14704) (and its companion MCPMark). The measured reliability gap behind the "MCP makes agents reliable" overclaim; read the live source for current numbers.
+- **Where servers are catalogued:** the [official MCP registry](https://modelcontextprotocol.io/registry). Namespace-verified provenance for published servers (it confirms who published a server, never its quality or safety); still in preview.
