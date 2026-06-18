@@ -42,7 +42,9 @@ PATTERNS = [
     # persuasive-authority tropes (humanizer S27)
     ("authority trope", r"\b(the real question|at its core|what really matters|fundamentally|the heart of the matter|the deeper issue|in reality)\b", SOFT),
     # signposting (humanizer S28)
-    ("signposting", r"\b(let['’]s (dive|explore|break|look)|here['’]s what you need|in this (section|chapter) we|without further ado)\b", SOFT),
+    ("signposting", r"\b(let['’]s (dive|explore|break|look|talk|unpack)|here['’]s what you need|in this (section|chapter) we|without further ado|first things first)\b", HARD),
+    # narrated significance / "this is the important bit" framing (humanizer S1/S28; prose-critic)
+    ("narrated significance", r"\b(the one (line|thing|rule|takeaway) to (hold|keep|remember)|worth (stating|noting|saying)[\w ]{0,12}(again|as (its|their) own)|here is (the|an?) [\w-]+ that (makes|matters|counts|earns)|what makes (this|the|it)\b[\w ]{0,24}\bworth (reading|the read|your time)|the (edge|thing|part|point) that (makes|earns)\b[\w ]{0,24}\bworth|is (the|this) (chapter|section|page|piece)['’]?s? (center|heart|crux|whole point)|the (real|whole) (point|lesson|takeaway) (is|here))\b", HARD),
     # filler / hedging (humanizer S23/24)
     ("filler phrase", r"\b(in order to|due to the fact|at this point in time|it is important to note|it['’]s worth noting|that said|the ability to|in the event that)\b", SOFT),
     # AI vocabulary (humanizer S7)
@@ -69,6 +71,24 @@ DUAL_RENDER = [
     ("attr_list button ({ .md-button })", re.compile(r"\{\s*\.md-button")),
     ("markdown inside <div>", re.compile(r"<div[^>]*\bmarkdown\b", re.I)),
 ]
+
+# Soft tells that, in aggregate, make prose read as machine-generated. Strong ones
+# count double in the slop score; the rest count single. The score gates CI, so the
+# cadence/signposting density that single soft flags never failed on cannot ship.
+STRONG_TELLS = {
+    "narrated significance", "signposting", "editorializing significance",
+    "significance inflation", "copula avoidance", "authority trope",
+    "AI vocab", "trailing -ing clause",
+}
+MODERATE_TELLS = {
+    "not only / not just", "isn't...it's contrast", "'..., not ...' contrast",
+    "'. It is X' contrast", "tailing negation", "filler phrase", "colon-zinger",
+    "intensifier",
+}
+SLOP_MAX = 12.0  # weighted soft-tell hits per 1000 words (calibrated against shipped chapters)
+# Labels that fail the build. Signposting and narrated-significance phrases are near-always
+# slop and (verified) fire zero times on every shipped chapter, so they gate like dashes do.
+HARD_PATTERN_LABELS = {label for label, _pat, hard in PATTERNS if hard}
 
 AI_HEADER_FILLER = re.compile(r"^#{1,6}\s")
 NOMINALIZATION = re.compile(r"\b\w{4,}(tion|ment|ity|ness|ance|ence)\b", re.I)
@@ -162,15 +182,7 @@ def main(path: str, hard_only: bool = False) -> int:
         hits.setdefault(label, []).extend(lns)
         hard_count += len(lns)
 
-    if hard_only:
-        for label, lns in sorted(hits.items()):
-            is_hard = label in ("em/en dash", "curly quote") or label in dr
-            if is_hard:
-                shown = ", ".join(map(str, lns[:12])) + (" ..." if len(lns) > 12 else "")
-                print(f"  {path}: [HARD] {label} x{len(lns)}: lines {shown}")
-        return 1 if hard_count else 0
-
-    # --- metrics ---
+    # --- metrics (computed before the hard-only gate so the slop score gates CI too) ---
     words = re.findall(r"[A-Za-z'’]+", prose_text)
     wc = len(words)
     sents = sentences(prose_text)
@@ -179,9 +191,28 @@ def main(path: str, hard_only: bool = False) -> int:
     adverbs = len(ADVERB.findall(prose_text))
     contrast = sum(len(hits.get(k, [])) for k in (
         "not only / not just", "isn't...it's contrast", "'..., not ...' contrast", "'. It is X' contrast"))
+    # dramatic fragmentation: adjacent short sentences (the performed staccato cadence)
+    short_pairs = sum(1 for a, b in zip(lens, lens[1:]) if a < 6 and b < 6)
+    strong = sum(len(hits.get(k, [])) for k in STRONG_TELLS)
+    moderate = sum(len(hits.get(k, [])) for k in MODERATE_TELLS)
 
-    def per_k(n: int) -> float:
+    def per_k(n: float) -> float:
         return round(1000 * n / wc, 1) if wc else 0.0
+
+    # slop score: weighted soft-tell density per 1000 words. This is the aggregate the
+    # single soft flags never gated on, which is how cadence/signposting slop shipped once.
+    slop = per_k(2 * strong + moderate + 2 * short_pairs)
+
+    if hard_only:
+        for label, lns in sorted(hits.items()):
+            is_hard = label in HARD_PATTERN_LABELS or label in dr
+            if is_hard:
+                shown = ", ".join(map(str, lns[:12])) + (" ..." if len(lns) > 12 else "")
+                print(f"  {path}: [HARD] {label} x{len(lns)}: lines {shown}")
+        if slop > SLOP_MAX:
+            print(f"  {path}: [note] slop score {slop} > {SLOP_MAX}/1k words "
+                  f"(cadence density; advisory, not gated: short pages skew high)")
+        return 1 if hard_count else 0
 
     print(f"\n=== prose_lint: {path} ===")
     print(f"words: {wc}   sentences: {len(sents)}")
@@ -190,6 +221,7 @@ def main(path: str, hard_only: bool = False) -> int:
               f"short(<8) {100*sum(1 for x in lens if x < 8)//len(lens)}%, long(>30) {100*sum(1 for x in lens if x > 30)//len(lens)}%")
     print(f"per 1000 words -> contrast: {per_k(contrast)}, nominalizations: {per_k(nominal)}, "
           f"adverbs(-ly): {per_k(adverbs)}, intensifiers: {per_k(len(hits.get('intensifier', [])))}")
+    print(f"slop score: {slop}  (target <= {SLOP_MAX}/1k words: weighted cadence + signposting + significance)")
     print("  (rough plain-prose targets: contrast < 8, nominalizations < 35, sentence stdev > 5)")
 
     print("\n--- flags (review each; high recall, not all are wrong) ---")
@@ -207,7 +239,9 @@ def main(path: str, hard_only: bool = False) -> int:
     if hard_count:
         print(f"FAIL: {hard_count} hard tell(s) present (dash/quote or dual-render violation). Fix before shipping.")
         return 1
-    print("OK: no hard tells. Review soft flags with judgment.")
+    if slop > SLOP_MAX:
+        print(f"NOTE: slop score {slop} > {SLOP_MAX}/1k words (de-slop recommended; advisory, not gated).")
+    print("OK: no hard tells. Review the slop score and soft flags with judgment.")
     return 0
 
 

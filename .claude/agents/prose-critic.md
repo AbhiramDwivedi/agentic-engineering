@@ -35,6 +35,21 @@ author reconciles.
    product names, SKUs, personas, or pipeline steps are findings; nobody else checks internal
    consistency (the fact-checker only checks external claims).
 
+## The bar (cadence tells are not optional)
+
+The surface and structural tells above are not take-it-or-leave-it polish. The author taste-gate
+has rejected them before, and `meta/prose_lint.py` now HARD-fails the worst of them (signposting
+and narrated-significance phrases like "Here is the edge that...", "the one thing to hold", "this
+is the chapter's center"). So:
+
+- Any signposting or narrated-significance phrase, any manufactured-aphorism closer, and any
+  performed short-sentence pair used for punch ("It is X. It is also Y.") is a finding the author
+  must fix, never one to wave through as load-bearing. Flag every instance with its line.
+- If the contrast reflex ("X, not Y") or performed fragmentation appears densely enough that a
+  reader notices the pattern, the verdict is at least **revise**.
+- A single earned contrast the author would defend in isolation can stay; the bar is the reader's
+  ear, not the writer's intent.
+
 ## Output format
 
 A verdict line first: **ship**, **revise** (fixable findings), or **rewrite** (structural
