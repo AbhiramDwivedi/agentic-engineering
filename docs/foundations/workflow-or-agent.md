@@ -118,5 +118,3 @@ Stop asking "is this an agent?" and start asking "how much agency does this step
 - **[9.1 When You Want Autonomy](../frontier/when-you-want-autonomy.md)** owns the far end of the spectrum: how to build and contain a full autonomous loop, where this chapter only places it and says when it is worth reaching for.
 - **[4.2 Evaluation](../craft/proving-it-works.md)** for why the model-driven end needs evals where the fixed path needs only unit tests.
 - **[How We Label](../about/how-we-label.md)** for the maturity lens, the trust axis this chapter's split verdict is scored on.
-</content>
-</invoke>
