@@ -2,7 +2,12 @@
 name = "listing-studio"
 version = "0.0.0"
 requires-python = ">=3.11"
-dependencies = []
+# Runtime deps the COMPANION CODE imports and the TESTS exercise. The heavy SDKs
+# (langgraph / openai / anthropic) used only by the illustration files are NOT
+# here: those files are py_compile-checked, never imported, so CI does not need
+# them. Anything pytest actually imports must be listed here, or the CI editable
+# install will lack it (the pre-push CI-parity venv now catches that locally).
+dependencies = ["pydantic>=2"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]

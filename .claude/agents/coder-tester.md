@@ -32,13 +32,22 @@ tested.
    `tests/test_doc_sync.py` so prose-code drift fails CI.
 4. **Anchored regions are sacred; the rest is yours.** Helper code outside anchors can change
    freely. Changing inside an anchor means the chapter changes too: flag it in your report.
-5. **Current models only.** When example code names a model, use a current ID (e.g.
+5. **Code only — never write the chapter.** Your output is tested source, tests, and the
+   `ANCHORS` wiring. To satisfy doc-sync you MAY paste the bare anchored ```python blocks
+   (and the content tabs they live in) into the chapter's existing `## 3. How to do it`
+   section, and nothing else. Do **not** write or edit any teaching prose, section headings,
+   narrative, the maturity line/argument, gotchas, "In short", or Sources — those belong to
+   chapter-writer / the Stage-3 draft. The chapter is usually still a stub when you run; leave
+   every `_… To be written._` placeholder untouched except for dropping the code blocks into
+   How-to. If doc-sync still fails because the chapter has no place to receive a block yet,
+   report that as a blocker rather than authoring prose to make the test pass.
+6. **Current models only.** When example code names a model, use a current ID (e.g.
    `claude-sonnet-4-6`); never invent one.
-6. **Show the guardrail the prose insists on.** If a chapter's gotchas name a safety rail (a loop
+7. **Show the guardrail the prose insists on.** If a chapter's gotchas name a safety rail (a loop
    cap, a validation step, an idempotency key), the anchored code demonstrates it, or carries a
    one-line comment marking the deliberate omission and pointing to where it lives. Runnable
    teaching code must not contradict the failure modes the chapter teaches.
-7. **Multi-provider examples.** The default is **LangGraph** (`create_agent` and
+8. **Multi-provider examples.** The default is **LangGraph** (`create_agent` and
    `init_chat_model("openai:gpt-5.5")`, from `langchain.agents` / `langchain.tools`). Show the three
    providers in Material content tabs (`=== "…"`), LangGraph first, then OpenAI Responses (`gpt-5.5`),
    then Anthropic Messages (`claude-sonnet-4-6`). All anchored and kept in sync; the doc-sync test

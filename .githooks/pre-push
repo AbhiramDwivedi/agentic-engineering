@@ -11,8 +11,30 @@ fail=0
 echo "[pre-push] prose_lint (docs, --hard-only) ..."
 python meta/prose_lint.py $(find docs -name '*.md') --hard-only || fail=1
 
-echo "[pre-push] pytest (companion code + doc-sync) ..."
-( cd listing-studio && python -m pytest -q ) || fail=1
+echo "[pre-push] pytest (companion code + doc-sync, CI-parity install) ..."
+# Mirror CI exactly (test.yml: pip install -e ".[dev]" then pytest) inside a
+# throwaway venv holding ONLY the declared dependencies. The ambient dev venv
+# carries extras (e.g. pydantic pulled in transitively by langgraph) that mask an
+# undeclared dependency, so plain `python -m pytest` here would pass while CI
+# fails. Running against the isolated install is what makes that divergence
+# impossible. The venv is reused; it only reinstalls when pyproject.toml changes,
+# and because it never holds undeclared libs, a new unlisted import still fails
+# here even when pyproject is unchanged.
+(
+  cd listing-studio || exit 1
+  CIVENV=".civenv"
+  MARK="$CIVENV/.pyproject.hash"
+  pick_py() { if [ -x "$CIVENV/bin/python" ]; then echo "$CIVENV/bin/python"; else echo "$CIVENV/Scripts/python.exe"; fi; }
+  cur="$(git hash-object pyproject.toml)"
+  if [ ! -e "$(pick_py)" ] || [ "$(cat "$MARK" 2>/dev/null)" != "$cur" ]; then
+    echo "[pre-push]   (building CI-parity venv from pyproject.toml ...)"
+    rm -rf "$CIVENV"
+    python -m venv "$CIVENV" || exit 1
+    "$(pick_py)" -m pip install -q -e ".[dev]" || exit 1
+    echo "$cur" > "$MARK"
+  fi
+  "$(pick_py)" -m pytest -q || exit 1
+) || fail=1
 
 if python -c "import mkdocs" 2>/dev/null; then
   echo "[pre-push] mkdocs build --strict ..."

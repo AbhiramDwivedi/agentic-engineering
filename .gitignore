@@ -6,6 +6,10 @@
 venv/
 __pycache__/
 *.pyc
+*.egg-info/
+
+# Pre-push CI-parity venv (mirrors test.yml's editable install; never committed)
+.civenv/
 
 # Claude Code: machine-local permission grants (the shared setup is tracked)
 .claude/settings.local.json

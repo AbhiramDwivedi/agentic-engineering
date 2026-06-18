@@ -14,6 +14,19 @@ ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 CHAPTER = os.path.join(ROOT, "docs", "the-unit", "tool-use.md")
 PRICING = os.path.join(ROOT, "listing-studio", "pricing")
 
+# Chapter 2.2 — Structured Output
+STRUCTURED_OUTPUT_CHAPTER = os.path.join(ROOT, "docs", "the-unit", "structured-output.md")
+STRUCTURED_OUTPUT_PKG = os.path.join(ROOT, "listing-studio", "structured_output")
+
+STRUCTURED_OUTPUT_ANCHORS = {
+    "pricing-schema":          "schema.py",
+    "pricing-call":            "structured_output_langgraph.py",
+    "pricing-call-openai":     "structured_output_responses.py",
+    "pricing-call-anthropic":  "structured_output_example.py",
+    "pricing-validate":        "validate.py",
+    "pricing-reask":           "validate.py",
+}
+
 # anchor name -> source file that defines it
 ANCHORS = {
     "tool": "tool_use_langgraph.py",
@@ -83,4 +96,15 @@ def test_augmented_llm_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/foundations/the-augmented-llm.md with "
             f"listing-studio/augmented_llm/{fname}."
+        )
+
+
+def test_structured_output_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(STRUCTURED_OUTPUT_CHAPTER))
+    for name, fname in STRUCTURED_OUTPUT_ANCHORS.items():
+        region = _region(_read(os.path.join(STRUCTURED_OUTPUT_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/the-unit/structured-output.md with "
+            f"listing-studio/structured_output/{fname}."
         )
