@@ -90,6 +90,18 @@
 <!-- Framework differences, where they matter, go in short #### subsections
      (content tabs are Material-only and render broken on GitHub). -->
 
+<!--
+  OPTIONAL SECTIONS (controlled-extension menu, design-system.md §1). Insert here, AFTER How and
+  BEFORE Gotchas, ONLY when the topic earns it, using these exact names and this order:
+    ## Security & trust         - a real trust boundary (untrusted input, supply chain).
+    ## Cost                     - token/compute/$ spend is a first-order design concern.
+    ## Ecosystem & tooling      - a real distribution / sharing / tooling landscape.
+    ## Operating in production  - observability, rollout, blast-radius, on-call.
+    ## Evaluating it            - how you'd measure it works.
+  A simple chapter uses none and keeps its sharp edges in Gotchas. Need a section the menu lacks?
+  Propose it for sign-off; never invent one silently.
+-->
+
 ## Gotchas
 <!--
   The real costs: latency, spend, complexity, non-determinism.
@@ -107,3 +119,12 @@
 
 ## See also
 <!-- Cross-links to related chapters. -->
+
+## Further reading
+<!--
+  A SHORT curated set of external deep-dives for the reader who wants more: the spec, the key
+  paper, the primary doc, the best skeptical take. Roughly 4-6 items, each with a one-line "what
+  it gives you". Distinct from Sources (per-claim footnotes) and See also (internal cross-links).
+  Point to the canonical primary source, not a blog aggregator; prefer links already verified in
+  Sources. Omit the section only if no good external deep-dive exists.
+-->

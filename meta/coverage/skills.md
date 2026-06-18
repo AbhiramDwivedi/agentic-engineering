@@ -157,3 +157,16 @@ Transitional Layer."
 3. **Cross-vendor parity.** How much non-Anthropic coverage of the skill/packaging mechanism, versus
    keeping Anthropic Agent Skills as the worked example with others as asides? (The mechanism is least
    standardised across vendors of anything in this chapter.)
+
+## Author sign-off (2026-06-18) — this is the chapter's contract
+
+Must-cover list accepted as-is (all 7 items, no trims). Open questions ruled:
+
+1. **Carrier grounding — RESOLVED to companion-repo / reasoned.** No real shipped Skill is confirmed.
+   No `> **From production.**` claims. Demonstrations stay `> **In the companion repo.**` /
+   `> **In Listing Studio.**` (the demo skill: a `pricing`/MAP-compliance skill packaging the rules).
+2. **Security depth — own the full triad here.** Audit-before-use + third-party-code discipline +
+   script scoping (least-privilege, blast radius) are the chapter's spine; mention-and-link the
+   general guardrail machinery to 4.4, do not defer the spine.
+3. **Cross-vendor parity — Anthropic Agent Skills is the single worked example;** OpenAI/Google get
+   short asides only, not full parity.
