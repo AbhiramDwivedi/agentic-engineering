@@ -33,7 +33,7 @@ author reconciles.
 5. **Dead paragraphs**: anything failing the three-jobs test.
 6. **Carrier continuity**: check examples against `meta/carrier-bible.md`. Wrong or invented
    product names, SKUs, personas, or pipeline steps are findings; nobody else checks internal
-   consistency (the fact-checker only checks external claims).
+   consistency (the fact-checker only checks external claims). Also flag any imaginary model utterance shown as a bare quote rather than italic + quoted (`*"..."*`); cited-source quotes and prompt text stay plain.
 
 ## The bar (cadence tells are not optional)
 

@@ -46,6 +46,7 @@ linted; your job is to give them something worth sharpening, not something safe.
   one thing to hold...", "This is the chapter's center"), no antithesis used as an aphorism ("X, not
   Y" for punch), no performed short-sentence pairs ("It is X. It is also Y."). `meta/prose_lint.py`
   hard-fails the worst of these. Write plain declarative prose; let earned contrast be rare.
+- **Quoting the model.** An imaginary LLM response is italic + quoted (`*"..."*`) so the reader sees it is the model talking, not the author or a cited source. Do not italicize cited vendor-doc quotes or the prompt text you send the model.
 - **Titles are canonical nouns** ("Tool Use", "Fan-Out"); the evocative phrase goes in the
   italic gloss line under the head, with an `*Also called: …*` line of common aliases beneath it.
 - **Define named techniques.** The first time a chapter uses a named technique, pattern, or acronym

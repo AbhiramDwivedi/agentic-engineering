@@ -39,6 +39,7 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 | From production | `> **From production.** …` blockquote | a first-hand scar. Only if true. |
 | In the companion repo | `> **In the companion repo.** …` blockquote | demonstrated, not shipped |
 | In Listing Studio | `> **In Listing Studio.** …` blockquote | the carrier instance, three sentences max |
+| LLM-response quote | italic + quotes, e.g. *"I'd list it at $419."* | an imaginary model utterance; the italics mark it as the model talking, not the author or a cited source |
 | Stub notice | `> **Stub.** …` blockquote | scaffolding, not finished writing |
 | Code | inline, synced to a tested file by `tests/test_doc_sync.py` | shown in full, cannot drift |
 | Expandable listing | `<details markdown><summary>…</summary>` around a code fence | long listings whose story the diagram + trace already tell; collapses on GitHub and the site both |

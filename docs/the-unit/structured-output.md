@@ -8,7 +8,7 @@
 
 ## 1. Why you'd reach for it
 
-Ask a bare model to set a price and it answers in a sentence that happens to contain a number. "I'd list the Aldsworth desk at $419." Or "$419.00 USD, comfortably above MAP." Or "around 419 dollars, though you could go higher." Your code does not want a sentence; it wants an integer it can write to `price_cents`. So you reach for a regex, and the regex works until the day the model phrases the answer a new way. Then the parse returns nothing, or worse, the wrong number, and the listing stalls in `draft` or ships a price no one chose.
+Ask a bare model to set a price and it answers in a sentence that happens to contain a number. *"I'd list the Aldsworth desk at $419."* Or *"$419.00 USD, comfortably above MAP."* Or *"around 419 dollars, though you could go higher."* Your code does not want a sentence; it wants an integer it can write to `price_cents`. So you reach for a regex, and the regex works until the day the model phrases the answer a new way. Then the parse returns nothing, or worse, the wrong number, and the listing stalls in `draft` or ships a price no one chose.
 
 Hand the model a typed contract instead. You name the fields you need (a price in cents, a currency code, a line of reasoning) and the model fills them. What comes back is an object your code reads as `decision.price_cents`, an integer, without parsing anything. The schema is the promise the model has to keep, and the API holds it to that promise.
 
