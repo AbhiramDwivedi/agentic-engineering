@@ -315,7 +315,15 @@ Look at how the work divided. The schema and the decoder produced a well-formed 
 
 ### When one schema becomes many
 
-A single flat schema like `PricingDecision` is the easy case. Production schemas grow, and reliability frays as they do: deeply nested objects, union types, recursion, and long enums are where adherence degrades, an Emerging finding that is benchmarked but unsettled, so measure your real schema rather than assuming it holds.[^jsonschemabench] The schema also rides in your input tokens on every call, so a sprawling contract taxes every request in both tokens and the model's attention. Keep schemas tight: ask for the fields the step needs and factor out the rest. This is a standing line item in your context budget, covered in [Context Engineering](../foundations/context-engineering.md).
+A single flat schema like `PricingDecision` is the easy case. Production schemas grow, and reliability frays as they do: deeply nested objects, union types, recursion, and long enums are where adherence degrades, an Emerging finding that is benchmarked but unsettled, so measure your real schema rather than assuming it holds.[^jsonschemabench] The schema also rides in your input tokens on every call, so a sprawling contract taxes every request in both tokens and the model's attention. A tight schema is the fix, and tight means five concrete things:
+
+- **Only the fields the step uses.** If your code will not read, branch on, or store a field, drop it. Every field is tokens in the schema, tokens in the filled output, and one more thing to validate.
+- **Flat over deeply nested.** Prefer a flat object to a tree of wrappers; nesting, unions, and recursion are where both token cost and adherence get worse.
+- **Precise types over open ones.** An `int` for cents, an enum or `Literal` for a small fixed set, a bounded range where the provider supports it. Narrow types leave fewer ways to return a valid but useless value.
+- **Required fields and `extra="forbid"`.** A schema where everything is optional and extras are allowed barely constrains anything; precision matters as much as size.
+- **Short descriptions, terse but clear names.** Descriptions and field names are tokens too, and names ride in both the schema and the emitted JSON. Trim to the one clarification the model needs, and stop short of cryptic.
+
+This is a standing line item in your context budget, covered in [Context Engineering](../foundations/context-engineering.md).
 
 > **In Listing Studio.** Structured output appears twice in the pipeline: at **categorize**, to place the desk in the catalog taxonomy, and at **price**, to return a typed `PricingDecision`. The price step pairs the schema with a code-side MAP and margin check, because a schema-valid number can still be a contract violation. The schema gets you a clean object; your code decides whether it is allowed to ship.
 
@@ -327,7 +335,7 @@ A single flat schema like `PricingDecision` is the easy case. Production schemas
 
 3. **Valid shape is not valid content.** This is the chapter's center and worth stating as its own failure mode. Constrained decoding guarantees syntax and shape, never meaning. The `38900` `PricingDecision` is valid in every field and still below MAP. A schema-valid object can be hallucinated, out of range, or carry injected instructions inside a string field, and passing it straight downstream is exactly the OWASP "improper output handling" risk.[^owasp-llm05] Validate the meaning in your code, every time.
 
-4. **The schema lives in your input tokens.** The schema is part of the prompt and is sent on every call, so a large or deeply nested schema costs tokens and attention on every request, and strict-mode compilation can add latency to the first call.[^jsonschemabench] Keep schemas tight; treat schema size as a standing budget item in [Context Engineering](../foundations/context-engineering.md).
+4. **The schema lives in your input tokens.** The schema is part of the prompt and is sent on every call, so a large or deeply nested schema costs tokens and attention on every request, and strict-mode compilation can add latency to the first call.[^jsonschemabench] Two levers cut the cost. Keep the schema tight, using the five practices above. And because the schema is a stable prefix, place it ahead of the variable input so the provider's prompt cache can charge it at a discount after the first call, turning a per-call cost into close to a one-time one. See [Controlling Cost](../production/controlling-cost.md) for prompt caching in depth.
 
 5. **Refusals and truncation break even the shape.** A safety refusal returns the refusal message, not your object, and the safety behavior takes precedence over the schema. A `max_tokens` cutoff returns JSON that stops mid-string and will not parse.[^openai][^anthropic] Neither yields a parseable object, so check the stop or finish reason before you parse, as the provider tabs above do. Deeply nested, union, and enum schemas plus streaming partial objects are where the shape frays earliest; this chapter does not teach streaming.
 
