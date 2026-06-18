@@ -65,10 +65,12 @@ to defend as semantically load-bearing.
 ```bash
 cd listing-studio && python -m pytest          # includes doc-sync
 cd .. && mkdocs build --strict
-python meta/prose_lint.py docs/<chapter>.md
+python meta/prose_lint.py docs/<chapter>.md   # HARD-fails signposting + narrated-significance; reports a slop score
 ```
 
-Run the **humanizer** skill on the final prose. Re-check dual rendering by eye: no `!!!`, no
+Run the **humanizer** (de-slop) pass on the final prose as a separate editor, never the writer
+reviewing itself: it must clear every prose_lint HARD tell and drive the reported slop score down
+(cadence, signposting, performed fragmentation). Then re-check dual rendering by eye. Re-check dual rendering by eye: no `!!!`, no
 content tabs, callouts as blockquotes, one-line `<small class="chapter-meta">`.
 
 ## Stage 7 — Ship
