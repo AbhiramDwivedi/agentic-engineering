@@ -61,8 +61,13 @@ PATTERNS = [
     ("colon-zinger", r":\s+(a|an|the)\s+\w+(\s+\w+){0,6}\.", SOFT),
 ]
 
-# --- dual-rendering violations (design-system.md §2): Material-only syntax that
-# --- breaks on GitHub's file view. mkdocs build --strict does NOT catch these.
+# --- raw-line HARD checks, scanned outside code fences. Two families:
+# --- (1) dual-rendering violations (design-system.md §2): Material-only syntax that breaks on
+# ---     GitHub's file view, which mkdocs build --strict happily passes.
+# --- (2) leaked agent tool-call tags: a sub-agent that Writes/Edits a chapter sometimes leaves a
+# ---     trailing harness artifact (</invoke>, </content>, <parameter ...>). The strict build
+# ---     renders these as literal text WITHOUT a warning, so the linter is the only gate that
+# ---     catches them. Seen twice in shipped-bound drafts; never legitimate outside a code fence.
 DUAL_RENDER = [
     ("admonition (!!!/???)", re.compile(r"^\s*(!{3}|\?{3}\+?)(\s|$)")),
     # Content tabs are banned EXCEPT the sanctioned multi-provider labels (design-system.md):
@@ -70,6 +75,8 @@ DUAL_RENDER = [
      re.compile(r'^\s*===\s+"(?!(?:LangGraph|OpenAI Responses API|Anthropic Messages API)")')),
     ("attr_list button ({ .md-button })", re.compile(r"\{\s*\.md-button")),
     ("markdown inside <div>", re.compile(r"<div[^>]*\bmarkdown\b", re.I)),
+    ("leaked tool-call tag",
+     re.compile(r"</?(antml:)?(invoke|parameter|function_calls)\b|</content>")),
 ]
 
 # Soft tells that, in aggregate, make prose read as machine-generated. Strong ones
