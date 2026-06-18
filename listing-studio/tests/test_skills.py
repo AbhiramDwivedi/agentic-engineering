@@ -26,6 +26,7 @@ SKILL_DIR = SKILLS_PKG / "map_compliance"
 
 from skills.loader import (
     SkillMeta,
+    build_skill_catalog,
     load_skill_meta,
     load_skill_body,
     run_skill_script,
@@ -192,6 +193,47 @@ def test_check_map_rejects_unknown_sku():
     assert code == 1
     data = json.loads(out)
     assert data["ok"] is False
+
+
+# ---------------------------------------------------------------------------
+# Skill catalog (skill-catalog anchor): selection is a catalog, not a router
+# ---------------------------------------------------------------------------
+
+def test_catalog_contains_every_name_and_description():
+    """The rendered catalog has one line per skill with name and description."""
+    meta_a = load_skill_meta(SKILL_DIR)
+    # Synthesise a second skill for variety.
+    meta_b = SkillMeta(
+        name="seo-optimizer",
+        description="Generate SEO-optimised titles and bullets for a listing.",
+        skill_dir=SKILL_DIR,
+    )
+    catalog = build_skill_catalog([meta_a, meta_b])
+    assert meta_a.name in catalog
+    assert meta_a.description in catalog
+    assert meta_b.name in catalog
+    assert meta_b.description in catalog
+
+
+def test_catalog_does_not_contain_body_text():
+    """The catalog must not include Level-2 body text — only name + description."""
+    meta = load_skill_meta(SKILL_DIR)
+    body = load_skill_body(meta)
+    # Grab a distinctive phrase from the body.
+    body_phrase = "How to use"
+    assert body_phrase in body, "test pre-condition: phrase must be in the body"
+    catalog = build_skill_catalog([meta])
+    assert body_phrase not in catalog
+
+
+def test_catalog_grows_linearly_with_skill_count():
+    """Adding more skills grows the catalog: one line per skill."""
+    meta = load_skill_meta(SKILL_DIR)
+    catalog_one = build_skill_catalog([meta])
+    catalog_two = build_skill_catalog([meta, meta])
+    lines_one = [l for l in catalog_one.splitlines() if l.strip()]
+    lines_two = [l for l in catalog_two.splitlines() if l.strip()]
+    assert len(lines_two) == len(lines_one) + 1
 
 
 # ---------------------------------------------------------------------------

@@ -21,6 +21,7 @@ SKILLS_PKG = os.path.join(ROOT, "listing-studio", "skills")
 SKILLS_ANCHORS = {
     "skill-meta":       "loader.py",
     "skill-loader":     "loader.py",
+    "skill-catalog":    "loader.py",
     "skill-langgraph":  "skills_langgraph.py",
     "skill-responses":  "skills_responses.py",
     "skill-anthropic":  "skills_example.py",
@@ -31,14 +32,16 @@ MCP_CHAPTER = os.path.join(ROOT, "docs", "the-unit", "mcp.md")
 MCP_PKG = os.path.join(ROOT, "listing-studio", "helpdesk_mcp")
 
 MCP_ANCHORS = {
-    "mcp-guard":       "guard.py",
-    "mcp-poison":      "guard.py",
-    "mcp-stale":       "guard.py",
-    "mcp-consent":     "client.py",
-    "mcp-connect":     "client.py",
-    "mcp-langgraph":   "helpdesk_mcp_langgraph.py",
-    "mcp-responses":   "helpdesk_mcp_responses.py",
-    "mcp-anthropic":   "helpdesk_mcp_example.py",
+    "mcp-guard":            "guard.py",
+    "mcp-poison":           "guard.py",
+    "mcp-stale":            "guard.py",
+    "mcp-consent":          "client.py",
+    "mcp-connect":          "client.py",
+    "mcp-server-expose":    "docs_server.py",
+    "mcp-server-validate":  "docs_server.py",
+    "mcp-langgraph":        "helpdesk_mcp_langgraph.py",
+    "mcp-responses":        "helpdesk_mcp_responses.py",
+    "mcp-anthropic":        "helpdesk_mcp_example.py",
 }
 
 # Chapter 2.2 — Structured Output

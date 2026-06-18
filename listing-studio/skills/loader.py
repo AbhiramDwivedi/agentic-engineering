@@ -126,6 +126,25 @@ def run_skill_script(
 # --8<-- [end:skill-loader]
 
 
+# --8<-- [start:skill-catalog]
+def build_skill_catalog(metas: list[SkillMeta]) -> str:
+    """Render the always-resident Level-1 catalog for the system prompt.
+
+    Every installed skill contributes exactly one line — its name and its
+    description — and nothing more. The body (Level 2) and script output
+    (Level 3) stay off the context until a skill is triggered.
+
+    This is what "selection is a catalog, not a router" means in practice:
+    the model reads each line and matches the task to a description. There is
+    no classifier, no embedding lookup, no routing logic — just text. The
+    token budget grows linearly with the number of installed skills, which is
+    the cost to keep in mind when the catalog gets large.
+    """
+    lines = [f"{m.name}: {m.description}" for m in metas]
+    return "\n".join(lines)
+# --8<-- [end:skill-catalog]
+
+
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 
 A model often needs procedural knowledge that only some of its calls will use. Listing Studio's price step has to apply the supplier's minimum advertised price (MAP), the floor a contract forbids you to undercut, and the house margin rule. The ingest step never touches either. If you paste the pricing rules into the system prompt, every call pays for them in tokens and in attention, including the dozens of calls that never price anything. Multiply that across a house style, a category taxonomy, and a half-dozen multi-step workflows, and the prompt fills with reference material the current task does not need.
 
-The convenience answer is to download a community skill that already packages those rules. That is where the cost story turns, because a Skill is not a passive document. A `SKILL.md` body is instructions the model will follow, and any bundled script executes with whatever authority you grant it.[^skills-overview] Install a "helpful" skill without reading it and you have installed third-party code. Its markdown can carry injected instructions, where text inside fetched or loaded content reads to the model as a command rather than as data,[^owasp-llm01] and its script can read a secret or take a privileged action.[^owasp-llm06] The cost of skipping the audit is a supply-chain compromise, a defect introduced through a dependency you trusted by default,[^owasp-mcp-cheat] that arrives looking like a convenience.
+The convenience answer is to download a community skill that already packages those rules. That is where the cost story turns, because a Skill is not a passive document. A `SKILL.md` body is instructions the model will follow, and any bundled script executes with whatever authority you grant it.[^skills-overview] Install a "helpful" skill without reading it and you have installed third-party code. Its markdown can carry injected instructions, where text inside fetched or loaded content reads to the model as a command rather than as data,[^owasp-llm01] and its script can read a secret or take a privileged action.[^owasp-llm06] The cost of skipping the audit is a supply-chain compromise, a defect introduced through a dependency you trusted by default.[^owasp-mcp-cheat]
 
 A benign skill can still fail you. A skill is pulled in by matching its `description`. Write a description that never triggers and you have stranded the whole capability: it sits in context doing nothing while still spending your token budget on its metadata.
 
@@ -28,7 +28,7 @@ A Skill is a folder of procedural knowledge: a `SKILL.md` file with YAML `name` 
 
 Run the litmus test on it, the question this book sorts every pattern by: who makes the structural decision, the model or your code? On a Skill, your code does. A Skill is context engineering as packaging, where context engineering is the discipline of choosing what goes into the model's window and what stays out. Your runtime decides what to reveal and when. The only thing the model decides is which skill to pull in. That is real value, and it is operational rather than architectural. A Skill is not a genuinely-new agentic pattern, and selling folders-of-markdown as a breakthrough overclaims it.
 
-**Maturity: Established.** The packaging mechanism is shipping and stabilising, and the parts that matter for building on it, the three-level loading model and the split between packaging knowledge and providing connectivity, are settling into accepted practice.[^skills-overview][^skills-eng] Progressive disclosure as a context principle, the idea of loading context in stages, is older and stronger, and counts as Standard. The framing that "Skills are a new paradigm" or the endgame is Contested: the word "skills" today lumps together markdown instructions, packaged code, and workflow orchestration that have little in common, and the durable win is routing plus context management, not smarter prompts.[^kinney][^ossinsight] Dependable audit and signing tooling for third-party skills is still Emerging, which is why the security burden in §4 falls on you rather than on the ecosystem.
+**Maturity: Established overall, with parts moving at different speeds.** The packaging mechanism is shipping and stabilising, and the parts that matter for building on it, the three-level loading model and the split between packaging knowledge and providing connectivity, are settling into accepted practice.[^skills-overview][^skills-eng] The `SKILL.md` format itself is trending toward Standard: it was open-sourced as the Agent Skills standard and is being adopted across tools beyond its origin.[^skills-standard][^codex-skills] Progressive disclosure as a context principle, the idea of loading context in stages, is older and stronger, and counts as Standard. What is still Emerging is the surrounding ecosystem: governance and versioning of the format, distribution and packaging conventions, and dependable audit and signing tooling for third-party skills, which is why the security burden in the Security & trust section falls on you rather than on the ecosystem. The framing that "Skills are a new paradigm" or the endgame is Contested: the word "skills" today lumps together markdown instructions, packaged code, and workflow orchestration that have little in common, and the durable win is routing plus context management more than smarter prompts.[^kinney][^ossinsight]
 
 A Skill is not an agent, and not a tool. It packages the workflow that may call tools (the call-execute-return contract from [Tool Use](tool-use.md)), and it can teach the model how to drive an [MCP](mcp.md) server. Skills compose with tools and MCP; this is not a versus.
 
@@ -62,6 +62,35 @@ class SkillMeta:
     description: str   # YAML front-matter `description` field
     skill_dir: Path    # path to the skill bundle on disk
 ```
+
+This is the place to be precise about how the model loads only some skills, because it is the part most people get wrong. The skill body is not in the prompt. What rides in the prompt is one line per installed skill: its `name` and its `description`, roughly a hundred tokens each, assembled into a single catalog the model can see on every call.[^skills-cc] Selection is the model reading those lines and choosing the one whose description matches the task. There is no router in front of it, no classifier, no embedding lookup, just the model reading text. A reverse-engineering of Claude Code's skills came to the same conclusion: the matching is the model reading descriptions, not a separate routing layer.[^skills-internals] When a description matches, the runtime loads that skill's Level-2 body from disk; the Level-3 scripts run only when the model asks for them.
+
+The catalog itself is the entire selection surface, and the loader builds it from nothing but the names and descriptions:
+
+```python
+def build_skill_catalog(metas: list[SkillMeta]) -> str:
+    """Render the always-resident Level-1 catalog for the system prompt.
+
+    Every installed skill contributes exactly one line — its name and its
+    description — and nothing more. The body (Level 2) and script output
+    (Level 3) stay off the context until a skill is triggered.
+
+    This is what "selection is a catalog, not a router" means in practice:
+    the model reads each line and matches the task to a description. There is
+    no classifier, no embedding lookup, no routing logic — just text. The
+    token budget grows linearly with the number of installed skills, which is
+    the cost to keep in mind when the catalog gets large.
+    """
+    lines = [f"{m.name}: {m.description}" for m in metas]
+    return "\n".join(lines)
+```
+
+The body is `[f"{m.name}: {m.description}" for m in metas]`: names and descriptions, nothing else.
+
+- The catalog is always resident, so every installed skill's metadata is paid for on every call whether the skill is used or not, and the catalog has a budget.
+- As the catalog grows the cost rises and the selection accuracy drops together, the same way an oversized tool list degrades tool choice ([Tool Use](tool-use.md)): more descriptions to read, more chances to read the wrong one or none.
+- Some runtimes truncate or drop descriptions past a budget, which can make a skill undiscoverable even though it is installed. The runtime does not error; the docs surface it (a `/doctor` diagnostic, for instance), so you find out only if you go looking.[^skills-cc]
+- The mitigations are to keep descriptions precise and keyword-first so they match on the words a task actually uses, to enable or disable skills so only the relevant set is resident, and to namespace skills so two similar ones stay distinguishable.
 
 Second, the three load functions, one per level. The Level-3 function carries the failure-return contract: when a script errors, times out, or produces nothing, it returns a structured, recoverable message rather than a raw stack trace, and never reports a silent success.
 
@@ -332,27 +361,43 @@ The runtime decided what to reveal at each level and ran the script; the model o
 
 ### From one skill to a library
 
-The singular case is one skill the model can hardly miss. Production hits the plural fast, and three things degrade together as the catalog grows. In practice, selection by `description` gets harder when many descriptions overlap, so the model pulls the wrong skill or none. Every skill's Level-1 metadata still rides in the system prompt whether or not it is ever used, so the always-on cost scales with the size of the library rather than with what any one task needs. And a description that fails to trigger silently strands its skill, which is cheap to miss precisely because nothing errors.
-
-The discipline follows from those three. Keep descriptions distinct and trigger-precise, so the model can tell two skills apart and knows when each applies. Treat the Level-1 metadata as a budget you spend deliberately rather than a free shelf you keep adding to. The principle underneath, that every token in the window costs both money and the model's attention, is the context economy, covered in [Context Engineering](../foundations/context-engineering.md); this chapter owns the Skills mechanism, 1.5 owns the principle.
+The singular case is one skill the model can hardly miss. Production hits the plural fast, and the catalog cost above is the price of getting there: as the library grows, the always-on metadata budget grows with it and selection gets harder at the same time. The discipline that keeps a library workable is the same one the bullets named. Keep descriptions distinct and trigger-precise, so the model can tell two skills apart and knows when each applies. Treat the Level-1 metadata as a budget you spend deliberately rather than a free shelf you keep adding to, and disable the skills a given workload never needs. The principle underneath, that every token in the window costs both money and the model's attention, is the context economy, covered in [Context Engineering](../foundations/context-engineering.md); this chapter owns the Skills mechanism, 1.5 owns the principle.
 
 > **In the companion repo.** The MAP-compliance skill packages the floor and margin rules as a `SKILL.md` plus a `check_map.py` script. The price step pulls it in only when it sets `price_cents`. The script returns the floor and a pass or fail, never its own source.
 
-## 4. Gotchas
+## 4. Security & trust
 
-1. **A Skill is untrusted code and instructions: audit before use.** A `SKILL.md` body is injected instructions the model will follow, and bundled scripts execute, so installing a third-party skill is installing third-party code. Read the body and the scripts before you trust them; this is Anthropic's own guidance.[^skills-overview] The body is a prompt-injection surface, the OWASP (Open Worldwide Application Security Project) LLM01 risk, where loaded text reads to the model as a command.[^owasp-llm01] The folder as a whole is a supply-chain surface: a dependency you adopt by download, with the same audit obligation as any other.[^owasp-mcp-cheat] Validating a script's output against a schema before you act on it is a poisoning mitigation, covered in [Structured Output](structured-output.md).
+Installing a skill is a supply-chain decision, and it is the part of this chapter most likely to cost you. A skill is untrusted code plus untrusted instructions. The `SKILL.md` body is followed as instructions the moment a task triggers the skill, and any bundled script runs with whatever authority your agent has. The fix is the same one you already apply to an open-source dependency: read it before you trust it. Audit the body for instructions you would not have written, and audit the scripts for what they read, write, and call over the network. Do both, because the body and the scripts are two separate ways in.[^skills-overview]
 
-2. **Scope what a skill's scripts can touch.** A script that can read any file or call any service is an excessive-agency risk, the OWASP LLM06 class: the more a script can do, the more a single bad run costs.[^owasp-llm06] Give it the least privilege that works, the way `run_skill_script` runs `check_map.py` in a subprocess with only the arguments you pass and a write-nothing contract. Gate the irreversible actions behind a person. The general machinery for that, allowlisting and blast-radius control and the human gate, lives in [Guardrails & Safety](../craft/guardrails-and-safety.md) and [Human-in-the-Loop](../craft/human-in-the-loop.md).
+The body is a prompt-injection surface, the OWASP (Open Worldwide Application Security Project) LLM01 risk, where loaded text reads to the model as a command rather than as data.[^owasp-llm01] The scripts are an excessive-agency surface, the LLM06 risk: the more a script can reach, the more a single bad run costs.[^owasp-llm06] Scope what the scripts can touch to the least privilege that does the job, and keep the blast radius small, the way `run_skill_script` runs `check_map.py` in a subprocess with only the arguments you pass and a write-nothing contract. Gate the irreversible actions behind a person. The general machinery for that, allowlisting and blast-radius control and the human gate, lives in [Guardrails & Safety](../craft/guardrails-and-safety.md) and [Human-in-the-Loop](../craft/human-in-the-loop.md); the supply-chain class itself is the one OWASP names for installable capabilities.[^owasp-mcp-cheat]
 
-3. **Make script failures structured and recoverable.** When a bundled script errors, times out, or returns malformed data, the failure has to come back to the model as a structured, recoverable message, never a raw stack trace and never a silent success. The `run_skill_script` failure path does exactly this: a missing script, a timeout, a non-zero exit, and an empty output all return a `[skill-script-error]` line the model can act on. Skip it and the agent loops on a dead script or proceeds on bad state.
+The uncomfortable part is that skills are unsafe by default. Today's default skill is unversioned, unsigned, unsandboxed, and unreviewed: you get a folder and the runtime's trust, with nothing between them. The risk is not hypothetical. A February 2026 security study of public skills reported that roughly one in seven scanned (about 13.4%) carried a critical issue, from prompt injection to data exfiltration.[^toxicskills] Treat that as a dated finding from one vendor's scan, not a fixed rate, but treat the direction as real: a marketplace of folders that execute with your permissions is exactly the surface attackers go for. Scanning and validation tooling exists, and running a skill through it before you install is worth the minute it takes. That tooling, and where the format is heading, is the next section.
 
-4. **Progressive disclosure earns its keep, and its failure mode is the mirror of that.** Every instruction block and script output in the window costs both tokens and degraded attention, so staged loading saves on both. A description that never triggers strands the whole skill while still spending its Level-1 token budget at idle. The general principle is the context economy in [Context Engineering](../foundations/context-engineering.md).
+When a script does fail, the failure has to come back structured and recoverable rather than as a raw stack trace or a silently swallowed success. The `run_skill_script` failure path does this: a missing script, a timeout, a non-zero exit, and an empty output all return a `[skill-script-error]` line the model can act on. Skip it and the agent loops on a dead script or proceeds on bad state.
 
-5. **"Skills are a new paradigm" is overclaimed.** The term today covers markdown instructions, packaged code, and workflow orchestration that have little in common, and the durable win is routing plus context management rather than smarter prompts.[^kinney] Treat the current shape as a useful packaging convention that may not survive in its present form, not as an endgame.[^ossinsight] That is the Contested half of the maturity verdict, and the reason to size the claim to what the mechanism actually does.
+## 5. Ecosystem & tooling
 
-## 5. In short
+The packaging mechanism is settling, but the ecosystem around it, the standard, the distribution, and the signing, is still forming. Three parts are worth knowing before you build on it.
 
-Use Skills to package procedural knowledge the model needs only sometimes, like the MAP and margin rules at the price step. They are an Established, practical mechanism, and progressive disclosure is the discipline that justifies them: keep the Level-1 metadata tight and the descriptions trigger-precise. The hard part is not authoring the folder, it is trusting one you did not write. Audit the body and the scripts before you deploy, scope what those scripts can reach, and make their failures structured and recoverable. A Skill packages knowledge; an MCP server provides connectivity; the two compose. And do not buy the "new paradigm" pitch.
+The format is becoming a real cross-vendor standard. The `SKILL.md` format was open-sourced in late 2025 as the open Agent Skills standard, with a published spec, and it is being adopted across tools well beyond its origin, including OpenAI Codex, Cursor, Gemini CLI, and Copilot.[^skills-standard][^codex-skills] What is not settled is the governance and a first-class `version` field, which is why a skill you install today still has no built-in way to tell you which revision you got.
+
+Distribution is mostly convention. A skill ships as a folder, usually over git, and the internal default is a private repository with code review on the way in. Packaging and versioning are still left to convention rather than enforced by the format. Microsoft's Agent Package Manager (APM) is one contender for fixing that: a manifest plus a lockfile that pins each skill by content hash, so an install is reproducible and you can tell whether the bytes changed.[^apm] The honest caveat is that APM is community-maintained, pre-1.0, and not a supported Microsoft product (the repository is hosted in the microsoft GitHub org), and you adopt it as you would any early open-source tool.
+
+Safety validation and provenance are arriving alongside. Scanners now exist that check a skill for prompt-injection, data-exfiltration, excessive-agency, and supply-chain patterns before you install it. NVIDIA SkillSpector is one, open source, and it is the kind of tool the Security & trust finding above argues for running by default.[^skillspector] Provenance is forming too: an NVIDIA-Verified skill carries a signed Skill Card attesting what it does.[^nvidia-verified] Both are Emerging, not yet standard.
+
+> **From production.** I have used NVIDIA SkillSpector to validate the safety of skills before installing them, and contributed a scanner rule for one of the exfiltration patterns it now checks. I have also used Microsoft APM to distribute skills internally. Neither is a settled standard yet, so I treat the scan and the lockfile as risk reduction, not as a reason to skip reading the skill.
+
+## 6. Gotchas
+
+The supply-chain and script-safety edges have their own section above, the catalog-budget and never-triggering edges are in the How section, and the "new paradigm" overclaim is the Contested half of the maturity line; these are the rest.
+
+1. **Validate a skill script's output before acting on it.** A script's stdout enters context, so a poisoned or malformed result is a way to steer the agent even after you have audited the body. Validating that output against a schema before you act on it is a poisoning mitigation, covered in [Structured Output](structured-output.md).
+
+2. **A skill body can drift from the script it ships with.** The body is followed as instructions while the bundled script runs as code, and nothing keeps the two in step. A `SKILL.md` that documents one flag set and a `check_map.py` that expects another will pass an audit of either file read alone, so read them together and pin the pair when you distribute.
+
+## 7. In short
+
+Use Skills to package procedural knowledge the model needs only sometimes, like the MAP and margin rules at the price step. They are an Established, practical mechanism, and progressive disclosure is the discipline that justifies them: keep the Level-1 catalog tight and the descriptions trigger-precise, because that catalog is the whole selection surface and there is no router behind it. The hard part is not authoring the folder, it is trusting one you did not write. Audit the body and the scripts before you deploy, scope what those scripts can reach, run a scanner over a third-party skill while the signing ecosystem is still Emerging, and make script failures structured and recoverable. A Skill packages knowledge; an MCP server provides connectivity; the two compose. And do not buy the "new paradigm" pitch.
 
 ## Sources
 
@@ -364,6 +409,14 @@ Use Skills to package procedural knowledge the model needs only sometimes, like 
 [^newstack-md]: The New Stack, "The case for running AI agents on Markdown files instead of MCP servers." Skills as procedural knowledge versus MCP for connectivity. <https://thenewstack.io/skills-vs-mcp-agent-architecture/>
 [^kinney]: Kinney, S., "Agent Skills, Stripped of Hype." The skeptical read on the paradigm framing. <https://stevekinney.com/writing/agent-skills>
 [^ossinsight]: OSS Insight, "Agent Skills Are Not the Endgame: They're Just a Transitional Layer," Mar 2026. The skeptical read on durability. <https://ossinsight.io/blog/agent-skills-explosion-2026>
+[^skills-cc]: Claude Code skills documentation. The always-resident catalog budget, and how descriptions can be silently truncated or dropped past a budget so a skill becomes undiscoverable. <https://code.claude.com/docs/en/skills>
+[^skills-internals]: Lee, H., "Claude Skills deep dive," a practitioner reverse-engineering of the selection mechanism (2025-10-26). The finding that selection is the model reading descriptions, with no separate router, classifier, or embedding lookup. <https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/>
+[^skills-standard]: The open Agent Skills standard and its published specification. <https://agentskills.io> and <https://agentskills.io/specification>
+[^codex-skills]: OpenAI, "Codex skills," documenting Codex adopting the skills format. <https://developers.openai.com/codex/skills>
+[^apm]: Microsoft Agent Package Manager (APM): a manifest plus content-hash lockfile for reproducible skill installs. Community-maintained, pre-1.0, and not a supported Microsoft product (the repository is hosted in the microsoft GitHub org). <https://github.com/microsoft/apm>
+[^skillspector]: NVIDIA SkillSpector, an open-source scanner that checks a skill for prompt-injection, data-exfiltration, excessive-agency, and supply-chain patterns before install. <https://github.com/NVIDIA/SkillSpector>
+[^nvidia-verified]: NVIDIA, "NVIDIA-Verified Agent Skills provide capability governance for AI agents." The signed Skill Card and verification programme. <https://developer.nvidia.com/blog/nvidia-verified-agent-skills-provide-capability-governance-for-ai-agents/>
+[^toxicskills]: Snyk, "ToxicSkills: malicious AI agent skills." A February 2026 security-vendor study reporting roughly one in seven public skills scanned (about 13.4%) carrying a critical issue; treat as a dated finding from one vendor's scan, not a fixed rate. <https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/>
 
 ## See also
 

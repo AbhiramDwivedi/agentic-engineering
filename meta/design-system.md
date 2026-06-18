@@ -14,6 +14,18 @@ carries the one-line definition. Start every chapter from [`chapter-template.md`
 Parts and numbering: Part I-IX (roman), chapters `N.M`. Later chapters render muted ("planned") in
 the nav so the full map is visible without implying it is all written.
 
+**Optional sections, from a fixed menu (controlled extension).** The spine above is mandatory, so
+every page reads the same way. A deep topic may add sections from a controlled menu, only when the
+topic earns it, always with the same name and in the same slot (after How, before Gotchas):
+**Security & trust** (a real trust boundary: untrusted input, supply chain), **Cost** (token or
+compute spend is a first-order design concern), **Ecosystem & tooling** (a real distribution,
+sharing, or tooling landscape), **Operating in production** (observability, rollout, blast-radius),
+and **Evaluating it** (how you'd measure it works). A simple chapter uses none of these and keeps
+its sharp edges in Gotchas; a chapter with a genuine security or distribution story promotes that
+concern out of Gotchas into its own section. The menu is the controlled vocabulary, not a cage: if
+a chapter needs a section the menu lacks, propose it for sign-off rather than inventing one
+silently, so the menu grows deliberately and the reference keeps reading as authored, not assembled.
+
 **Titles are canonical nouns** ("Tool Use", "Fan-Out"), in the H1 and the nav both: a reference
 gets cited and searched by its nouns. The evocative phrase the chapter used to carry as a title
 moves into the gloss line under the head, which doubles as the chapter's one-line entry in the
@@ -36,7 +48,7 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 |---|---|---|
 | Lens line | one-line `<small class="chapter-meta">…</small>` | maturity · who-decides · grounding · last-reviewed |
 | Maturity lens | prose, one line | Standard / Established / Emerging / Contested. Never a radar. |
-| From production | `> **From production.** …` blockquote | a first-hand scar. Only if true. |
+| From production | `> **From production.** …` blockquote | the single first-hand-experience callout: a real scar or real hands-on use. Only if true. Public tools may be named (e.g. a scanner the author used); the confidential product is recast into the carrier, never named. |
 | In the companion repo | `> **In the companion repo.** …` blockquote | demonstrated, not shipped |
 | In Listing Studio | `> **In Listing Studio.** …` blockquote | the carrier instance, three sentences max |
 | LLM-response quote | italic + quotes, e.g. *"I'd list it at $419."* | an imaginary model utterance; the italics mark it as the model talking, not the author or a cited source |

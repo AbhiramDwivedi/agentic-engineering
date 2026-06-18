@@ -246,7 +246,87 @@ def test_result_validation_fails_on_missing_key():
 
 
 # ---------------------------------------------------------------------------
-# 7. Illustration files compile as valid Python
+# 8. Server-side input validation and scoping (mcp-server-validate anchor)
+# ---------------------------------------------------------------------------
+
+def test_server_rejects_empty_query():
+    """search_docs with a blank query returns a structured server error."""
+    async def _test():
+        server = make_docs_server()
+        async def _call(session: DocsMCPSession) -> str:
+            return await session.call("search_docs", {"query": "   "})
+        return await run_with_server(server, _call)
+
+    result = run(_test())
+    assert "[mcp-error]" in result
+
+
+def test_server_rejects_oversized_query():
+    """search_docs with a 501-character query returns a structured server error."""
+    async def _test():
+        server = make_docs_server()
+        async def _call(session: DocsMCPSession) -> str:
+            return await session.call("search_docs", {"query": "x" * 501})
+        return await run_with_server(server, _call)
+
+    result = run(_test())
+    assert "[mcp-error]" in result
+
+
+def test_server_rejects_invalid_status_enum():
+    """update_listing_status with an invalid new_status returns a structured error."""
+    async def _test():
+        server = make_docs_server()
+        # Bypass the SDK schema validation by patching: call _dispatch directly.
+        from helpdesk_mcp.docs_server import _dispatch
+        return await _dispatch(
+            "update_listing_status",
+            {"supplier_sku": "NV-ALDSWORTH-DM", "new_status": "published"},
+        )
+    result = run(_test())
+    # _dispatch returns a CallToolResult with isError=True
+    assert result.isError is True
+    assert "new_status" in result.content[0].text
+
+
+def test_server_rejects_malformed_sku():
+    """update_listing_status with a bad SKU shape returns a structured error."""
+    async def _test():
+        from helpdesk_mcp.docs_server import _dispatch
+        return await _dispatch(
+            "update_listing_status",
+            {"supplier_sku": "bad sku!", "new_status": "review"},
+        )
+    result = run(_test())
+    assert result.isError is True
+    assert "supplier_sku" in result.content[0].text
+
+
+def test_server_rejects_unknown_tool_with_structured_error():
+    """An unknown tool name returns isError=True from the server, not a crash."""
+    async def _test():
+        from helpdesk_mcp.docs_server import _dispatch
+        return await _dispatch("no_such_tool", {})
+    result = run(_test())
+    assert result.isError is True
+    assert "unknown tool" in result.content[0].text.lower()
+
+
+def test_valid_search_docs_call_succeeds():
+    """A valid search_docs call returns content without an error."""
+    async def _test():
+        server = make_docs_server()
+        async def _call(session: DocsMCPSession) -> str:
+            return await session.call("search_docs", {"query": "returns policy"})
+        return await run_with_server(server, _call)
+
+    result = run(_test())
+    assert "[mcp-error]" not in result
+    assert len(result) > 0
+
+
+# ---------------------------------------------------------------------------
+# 9. Illustration files compile as valid Python
 # ---------------------------------------------------------------------------
 
 def test_illustration_files_are_valid_python():
