@@ -14,6 +14,33 @@ ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 CHAPTER = os.path.join(ROOT, "docs", "the-unit", "tool-use.md")
 PRICING = os.path.join(ROOT, "listing-studio", "pricing")
 
+# Chapter 2.3 — Skills
+SKILLS_CHAPTER = os.path.join(ROOT, "docs", "the-unit", "skills.md")
+SKILLS_PKG = os.path.join(ROOT, "listing-studio", "skills")
+
+SKILLS_ANCHORS = {
+    "skill-meta":       "loader.py",
+    "skill-loader":     "loader.py",
+    "skill-langgraph":  "skills_langgraph.py",
+    "skill-responses":  "skills_responses.py",
+    "skill-anthropic":  "skills_example.py",
+}
+
+# Chapter 2.4 — MCP
+MCP_CHAPTER = os.path.join(ROOT, "docs", "the-unit", "mcp.md")
+MCP_PKG = os.path.join(ROOT, "listing-studio", "helpdesk_mcp")
+
+MCP_ANCHORS = {
+    "mcp-guard":       "guard.py",
+    "mcp-poison":      "guard.py",
+    "mcp-stale":       "guard.py",
+    "mcp-consent":     "client.py",
+    "mcp-connect":     "client.py",
+    "mcp-langgraph":   "helpdesk_mcp_langgraph.py",
+    "mcp-responses":   "helpdesk_mcp_responses.py",
+    "mcp-anthropic":   "helpdesk_mcp_example.py",
+}
+
 # Chapter 2.2 — Structured Output
 STRUCTURED_OUTPUT_CHAPTER = os.path.join(ROOT, "docs", "the-unit", "structured-output.md")
 STRUCTURED_OUTPUT_PKG = os.path.join(ROOT, "listing-studio", "structured_output")
@@ -107,4 +134,24 @@ def test_structured_output_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/the-unit/structured-output.md with "
             f"listing-studio/structured_output/{fname}."
+        )
+
+
+def test_skills_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(SKILLS_CHAPTER))
+    for name, fname in SKILLS_ANCHORS.items():
+        region = _region(_read(os.path.join(SKILLS_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/the-unit/skills.md with listing-studio/skills/{fname}."
+        )
+
+
+def test_mcp_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(MCP_CHAPTER))
+    for name, fname in MCP_ANCHORS.items():
+        region = _region(_read(os.path.join(MCP_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/the-unit/mcp.md with listing-studio/helpdesk_mcp/{fname}."
         )

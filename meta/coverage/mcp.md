@@ -151,3 +151,19 @@ practitioner: The New Stack "The case for running AI agents on Markdown files in
    *poisoning / rug-pull / consent* triad here; mention-and-link the general guardrail machinery.
 4. **OpenAI/Google parity.** How much cross-vendor coverage (OpenAI hosted MCP, approvals) versus
    keeping the spec + Anthropic as the worked example with others as asides?
+
+## Author sign-off (2026-06-18) — this is the chapter's contract
+
+Must-cover list accepted as-is (all 7 items, no trims). Open questions ruled:
+
+1. **CVE specificity — category-level prose, CVE IDs in a footnote.** Prose stays at the category
+   level (poisoning / rug pull / over-broad permission); MCPoison (CVE-2025-54136), CurXecute
+   (CVE-2025-54135), and the postmark-mcp incident live in a footnote, re-verified before naming.
+2. **Carrier grounding — companion-repo / reasoned, confirmed.** No shipped MCP story, no
+   `> **From production.**`. The demonstrated surface is the **merchant helpdesk reaching a docs MCP
+   server** (`> **In the companion repo.**`).
+3. **Security depth — own the full triad here.** Tool poisoning + the third-party-server trust
+   boundary (rug pull) + consent are the chapter's spine; mention-and-link the general guardrail
+   machinery to 4.4, do not defer the spine.
+4. **Cross-vendor parity — the MCP spec + Anthropic are the worked example;** OpenAI hosted MCP /
+   approvals and Google get short asides only, not full parity.
