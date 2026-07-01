@@ -26,6 +26,8 @@ The counter-trigger: do not reach for a Skill when the need is connectivity to a
 
 A Skill is a folder of procedural knowledge: a `SKILL.md` file with YAML `name` and `description` fields and a fuller instruction body, plus optional bundled files and executable scripts, that the runtime reveals to the model in stages.[^skills-overview] Anthropic's framing for it is an onboarding guide for a new hire: the reference a capable worker reaches for to do a specific job well, not a rewrite of how the worker thinks.[^skills-eng]
 
+Most people meet a skill inside a coding tool such as Claude Code, Codex, or Cursor, where dropping a `SKILL.md` into a folder teaches the agent a new trick. That is where skills got famous, and it is where the easy misread starts: that a skill is a coding-tool convenience. It is a first-class primitive of agentic architecture. Every major model API now loads skills natively: Anthropic through the code-execution container, OpenAI on the hosted shell tool, and Gemini through Managed Agents, all shipped in 2026.[^skills-api-anthropic][^skills-api-openai][^skills-api-gemini] The batteries-included agent frameworks build the same thing in.[^deepagents] Where [MCP](mcp.md) connects an agent to live tools and data, a skill hands it portable know-how; both are architecture, and the coding CLIs are just the most visible place skills appear.
+
 Run the litmus test on it, the question this book sorts every pattern by: who makes the structural decision, the model or your code? On a Skill, your code does. A Skill is context engineering as packaging, where context engineering is the discipline of choosing what goes into the model's window and what stays out. Your runtime decides what to reveal and when. The only thing the model decides is which skill to pull in. The value there is real, but it is operational rather than architectural. A Skill is not a genuinely-new agentic pattern, and selling folders-of-markdown as a breakthrough overclaims it.
 
 **Maturity: Established overall, with parts moving at different speeds.** The packaging mechanism is shipping and stabilising, and the parts that matter for building on it, the three-level loading model and the split between packaging knowledge and providing connectivity, are settling into accepted practice.[^skills-overview][^skills-eng] The `SKILL.md` format itself is trending toward Standard: it was open-sourced as the Agent Skills standard and is being adopted across tools beyond its origin.[^skills-standard][^codex-skills] Progressive disclosure as a context principle, the idea of loading context in stages, is older and stronger, and counts as Standard. What is still Emerging is the surrounding ecosystem: governance and versioning of the format, distribution and packaging conventions, and dependable audit and signing tooling for third-party skills, which is why the security burden in the Security & trust section falls on you rather than on the ecosystem. The framing that "Skills are a new paradigm" or the endgame is Contested: the word "skills" today lumps together markdown instructions, packaged code, and workflow orchestration that have little in common, and the durable win is routing plus context management more than smarter prompts.[^kinney][^ossinsight]
@@ -33,6 +35,18 @@ Run the litmus test on it, the question this book sorts every pattern by: who ma
 A Skill is not an agent, and not a tool. It packages the workflow that may call tools (the call-execute-return contract from [Tool Use](tool-use.md)), and it can teach the model how to drive an [MCP](mcp.md) server. Skills compose with tools and MCP; this is not a versus.
 
 ## 3. How to do it
+
+### Which path is right
+
+You almost never write a skill's loading yourself. The decision that matters is who runs it for you, and there are three honest answers:
+
+- **On a coding agent (Claude Code, Codex, Gemini CLI): drop the folder.** Put the `SKILL.md` in the agent's skills directory and you are done; the harness discovers it, discloses it, and runs its scripts.
+- **On an agent framework: let the framework own it.** In LangChain, `deepagents` ships a `SkillsMiddleware` that does the three-level disclosure for you and stays model-agnostic, so you pass a folder path and the same skill runs under any tool-calling model.[^deepagents] Do not hand-roll it on bare `create_agent`.
+- **On a raw model API: use the native skills parameter.** Anthropic attaches skills to the code-execution container (`container.skills`), OpenAI mounts them on the hosted shell tool (`environment.skills`), and Gemini exposes them through Managed Agents. In each case the platform loads the metadata, discloses the body on demand, and runs bundled scripts in its own sandbox. (Disclosure here is not fully hands-off: on the Anthropic API you attach up to eight skills per request yourself, and any runtime lets you name a skill to force it.)
+
+The one move to avoid is the one that looks easiest: flattening a skill into a single function tool with its whole body pasted into the system prompt. That makes the body always-resident, so progressive disclosure is gone, and it reinvents loading the runtime already ships for free.
+
+Underneath, all three paths read the same open `SKILL.md` folder; the format is portable across every runtime above, and only the discloser differs, the vendor's infrastructure or your framework. Here is that shared mechanism unpacked, so you can reason about its cost even though you rarely write it.
 
 Progressive disclosure loads context in stages so the window only ever holds what the current task needs. A Skill realises it at three levels. Rounded nodes are the model deciding, rectangles are your code or runtime deciding, the hexagon is the capability the skill packages:
 
@@ -47,7 +61,7 @@ flowchart LR
 
 Level 1 is the metadata: the `name` and `description`, always in the system prompt, tiny by design. Level 2 is the `SKILL.md` body, the full how-to, loaded only when the skill is triggered. Level 3 is a referenced file or script, read or executed only on demand, where the script's output enters context and its source never does.
 
-The loader carries the whole mechanism in two pieces. First, the Level-1 payload, the metadata that rides in the system prompt for every registered skill whether or not it is ever used:
+Unpacked, that mechanism is two pieces. First, the Level-1 payload, the metadata that rides in the system prompt for every registered skill whether or not it is ever used:
 
 ```python
 @dataclass
@@ -196,41 +210,19 @@ Call the bundled `check_map.py` script with the SKU and proposed price:
     python check_map.py NV-ALDSWORTH-DM 41900
 ```
 
-The runtime side, where the three levels plug into an agent, differs only by SDK. The LangGraph version is the default; the OpenAI Responses and Anthropic Messages variants show the same three levels wired through their own tool loops.
+Here is that same skill attached the first-class way in each runtime. The LangGraph tab uses `deepagents`, the recommended framework path; the OpenAI Responses and Anthropic Messages tabs attach a skill you have uploaded, by its id. In all three the runtime owns the three levels, rather than your code wiring them through a tool loop.
 
 === "LangGraph"
 
     ```python
-    # Level 1: load metadata at startup — tiny token budget, always in the system prompt.
-    skill = load_skill_meta(_SKILL_DIR)
-
-    # The system prompt carries only the name + description (Level 1).
-    # The full body (Level 2) is loaded below only when this skill is triggered.
-    SYSTEM_PROMPT = (
-        "You are a pricing specialist for Stockwell. "
-        f"Available skill: {skill.name} — {skill.description}"
-    )
-
-    # Level 2: load the full body on trigger (e.g. when the task is pricing-related).
-    skill_body = load_skill_body(skill)
-
-
-    @tool(parse_docstring=True)
-    def check_map_price(supplier_sku: str, proposed_price_cents: int) -> str:
-        """Run the MAP-compliance check for a proposed price.
-
-        Args:
-            supplier_sku: the product SKU to check.
-            proposed_price_cents: the proposed listed price in cents.
-        """
-        # Level 3: run the bundled script; its output enters context, not the source.
-        return run_skill_script(skill, "check_map.py", [supplier_sku, str(proposed_price_cents)])
-
-
-    agent = create_agent(
-        "openai:gpt-5.5",
-        tools=[check_map_price],
-        system_message=SYSTEM_PROMPT + "\n\n" + skill_body,
+    # Point deepagents at the skill folder. SkillsMiddleware (in the default stack
+    # when you pass `skills`) does progressive disclosure for you: it reads only
+    # name + description at startup, loads the SKILL.md body when the model triggers
+    # the skill, and runs a bundled script on demand — the same three levels, but
+    # owned by the harness, not hand-rolled, and portable across models.
+    agent = create_deep_agent(
+        model="anthropic:claude-sonnet-4-6",   # or "openai:gpt-5.5" — same skill, any model
+        skills=["skills/map_compliance"],
     )
 
     result = agent.invoke({
@@ -238,7 +230,7 @@ The runtime side, where the three levels plug into an agent, differs only by SDK
             "role": "user",
             "content": (
                 "Set a listed price for the Aldsworth Dual-Motor Sit-Stand Desk "
-                "(SKU NV-ALDSWORTH-DM). Use the MAP-compliance skill to validate "
+                "(SKU NV-ALDSWORTH-DM). Use the map-compliance skill to validate "
                 "the price before confirming it."
             ),
         }]
@@ -249,103 +241,53 @@ The runtime side, where the three levels plug into an agent, differs only by SDK
 === "OpenAI Responses API"
 
     ```python
-    # Level 1: name + description in the system prompt, Level 2: body on trigger.
-    skill = load_skill_meta(_SKILL_DIR)
-    skill_body = load_skill_body(skill)
-
-    CHECK_MAP_TOOL = {
-        "type": "function",
-        "name": "check_map_price",
-        "description": (
-            "Run the MAP-compliance check for a proposed price. Returns a JSON "
-            "result confirming whether the price meets the MAP floor and margin rules."
-        ),
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "supplier_sku": {"type": "string"},
-                "proposed_price_cents": {"type": "integer"},
-            },
-            "required": ["supplier_sku", "proposed_price_cents"],
-            "additionalProperties": False,
-        },
-    }
-
+    # Native skills: mount the skill on the hosted shell tool. The platform adds the
+    # skill's name + description + path to context (Level 1), loads the SKILL.md body
+    # when the model triggers it (Level 2), and runs the bundled check_map.py inside
+    # its own container (Level 3). No function-tool wrapper, no local subprocess.
     response = client.responses.create(
         model="gpt-5.5",
-        instructions=(
-            f"Available skill: {skill.name} — {skill.description}\n\n{skill_body}"
-        ),
-        input=[{
-            "role": "user",
-            "content": (
-                "Set a listed price for the Aldsworth Dual-Motor Sit-Stand Desk "
-                "(SKU NV-ALDSWORTH-DM). Use the MAP-compliance skill to validate."
-            ),
+        tools=[{
+            "type": "shell",
+            "environment": {
+                "type": "container_auto",
+                "skills": [
+                    {"type": "skill_reference", "skill_id": MAP_COMPLIANCE_SKILL_ID},
+                ],
+            },
         }],
-        tools=[CHECK_MAP_TOOL],
+        input=(
+            "Set a listed price for the Aldsworth Dual-Motor Sit-Stand Desk "
+            "(SKU NV-ALDSWORTH-DM). Use the map-compliance skill to validate."
+        ),
     )
-
-    # If the model called a tool, run Level 3 and feed the result back.
-    for item in response.output:
-        if item.type == "function_call" and item.name == "check_map_price":
-            args = json.loads(item.arguments)
-            # Level 3: run the bundled script; stdout enters context, not the source.
-            tool_output = run_skill_script(
-                skill, "check_map.py",
-                [args["supplier_sku"], str(args["proposed_price_cents"])],
-            )
-            print("Script output injected into context:", tool_output)
+    print(response.output_text)
     ```
 
 === "Anthropic Messages API"
 
     ```python
-    # Level 1: name + description in the system prompt, Level 2: body on trigger.
-    skill = load_skill_meta(_SKILL_DIR)
-    skill_body = load_skill_body(skill)
-
-    CHECK_MAP_TOOL = {
-        "name": "check_map_price",
-        "description": (
-            "Run the MAP-compliance check for a proposed price. Returns a JSON "
-            "result confirming whether the price meets the MAP floor and margin rules."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "supplier_sku": {"type": "string"},
-                "proposed_price_cents": {"type": "integer"},
-            },
-            "required": ["supplier_sku", "proposed_price_cents"],
-            "additionalProperties": False,
-        },
-    }
-
-    reply = client.messages.create(
+    # Native skills ride on the code-execution tool: attach the skill to the
+    # container and Claude discloses it progressively (name+description, then body,
+    # then it runs check_map.py inside Anthropic's sandbox). Up to 8 skills per
+    # request. Beta today, so the feature is gated behind beta headers.
+    reply = client.beta.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=1024,
-        system=(
-            f"Available skill: {skill.name} — {skill.description}\n\n{skill_body}"
-        ),
-        tools=[CHECK_MAP_TOOL],
+        betas=["code-execution-2025-08-25", "skills-2025-10-02"],
+        tools=[{"type": "code_execution_20250825", "name": "code_execution"}],
+        container={"skills": [
+            {"type": "custom", "skill_id": MAP_COMPLIANCE_SKILL_ID, "version": "latest"},
+        ]},
         messages=[{
             "role": "user",
             "content": (
                 "Set a listed price for the Aldsworth Dual-Motor Sit-Stand Desk "
-                "(SKU NV-ALDSWORTH-DM). Use the MAP-compliance skill to validate."
+                "(SKU NV-ALDSWORTH-DM). Use the map-compliance skill to validate."
             ),
         }],
     )
-
-    for block in reply.content:
-        if block.type == "tool_use" and block.name == "check_map_price":
-            # Level 3: run the bundled script; stdout enters context, not the source.
-            tool_output = run_skill_script(
-                skill, "check_map.py",
-                [block.input["supplier_sku"], str(block.input["proposed_price_cents"])],
-            )
-            print("Script output injected into context:", tool_output)
+    print(reply.content[-1].text if reply.content else "")
     ```
 
 One run, at the price step, for the Aldsworth desk:
@@ -354,7 +296,7 @@ One run, at the price step, for the Aldsworth desk:
 2. At the price step the model decides the task needs the compliance rules and triggers the skill.
 3. The runtime loads the Level-2 `SKILL.md` body into context: the MAP and margin workflow, in full.
 4. The model follows that workflow and asks to run the bundled `check_map.py` (Level 3) on a proposed price, say *"I'll list it at $419.00, which I'll validate first."*
-5. The runtime executes the script offline and returns a structured result, the floor and a pass or fail, into context. The script's source never enters context, only its output.
+5. The runtime executes the script in its sandbox and returns a structured result, the floor and a pass or fail, into context. The script's source never enters context, only its output.
 6. The model reads the result and sets `price_cents` at or above the floor, at `41900`, above the $399.00 MAP.
 
 The runtime decided what to reveal at each level and ran the script; the model only decided that pricing was the task and which skill fit it.
@@ -417,6 +359,10 @@ Use Skills to package procedural knowledge the model needs only sometimes, like 
 [^skillspector]: NVIDIA SkillSpector, an open-source scanner that checks a skill for prompt-injection, data-exfiltration, excessive-agency, and supply-chain patterns before install. <https://github.com/NVIDIA/SkillSpector>
 [^nvidia-verified]: NVIDIA, "NVIDIA-Verified Agent Skills provide capability governance for AI agents." The signed Skill Card and verification programme. <https://developer.nvidia.com/blog/nvidia-verified-agent-skills-provide-capability-governance-for-ai-agents/>
 [^toxicskills]: Snyk, "ToxicSkills: malicious AI agent skills." A February 2026 security-vendor study reporting roughly one in seven public skills scanned (about 13.4%) carrying a critical issue; treat as a dated finding from one vendor's scan, not a fixed rate. <https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/>
+[^skills-api-anthropic]: Anthropic, "Using Agent Skills with the API." Skills attach to the code-execution tool through the `container.skills` parameter (up to eight per request), covering both Anthropic's pre-built `pptx`/`xlsx`/`docx`/`pdf` skills and custom uploads. <https://platform.claude.com/docs/en/build-with-claude/skills-guide>
+[^skills-api-openai]: OpenAI, "Skills" (API guide). Skills mount on the hosted `shell` tool via `environment.skills` using `skill_reference` objects; the platform surfaces each skill's name, description, and path, and loads the `SKILL.md` on demand. <https://developers.openai.com/api/docs/guides/tools-skills>
+[^skills-api-gemini]: Google, "Introducing Managed Agents in the Gemini API." Managed agents define custom instructions, skills, and data as versionable `AGENTS.md` and `SKILL.md` files. <https://blog.google/innovation-and-ai/technology/developers-tools/managed-agents-gemini-api/>
+[^deepagents]: LangChain, "Skills" (deepagents documentation). `SkillsMiddleware` implements the three-level progressive-disclosure loading in the harness and stays model-agnostic across providers; skills are passed as folder paths. <https://docs.langchain.com/oss/python/deepagents/skills>
 
 ## See also
 
@@ -432,6 +378,8 @@ External deep-dives for a reader who wants more than this chapter covers. These 
 
 - **The vendor mechanism.** Anthropic, [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills). The three-level loading model and the onboarding-guide framing, straight from the team that shipped the format.
 - **The open standard.** The [Agent Skills specification](https://agentskills.io/specification). The portable `SKILL.md` format itself: what the spec pins down and what it deliberately leaves to the runtime.
+- **Skills in a framework.** LangChain's [deepagents Skills docs](https://docs.langchain.com/oss/python/deepagents/skills). How a model-agnostic harness implements the same three-level disclosure the vendors run, so one skill folder works under any provider.
 - **The loading reality.** The [Claude Code skills documentation](https://code.claude.com/docs/en/skills). How selection actually behaves in a shipping runtime: the always-resident catalog budget, and how descriptions get truncated or dropped so a skill goes undiscoverable.
+- **Authoring at scale.** Anthropic's [Lessons from building Claude Code: how we use skills](https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills). The team's own field notes from running hundreds of skills: how to categorise them, write descriptions the model will match rather than a human, and lean on folder structure for progressive disclosure.
 - **Safety.** NVIDIA's [SkillSpector](https://github.com/NVIDIA/SkillSpector), the open-source scanner to run over a skill before you trust it, and Snyk's [ToxicSkills study](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) for the threat data behind the supply-chain warning.
 - **The skeptical take.** Kinney, [Agent Skills, Stripped of Hype](https://stevekinney.com/writing/agent-skills), and OSS Insight, [Agent Skills Are Not the Endgame](https://ossinsight.io/blog/agent-skills-explosion-2026). The honest read on the "new paradigm" framing and how durable the win is.

@@ -1,65 +1,41 @@
-"""Skills with the Anthropic Messages API.
+"""Skills with the Anthropic Messages API — native skills path.
 
-Illustration, not run in CI: needs an API key and a network call. The default
-pane is skills_langgraph.py; this is the Anthropic Messages variant.
+Illustration, not run in CI: needs an API key and a network call.
+The skill is attached to the code-execution container via container.skills —
+the platform discloses it progressively and runs the bundled script in its
+own sandbox. You attach the uploaded custom skill by id (or Anthropic's
+pre-built pptx/xlsx/docx/pdf by name); beta today.
+
+The default pane is skills_langgraph.py; this is the Anthropic Messages variant.
 """
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import anthropic
 
-from .loader import load_skill_meta, load_skill_body, run_skill_script
-
-_SKILL_DIR = Path(__file__).parent / "map_compliance"
+MAP_COMPLIANCE_SKILL_ID = "skill_01MapComplianceExample"
 client = anthropic.Anthropic()
 
 
 # --8<-- [start:skill-anthropic]
-# Level 1: name + description in the system prompt, Level 2: body on trigger.
-skill = load_skill_meta(_SKILL_DIR)
-skill_body = load_skill_body(skill)
-
-CHECK_MAP_TOOL = {
-    "name": "check_map_price",
-    "description": (
-        "Run the MAP-compliance check for a proposed price. Returns a JSON "
-        "result confirming whether the price meets the MAP floor and margin rules."
-    ),
-    "input_schema": {
-        "type": "object",
-        "properties": {
-            "supplier_sku": {"type": "string"},
-            "proposed_price_cents": {"type": "integer"},
-        },
-        "required": ["supplier_sku", "proposed_price_cents"],
-        "additionalProperties": False,
-    },
-}
-
-reply = client.messages.create(
+# Native skills ride on the code-execution tool: attach the skill to the
+# container and Claude discloses it progressively (name+description, then body,
+# then it runs check_map.py inside Anthropic's sandbox). Up to 8 skills per
+# request. Beta today, so the feature is gated behind beta headers.
+reply = client.beta.messages.create(
     model="claude-sonnet-4-6",
     max_tokens=1024,
-    system=(
-        f"Available skill: {skill.name} — {skill.description}\n\n{skill_body}"
-    ),
-    tools=[CHECK_MAP_TOOL],
+    betas=["code-execution-2025-08-25", "skills-2025-10-02"],
+    tools=[{"type": "code_execution_20250825", "name": "code_execution"}],
+    container={"skills": [
+        {"type": "custom", "skill_id": MAP_COMPLIANCE_SKILL_ID, "version": "latest"},
+    ]},
     messages=[{
         "role": "user",
         "content": (
             "Set a listed price for the Aldsworth Dual-Motor Sit-Stand Desk "
-            "(SKU NV-ALDSWORTH-DM). Use the MAP-compliance skill to validate."
+            "(SKU NV-ALDSWORTH-DM). Use the map-compliance skill to validate."
         ),
     }],
 )
-
-for block in reply.content:
-    if block.type == "tool_use" and block.name == "check_map_price":
-        # Level 3: run the bundled script; stdout enters context, not the source.
-        tool_output = run_skill_script(
-            skill, "check_map.py",
-            [block.input["supplier_sku"], str(block.input["proposed_price_cents"])],
-        )
-        print("Script output injected into context:", tool_output)
+print(reply.content[-1].text if reply.content else "")
 # --8<-- [end:skill-anthropic]
