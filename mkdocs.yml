@@ -146,4 +146,5 @@ nav:
       - "D. State of Play 2026 (planned)": catalogs/state-of-play.md
       - "E. Glossary": catalogs/glossary.md
       - "F. The Hardening Checklist (planned)": catalogs/hardening-checklist.md
+      - "G. The Security Posture Map (planned)": catalogs/security-posture.md
   - Contributing: contributing.md
