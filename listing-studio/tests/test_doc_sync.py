@@ -70,6 +70,19 @@ ANCHORS = {
     "many_anthropic": "multi_tool_example.py",
 }
 
+# Chapter 3.1 — Prompt Chaining
+PROMPT_CHAINING_CHAPTER = os.path.join(ROOT, "docs", "composition", "prompt-chaining.md")
+PROMPT_CHAINING_PKG = os.path.join(ROOT, "listing-studio", "prompt_chaining")
+
+PROMPT_CHAINING_ANCHORS = {
+    "chain-schemas":    "schemas.py",
+    "chain-gate":       "gate.py",
+    "chain-run":        "chain.py",
+    "chain-langgraph":  "prompt_chaining_langgraph.py",
+    "chain-responses":  "prompt_chaining_responses.py",
+    "chain-anthropic":  "prompt_chaining_example.py",
+}
+
 # Chapter 1.4 — The Augmented LLM
 AUGMENTED_LLM_CHAPTER = os.path.join(ROOT, "docs", "foundations", "the-augmented-llm.md")
 AUGMENTED_LLM_PKG = os.path.join(ROOT, "listing-studio", "augmented_llm")
@@ -157,4 +170,15 @@ def test_mcp_chapter_code_matches_tested_source():
         assert region in blocks, (
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/the-unit/mcp.md with listing-studio/helpdesk_mcp/{fname}."
+        )
+
+
+def test_prompt_chaining_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(PROMPT_CHAINING_CHAPTER))
+    for name, fname in PROMPT_CHAINING_ANCHORS.items():
+        region = _region(_read(os.path.join(PROMPT_CHAINING_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/composition/prompt-chaining.md with "
+            f"listing-studio/prompt_chaining/{fname}."
         )
