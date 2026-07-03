@@ -38,7 +38,8 @@ stage 2, and the chapter path. It returns the full chapter markdown plus its lis
 unverified items.
 
 > **Maintainer enhancement (optional).** The draft may instead be produced by a multi-engine
-> fusion step: several engines draft the same full-chapter brief and an Opus reviewer fuses their
+> fusion step: several engines draft the same full-chapter brief and a reviewer on the strongest
+> available model fuses their
 > coverage onto the chapter-writer draft as the spine (which alone carries the anchored, tested
 > code). This runs only from the private planning workspace, where the extra engines' CLIs are
 > authed. Contributors without it use **chapter-writer** alone, the portable default. Either way

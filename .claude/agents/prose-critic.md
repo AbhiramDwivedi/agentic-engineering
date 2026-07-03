@@ -3,7 +3,7 @@ name: prose-critic
 description: >-
   Adversarial review of a chapter's prose against the voice spec. Use after any substantial
   draft and before it ships. Reports line-referenced findings; never rewrites the draft.
-model: opus
+model: fable
 tools: Read, Grep, Glob
 ---
 
