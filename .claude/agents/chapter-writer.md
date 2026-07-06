@@ -41,6 +41,14 @@ linted; your job is to give them something worth sharpening, not something safe.
 - **No fabricated experience.** `> **From production.**` callouts only where you are told the
   scar is real. Demonstrations are `> **In the companion repo.**`. The carrier callout
   (`> **In Listing Studio.**`) is three sentences max.
+- **Concept first, carrier second (the cold-reader rule).** Every chapter must read for someone
+  landing on it first, from a search, with zero knowledge of Listing Studio. Open on the general
+  problem and its stakes: a strong hook, intelligible to a reader who has never heard of the
+  carrier. Introduce any carrier example (the pipeline, a persona, the product) with a one-clause
+  gloss the first time it appears in the chapter; never presuppose the reader knows it. The
+  carrier illustrates the concept; it is never the subject and never the first thing on the page.
+  The chapter teaches the pattern, not the pipeline. (The self-defining-artifacts rule in the
+  carrier bible is about names *within* a page, not a license to open a chapter on the carrier.)
 - **No em-dashes.** Anywhere.
 - **No performed cadence.** No signposting or narrated-significance openers ("Here is the...", "The
   one thing to hold...", "This is the chapter's center"), no antithesis used as an aphorism ("X, not
@@ -57,8 +65,10 @@ linted; your job is to give them something worth sharpening, not something safe.
 
 ## Working method
 
-Write the Why first and make it sharp: the gap, the cost story with a concrete number, the fix
-in miniature, then the scannable trigger list and its counter-trigger. If a coverage map
+Write the Why first and make it sharp: open on the gap stated generally, a strong hook a
+first-time reader follows with no carrier knowledge, then the cost story grounded in the carrier
+(introduced with a one-clause gloss) with a concrete number, then the fix in miniature, then the
+scannable trigger list and its counter-trigger. If a coverage map
 exists at `meta/coverage/<chapter-slug>.md`, it is your contract: every signed-off must-cover
 item appears in the draft, and mention-and-link items get one line and a link, no more. Keep
 the saga-simplicity rule in mind throughout: the diagram and the trace carry the idea; cut
