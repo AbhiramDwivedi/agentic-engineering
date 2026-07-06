@@ -5,6 +5,13 @@
   carries the one-line definition so a reader who already knows they need it is served too.
   Pull every concrete specific from meta/carrier-bible.md. Obey meta/voice-and-style.md.
 
+  CONCEPT FIRST, CARRIER SECOND (the cold-reader rule). Every chapter must read for someone who
+  lands on it first, from a search, with zero knowledge of the carrier (Listing Studio, its
+  pipeline, its people, the product). Open on the general problem and its stakes; introduce any
+  carrier example with a one-clause gloss the first time it appears ("a product-listing pipeline
+  that turns a supplier feed into a storefront page"). The carrier ILLUSTRATES the concept. It is
+  never the subject, and it is never presupposed. The chapter teaches the pattern, not the pipeline.
+
   COMPLETENESS CHECK (the classic pattern form, kept as content, not as headings).
   The Alexandrian fields map onto our flow; before a chapter ships, confirm each is answered:
     Context + Problem  -> Why (the gap, the cost story)
@@ -36,14 +43,20 @@
 ## Why you'd reach for it
 <!--
   Fixed shape, four beats:
-    1. THE GAP: what is missing without this, stated plainly. Include the sharp edge, what
-       the system does WRONG (not just can't do) when the gap is hit.
-    2. THE COST STORY: one concrete carrier scenario where the gap burns you, with the cost
-       in time / money / risk (the leadership framing).
+    1. THE GAP (this is the HOOK, and it must be strong): what is missing without this, stated
+       plainly and GENERALLY, in terms of the problem rather than the carrier, so a first-time
+       reader with no carrier knowledge is pulled in and follows. Include the sharp edge, what the
+       system does WRONG (not just can't do) when the gap is hit. This opening decides whether
+       they read on; make it earn the next paragraph.
+    2. THE COST STORY: now GROUND the gap in one concrete carrier scenario, introduced with a
+       one-clause gloss ("a product-listing pipeline that turns a supplier feed into a storefront
+       page"), with the cost in time / money / risk (the leadership framing). The carrier enters
+       HERE, as illustration, not in beat 1.
     3. THE FIX, in miniature: how this pattern closes the gap, two or three sentences.
     4. THE TRIGGER LIST: when you need it, as a short scannable bulleted list, then the
        counter-trigger (when you don't, and the simpler thing instead).
-  A brief "From production" opening is allowed when a real scar is the best way in.
+  A brief "From production" opening is allowed when a real scar is the best way in, as long as it
+  still reads for a first-time reader and does not presuppose carrier internals.
 -->
 
 ## What it actually is

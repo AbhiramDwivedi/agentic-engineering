@@ -5,7 +5,7 @@ description: >-
   field and produce the coverage map (meta/coverage/<slug>.md) that sets the chapter's scope,
   maturity verdicts, and evidence base. Use at the start of every new chapter, and to refresh
   the map when a fast-moving chapter is re-reviewed.
-model: opus
+model: sonnet
 tools: Read, Grep, Glob, Write, WebFetch, WebSearch
 ---
 

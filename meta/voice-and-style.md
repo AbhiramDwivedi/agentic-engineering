@@ -45,6 +45,12 @@ it. Do not try to make a reference chapter sing. Make it true, clear, and commit
     every API." The mental model is shared; the concrete fields differ by vendor (Anthropic
     `input_schema`, OpenAI `parameters` / `strict`), and any code sample is one vendor's shape, so
     label it. A schema validates *shape*, never *business truth*; say which you mean.
+13. **Concept leads, carrier illustrates (the cold-reader rule).** The opening states the problem
+    generally, as a strong hook a first-time reader with no carrier knowledge follows; the carrier
+    example lands right after, introduced with a one-clause gloss, never presupposed. Rule 2's
+    concrete-instance requirement is met by grounding the concept in the carrier *quickly*, not by
+    opening on the carrier as if the reader already knows it. "Concrete" means specific, not
+    carrier-insider. The chapter teaches the pattern, not the pipeline.
 
 ## The blandness checklist (the critic scores against this)
 
@@ -54,7 +60,10 @@ A draft fails if it shows these. The prose-critic agent flags each by line.
 - **Hedge with no recommendation.** "There are trade-offs to consider" and then no recommendation.
 - **List-itis.** Bullets doing the work that argued prose should do.
 - **Restatement.** The intro, body, and conclusion saying the same thing. Low information density.
-- **Generic example.** "Imagine an online store" instead of the standing desk in Listing Studio.
+- **Generic example.** A *vague* stand-in ("imagine an online store") where the specific carrier
+  example (the standing desk in Listing Studio) would teach more. This flags vagueness, not
+  generality: stating the concept in general terms *first* is correct and required (rule 13), as
+  long as it lands on the concrete carrier within a sentence or two rather than staying abstract.
 - **False balance.** Every option presented as equally good. A reference weights; it recommends.
 - **No throughline.** Sections that do not build on each other toward the chapter's point.
 - **Hook outruns the chapter.** An opening claim the Gotchas later contradict (the pattern "just

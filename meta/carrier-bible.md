@@ -42,6 +42,13 @@ pointer to a definition the reader may never have loaded. Artifacts are not: the
 `supplier_sku`, `price_cents`, `draft → review` define themselves, and they carry the concreteness.
 Names cost a lookup, so spend them carefully.
 
+This makes artifacts safe to *use* on any page. It does not make the carrier safe to *open on*. A
+first-time reader knows a desk is a desk, but does not know what Listing Studio is, nor that a
+"listing pipeline" is the thing this book keeps returning to. So a chapter still leads with the
+concept and its stakes, and introduces the pipeline itself with a one-clause gloss the first time
+it uses it ("a product-listing pipeline that turns a supplier feed into a storefront page"). Use
+the artifacts freely; do not presuppose the world (see §8).
+
 - **Devon is the second person.** In How-to and reference prose the platform engineer is *you* and
   *your code*, never "Devon" in the third person. Naming him beside "your code" makes two labels for
   one role. His first name belongs in the warmer distribution blog posts, not the chapters.
@@ -175,6 +182,10 @@ They reason independently, then a reconcile step merges them.
 ## 8. Consistency rules
 
 - One world, one set of names. Pull from this file; do not coin synonyms.
+- **The carrier illustrates; it is never the subject.** A chapter opens on the concept and its
+  stakes, and must read for someone who has never heard of Stockwell or Listing Studio. Introduce
+  the pipeline or a surface with a one-clause gloss the first time a chapter uses it; never
+  presuppose the reader knows the world. The chapter teaches the pattern, not the pipeline.
 - Code identifiers match section 2 exactly.
 - Numbers are measured from `listing-studio/`, never invented (see the warning up top).
 - If a chapter needs a new specific, add it here first, then use it.
