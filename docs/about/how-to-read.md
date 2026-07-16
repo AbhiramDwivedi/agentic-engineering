@@ -48,7 +48,7 @@ Each chapter hits the same beats, so you always know where to look:
 - **Just the genuinely-new patterns:** [Tool Use](../the-unit/tool-use.md),
   [Evaluator-Optimizer](../composition/evaluator-optimizer.md),
   [Orchestrator-Workers](../composition/fan-out.md), [The Specialist Panel](../composition/specialist-panel.md).
-- **The deflations:** [Front Controller](../composition/the-router-that-isnt.md), then
+- **The deflations:** [Routing & Dispatch](../composition/the-router-that-isnt.md), then
   the [Anti-Patterns Catalog](../catalogs/anti-patterns.md).
 
 > **This site is a work in progress.**

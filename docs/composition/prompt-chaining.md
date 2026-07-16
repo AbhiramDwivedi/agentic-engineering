@@ -357,7 +357,7 @@ Chain when the task decomposes into fixed, code-checkable subtasks and the pipel
 - [1.3 Workflow or Agent?](../foundations/workflow-or-agent.md): the spectrum this pattern sits at the workflow end of, and the longer answer to "chain or loop?"
 - [1.5 Context Engineering](../foundations/context-engineering.md): what to carry across the gate and what to leave behind, the depth behind "do not forward the transcript."
 - [2.2 Structured Output](../the-unit/structured-output.md): the typed contract each gate validates, and the re-ask-with-structured-error shape this chapter's gate reuses at the step boundary.
-- [3.2 Front Controller](the-router-that-isnt.md): conditional branching between steps is routing, not chaining; a chain that picks its next step from a classifier is that chapter's pattern in a chain's clothes.
+- [3.2 Routing & Dispatch](the-router-that-isnt.md): conditional branching between steps is routing, not chaining; a chain that picks its next step from a classifier is that chapter's pattern in a chain's clothes.
 - [3.3 Orchestrator-Workers](fan-out.md): where steps have no ordering dependency, fan them out in parallel instead of chaining them.
 - [3.4 Evaluator-Optimizer](evaluator-optimizer.md): the model judging its own output and deciding whether to loop, the genuinely new sibling this pattern gets mistaken for.
 - [4.3 Human-in-the-Loop](../craft/human-in-the-loop.md): the gate failure that needs a person rather than a retry.

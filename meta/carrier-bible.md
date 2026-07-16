@@ -104,8 +104,12 @@ until every step has reported back**.
 | 8 | **brand-voice polish** | rewrite everything to one voice, less robotic | the humanizer |
 | 9 | **publish** | validate, write to the catalog, mark `published` | dispatch, observer |
 
-The **front door** that maps the *Generate listing* event to this graph is the dispatcher (the
-"router that isn't one"). The **dashboard** is the observer target on every step.
+The **front door** is the dispatcher (the "router that isn't one"): a static dispatch table
+keyed on `event_type`. Events arrive already labelled, whether from the UI (Maya's *Generate
+listing* click emits `new_product`) or from the supplier-feed integration (`price_update`,
+`stock_update`), and the table maps `new_product` to this nine-step graph and the update types
+to their narrower update pipelines. Unknown event types hit an explicit deny branch (logged,
+structured error). The **dashboard** is the observer target on every step.
 
 ---
 
@@ -142,8 +146,10 @@ Reach for these only when the pipeline cannot show the concept.
   my 200 sq ft garage?" and it answers from the catalog. Teaches multi-turn, state vs. memory,
   human-in-the-loop. *Built in the companion repo.*
 - **Merchant helpdesk.** A retrieval agent over Stockwell's policy and how-to docs. A merchant
-  asks "how do I set a MAP rule?" Teaches RAG, semantic memory, grounding. *Built in the
-  companion repo.*
+  asks "how do I set a MAP rule?" Teaches RAG, semantic memory, grounding. Its intake is the
+  LLM-routing example (chapter 3.2): each unlabelled merchant message is classified into the
+  closed taxonomy `billing` / `listing_issue` / `account` / `unclear`, and both `unclear` and
+  low-confidence reads escalate to a human instead of guessing. *Built in the companion repo.*
 - **Repricer.** An autonomous agent that watches competitor prices and adjusts within rules. It
   plans its own steps and acts. Teaches real autonomy, model-driven planning, blast-radius
   guardrails. *Built in the companion repo. The one genuinely autonomous loop.*
