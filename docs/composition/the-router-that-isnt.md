@@ -8,9 +8,9 @@
 
 ## 1. Why you'd reach for it
 
-Two mechanisms share the name "routing" in agentic systems, and picking the wrong one fails in opposite directions. A system whose inputs already arrive labelled has no decision left to make; put a classifier in front of it anyway and every request pays a model call, its latency, and a fresh chance of a misread, all to re-answer a question the input already answered. A system whose inputs are unlabelled free text has a real decision to make on every request; force a lookup table onto it, through keyword rules or a category field users will not fill in, and messages land on the wrong handler. Neither failure announces itself. The overbuilt door quietly overpays on every event. The underbuilt door sends work to the wrong specialist, whose answer still reads as plausible, so the trace shows nothing wrong.
+Two different mechanisms go by the name "routing" in agentic systems, and each one is a mistake in the other's place. If your inputs already arrive labelled, there is no decision left to make, so a classifier in front of them buys nothing: you pay a model call and its latency on every request, and you accept a fresh chance of a misread, to re-answer a question the input already answered. If your inputs are unlabelled free text, a real decision has to be made on every request, and a lookup table cannot make it: keyword rules, or a category field users will not fill in, send messages to the wrong handler. Both mistakes are hard to spot from outside. The overbuilt door just costs more on every event, and the underbuilt one hands work to the wrong specialist, who still produces a plausible answer, so nothing in the logs looks wrong.
 
-Take Listing Studio, a product-listing pipeline that turns a raw supplier feed into a live storefront listing. Its front door receives feed events that arrive already labelled: each one carries an `event_type` of `new_product`, `price_update`, or `stock_update`, and a plain dictionary maps the type to the processing pipeline that owns it. The decision was made when the feed integration wrote the label. An LLM classifier at this door would spend tokens and latency on every event to remake that decision, and would sometimes remake it differently. The merchant helpdesk, a support surface on Stockwell, the commerce platform Listing Studio runs on, faces the opposite input. A merchant types "Why was I charged twice for my Stockwell subscription this month?" and no category field arrives with it, because merchants do not file their questions under taxonomy headings. Keyword rules look workable here until they meet traffic: "charged" sends that message to billing, and it also sends the merchant whose listing displays a wrong charge amount, whose problem is a listing issue. The billing specialist answers both plausibly. Nobody notices until the merchant complains.
+Take Listing Studio, a product-listing pipeline that turns a raw supplier feed into a live storefront listing. Its front door receives feed events that arrive already labelled: each one carries an `event_type` of `new_product`, `price_update`, or `stock_update`, and a plain dictionary maps the type to the processing pipeline that owns it. The decision was made when the feed integration wrote the label. An LLM classifier at this door would spend tokens and latency on every event to remake that decision, and would sometimes remake it differently. The merchant helpdesk, a support surface on Stockwell, the commerce platform Listing Studio runs on, faces the opposite input. A merchant types "Why was I charged twice for my Stockwell subscription this month?" and no category field arrives with it, because merchants do not file their questions under taxonomy headings. Keyword rules look workable here until they meet traffic: "charged" sends that message to billing, and it also sends the merchant whose listing displays a wrong charge amount, whose problem is a listing issue. The billing specialist answers both plausibly, and nobody notices until the merchant complains.
 
 The fix is to match the mechanism to the input rather than to what anything is named. If a reliable label exists, dispatch on it: a dictionary, a validated key, zero tokens. If no label exists, classify first, and build the classifier's failure path before its happy path: keep `unclear` inside the taxonomy as a first-class answer, and give low confidence a structured escape to a human ([4.3 Human-in-the-Loop](../craft/human-in-the-loop.md)) rather than a forced guess.
 
@@ -19,22 +19,28 @@ The fix is to match the mechanism to the input rather than to what anything is n
 Read the input, and reach for the mechanism it calls for:
 
 - the inputs already carry a reliable label (an event type on a feed, a message kind on a queue): dispatch on it with a table and spend zero tokens;
-- the inputs are unlabelled free text and the categories are known but fuzzy or evolving: LLM routing, one classification call before the handler runs;
+- the inputs are unlabelled free text and the categories are known but fuzzy at the boundaries, or the set changes over time: LLM routing, one classification call before the handler runs;
 - the inputs are unlabelled but the categories are stable and the route must add near-zero latency and cost: consider a non-LLM classifier (embedding similarity or a rules engine) before you pay for a model call per request.
 
-The counter-trigger: if the model must keep deciding what to do next, turn after turn, a one-time upfront split is the wrong shape, and you want [tool use](../the-unit/tool-use.md) or an agent loop instead. And if there is only one handler, neither pattern applies; call it directly.
+There is also a counter-trigger: if the model must keep deciding what to do next, turn after turn, a one-time upfront split is the wrong shape, and you want [tool use](../the-unit/tool-use.md) or an agent loop instead. If there is only one handler, neither pattern applies; call it directly.
 
 ## 2. What it actually is
 
 Dispatch and routing both stand at the front of a system that has several handlers and must get each input to the right one. What separates them is where the label comes from. A dispatch table takes a label the caller already supplied and looks up the handler that owns it; your code made the decision when it wrote the table, and at runtime there is only a lookup. Routing starts from unlabelled input and classifies it before any handler runs. Intent classification, the routing side's other alias, names that same step: assigning an input to one category from a closed set before its handler is chosen. Anthropic's guide, which named the workflow, defines routing as a step that "classifies an input and directs it to a specialized followup task," and allows the classification to be handled by an LLM or by a more traditional classification model or algorithm.[^anthropic] Gulli's independent treatment agrees, admitting LLM-based, embedding-based, rule-based, and ML-model-based classifiers.[^gulli]
 
-On this book's litmus test (who makes the structural decision, the model or your code? see [1.2 Who Decides?](../foundations/who-decides.md)), the word "routing" covers three arrangements, and they sort differently. This chapter carries patterns from both sides of the test on purpose, because the two ends are chronically confused under the one word.
+So does any of this need an LLM? Mostly no. On this book's litmus test (who makes the structural decision, the model or your code? see [1.2 Who Decides?](../foundations/who-decides.md)), the word "routing" covers three arrangements, and only the last of them puts a model in the decision:
 
-With no classifier at all, you have a dispatch table. There is nothing to classify; the caller already supplied the label. This is the sharper form of the deflation 1.2 states in brief: the common objection to calling a lookup "routing" is that no LLM is involved, and the accurate objection is that no classifier of any kind is involved. Your code decides everything, at authoring time, and the technique is Standard: a table from key to handler fronts interpreters, event loops, and web frameworks, and the pattern catalogs wrote it up for the web tier more than two decades ago.[^fowler][^j2ee]
+- **no classifier at all**: a dispatch table over already-labelled input; nothing decides at runtime;
+- **a non-LLM classifier**: embeddings, rules, or a trained model make a real per-request decision, without an LLM;
+- **an LLM classifier**: the model reads the input and decides, and only here is the pattern agentic in any sense.
 
-With a non-LLM classifier, a real decision happens on every request, made by embedding similarity (comparing texts as vectors positioned so that similar messages land near each other), a rules engine, or a trained ML model. The semantic-router library is the concrete example: a nearest-neighbour search over example utterances attached to each route, no model call at decision time.[^semrouter] This bucket satisfies both vendor definitions of routing above. By this book's litmus it is still code-decides, because no LLM exercises judgment in the decision; the trained artifact your code selected does. It would be a mistake to file it with dispatch tables, since a real decision happens on every request, and a mistake to bill it as agentic, since the decision involves no LLM judgment. It is Established: proven, in production, with known trade-offs, and the right choice when categories are stable and the route has to be near-free.
+A dispatch table is not an agentic pattern. This chapter carries it anyway, because the two ends of that list are chronically confused under the one word, and clearing that confusion up is the chapter's job.
 
-With an LLM classifier, the model itself reads the input and decides the category, fresh on every request. This is the only bucket that is new by the litmus, and the only one whose routing decision you evaluate the way you evaluate model output. As a technique it is Established, a named, vendor-documented workflow in production use for support and triage,[^anthropic] which is why the lens line above carries two verdicts. The litmus answers whether a thing is new; the maturity lens answers whether it is proven.
+**A dispatch table involves no model and no classifier of any kind.** There is nothing to classify; the caller already supplied the label. This is the sharper form of the deflation 1.2 states in brief: the common objection to calling a lookup "routing" is that no LLM is involved, and the accurate objection is that no classifier of any kind is involved. Your code decides everything, at authoring time, and the technique is ordinary engineering, Standard for decades: a table from key to handler fronts interpreters, event loops, and web frameworks, and the pattern catalogs wrote it up for the web tier more than two decades ago.[^fowler][^j2ee]
+
+**A non-LLM classifier makes a real decision on every request, still without an LLM.** The decision comes from embedding similarity (comparing texts as vectors positioned so that similar messages land near each other), a rules engine, or a trained ML model. The semantic-router library is the concrete example: a nearest-neighbour search over example utterances attached to each route, no model call at decision time.[^semrouter] This bucket satisfies both vendor definitions of routing above, and by this book's litmus it is still code-decides, because no LLM exercises judgment in the decision; the trained artifact your code selected does. Filing it with dispatch tables would lose the real per-request decision, and billing it as agentic would overstate it. It is Established: proven, in production, with known trade-offs, and the right choice when categories are stable and the route has to be near-free.
+
+**An LLM classifier is the one arrangement where the model decides.** The model reads the input and picks the category, fresh on every request; this is the only bucket that is new by the litmus, and the only one whose routing decision you evaluate the way you evaluate model output. It picks from *your* categories, though, never its own: the taxonomy is a closed set pinned by the classifier's output schema ([2.2 Structured Output](../the-unit/structured-output.md)), so an answer naming a category you did not define fails validation instead of creating a new route. As a technique it is Established, a named, vendor-documented workflow in production use for support and triage,[^anthropic] which is why the lens line above carries two verdicts. The litmus answers whether a thing is new; the maturity lens answers whether it is proven.
 
 Function names will not tell you which bucket you are in. LangGraph's conditional edges (the mechanism that picks a graph's next node from a callback's return value) call that callback a "routing function" whatever it contains.[^langgraph] The prompt-chaining chapter's graph has a conditional edge named `route_after_gate` that branches on a validation-error field, pure code, no classifier anywhere ([3.1 Prompt Chaining](prompt-chaining.md)); this chapter's graph has `route_after_classify`, which reads a model's classification. To tell them apart you read the function body, and the read takes seconds: is there a model call feeding the branch?
 
@@ -77,7 +83,7 @@ flowchart LR
 
 The classify call is the only rounded node in the diagram; every other box, including both failure branches, is your code.
 
-The dispatch side is the whole pattern in one function. The `event_type` arrives on an external feed, so it is untrusted, and the docstring's two rules follow from that: validate the key before the lookup, and give unknown types an explicit deny branch instead of an exception. The tests are ordinary dictionary tests.
+The dispatch side is the whole pattern in one function. The `event_type` arrives on an external feed, so it is untrusted, and the docstring's two rules follow from that: validate the key before the lookup, and give unknown types an explicit deny branch instead of an exception. Testing it takes nothing beyond ordinary dictionary tests.
 
 ```python
 EVENT_HANDLERS: dict[str, Callable[[dict], DispatchResult]] = {
@@ -110,7 +116,7 @@ def dispatch(event: dict) -> DispatchResult:
     return EVENT_HANDLERS[event_type](event)
 ```
 
-That is everything the dispatch half needs. The rest of this section is the routing half, which starts with a contract rather than a model. The taxonomy is a closed enum, and `unclear` is a member of it: when nothing fits, the classifier has a correct answer available instead of a forced guess.
+That is everything the dispatch half needs. The rest of this section is the routing half, which starts with a contract rather than a model. The taxonomy is a closed enum, and `unclear` is a member of it: when nothing fits, the classifier has a correct answer available instead of a forced guess. The enum also answers a worry the "fuzzy, evolving categories" trigger tends to raise: the model cannot grow the taxonomy at runtime, invent a fifth category, or drift into synonyms of the four, because the enum rides inside the output schema and anything off the set fails validation before it reaches a handler. The set changes only when you edit this class.
 
 ```python
 class Category(str, Enum):
@@ -182,7 +188,7 @@ def route_message(
     )
 ```
 
-The provider variants supply the classify function. As in 3.1, the tabs are asymmetric by design: the LangGraph tab shows the full graph, classify node, conditional edge, handlers, and escalate node, because the classify-then-branch graph is the reference shape for this pattern,[^langgraph] while the two raw-SDK tabs build only `classify_fn` (each vendor's structured-output mechanism filling the `RouteDecision` contract) and hand it to the shared `route_message` above.
+Each provider tab below supplies the classify function that `route_message` takes as its first argument. As in 3.1, the tabs are asymmetric by design: the LangGraph tab shows the full graph, classify node, conditional edge, handlers, and escalate node, because the classify-then-branch graph is the reference shape for this pattern,[^langgraph] while the two raw-SDK tabs build only `classify_fn` (each vendor's structured-output mechanism filling the `RouteDecision` contract) and hand it to the shared `route_message` above.
 
 === "LangGraph"
 
@@ -341,12 +347,12 @@ The provider variants supply the classify function. As in 3.1, the tabs are asym
     print(result.response)
     ```
 
-One run on each door. The dispatch side, in full:
+Walking one run through each door makes the cost difference concrete. The dispatch side, in full:
 
 1. A `price_update` event arrives from the supplier feed, and your code checks the key against the known set.
 2. The dict returns the price-update pipeline, which runs.
 
-The dispatch trace ends there, at zero model calls, zero tokens, and the same answer every time. The routing side, on the merchant message:
+The dispatch trace ends there, at zero model calls, zero tokens, and the same answer every time. The routing side takes five steps on the merchant message:
 
 1. A message arrives with no label: "Why was I charged twice for my Stockwell subscription this month?"
 2. Your code sends the classify prompt: the message plus the four-category taxonomy.
@@ -354,13 +360,13 @@ The dispatch trace ends there, at zero model calls, zero tokens, and the same an
 4. `route_after_classify` reads the decision and routes to the billing handler.
 5. The billing handler answers from billing context, and the run ends with `escalated=False`.
 
-The contrast run: a rambling message that touches a charge, a listing photo, and a password reset comes back `unclear`, illustratively *"category: unclear, confidence: 0.42"*. The same conditional edge sends it to the escalate node, and a human gets the message with the classifier's reading attached, `escalated=True`, no exception anywhere in the trace.
+In the contrast run, a rambling message that touches a charge, a listing photo, and a password reset comes back `unclear`, illustratively *"category: unclear, confidence: 0.42"*. The same conditional edge sends it to the escalate node, and a human gets the message with the classifier's reading attached, `escalated=True`, no exception anywhere in the trace.
 
 Three scale-ups matter in production.
 
 **From four categories to many.** Every category you add grows the classifier prompt and blurs a boundary with its neighbours, the same ceiling pressure as the tool-count problem in [2.1 Tool Use](../the-unit/tool-use.md): each addition is one more choice the model can get wrong. More categories also mean more labelled examples to maintain in the classifier's eval set, and a taxonomy change moves every boundary at once, so re-run the eval after each one. Keep the taxonomy small, and merge categories that rarely fire.
 
-**Taxonomy churn.** The three classifier families absorb change at different costs. An LLM classifier takes a new category with a prompt edit; an embedding router needs example utterances written for the new route;[^semrouter] a trained classifier needs retraining. If your categories shift often, that difference dominates the choice.
+**Taxonomy churn.** The three classifier families absorb change at different costs. An LLM classifier takes a new category with a prompt and schema edit; an embedding router needs example utterances written for the new route;[^semrouter] a trained classifier needs retraining. If your categories shift often, that difference dominates the choice. In all three families the set changes only when you change it: the classifier picks from whatever taxonomy you shipped, and "evolving categories" names a maintenance cost you carry, never a drift the model performs on its own.
 
 **The cost axis.** The classify call reads one message and emits one small object, so where most traffic is easy it can run on a cheaper model than the handlers use. Pushing that idea further, choosing between model tiers per request by predicted difficulty, is model cascading, a production-cost concern with its own chapter ([8.4 Controlling Cost](../production/controlling-cost.md)); this chapter only points at the door.
 
