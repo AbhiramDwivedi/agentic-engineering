@@ -54,7 +54,7 @@ works across vendors. See [2.4 MCP](../the-unit/mcp.md).
 context before the model answers: semantic memory for the system. See
 [5.2 Retrieval (RAG)](../knowledge/retrieval-rag.md).
 
-The composition patterns (prompt chaining, front controller, orchestrator-workers,
+The composition patterns (prompt chaining, routing & dispatch, orchestrator-workers,
 evaluator-optimizer, specialist panel) are each defined in their own chapter under
 [Composition](../composition/index.md).
 

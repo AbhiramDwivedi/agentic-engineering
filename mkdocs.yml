@@ -100,7 +100,7 @@ nav:
   - III. Composition:
       - composition/index.md
       - "3.1 Prompt Chaining": composition/prompt-chaining.md
-      - "3.2 Front Controller": composition/the-router-that-isnt.md
+      - "3.2 Routing & Dispatch": composition/the-router-that-isnt.md
       - "3.3 Orchestrator-Workers": composition/fan-out.md
       - "3.4 Evaluator-Optimizer": composition/evaluator-optimizer.md
       - "3.5 The Specialist Panel": composition/specialist-panel.md

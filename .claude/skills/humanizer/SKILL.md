@@ -1,13 +1,14 @@
 ---
 name: humanizer
-version: 2.7.0
+version: 2.8.0
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
   comprehensive "Signs of AI writing" guide. Detects and fixes patterns including:
   inflated symbolism, promotional language, superficial -ing analyses, vague
   attributions, em dash overuse, rule of three, AI vocabulary words, passive
-  voice, negative parallelisms, and filler phrases.
+  voice, negative parallelisms, staccato transition fragments, performed
+  contrast pairs, and filler phrases.
 license: MIT
 compatibility: claude-code opencode
 allowed-tools:
@@ -481,6 +482,36 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 
 **After:**
 > This function uses a hash map for O(1) lookups, avoiding the O(n²) cost of naive iteration.
+
+
+### 31. Staccato Transition Sentences and Label-Colon Openers
+
+**Signs to watch:** A paragraph or block opening with a clipped noun phrase plus colon ("The counter-trigger:", "The catch:", "The result:", "The contrast run:"), or a very short standalone sentence whose only job is to point at the block that follows ("One run on each door.", "The provider variants supply the classify function.", "A few things stand out.").
+
+**Problem:** LLMs use terse label-fragments and stubby announcement sentences as connective tissue between blocks. Each one reads like a slide title dropped into prose: it gestures at content instead of carrying any, and a page full of them develops a choppy, deck-like rhythm. Fold the label into a full sentence that does real work, or attach the stub to the sentence it was announcing. (A short topic sentence that makes an actual claim is fine; the tell is the sentence that only points.)
+
+**Before:**
+> The counter-trigger: if the model keeps deciding what to do next, a one-time split is the wrong shape.
+>
+> One run on each door. The dispatch side, in full:
+
+**After:**
+> There is also a counter-trigger: if the model keeps deciding what to do next, a one-time split is the wrong shape.
+>
+> Walking one run through each door makes the cost difference concrete. The dispatch side, in full:
+
+
+### 32. Performed Contrast Pairs
+
+**Signs to watch:** Two or three consecutive short sentences built on the same syntactic frame to stage a contrast: "Speed goes up. Judgment matters more." / "Neither failure announces itself. The overbuilt door quietly overpays. The underbuilt door misroutes." Often preceded by a one-line setup sentence that exists only to tee up the pair.
+
+**Problem:** LLMs reach for matched-frame mini-sentences as applause lines. The content is usually a legitimate contrast, but the drumbeat delivery performs significance instead of stating the point, and it recurs so uniformly that it reads as a machine cadence. Related to negative parallelisms (§9) and rule of three (§10), but the tell here is the rhythm, not the wording. Keep the contrast; join it into flowing prose where one clause carries each side. A single deliberate short sentence for emphasis is human. Three in a matched frame is a tell.
+
+**Before:**
+> Neither failure announces itself. The overbuilt door quietly overpays on every event. The underbuilt door sends work to the wrong specialist.
+
+**After:**
+> Both failures are hard to spot from outside: the overbuilt door just costs more on every event, and the underbuilt one hands work to the wrong specialist, whose answer still looks plausible.
 
 
 ## DETECTION GUIDANCE

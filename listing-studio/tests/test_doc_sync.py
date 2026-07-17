@@ -83,6 +83,19 @@ PROMPT_CHAINING_ANCHORS = {
     "chain-anthropic":  "prompt_chaining_example.py",
 }
 
+# Chapter 3.2 — Routing & Dispatch
+ROUTING_CHAPTER = os.path.join(ROOT, "docs", "composition", "the-router-that-isnt.md")
+ROUTING_PKG = os.path.join(ROOT, "listing-studio", "routing")
+
+ROUTING_ANCHORS = {
+    "routing-dispatch":   "dispatch.py",
+    "routing-schemas":    "schemas.py",
+    "routing-route":      "route.py",
+    "routing-langgraph":  "router_langgraph.py",
+    "routing-responses":  "router_responses.py",
+    "routing-anthropic":  "router_anthropic.py",
+}
+
 # Chapter 1.4 — The Augmented LLM
 AUGMENTED_LLM_CHAPTER = os.path.join(ROOT, "docs", "foundations", "the-augmented-llm.md")
 AUGMENTED_LLM_PKG = os.path.join(ROOT, "listing-studio", "augmented_llm")
@@ -181,4 +194,15 @@ def test_prompt_chaining_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/prompt-chaining.md with "
             f"listing-studio/prompt_chaining/{fname}."
+        )
+
+
+def test_routing_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(ROUTING_CHAPTER))
+    for name, fname in ROUTING_ANCHORS.items():
+        region = _region(_read(os.path.join(ROUTING_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/composition/the-router-that-isnt.md with "
+            f"listing-studio/routing/{fname}."
         )
