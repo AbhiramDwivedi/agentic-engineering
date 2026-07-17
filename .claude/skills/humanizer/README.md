@@ -88,7 +88,7 @@ The skill also includes a final "obviously AI generated" audit pass and a second
 
 > "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
 
-## 30 Patterns Detected (with Before/After Examples)
+## 32 Patterns Detected (with Before/After Examples)
 
 ### Content Patterns
 
@@ -128,6 +128,8 @@ The skill also includes a final "obviously AI generated" audit pass and a second
 | 28 | **Signposting announcements** | "Let's dive in", "Here's what you need to know" | Start with the content |
 | 29 | **Fragmented headers** | "## Performance" + "Speed matters." | Let the heading do the work |
 | 30 | **Diff-anchored writing** | "This function was added to replace..." | Describe what it does, not what changed |
+| 31 | **Staccato transitions / label-colon openers** | "The catch: ...", "One run on each door." | Fold the label into a sentence that carries content |
+| 32 | **Performed contrast pairs** | "Speed goes up. Judgment matters more." | Join the contrast into flowing prose |
 
 ### Communication Patterns
 
@@ -180,7 +182,7 @@ The skill also includes a final "obviously AI generated" audit pass and a second
 
 ## Version History
 
-- **2.7.0** - Added pattern #30 (diff-anchored writing); made em/en dashes a hard cut rather than "overuse"; expanded #21 to cover speculative gap-filling ("maintains a low profile"). 30 patterns total.
+- **2.8.0** - Added pattern #31 (staccato transition sentences and label-colon openers like "The catch: ..." or a stubby announcement sentence pointing at the next block) and pattern #32 (performed contrast pairs: matched-frame mini-sentences staging a contrast as an applause line). Both kept slipping past review in long technical chapters and only surfaced on author read-through. 32 patterns total.
 - **2.6.0** - Cleanup pass: consolidated the duplicated workflow sections, gated the personality guidance to content where voice is wanted, removed the model-fingerprinting subsection, and condensed the worked example. No change to the 29 patterns.
 - **2.5.1** - Added a passive-voice / subjectless-fragment rule, raising the total to 29 patterns
 - **2.5.0** - Added patterns for persuasive framing, signposting, and fragmented headers; expanded negative parallelisms to cover tailing negations; tightened wording around em dash overuse; fixed frontmatter wording to use "filler phrases"
