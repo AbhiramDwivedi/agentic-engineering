@@ -111,6 +111,21 @@ AUGMENTED_LLM_ANCHORS = {
 }
 
 
+# Chapter 3.3 — Orchestrator-Workers
+FAN_OUT_CHAPTER = os.path.join(ROOT, "docs", "composition", "fan-out.md")
+FAN_OUT_PKG = os.path.join(ROOT, "listing-studio", "fan_out")
+
+FAN_OUT_ANCHORS = {
+    "fanout-schemas":    "schemas.py",
+    "fanout-fixed":      "fixed.py",
+    "fanout-plan":       "plan.py",
+    "fanout-gather":     "gather.py",
+    "fanout-langgraph":  "fan_out_langgraph.py",
+    "fanout-responses":  "fan_out_responses.py",
+    "fanout-anthropic":  "fan_out_example.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -205,4 +220,15 @@ def test_routing_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/the-router-that-isnt.md with "
             f"listing-studio/routing/{fname}."
+        )
+
+
+def test_fan_out_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(FAN_OUT_CHAPTER))
+    for name, fname in FAN_OUT_ANCHORS.items():
+        region = _region(_read(os.path.join(FAN_OUT_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/composition/fan-out.md with "
+            f"listing-studio/fan_out/{fname}."
         )
