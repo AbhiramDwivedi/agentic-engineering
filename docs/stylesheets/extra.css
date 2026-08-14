@@ -81,11 +81,12 @@
 /* --- Wide mechanism diagrams (hand-authored SVG) ------------------------- */
 /* These carry 11px labels. Scaled down to a 45rem content column they become
    unreadable, so let them keep a legible size and scroll instead. The
-   paragraph wrapper is what markdown gives us around a bare image. */
-.md-typeset p:has(> img[src$="-flow.svg"]) {
+   paragraph wrapper is what markdown gives us around a bare image.
+   Every .svg in the content tree is one of these; illustrations are .jpg. */
+.md-typeset p:has(> img[src$=".svg"]) {
   overflow-x: auto;
 }
-.md-typeset img[src$="-flow.svg"] {
+.md-typeset img[src$=".svg"] {
   width: 100%;
   min-width: 800px;
 }

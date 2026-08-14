@@ -337,8 +337,7 @@ chapter's contract; a `missing` item at Stage 4 sends the draft back to Stage 3.
 
 1. **Carrier example: resolved as A, not the recommended B.** The research sweep couldn't see the
    first-hand system and so had to hedge on whether option A was honestly available. It is: the
-   author confirms that step ran fixed, code-known lists alongside a wave whose worker count
-   genuinely varied per input. Both litmus halves in one graph, shipped. So step 7 stays the
+   author confirms first-hand grounding for both litmus halves. So step 7 stays the
    carrier home and splits in two: the three standard deliverables (listing, email, ad copy, always
    produced, code decides) as the deflated contrast, then a model-named list of extra deliverables
    with one worker each (compliance insert, MAP-safe ad variant, freight/assembly blurb, nothing at

@@ -1,12 +1,10 @@
 # 3.3 Orchestrator-Workers
 
-<small class="chapter-meta">**Maturity: Standard (fixed parallel fan-out) · Established (dynamic orchestrator-workers)** (concurrent workers with a merge are a decades-old idiom; the model sizing its own fan-out is vendor-documented and shipping, with live trade-offs) · *Who decides:* your code (the fixed list) / the model (the dynamic list) · *Grounding:* production + research · *Last reviewed:* 2026-07</small>
-
 *Fan-out, fan-in: split a task across parallel workers and merge the results. When your code wrote the worker list, that is ordinary concurrency; orchestrator-workers is the narrower pattern where the model reads the input and decides, fresh on every run, how many workers to spawn and what each one does.*
 
 *Also called: fan-out / fan-in, parallelization, scatter-gather, manager-workers.*
 
-## 1. Why you'd reach for it
+## Why you'd reach for it
 
 Some tasks are wide rather than deep. They break into independent pieces, none waiting on another's output, each easy on its own, together more than a single model call holds well. Running the pieces concurrently is the obvious move, and it is old engineering: your code knows the list, loops over it, merges the results. The gap arrives when the list itself depends on the input. Fix the list at author time and every input gets the same treatment whether it needs it or not. The system over-produces, running every piece that any input might need on all of them, or it under-produces, skipping the one piece this input needed. The second failure is the sharp one, because nothing errors: the work that should have existed never runs, and no log line marks its absence.
 
@@ -14,18 +12,20 @@ Take Listing Studio, a pipeline that turns a raw supplier feed into a live store
 
 Orchestrator-workers closes the gap by handing the list-making to the model. Keep the fixed fan-out for the three standard deliverables. Then make one more model call: a planner reads the finished listing and names which extra deliverables this product needs, zero or more, each with a reason. Your code caps the count, runs one worker per named item, and gathers every result under a stable key. The desk's second wave runs three workers, the phone case's runs zero, and your code chose neither count.
 
-![A packing-bench illustration of the same split: at the left station, under a sign reading "same three, every parcel", three identical pigeonholes feed the same three inserts into every parcel that passes; at the right station, under a sign reading "look, then decide", a wall of many different inserts sits above an inspector lamp, and only three arms reach down for the parcel under it, while the next parcel passes with nothing added at all; at the end of the bench a clipboard tally has most lines ticked and one crossed out, and a stray insert lies fallen on the floor beside a tipped bin.](fan-out-packing-bench.jpg)
+Rectangles are your code deciding, rounded boxes are the model deciding, dashed boxes are data in flight. Nothing differs between the two rows below except the product that went in.
+
+![Two products run through the same launch step. Above a dividing line, a rectangle holding the literal list of three standard deliverables feeds three workers, labelled the same way for every product because that list was written into the code. Below the line, a sit-stand desk carrying compliance, pricing and freight flags reaches a planner, which names three extra deliverables, and three workers spawn; a plain phone case with no flags reaches the same planner, which names none, and no worker spawns at all. Each row ends in a large count: three, three, zero.](fan-out-count.svg)
 
 Reach for the dynamic half when:
 
 - the subtasks vary per input, in count or in kind, so no author-time list covers them;
 - they are independent, with no ordering between them, and each result can be judged without a sibling's output in hand (subtasks that feed each other are [3.1 Prompt Chaining](prompt-chaining.md)'s territory);
 - the task is wider than one context window comfortably holds, and the pieces can be explored separately and condensed;
-- the value of the result clears a token bill an order of magnitude above a single call (section 4).
+- the value of the result clears a token bill an order of magnitude above a single call (Cost, below).
 
-The counter-trigger comes in two forms. If the subtask list is the same on every run, use the fixed half: a literal, a concurrent loop, no planner call, and an honest name for it. If the subtasks share deep context, each worker's choices constraining the others (most coding tasks have this shape), a single agent holding the full history in one window is the safer default; section 2 gives both sides of that argument.
+The counter-trigger comes in two forms. If the subtask list is the same on every run, use the fixed half: a literal, a concurrent loop, no planner call, and an honest name for it. If the subtasks share deep context, each worker's choices constraining the others (most coding tasks have this shape), a single agent holding the full history in one window is the safer default, and the two published sides of that argument are below.
 
-## 2. What it actually is
+## What it actually is
 
 Orchestrator-workers is the workflow where a central model reads the task, decides how to break it down, delegates the pieces to parallel worker calls, and synthesizes their results. Anthropic's guide, which named it, defines the workflow: "a central LLM dynamically breaks down tasks, delegates them to worker LLMs, and synthesizes their results."[^anthropic-bea] The same guide defines the neighbour it is most confused with. In Parallelization, "LLMs can sometimes work simultaneously on a task and have their outputs aggregated programmatically," in two variants: sectioning, "breaking a task into independent subtasks run in parallel," and voting, running the same task several times and aggregating the answers for diverse outputs.[^anthropic-bea] Voting is a reliability technique rather than a composition pattern, and this chapter names it only for contrast. The guide calls the two workflows "topographically similar" and puts the whole difference on one axis: in Parallelization the subtasks are pre-defined, while in orchestrator-workers they are "determined by the orchestrator based on the specific input."[^anthropic-bea]
 
@@ -39,7 +39,7 @@ The maturity call splits along the litmus line. The fixed half is Standard: scat
 
 Established describes the mechanism. Whether it is a good default is contested, by named practitioners with production systems behind their positions, in two posts published a day apart. Cognition's Walden Yan argues against fanning out to parallel subagents at all: "actions carry implicit decisions, and conflicting decisions carry bad results," and, in his account, subagents working in isolation cannot see what a sibling is doing, so their outputs land on assumptions the synthesizer must reconcile after the fact. His recommended default is a single-threaded linear agent with the full history in one context window, reserving any splitting for a compression step on long tasks, an approach the same post admits is "hard to get right."[^cognition] Anthropic's post, published the next day, draws the boundary from the other side: multi-agent fan-out earns its cost on "tasks that involve heavy parallelization, information that exceeds single context windows, and interfacing with numerous complex tools," and it names its own bad fit plainly: "most coding tasks involve fewer truly parallelizable tasks than research, and LLM agents are not yet great at coordinating and delegating to other agents in real time."[^anthropic-multiagent] Read together, the two disagree about which tasks are the exception rather than about whether the mechanism works. The axis that decides is shared context. A research sweep splits into questions that can be explored separately; a refactor's edits constrain each other file by file. The launch step sits at the easy end, deliverables independent by construction, which is why the carrier can use the pattern honestly.
 
-## 3. How to do it
+## How to do it
 
 The shape, in the reference's visual language (rounded nodes are the model deciding, rectangles are your code):
 
@@ -112,7 +112,7 @@ def run_fixed_fanout(worker_fn: Any, listing: dict) -> FanOutSummary:
     return gather(worker_fn, STANDARD_DELIVERABLES, listing)
 ```
 
-The dynamic half swaps the literal for a model call and adds the one control the fixed half never needed: a cap, enforced by your code after the plan comes back and before any worker starts. The comment names the production incident this guards against; section 5 gives the risk category. Note `truncated`: a plan that overruns the cap is cut, and the caller is told, so the event lands in a log instead of a cost report. Treat a tripped cap as a reason to replan or route the listing to a person: the cut is positional, so nothing guarantees the dropped deliverable was the one this product could spare.
+The dynamic half swaps the literal for a model call and adds the one control the fixed half never needed: a cap, enforced by your code after the plan comes back and before any worker starts. The comment names the production incident this guards against, and Security & trust gives the risk category. Note `truncated`: a plan that overruns the cap is cut, and the caller is told, so the event lands in a log instead of a cost report. Treat a tripped cap as a reason to replan or route the listing to a person: the cut is positional, so nothing guarantees the dropped deliverable was the one this product could spare.
 
 ```python
 # The bounded-consumption cap (OWASP LLM10 Unbounded Consumption). Anthropic's
@@ -150,7 +150,7 @@ def propose_deliverables(planner_fn: Any, listing: dict) -> PlanResult:
     )
 ```
 
-Both halves hand their list to the same `gather()`. The fan-in cannot tell, and does not need to know, whether the ids came from a literal or a planner. Three obligations live at this boundary, and each is in the code below. Results are keyed by `deliverable_id` and never by arrival order, because concurrent workers finish in any order and an append-based merge silently reorders output between runs. A failing worker comes back as a structured, recoverable result ("2 of 3 completed; worker `compliance_insert` failed: timeout"), never as a raw exception that takes the other N-1 workers down, and never as a silent drop that shrinks a three-part answer to two with no signal anywhere. And every worker's content is untrusted model output; `render_for_synthesis()` is the only sanctioned path onward, and section 5 explains the tag it applies.
+Both halves hand their list to the same `gather()`. The fan-in cannot tell, and does not need to know, whether the ids came from a literal or a planner. Three obligations live at this boundary, and each is in the code below. Results are keyed by `deliverable_id` and never by arrival order, because concurrent workers finish in any order and an append-based merge silently reorders output between runs. A failing worker comes back as a structured, recoverable result ("2 of 3 completed; worker `compliance_insert` failed: timeout"), never as a raw exception that takes the other N-1 workers down, and never as a silent drop that shrinks a three-part answer to two with no signal anywhere. And every worker's content is untrusted model output; `render_for_synthesis()` is the only sanctioned path onward, and Security & trust explains the tag it applies.
 
 ```python
 @dataclass
@@ -416,9 +416,9 @@ Two production scale-ups matter.
 
 > **In Listing Studio.** Step 7 of the nine-step pipeline assembles the launch package in the two halves shown above: three standard deliverables from a fixed list, then a planner-named list of extras with one worker each. Both halves hand their lists to the same fan-in, and the dashboard shows each worker's status as results land. The dynamic half names deliverables and channels; page sections belong to step 5 and its specialist panel.
 
-> **From production.** The system this carrier recasts assembles its final output with roughly twenty workers across three waves. Two run over fixed lists the code knows at author time. The third asks the model to name the parts that input needs, then spawns one worker per name, so its width is a property of the input rather than of the source. The dependency forces the staging: the dynamic wave cannot start until that list comes back, so it never collapses into one flat gather with the other two.
+> **From production.** The pipeline I shipped this on assembles its final output in more than one wave. Most of its workers run over lists the code knows at author time; one wave asks the model to name the pieces that particular input calls for, then spawns one worker per name, so its width is a property of the input rather than of the source. The dependency forces the staging: that wave cannot start until its list comes back, so it never collapses into one flat gather with the others.
 
-## 4. Cost
+## Cost
 
 Fan-out multiplies spend, and the multiplier has been measured. Anthropic reports agents using roughly 4x the tokens of a chat interaction and multi-agent systems roughly 15x,[^anthropic-multiagent] and the mechanism behind the multiple is visible in this chapter's code. Every worker carries its own context window, so the shared input is paid for once per worker: `gather()` hands the full listing to each of them, and a five-worker wave reads it five times before writing a word. The orchestrator then pays again to read every worker's output at synthesis, and the planner call itself rides on every run, including the runs where it names nothing. Treat the exact multiples as a snapshot: one system, one set of internal evals, mid-2025, and both numbers will move with every model and eval generation. The durable finding is the shape, an order of magnitude over a single call; check the live source before repeating a figure.
 
@@ -426,7 +426,7 @@ The decision a technical leader makes here is whether the value clears that mult
 
 Workers can run on a cheaper model than the planner and the synthesizer, since drafting one named deliverable is an easier task than deciding what a product needs or reconciling N outputs ([8.2 Which Model?](../production/which-model.md)). The depth on the economics, model cascading included, is [8.4 Controlling Cost](../production/controlling-cost.md)'s.
 
-## 5. Security & trust
+## Security & trust
 
 Fan-out changes the shape of three risks this reference names elsewhere. The attack surface is the union of every worker's inputs: each worker reading untrusted content is one more model call an indirect prompt injection (instructions planted in content the model reads, rather than typed by a user) can land on, LLM01 in the OWASP Top 10 for LLM Applications (a ranked catalog of the common security risks in LLM-backed systems).[^owasp] In the launch step every worker reads the finished listing, itself assembled from a supplier's feed and spec sheets, so a line planted in one spec sheet reaches every worker at once. In a research-shaped fan-out where each worker retrieves its own sources, the union grows with the worker count. The matching control is scoped input: hand each worker the minimum content its one deliverable needs. The launch step passes the whole listing because every deliverable draws on it; where workers' needs differ, per-worker curation shrinks the union back.
 
@@ -436,7 +436,7 @@ Uncapped spawning is the third risk, OWASP's LLM10 Unbounded Consumption,[^owasp
 
 One honesty note on the evidence. No dedicated research literature on injection or manipulation attacks specific to orchestrator-worker fan-out had surfaced as of this page's last review; the mitigations above are reasoned from OWASP's general categories plus one vendor's published incident, the same evidentiary posture 3.2 takes for router manipulation. When closer work appears, the citations here should upgrade.
 
-## 6. Gotchas
+## Gotchas
 
 **The same input can fan out differently tomorrow.** Anthropic states the property plainly: agents "make dynamic decisions and are non-deterministic between runs, even with identical prompts," and one derailed step can redirect the whole trajectory.[^anthropic-multiagent] A dynamic fan-out multiplies that, N nondeterministic workers downstream of a nondeterministic plan, so worker count, decomposition, and final answer can all differ between two runs on the same listing. Two consequences follow. A green demo run is one sample rather than a behavior, so evaluate across runs ([4.2 Evaluation](../craft/proving-it-works.md) covers eval discipline under nondeterminism). And a bug report is unreproducible unless the failing run's own decomposition was recorded: log the `FanOutPlan` and the `truncated` flag with every run, because the plan is the one part you cannot re-derive later.
 
@@ -444,15 +444,17 @@ One honesty note on the evidence. No dedicated research literature on injection 
 
 **Workers duplicate and contradict.** Isolation means a worker cannot see that a sibling already covered the warranty terms, or that the ad variant it is drafting assumes a price the compliance insert contradicts. This is Cognition's conflicting-implicit-decisions argument showing up at small scale,[^cognition] and when it bites on your task the fix is structural: fewer workers, more shared context, or one agent, rather than a smarter synthesizer mopping up downstream.
 
-**The planner misses too.** Handing list-making to the model closes the rules-engine gap and opens a stochastic one. A planner that fails to name the compliance insert produces exactly the failure section 1 opened on, the deliverable that silently never runs, except now the cause is a model's judgment rather than a missing rule, so it will not be fixed by a code change and it will not reproduce on demand. The dynamic half needs a backstop for that: a deterministic check that certain flags on a listing must produce certain deliverables, run against the plan before the workers start. Let the model handle the open-ended cases and keep the ones you can name in code.
+**The planner misses too.** Handing list-making to the model closes the rules-engine gap and opens a stochastic one. A planner that fails to name the compliance insert produces exactly the failure this chapter opened on, the deliverable that silently never runs, except now the cause is a model's judgment rather than a missing rule, so it will not be fixed by a code change and it will not reproduce on demand. The dynamic half needs a backstop for that: a deterministic check that certain flags on a listing must produce certain deliverables, run against the plan before the workers start. Let the model handle the open-ended cases and keep the ones you can name in code.
 
 **A planner that always finds something.** The dynamic half earns its cost partly on the runs where it names nothing. A planner prompted with a menu of extras and an expectation of usefulness will pad, naming a compliance insert for products with nothing to comply with, and every padded item is a worker's worth of spend plus a deliverable someone has to notice is pointless. Keep the phone case in your eval set. If the empty plan never comes back in a catalog that has simple products in it, suspect the planner is inventing work.
 
 **A fixed list in a planner's costume.** The inverse overclaim is billing the fixed half as the model orchestrating a team. If the worker list is in the code, it is parallelism: useful, Standard, and settled. Presenting it as agentic is the over-orchestration entry in the [Anti-Patterns Catalog](../catalogs/anti-patterns.md), this chapter's version of 3.2's dict in a router costume, and the same entry covers the build direction: a planner call and a worker pool bolted onto work a three-line loop over a known list already handles.
 
-## 7. In short
+## In short
 
 Split the verdict the way the step splits. Work that is the same on every run goes in a literal and runs concurrently; that is the Standard half, it needs no planner, and it should be described as parallelism without apology. Reach for the dynamic half only when the subtask list changes with the input, and build its controls before trusting it: a cap enforced in code with a `truncated` signal, a fan-in keyed by subtask id, partial failures returned as structured results, worker output treated as untrusted at the synthesis boundary, and the plan logged so any run can be replayed. Expect an order-of-magnitude token bill over a single call and make the value case first. Where subtasks share deep context, take the skeptical side's advice and keep one agent with one window. The pattern earns its keep on wide, separable work whose width varies by input, and the tell that you have it is checkable in a trace: run two different inputs through the step and count the workers.
+
+<small class="chapter-meta">**Maturity: Standard (fixed parallel fan-out) · Established (dynamic orchestrator-workers)** (concurrent workers with a merge are a decades-old idiom; the model sizing its own fan-out is vendor-documented and shipping, with live trade-offs) · *Who decides:* your code (the fixed list) / the model (the dynamic list) · *Grounding:* production + research · *Last reviewed:* 2026-07</small>
 
 ## Sources
 
@@ -486,4 +488,4 @@ Split the verdict the way the step splits. Work that is the same on every run go
 - Cognition (Walden Yan), ["Don't Build Multi-Agents"](https://cognition.com/blog/dont-build-multi-agents) (2025-06-12): the best skeptical take; the shared-context argument for a single-threaded agent, from a team that builds a coding agent.
 - Cemri et al., ["Why Do Multi-Agent LLM Systems Fail?"](https://arxiv.org/abs/2503.13657) (NeurIPS 2025): the MAST failure taxonomy; read it before designing your fan-in.
 - LangChain, ["Graph API overview"](https://docs.langchain.com/oss/python/langgraph/graph-api): the `Send` / map-reduce mechanics for runtime-sized fan-outs, in depth.
-- OWASP, ["Top 10 for LLM Applications 2025"](https://genai.owasp.org/llm-top-10/): the risk categories section 5 reasons from, with per-category mitigations.
+- OWASP, ["Top 10 for LLM Applications 2025"](https://genai.owasp.org/llm-top-10/): the risk categories Security & trust reasons from, with per-category mitigations.
