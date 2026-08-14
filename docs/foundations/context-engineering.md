@@ -1,7 +1,5 @@
 # 1.5 Context Engineering
 
-<small class="chapter-meta">**Maturity: Established** (the practice is as old as calling an LLM; only the name is new) · *Who decides:* your code (you curate the window the model reasons over) · *Grounding:* research · *Last reviewed:* 2026-06</small>
-
 *The discipline of deciding what goes into the model's context window and what stays out. The window is the program: behaviour is governed more by what you put in it than by almost any other lever. Every token competes for one finite budget and pays twice, once in cost and latency and once in the model's attention.*
 
 ## Why you'd reach for it
@@ -99,6 +97,8 @@ What is *not* contested is the core. That each window item costs tokens and atte
 ## In short
 
 Treat the context window as the program, because it is closer to the truth than treating the prompt as the program. Before tuning instruction wording, account for everything else in the window (tools, retrieved knowledge, memory, history) and curate it deliberately: inject the smallest high-signal subset for each step, load heavy content only on demand, compress what must stay long, and isolate sub-tasks in their own windows. Assume reliability falls as the window fills, well before the advertised limit, and design for that rather than trusting the spec sheet. The discipline is not new and not optional; the only new thing is that we finally have a name for it and a growing body of evidence for why it pays. The mechanisms it points to (retrieval, memory, compaction, skills) each get their own chapter; this one gives you the mental model and the vocabulary to use them well.
+
+<small class="chapter-meta">**Maturity: Established** (the practice is as old as calling an LLM; only the name is new) · *Who decides:* your code (you curate the window the model reasons over) · *Grounding:* research · *Last reviewed:* 2026-06</small>
 
 ## Sources
 

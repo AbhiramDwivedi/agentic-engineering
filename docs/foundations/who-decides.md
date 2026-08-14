@@ -1,7 +1,5 @@
 # 1.2 Who Decides?
 
-<small class="chapter-meta">**Maturity: n/a** (this *is* the test other chapters are scored against) · *Who decides:* the lens itself · *Grounding:* the reference's classification lens</small>
-
 *The one question that sorts any "agentic" pattern: who makes the structural decision, the model or your code? The model deciding is the only thing that is genuinely new. Everything else is engineering you already know with a model dropped into one slot.*
 
 ## Why you'd reach for it
@@ -100,6 +98,8 @@ The discipline that falls out of all three: **when in doubt, downgrade the claim
 ## In short
 
 For any pattern you meet, ask the one question and write down the reasoning: *who makes the structural decision, the model or your code?* If you can point to a real model-made decision, the pattern is genuinely new, and you should budget and test for non-determinism. If your code owns the decision and the model only fills a slot, you have a pattern you already know, and the "agentic" label is doing marketing's work, not engineering's. Hold the result against the second axis: new is not the same as good, and a passing pattern does not make the system an agent. When you cannot tell, downgrade the claim. It is the honest move, and the one that protects the credibility this reference is built to sell.
+
+<small class="chapter-meta">**Maturity: n/a** (this *is* the test other chapters are scored against) · *Who decides:* the lens itself · *Grounding:* the reference's classification lens</small>
 
 ## Sources
 

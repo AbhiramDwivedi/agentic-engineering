@@ -1,10 +1,8 @@
 # 2.3 Skills
 
-<small class="chapter-meta">**Maturity: Established** (the packaging mechanism is shipping and stabilising; the "new paradigm" framing is contested) · *Who decides:* mostly your runtime (the model only picks which skill) · *Grounding:* research + companion repo · *Last reviewed:* 2026-06</small>
-
 *A folder of procedural knowledge the runtime reveals to the model in stages, so the window holds only what the task needs. Installing one is a supply-chain decision: its instructions are followed and its scripts run.*
 
-## 1. Why you'd reach for it
+## Why you'd reach for it
 
 A model often needs procedural knowledge that only some of its calls will use. Listing Studio's price step has to apply the supplier's minimum advertised price (MAP), the floor a contract forbids you to undercut, and the house margin rule. The ingest step never touches either. If you paste the pricing rules into the system prompt, every call pays for them in tokens and in attention, including the dozens of calls that never price anything. Multiply that across a house style, a category taxonomy, and a half-dozen multi-step workflows, and the prompt fills with reference material the current task does not need.
 
@@ -22,7 +20,7 @@ Reach for a Skill when:
 
 The counter-trigger: do not reach for a Skill when the need is connectivity to a live system's tools or data over the wire. That is [MCP](mcp.md), chapter 2.4. A Skill packages knowledge; an MCP server provides connectivity.[^newstack-md] And when the knowledge is small enough to live permanently in the prompt, leave it in the prompt; staged loading is overhead you do not need.
 
-## 2. What it actually is
+## What it actually is
 
 A Skill is a folder of procedural knowledge: a `SKILL.md` file with YAML `name` and `description` fields and a fuller instruction body, plus optional bundled files and executable scripts, that the runtime reveals to the model in stages.[^skills-overview] Anthropic's framing for it is an onboarding guide for a new hire: the reference a capable worker reaches for to do a specific job well, not a rewrite of how the worker thinks.[^skills-eng]
 
@@ -34,7 +32,7 @@ Run the litmus test on it, the question this book sorts every pattern by: who ma
 
 A Skill is not an agent, and not a tool. It packages the workflow that may call tools (the call-execute-return contract from [Tool Use](tool-use.md)), and it can teach the model how to drive an [MCP](mcp.md) server. Skills compose with tools and MCP; this is not a versus.
 
-## 3. How to do it
+## How to do it
 
 ### Which path is right
 
@@ -307,7 +305,7 @@ The singular case is one skill the model can hardly miss. Production hits the pl
 
 > **In the companion repo.** The MAP-compliance skill packages the floor and margin rules as a `SKILL.md` plus a `check_map.py` script. The price step pulls it in only when it sets `price_cents`. The script returns the floor and a pass or fail, never its own source.
 
-## 4. Security & trust
+## Security & trust
 
 Installing a skill is a supply-chain decision, and it is the part of this chapter most likely to cost you. A skill is untrusted code plus untrusted instructions. The `SKILL.md` body is followed as instructions the moment a task triggers the skill, and any bundled script runs with whatever authority your agent has. The fix is the same one you already apply to an open-source dependency: read it before you trust it. Audit the body for instructions you would not have written, and audit the scripts for what they read, write, and call over the network. Do both, because the body and the scripts are two separate ways in.[^skills-overview]
 
@@ -317,7 +315,7 @@ The uncomfortable part is that skills are unsafe by default. Today's default ski
 
 When a script does fail, the failure has to come back structured and recoverable rather than as a raw stack trace or a silently swallowed success. The `run_skill_script` failure path does this: a missing script, a timeout, a non-zero exit, and an empty output all return a `[skill-script-error]` line the model can act on. Skip it and the agent loops on a dead script or proceeds on bad state.
 
-## 5. Ecosystem & tooling
+## Ecosystem & tooling
 
 The packaging mechanism is settling, but the ecosystem around it, the standard, the distribution, and the signing, is still forming. Three parts are worth knowing before you build on it.
 
@@ -329,7 +327,7 @@ Safety validation and provenance are arriving alongside. Scanners now exist that
 
 > **From production.** I have used NVIDIA SkillSpector to validate the safety of skills before installing them, and contributed a scanner rule for one of the exfiltration patterns it now checks. I have also used Microsoft APM to distribute skills internally. Neither is a settled standard yet, so I treat the scan and the lockfile as risk reduction, not as a reason to skip reading the skill.
 
-## 6. Gotchas
+## Gotchas
 
 The supply-chain and script-safety edges have their own section above, the catalog-budget and never-triggering edges are in the How section, and the "new paradigm" overclaim is the Contested half of the maturity line; these are the rest.
 
@@ -337,9 +335,11 @@ The supply-chain and script-safety edges have their own section above, the catal
 
 2. **A skill body can drift from the script it ships with.** The body is followed as instructions while the bundled script runs as code, and nothing keeps the two in step. A `SKILL.md` that documents one flag set and a `check_map.py` that expects another will pass an audit of either file read alone, so read them together and pin the pair when you distribute.
 
-## 7. In short
+## In short
 
 Use Skills to package procedural knowledge the model needs only sometimes, like the MAP and margin rules at the price step. They are an Established, practical mechanism, and progressive disclosure is the discipline that justifies them: keep the Level-1 catalog tight and the descriptions trigger-precise, because that catalog is the whole selection surface and there is no router behind it. The hard part is not authoring the folder, it is trusting one you did not write. Audit the body and the scripts before you deploy, scope what those scripts can reach, run a scanner over a third-party skill while the signing ecosystem is still Emerging, and make script failures structured and recoverable. A Skill packages knowledge; an MCP server provides connectivity; the two compose. And do not buy the "new paradigm" pitch.
+
+<small class="chapter-meta">**Maturity: Established** (the packaging mechanism is shipping and stabilising; the "new paradigm" framing is contested) · *Who decides:* mostly your runtime (the model only picks which skill) · *Grounding:* research + companion repo · *Last reviewed:* 2026-06</small>
 
 ## Sources
 

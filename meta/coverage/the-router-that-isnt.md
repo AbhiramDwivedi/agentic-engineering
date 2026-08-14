@@ -1,5 +1,17 @@
 # Coverage map: Front Controller (chapter 3.2)
 
+> **Thesis** (the one sentence the chapter argues): *Most things called routers are dictionaries,
+> and the two mechanisms fail in opposite directions: a classifier on labelled input burns money
+> re-deciding a settled question, and a lookup table on unlabelled text answers confidently from
+> the wrong specialist.*
+>
+> **Budget:** standard pattern, ~2,000-2,800 prose words to the end of *In short* (code, sources,
+> and cross-links excluded). This chapter deflates one mechanism *and* has to teach another
+> properly, so it is budgeted as a standard pattern rather than a deflation; count the mechanisms
+> you have to make work, not the ones you debunk.
+>
+> Covering a must-cover item in one clause is complete coverage. Length is not coverage.
+
 > Research-derived spec for what the chapter must cover to let a reader (a) build a static
 > dispatch table correctly and (b) recognize genuine LLM routing when it's the right tool,
 > without ever confusing the two. Built from a 5-angle sweep (vendor/primary docs, academic +
