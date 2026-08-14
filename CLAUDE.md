@@ -19,10 +19,20 @@ tested companion code it quotes. This file is the entry point; the real constitu
 
 ## Non-negotiables
 
+0. **A reader has to want to keep reading.** Every other rule here optimizes against badness, and
+   none of them produces a page worth paying for. Before a draft goes to review it must have a
+   **thesis** (one sentence the chapter argues), a **way in** (a story, a scar, a failure, or a
+   provocation in the first two sentences, never a definition or a label), and **one line worth
+   quoting** to a colleague. A draft failing any of the three goes back before a single tell is
+   counted. See the interest bar in `meta/voice-and-style.md`.
 1. **Maturity lens + cited evidence.** Every chapter carries a maturity verdict (Standard /
    Established / Emerging / Contested) argued honestly in prose, and every non-obvious claim
    cites a source (paper, primary doc, benchmark) as a footnote. No confident prose about
-   something untested; no coinage sold as canon. When in doubt, downgrade the claim.
+   something untested; no coinage sold as canon. When in doubt, downgrade the claim. The `<small>`
+   lens line goes at the **foot** of the chapter, immediately above `## Sources`, never at the top.
+   **Never narrate the apparatus:** apply the litmus and maturity labels, never explain them
+   ("on this book's litmus test", "the lens line carries two verdicts") — that is what
+   `docs/about/how-we-label.md` is for. Section headings are unnumbered.
 2. **Dual rendering.** Every page must read correctly on the built site **and** GitHub's file
    view. Banned in content: `!!!` admonitions, content tabs, attr_list buttons
    (`{ .md-button }`), markdown inside block-level `<div>`s. Use instead: bold-labelled
@@ -32,11 +42,16 @@ tested companion code it quotes. This file is the entry point; the real constitu
 3. **Code cannot drift from prose.** Every code block shown in a chapter is copied verbatim
    from a tested file in `listing-studio/`, marked with `# --8<-- [start:NAME]/[end:NAME]`
    anchors; `listing-studio/tests/test_doc_sync.py` fails CI if they diverge. Never paste
-   code into a chapter that has no anchored, tested source.
+   code into a chapter that has no anchored, tested source. **Code diet:** one primary listing,
+   ideally under 30 lines, with its contract beside it; comments state constraints the code cannot
+   show and never re-teach the prose; provider tabs go last, under `#### Wiring it to a provider`.
 4. **All examples live in the Listing Studio carrier world** (see the carrier bible). Never
    claim production experience for something only demonstrated; `> **From production.**`
    callouts are reserved for first-hand scars and `> **In the companion repo.**` for
-   demonstrations.
+   demonstrations. Where a scar is real, **tell it like a person**: first person, the argument,
+   the thing that broke. Recast the world into the carrier, never the voice into passive
+   de-peopled prose. `docs/about/how-to-read.md` discloses the recasting once, globally, so no
+   chapter has to hedge it.
 5. **Titles are canonical nouns** ("Tool Use", "Fan-Out") in both the H1 and `mkdocs.yml`
    nav; the evocative phrase lives in the italic gloss line under the head.
 6. **Diagram visual language** (sitewide): rounded nodes `( )` = the model decides;

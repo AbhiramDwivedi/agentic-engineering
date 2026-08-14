@@ -11,10 +11,17 @@ This is a **reference**, written in the reference register, the one Fowler's art
 Hammant's trunkbaseddevelopment.com live in: plain, declarative, organized, opinionated, concrete.
 Authority comes from clear thinking and a stated position, not from lyrical sentences.
 
-The lyrical, personal-essay voice (the scene-setting hook, the childhood memory, the weather
-frame) is real and good, but it belongs in the **distribution blog posts**, not the reference
-body. Same research, two products: a plain authoritative chapter here, a warmer post that links to
-it. Do not try to make a reference chapter sing. Make it true, clear, and committed.
+Plain is not impersonal, and it is not dull. Fowler writes "What most appeals to me about the debt
+metaphor"; Hammant writes "merge hell" and "live happily ever after". First person, direct address
+to the reader, a dry joke, and an opinion the author would defend at a conference all belong here.
+What does not belong is the apparatus of the personal essay: the childhood memory, the weather
+frame, the scene set for its own sake. Those go to the **distribution blog posts**. Same research,
+two products: an authoritative chapter here, a warmer post that links to it.
+
+An earlier version of this file said "do not try to make a reference chapter sing." That
+over-corrected, and it produced pages that passed every gate and that nobody wanted to finish. The
+bar now: **a competent, busy engineer should want to keep reading, and should be able to quote one
+sentence to a colleague without editing it.** A chapter that is merely inoffensive has failed.
 
 ## The rules
 
@@ -45,12 +52,51 @@ it. Do not try to make a reference chapter sing. Make it true, clear, and commit
     every API." The mental model is shared; the concrete fields differ by vendor (Anthropic
     `input_schema`, OpenAI `parameters` / `strict`), and any code sample is one vendor's shape, so
     label it. A schema validates *shape*, never *business truth*; say which you mean.
-13. **Concept leads, carrier illustrates (the cold-reader rule).** The opening states the problem
-    generally, as a strong hook a first-time reader with no carrier knowledge follows; the carrier
-    example lands right after, introduced with a one-clause gloss, never presupposed. Rule 2's
-    concrete-instance requirement is met by grounding the concept in the carrier *quickly*, not by
-    opening on the carrier as if the reader already knows it. "Concrete" means specific, not
-    carrier-insider. The chapter teaches the pattern, not the pipeline.
+13. **Concept leads, carrier illustrates (the cold-reader rule).** A reader who lands here first,
+    from a search, knowing nothing about Listing Studio, must be able to follow the opening and
+    grasp what the chapter is about within two sentences. That is the whole rule. It is satisfied
+    by a general statement of the problem, and it is equally satisfied by a carrier scene that
+    glosses itself as it goes ("the front door of a supplier-feed pipeline") as long as the concept
+    lands immediately. What it forbids is presupposition: carrier internals, personas, or pipeline
+    steps used as if the reader already knows them. "Concrete" means specific, not carrier-insider.
+    The chapter teaches the pattern, not the pipeline.
+14. **Do not narrate the apparatus.** The maturity lens, the litmus test, the grounding label and
+    the chapter's own structure are the editor's constitution, not furniture for the reader. Never
+    write "on this book's litmus test", "which is why the lens line above carries two verdicts",
+    "this reference files it under X", or any sentence explaining how the labels relate to one
+    another. Make the call instead: "Structurally this is a 1970s batch pipeline. What is new is
+    the reason you split." The reader who wants the system reads
+    [How we label](../docs/about/how-we-label.md); everyone else wants the verdict, not a tour of
+    the filing cabinet.
+15. **Epistemic housekeeping lives in the footnote.** "Not peer-reviewed, so treat as directional",
+    "paraphrased, exact wording pending verification against the print edition",
+    "benchmark-specific the day it was published" all belong in the source note. The body states
+    the claim at the confidence it has earned and moves on. Honest uncertainty about the *subject*
+    stays in the body, where it is interesting ("no default router has settled"); bookkeeping about
+    the *citation* goes below, where it is checkable.
+
+## The interest bar (checked before the critic, not after)
+
+Every other gate in this pipeline optimizes against badness: tells, hedges, blandness, overclaims.
+None of them can produce a page worth paying for, because avoiding all the bad things is not the
+same as doing a good one. A draft that clears every negative gate and interests nobody is the
+default failure mode of this whole system, and it is the one we now check for first.
+
+Before a draft goes to the critic, it must clear three positive checks:
+
+1. **A thesis.** One sentence, written into the coverage map before drafting, that the whole
+   chapter argues. If the chapter can only be described as "everything about routing", it has no
+   thesis and it will read as a survey. 3.2's thesis: *most things called routers are dictionaries,
+   and the two mechanisms fail in opposite directions.* 3.1's: *you split the prompt not for
+   modularity but because one call cannot hold the task, and the split is worthless without a gate.*
+2. **A way in.** A story, a scar, a concrete failure, or a provocation inside the first two
+   sentences. Not a definition. The definition arrives once the reader wants it.
+3. **A line worth quoting.** At least one sentence a reader would paste into a team chat. It is
+   earned by a specific or by a judgment the author owns, never by a manufactured aphorism (see the
+   anti-samples in `voice-samples.md`). If you cannot find one in your own draft, you have written a
+   summary of the topic rather than an argument about it.
+
+A draft failing any of the three goes back before a single tell is counted.
 
 ## The blandness checklist (the critic scores against this)
 
@@ -62,10 +108,16 @@ A draft fails if it shows these. The prose-critic agent flags each by line.
 - **Restatement.** The intro, body, and conclusion saying the same thing. Low information density.
 - **Generic example.** A *vague* stand-in ("imagine an online store") where the specific carrier
   example (the standing desk in Listing Studio) would teach more. This flags vagueness, not
-  generality: stating the concept in general terms *first* is correct and required (rule 13), as
-  long as it lands on the concrete carrier within a sentence or two rather than staying abstract.
+  generality: an abstraction that never lands on a specific fails, whether it opened the chapter or
+  buried itself in the middle.
 - **False balance.** Every option presented as equally good. A reference weights; it recommends.
-- **No throughline.** Sections that do not build on each other toward the chapter's point.
+- **No throughline.** Sections that do not build on each other toward the chapter's point. If the
+  chapter has no thesis (see the interest bar above), this failure is guaranteed.
+- **Apparatus narration.** The page explaining its own labels, sections, or classification scheme
+  instead of using them (rule 14).
+- **Unearned length.** Prose past the chapter's budget in `design-system.md` that is not the
+  argument: a second worked example, a table the catalogs should own, a neighbour pattern
+  re-explained instead of linked.
 - **Hook outruns the chapter.** An opening claim the Gotchas later contradict (the pattern "just
   works", then a section on how often it does not).
 - **Surface tells.** See the list below.
@@ -140,12 +192,29 @@ intent.
 - narrating significance instead of showing it ("the whole point", "exactly what separates")
 - the colon-then-restatement zinger
 - the imperative-sentence-then-short-fragment metronome
+- narrating the apparatus ("on this book's litmus test", "the lens line above carries two
+  verdicts", "this reference files it under chaining")
+- numbered section headings ("## 1. Why you'd reach for it"), which make a chapter read as a form
+  that was filled in rather than an argument that was made
+- the witness-protection war story: a first-hand scar told in passive, de-peopled prose ("the
+  production system this carrier recasts exhibited the failure mode described above"). Recast the
+  *world*, not the voice; see the carrier disclosure in `docs/about/how-to-read.md`
+- docstrings and code comments that re-teach the surrounding prose
 
 ## How the critic and gates work together
 
-The deterministic linter catches the mechanical tells. The humanizer audit catches the
-vocabulary and rhetorical patterns. A separate editor agent does the cut pass and scores the
-prose against the structural rules and the three-jobs test, returning line-referenced findings,
-not a rewrite the writer would just rubber-stamp. The author reconciles for technical fidelity
-(code, citations, links must survive intact). Ram makes the final taste call, and whatever he
-flags is added to the living tells list above.
+The interest bar comes first, and it is a judgment call, not a lint: thesis, way in, quotable
+line. Only a draft that clears it is worth reviewing. Then the deterministic linter catches the
+mechanical tells, the humanizer audit catches the vocabulary and rhetorical patterns, and a
+separate editor agent does the cut pass and scores the prose against the structural rules and the
+three-jobs test, returning line-referenced findings rather than a rewrite the writer would just
+rubber-stamp. The author reconciles for technical fidelity (code, citations, links must survive
+intact). The final taste call is the author's, and anything flagged there is added to the living
+tells list above.
+
+**One writer owns the voice.** Where a draft is assembled from several engines (the private
+`/fused-draft` harness), fuse for *coverage*: the union of what each engine found, the best
+citations, the sharpest examples. Do not fuse for prose. Consensus prose is averaged prose, and
+averaging is how personality dies. After the merge, one writer does a single continuous voice pass
+over the whole chapter with `voice-samples.md` in context, rewriting rather than stitching. That
+pass is a writing step and it comes last, after the merge and before the critic.

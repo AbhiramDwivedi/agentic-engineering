@@ -9,10 +9,46 @@ The system has five layers.
 
 ## 1. Structure
 
-The fixed chapter flow: **HEAD → Why → What → How → Gotchas → Foot**. Why comes first; the head
-carries the one-line definition. Start every chapter from [`chapter-template.md`](chapter-template.md).
-Parts and numbering: Part I-IX (roman), chapters `N.M`. Later chapters render muted ("planned") in
-the nav so the full map is visible without implying it is all written.
+The fixed chapter flow: **gloss → Why → What → How → Gotchas → In short → lens line → Sources →
+See also**. Start every chapter from [`chapter-template.md`](chapter-template.md). Parts and
+numbering: Part I-IX (roman), chapters `N.M`. Later chapters render muted ("planned") in the nav so
+the full map is visible without implying it is all written.
+
+**The reading line comes first; the apparatus goes to the foot.** A chapter opens with its gloss
+and then its way in, a scar or a failure or a provocation, because that is what decides whether
+anyone reads the rest. The lens line (maturity, who-decides, grounding, last-reviewed) sits
+immediately above **Sources**, where a reader checking the work looks for it, and the verdict also
+appears in the [quick-reference](../docs/catalogs/quick-reference.md) table for anyone scanning
+across patterns. It is metadata. It is not a headline, and it is a bad first impression: no reader
+has ever been pulled into a page by a grounding label.
+
+**Section headings are unnumbered.** `## Why you'd reach for it`, never `## 1. Why you'd reach for
+it`. Numbering makes a page read as a form that was filled in.
+
+**One chapter, one argument, sized to the argument.** Every chapter declares a thesis in its
+coverage map before drafting (see the interest bar in `voice-and-style.md`), and the draft argues
+that thesis. Length follows the weight of the idea, never the number of sections in the template:
+
+| Chapter kind | Prose budget | Example |
+|---|---|---|
+| Deflation / disambiguation | ~1,500-2,000 words | 6.1 Retry & Backoff |
+| Standard pattern | ~2,000-2,800 words | 3.1 Prompt Chaining, 3.2 Routing & Dispatch |
+| Flagship (the genuinely-new four) | up to ~3,500 words | 2.1 Tool Use |
+| Framing / concept | ~1,200-2,000 words | 1.2 Who Decides? |
+
+Prose words, code excluded, and counted to the end of **In short** (sources and cross-links do not
+count against the argument). These are ceilings, not targets; coming in under is good.
+
+**Count the mechanisms you have to make work, not the ones you debunk.** A chapter is a deflation
+only when the deflation is the whole chapter. 3.2 opens by deflating the dispatch table and then
+has to teach LLM routing properly, with a taxonomy, a confidence floor, an escalation path, and an
+eval discipline, so it is a standard-pattern chapter carrying a deflation, and it is budgeted as
+one. Reaching for the wrong row is how a chapter either bloats or gets starved.
+
+A chapter that wants more than its row must justify it by the idea, and the honest fix is nearly
+always a link to the chapter that owns the material rather than a fuller treatment here. Material
+that is reference-shaped rather than argument-shaped (a comparison matrix across many patterns, a
+checklist) belongs in `docs/catalogs/`, not in a chapter.
 
 **Optional sections, from a fixed menu (controlled extension).** The spine above is mandatory, so
 every page reads the same way. A deep topic may add sections from a controlled menu, only when the
@@ -46,7 +82,7 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 
 | Component | Markdown | Job |
 |---|---|---|
-| Lens line | one-line `<small class="chapter-meta">…</small>` | maturity · who-decides · grounding · last-reviewed |
+| Lens line | one-line `<small class="chapter-meta">…</small>`, placed immediately above `## Sources` | maturity · who-decides · grounding · last-reviewed |
 | Maturity lens | prose, one line | Standard / Established / Emerging / Contested. Never a radar. |
 | From production | `> **From production.** …` blockquote | the single first-hand-experience callout: a real scar or real hands-on use. Only if true. Public tools may be named (e.g. a scanner the author used); the confidential product is recast into the carrier, never named. |
 | In the companion repo | `> **In the companion repo.** …` blockquote | demonstrated, not shipped |
@@ -56,10 +92,28 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 | Code | inline, synced to a tested file by `tests/test_doc_sync.py` | shown in full, cannot drift |
 | Expandable listing | `<details markdown><summary>…</summary>` around a code fence | long listings whose story the diagram + trace already tell; collapses on GitHub and the site both |
 | Shape diagram | ` ```mermaid ` flowchart in How | the pattern's runtime shape, in the shared visual language |
+| Mechanism diagram | hand-authored `.svg`, referenced as a plain image, in place of the mermaid | rare: where the mermaid draws the boxes but hides the thing the reader actually has to see (3.1's splice). Same visual language, same slot. Must stay legible as a still, because GitHub strips the animation |
 | Framework differences | short `####` subsections | only where implementations differ (tabs are Material-only) |
 | Citation | footnote | every non-obvious claim |
 | See also | links | cross-links to related chapters |
 | Further reading | links, annotated | a short curated set of external deep-dives (the spec, the key paper, the primary doc, the best skeptical take), each with a one-line reason. Distinct from Sources (per-claim footnotes) and See also (internal cross-links); points to canonical primary sources, not aggregators. |
+
+### Code in a chapter (the diet)
+
+Code earns its space by carrying the argument. A page that is half listing has stopped being prose,
+and the reader who came for the idea leaves before the idea arrives.
+
+- **One primary listing.** The minimal shape that makes the pattern real, ideally under 30 lines.
+  The contract or schema it depends on may stand beside it.
+- **Comments state constraints the code cannot show.** They never narrate the next line, and they
+  never re-teach the chapter. If a docstring explains the pattern, the prose already did it better;
+  cut it in the source, not just in the chapter.
+- **The trace does the teaching.** A numbered run trace after the code teaches runtime behaviour
+  faster than a second listing does. Prefer adding a trace step over adding code.
+- **Provider wiring goes last**, in a short `#### Wiring it to a provider` subsection at the end of
+  How, after the trace, so it never interrupts the reading line.
+- **A listing whose story the diagram and trace already tell** goes inside
+  `<details markdown><summary>`, or stays in the companion repo behind a link.
 
 ### Multi-provider code examples
 
@@ -69,7 +123,7 @@ Messages API**. Reuse the same tab labels across a page so the tabs link. They r
 tabs on the site (the intended reading experience) and degrade to literal markers on GitHub; that
 tradeoff is accepted. Do not explain the framework's internals, the audience can read its docs.
 Every tab's code is tested companion code under doc-sync, which dedents the tab indentation before
-matching.
+matching. Per the diet above, the tab group is the *last* thing in How.
 
 ## 3. Language
 
@@ -89,6 +143,16 @@ pattern.** That is the litmus test drawn. Every pattern chapter carries one shap
 How; the homepage carries the overall map in the same language. Plain theme colours, no custom
 palettes per diagram.
 
+**The one exception is a hand-authored SVG**, and it has to be argued for. Mermaid draws boxes and
+arrows, which is enough for most patterns and not enough for a pattern whose difficulty is what
+moves along the arrow. 3.1 is the case that earned it: a flowchart of the gated chain leaves the
+splice, the previous answer becoming text inside the next prompt, entirely invisible, and that is
+the part readers get wrong. Such a diagram keeps the shared visual language, sits in the mermaid's
+slot rather than beside it, animates with SMIL only, carries its palette in an internal
+`prefers-color-scheme` block, and must still teach when frozen, because GitHub renders the still
+and drops the motion. Anything that reads as decoration belongs in the chapter illustration
+instead.
+
 ## 5. Taxonomy and evidence
 
 Defined once, linked everywhere:
@@ -104,14 +168,20 @@ How a chapter is actually made, in order:
 
 1. **Research** (agent fan-out) → a cited evidence pack; unsupported claims flagged.
 2. **Interview the author** (informed by the research) → stance, the call, the war stories.
-3. **Build and run the companion example** for any chapter that shows code → real artifacts.
-4. **Draft** in the reference register, anchored on 1-3.
-5. **Adversarial QA panel** (independent agents): fact-checker, skeptic on the lenses,
+3. **Agree the thesis and the budget** → the one sentence the chapter argues, and which row of the
+   budget table it is written to. Both go in the coverage map before a word is drafted.
+4. **Build and run the companion example** for any chapter that shows code → real artifacts.
+5. **Draft** in the reference register, anchored on 1-4.
+6. **Voice pass**, one writer, continuous, over the whole chapter. Where several engines drafted,
+   the merge happens first and fuses coverage only; the voice pass rewrites rather than stitches.
+7. **Interest bar** (author or a fresh reader): thesis, way in, quotable line. A draft that fails
+   goes back here, before anyone counts a tell. Boring dies at this gate, when the fix is cheap.
+8. **Adversarial QA panel** (independent agents): fact-checker, skeptic on the lenses,
    confidentiality scrubber, code-drift checker, prose-critic against the voice spec.
-6. **Revise**, cutting hard.
-7. **Author read** (taste gate): boring dies, overclaims get pulled.
-8. **Gates:** humanizer for residual tells, `mkdocs build --strict`, link check, citation
-   re-verify, read-aloud cadence.
+9. **Revise**, cutting hard.
+10. **Author read** (taste gate): overclaims get pulled.
+11. **Gates:** humanizer for residual tells, `mkdocs build --strict`, link check, citation
+    re-verify, read-aloud cadence.
 
 Agents do research and verification, where they are strong. The draft is written under the spec.
 The human is the source of judgement and the final taste call, never the bottleneck on volume.

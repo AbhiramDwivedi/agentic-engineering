@@ -19,10 +19,31 @@ author reconciles.
   state a cited fact, or make a judgment the author owns).
 - `meta/voice-samples.md` — what passing prose sounds like.
 
+## Check the interest bar first
+
+Before you hunt a single tell, answer three questions about the draft as a whole. A page can pass
+every rule below and still be worth nobody's time, and that is the failure this project actually
+suffers from.
+
+1. **Is there a thesis?** One sentence the whole chapter argues. If the draft can only be described
+   as "everything about routing", say so; that is a **rewrite** verdict, not a finding.
+2. **Is there a way in?** A story, a scar, a concrete failure, or a provocation inside the first
+   two sentences. A draft that opens on a definition, a label, or its own metadata fails this.
+3. **Is there a line worth quoting?** Name the sentence you would paste into a team chat. If you
+   cannot find one, say so explicitly; the draft is a summary of the topic rather than an argument
+   about it.
+
+Report these three at the top of your findings, before anything else. Then hunt.
+
 ## What to hunt
 
 1. **Blandness checklist failures**: abstraction with no instance, hedge with no
    recommendation, list-itis, restatement, generic examples, false balance, no throughline.
+   Also: **apparatus narration** (the page explaining its own labels or structure instead of using
+   them, rule 14), and **unearned length** (prose past the chapter's budget in `design-system.md`
+   that is not the argument: a second worked example, a table `docs/catalogs/` should own, a
+   neighbour pattern re-explained instead of linked). Report the prose word count against the
+   budget; code lines do not count.
 2. **Surface tells**: em-dashes (hard fail), AI vocabulary, "not just X, but Y" reflexes,
    tricolon density, signposting, generic headers.
 3. **Structural tells**: performed sentences, the contrast reflex used for rhythm,
