@@ -1,11 +1,4 @@
-"""The gate between step one and step two: category_path must be real.
-
-A schema-valid CategoryDecision can still name a category that does not
-exist in the catalog. The schema guarantees the shape; this module
-guarantees the meaning -- the same division of labor as 2.2's validate.py,
-one level up: here the object gating a chain step, there the object gating
-a single call.
-"""
+"""The gate between step one and step two: category_path must be real."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -29,12 +22,7 @@ class GateResult:
 
 
 def validate_category(decision: CategoryDecision) -> GateResult:
-    """The gate: category_path must be a real node in the catalog taxonomy.
-
-    The categorize step can return a schema-valid CategoryDecision that names
-    a path that does not exist. This is the check that catches that before
-    the write-copy step drafts against a category that isn't real.
-    """
+    """category_path must be a real node in the catalog taxonomy."""
     if decision.category_path not in TAXONOMY:
         return GateResult(
             ok=False,
