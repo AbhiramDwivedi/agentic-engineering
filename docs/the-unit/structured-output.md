@@ -1,12 +1,10 @@
 # 2.2 Structured Output
 
-<small class="chapter-meta">**Maturity: Standard** (the accepted default whenever code, not a person, consumes the model's output) · *Who decides:* a capability, not a pattern · *Grounding:* research + companion repo · *Last reviewed:* 2026-06</small>
-
 *The machine-checkable contract: a schema the model must fill, so its output is something your code can read instead of prose it has to parse.*
 
 *Also called: function calling (for outputs), constrained decoding, JSON / structured-output mode.*
 
-## 1. Why you'd reach for it
+## Why you'd reach for it
 
 Ask a bare model to set a price and it answers in a sentence that happens to contain a number. *"I'd list the Aldsworth desk at $419."* Or *"$419.00 USD, comfortably above MAP."* Or *"around 419 dollars, though you could go higher."* Your code does not want a sentence; it wants an integer it can write to `price_cents`. So you reach for a regex, and the regex works until the day the model phrases the answer a new way. Then the parse returns nothing, or worse, the wrong number, and the listing stalls in `draft` or ships a price no one chose.
 
@@ -22,7 +20,7 @@ Reach for a schema whenever code, not a person, consumes the model's output:
 
 The counter-trigger: if a human just reads the text, a free-text answer is fine and a schema is overhead. Brand-voice copy that a merchandiser reviews does not need one. The priced number your pipeline writes to the catalog does.
 
-## 2. What it actually is
+## What it actually is
 
 A schema is a typed contract you hand the model: the fields it must return, their types, and which are required. Structured output is the same constrained-decoding machinery as tool and function calling, aimed at a different target. Constrained decoding means the model's token sampler is restricted so it cannot emit a token that would break the declared shape.[^outlines] Tool use points that machinery at a function's *input* schema: the model fills the schema and your code runs the function. Structured output points it at the model's *response* schema: the model fills the schema and your code reads the typed object. The difference is only in what happens next: a tool call runs a function, while a structured-output call shapes the text the model already produced. Both run through the same decoder, so only the target schema changes. That is why several vendors ship strict tool use and JSON outputs as one feature.[^anthropic]
 
@@ -36,7 +34,7 @@ Three reliability tiers are worth keeping straight, because they get conflated a
 2. **JSON mode.** The API guarantees syntactically valid JSON. It does not guarantee your fields or your types. You can get a clean object with the wrong shape and trust it.[^openai]
 3. **Strict schema mode.** The decoder is constrained against your JSON Schema and cannot emit a violating token, so the shape is guaranteed.[^openai][^xgrammar] The trade-off is that your schema must sit inside the subset of JSON Schema the provider supports, and adherence frays near the edges of that subset.[^jsonschemabench]
 
-## 3. How to do it
+## How to do it
 
 The flow has five moving parts. Your code sends the prompt and the schema; the model fills the schema under constrained decoding (the capability); a typed object comes back; your code validates its *meaning*; on a semantic failure you re-ask with a structured error, otherwise you use it. Rounded nodes are the model deciding, rectangles are your code, the hexagon is the capability:
 
@@ -327,7 +325,7 @@ This is a standing line item in your context budget, covered in [Context Enginee
 
 > **In Listing Studio.** Structured output appears twice in the pipeline: at **categorize**, to place the desk in the catalog taxonomy, and at **price**, to return a typed `PricingDecision`. The price step pairs the schema with a code-side MAP and margin check, because a schema-valid number can still be a contract violation. The schema gets you a clean object; your code decides whether it is allowed to ship.
 
-## 4. Gotchas
+## Gotchas
 
 1. **JSON mode is not structured output.** JSON mode guarantees valid JSON, not the field names or the types you asked for; only strict schema mode constrains the decoder to your shape.[^openai] Reaching for JSON mode and trusting the result is how you get a syntactically clean object with the wrong fields, parsed without complaint and acted on.
 
@@ -339,9 +337,11 @@ This is a standing line item in your context budget, covered in [Context Enginee
 
 5. **Refusals and truncation break even the shape.** A safety refusal returns the refusal message, not your object, and the safety behavior takes precedence over the schema. A `max_tokens` cutoff returns JSON that stops mid-string and will not parse.[^openai][^anthropic] Neither yields a parseable object, so check the stop or finish reason before you parse, as the provider tabs above do. Deeply nested, union, and enum schemas plus streaming partial objects are where the shape frays earliest; this chapter does not teach streaming.
 
-## 5. In short
+## In short
 
 Use strict schema mode any time downstream code consumes the model's output, and skip it when a human just reads the text. Keep the schema tight and put reasoning first. After the schema validates the shape, validate the meaning in your own code; the MAP and margin check is not optional, because a schema-valid `38900` is a delisted desk. On failure, re-ask with a structured error rather than throwing, and bound the loop. The schema gets you a well-formed object; checking that it is also correct is your code's job.
+
+<small class="chapter-meta">**Maturity: Standard** (the accepted default whenever code, not a person, consumes the model's output) · *Who decides:* a capability, not a pattern · *Grounding:* research + companion repo · *Last reviewed:* 2026-06</small>
 
 ## Sources
 

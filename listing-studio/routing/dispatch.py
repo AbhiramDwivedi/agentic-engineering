@@ -1,12 +1,4 @@
-"""Static dispatch: the front door for Listing Studio's supplier-feed events.
-
-The supplier feed emits pre-labeled events -- new_product, price_update,
-stock_update -- the event_type is already on the wire before this file ever
-runs. There is no classifier anywhere in dispatch(): a dict lookup is the
-whole decision, and your code made it once, at the moment EVENT_HANDLERS was
-written, not fresh on every request. Compare route.py, which spends a model
-call deciding a label that does not exist yet.
-"""
+"""Static dispatch: the front door for Listing Studio's supplier-feed events."""
 from __future__ import annotations
 
 import logging
@@ -47,15 +39,9 @@ EVENT_HANDLERS: dict[str, Callable[[dict], DispatchResult]] = {
 
 
 def dispatch(event: dict) -> DispatchResult:
-    """Look up the handler for event["event_type"] and run it.
-
-    event_type is untrusted -- it comes off the supplier feed -- so it is
-    validated against the known key set BEFORE the lookup. The lookup itself
-    is a plain dict access, never a dynamic getattr/eval built from the raw
-    string. An unrecognized type hits an explicit deny branch: logged,
-    returned as a structured error, never a silent no-op and never an
-    uncaught KeyError.
-    """
+    """Look up the handler for event["event_type"] and run it."""
+    # event_type is untrusted (off the supplier feed): validate against the
+    # known key set before the lookup, never a dynamic getattr/eval on it.
     event_type = event.get("event_type")
 
     if event_type not in EVENT_HANDLERS:

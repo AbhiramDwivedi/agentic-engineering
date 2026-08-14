@@ -1,7 +1,5 @@
 # 2.4 MCP
 
-<small class="chapter-meta">**Maturity: Standard** (the settled cross-vendor connectivity standard, now under the Linux Foundation; "MCP makes agents reliable" is the contested overclaim) · *Who decides:* your code · *Grounding:* companion repo + research · *Last reviewed:* 2026-06</small>
-
 *MCP, the Model Context Protocol, is a standard wire for connecting an agent to servers that expose tools, resources, and prompts, so a tool written once works across vendors. The cost of that reach is a new supply-chain trust boundary: you grant ambient authority to software you may not control.*
 
 ## Why you'd reach for it
@@ -622,6 +620,8 @@ The tooling around MCP has grown faster than the standard itself, and most of it
 ## In short
 
 Use MCP when you need connectivity, and reach for a Skill when you need knowledge; they compose. The wire is the easy part. The hard part is the trust boundary you cross by consuming someone else's server: treat tool descriptions and results as untrusted, validate every result against an expected shape before it enters context, vet and least-privilege-scope every server, gate privileged actions behind explicit consent, and make failures structured and recoverable. The connection is standardised; whether the agent is good at using what the connection reaches is a separate question, and a measured one.
+
+<small class="chapter-meta">**Maturity: Standard** (the settled cross-vendor connectivity standard, now under the Linux Foundation; "MCP makes agents reliable" is the contested overclaim) · *Who decides:* your code · *Grounding:* companion repo + research · *Last reviewed:* 2026-06</small>
 
 ## Sources
 

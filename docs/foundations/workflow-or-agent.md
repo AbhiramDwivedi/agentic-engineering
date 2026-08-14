@@ -1,7 +1,5 @@
 # 1.3 Workflow or Agent?
 
-<small class="chapter-meta">**Maturity: split** (the guidance, start simple and sit near the workflow end, is Standard to Established; "go autonomous for everything" is Contested; the hybrid is Established to Emerging) · *Who decides:* a spectrum, from your code to the model · *Grounding:* research, corroborated across vendors and practitioners · *Last reviewed:* 2026-06</small>
-
 *Workflow and agent are not two boxes, they are the two ends of one spectrum of agency: how much control over the program's flow you hand to the model. The useful question is not "is this an agent?" but "how much agency does this step need?", and the honest answer for most production work today is "less than you think."*
 
 ## Why you'd reach for it
@@ -93,6 +91,8 @@ The honest caveat runs the other way too. The "start simple" guidance is durable
 ## In short
 
 Stop asking "is this an agent?" and start asking "how much agency does this step need?" Agency is a dial, not a category, and the engineering default is to sit as far toward the cheap, testable, workflow end as the task allows. Start with the simplest thing, a fixed path, and turn the dial up only where you can show that model-directed control earns its cost in reliability, latency, and test burden. For most production work that means a hybrid: a deterministic pipeline with a small bounded-agency step dropped into the one place that needs judgment, and the discipline to refactor that step back to rules once its output is stable. Reach for a full autonomous loop only when the task is genuinely open-ended, and treat "agents for everything" as the marketing it usually is.
+
+<small class="chapter-meta">**Maturity: split** (the guidance, start simple and sit near the workflow end, is Standard to Established; "go autonomous for everything" is Contested; the hybrid is Established to Emerging) · *Who decides:* a spectrum, from your code to the model · *Grounding:* research, corroborated across vendors and practitioners · *Last reviewed:* 2026-06</small>
 
 ## Sources
 

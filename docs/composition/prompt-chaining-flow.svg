@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 694" width="1060" height="694" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">Prompt chaining: the answer to one model call becomes text inside the next prompt</title>
+  <desc id="desc">Two model calls side by side. Call one holds prompt 1, a model, and response 1. Its response names a category that does not exist, so your code's gate rejects it and sends it back to be re-asked with the rejection appended to the same prompt. The second answer passes the gate, and the validated category value then flies into an empty slot in prompt 2, which stays dimmed and unbuildable until it arrives. That splice, the previous answer becoming text inside the next prompt, is what the name prompt chaining refers to.</desc>
+  <style>
+  .h1 { font-size: 21px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .card-t { font-size: 13px; font-weight: 700; letter-spacing: .02em; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .sub { font-size: 11.5px; }
+  .sub-s { font-size: 10.5px; }
+  .mono-t { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; }
+  .chip-body { fill: none; stroke-width: 2; }
+  .chip-inner { fill: none; stroke-width: 1.3; }
+  .chip-pin { stroke-width: 1.5; }
+  .chip-txt { font-size: 8px; font-weight: 700; letter-spacing: .01em; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; font-weight: 600; }
+  .badge-glyph-code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 700; }
+  .chain-lbl { font-size: 15px; font-weight: 800; letter-spacing: .01em; }
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .code-box, .model-box, .gate-box, .data-box { stroke-width: 2; }
+  .gate-box { stroke-width: 3; }
+  .data-box { stroke-dasharray: 5 4; }
+  .wire, .wire-back, .wire-chain { fill: none; stroke-width: 2; }
+  .wire-chain { stroke-width: 3.5; }
+  .ring-model, .ring-bad, .ring-good { stroke-width: 3; }
+  .slot-empty { fill: none; stroke-dasharray: 4 4; stroke-width: 1.5; }
+
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .gate-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .badge-code { fill: #4f5b93; }
+  .badge-glyph-code { fill: #eef1f9; }
+  .chip-body { stroke: #7e57c2; }
+  .chip-inner { stroke: #7e57c2; }
+  .chip-pin { stroke: #7e57c2; }
+  .chip-pad { fill: #7e57c2; }
+  .chip-txt { fill: #7e57c2; }
+  .tax-hit { fill: #e4f4e6; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-bad { fill: #c62828; }
+  .txt-good { fill: #256b29; }
+  .txt-back { fill: #b35c1e; }
+  .txt-chain { fill: #00796b; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-back { stroke: #e07b39; stroke-dasharray: 7 5; }  .mk-back { fill: #e07b39; }
+  .wire-chain { stroke: #00796b; }  .mk-chain { fill: #00796b; }
+  .ring-model { stroke: #7e57c2; }
+  .ring-bad { stroke: #e53935; }
+  .ring-good { stroke: #2e7d32; }
+  .neutral { fill: #5c6bc0; }
+  .bad { fill: #e53935; }
+  .good { fill: #2e7d32; }
+  .backfill { fill: #e07b39; }
+  .slot-empty { stroke: #5b6377; }
+  .slot-full { fill: #e4f4e6; }
+  /* Painted, not transparent: the host page may be toggled to a theme this
+     drawing did not follow, and unpainted text would vanish into it. */
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .pill { fill: #00796b; }
+  .pill-txt { fill: #ffffff; }
+
+  @media (prefers-color-scheme: dark) {
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .gate-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .badge-code { fill: #939ed4; }
+  .badge-glyph-code { fill: #262b3d; }
+  .chip-body { stroke: #b39ddb; }
+  .chip-inner { stroke: #b39ddb; }
+  .chip-pin { stroke: #b39ddb; }
+  .chip-pad { fill: #b39ddb; }
+  .chip-txt { fill: #b39ddb; }
+  .tax-hit { fill: #22392b; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-bad { fill: #ff8a80; }
+  .txt-good { fill: #a5d6a7; }
+  .txt-back { fill: #ffb74d; }
+  .txt-chain { fill: #4db6ac; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-back { stroke: #ffb74d; stroke-dasharray: 7 5; }  .mk-back { fill: #ffb74d; }
+  .wire-chain { stroke: #4db6ac; }  .mk-chain { fill: #4db6ac; }
+  .ring-model { stroke: #b39ddb; }
+  .ring-bad { stroke: #ff6b66; }
+  .ring-good { stroke: #66bb6a; }
+  .neutral { fill: #8c9eff; }
+  .bad { fill: #ff6b66; }
+  .good { fill: #66bb6a; }
+  .backfill { fill: #ffb74d; }
+  .slot-empty { stroke: #a2abc0; }
+  .slot-full { fill: #22392b; }
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .pill { fill: #4db6ac; }
+  .pill-txt { fill: #10201d; }
+}
+  </style>
+  <rect class="page-bg" x="0.5" y="0.5" width="1059" height="693" rx="8"/>
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="arwBack" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-back" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="arwChain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="mk-chain" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+  <text class="h1 txt" x="24" y="34">Where is the chain?</text>
+  <text class="h2 txt-mute" x="24" y="58">The answer to call 1 becomes literal text inside the prompt for call 2. That splice is the chain.</text>
+  <text class="tag-lbl txt-mute" x="50" y="96">CALL 1 · CATEGORIZE</text>
+  <text class="tag-lbl txt-mute" x="650" y="96">CALL 2 · WRITE COPY</text>
+  <path class="wire" d="M215,246 L215,266" marker-end="url(#arw)"/>
+  <path class="wire" d="M215,336 L215,366" marker-end="url(#arw)"/>
+  <path class="wire" d="M380,415 L424,415" marker-end="url(#arw)"/>
+  <path class="wire" d="M830,246 L830,266" marker-end="url(#arw)"/>
+  <path class="wire" d="M830,336 L830,366" marker-end="url(#arw)"/>
+  <path class="wire-back" d="M452,372 C430,300 400,250 382,205" marker-end="url(#arwBack)"/>
+  <path class="wire-chain" d="M578,372 C620,300 660,250 750,214" marker-end="url(#arwChain)"/>
+  <rect class="code-box" x="50" y="106" width="330" height="140" rx="6"/>
+  <g transform="translate(62,118)"><rect class="badge-code" x="0" y="0" width="22" height="22" rx="5"/><text class="badge-glyph-code" x="11" y="16" text-anchor="middle">{ }</text></g>
+  <text class="card-t txt" x="92" y="134">prompt 1</text>
+  <text class="mono txt" x="64" y="164">Categorize this product:</text>
+  <text class="mono txt" x="64" y="182">Aldsworth Sit-Stand Desk</text>
+  <g opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.4133;0.4213;0.5867;0.5947;1.0000" values="0;0;1;1;0;0"/><text class="mono txt-bad" x="64" y="212">Previous attempt was rejected:</text><text class="mono txt-bad" x="64" y="230">that path is not in the taxonomy.</text></g>
+  <rect class="model-box" x="127" y="272" width="176" height="64" rx="32"/>
+  <g transform="translate(163,304)"><rect class="chip-body" x="-13.5" y="-13.5" width="27" height="27" rx="6"/><rect class="chip-inner" x="-9.5" y="-9.5" width="19" height="19" rx="3.5"/><line class="chip-pin" x1="-6.5" y1="-13.5" x2="-6.5" y2="-18"/><line class="chip-pin" x1="-6.5" y1="13.5" x2="-6.5" y2="18"/><line class="chip-pin" x1="-13.5" y1="-6.5" x2="-18" y2="-6.5"/><line class="chip-pin" x1="13.5" y1="-6.5" x2="18" y2="-6.5"/><circle class="chip-pad" cx="-6.5" cy="-20.5" r="2"/><circle class="chip-pad" cx="-6.5" cy="20.5" r="2"/><circle class="chip-pad" cx="-20.5" cy="-6.5" r="2"/><circle class="chip-pad" cx="20.5" cy="-6.5" r="2"/><line class="chip-pin" x1="0.0" y1="-13.5" x2="0.0" y2="-18"/><line class="chip-pin" x1="0.0" y1="13.5" x2="0.0" y2="18"/><line class="chip-pin" x1="-13.5" y1="0.0" x2="-18" y2="0.0"/><line class="chip-pin" x1="13.5" y1="0.0" x2="18" y2="0.0"/><circle class="chip-pad" cx="0.0" cy="-20.5" r="2"/><circle class="chip-pad" cx="0.0" cy="20.5" r="2"/><circle class="chip-pad" cx="-20.5" cy="0.0" r="2"/><circle class="chip-pad" cx="20.5" cy="0.0" r="2"/><line class="chip-pin" x1="6.5" y1="-13.5" x2="6.5" y2="-18"/><line class="chip-pin" x1="6.5" y1="13.5" x2="6.5" y2="18"/><line class="chip-pin" x1="-13.5" y1="6.5" x2="-18" y2="6.5"/><line class="chip-pin" x1="13.5" y1="6.5" x2="18" y2="6.5"/><circle class="chip-pad" cx="6.5" cy="-20.5" r="2"/><circle class="chip-pad" cx="6.5" cy="20.5" r="2"/><circle class="chip-pad" cx="-20.5" cy="6.5" r="2"/><circle class="chip-pad" cx="20.5" cy="6.5" r="2"/><text class="chip-txt" x="0" y="2.9" text-anchor="middle">LLM</text></g>
+  <text class="card-t txt" x="197" y="300">model</text>
+  <text class="sub-s txt-mute" x="197" y="318">answers may vary</text>
+  <rect class="ring-model" x="123" y="268" width="184" height="72" rx="36" fill="none" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.1067;0.1147;0.1667;0.1747;1.0000" values="0;0;1;1;0;0"/></rect>
+  <rect class="ring-model" x="123" y="268" width="184" height="72" rx="36" fill="none" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.4667;0.4747;0.5267;0.5347;1.0000" values="0;0;1;1;0;0"/></rect>
+  <rect class="data-box" x="50" y="372" width="330" height="86" rx="6"/>
+  <text class="card-t txt-mute" x="64" y="396">response 1</text>
+  <text class="mono txt" x="64" y="422">{ "category_path":</text>
+  <text class="mono txt-bad" x="80" y="442" opacity="0">"furniture/desks/sit-stand" }<animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.2067;0.2147;0.3267;0.3347;1.0000" values="0;0;1;1;0;0"/></text>
+  <text class="mono txt-good" x="80" y="442" opacity="0">"office/desks/standing-desks" }<animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.5267;0.5347;0.7333;0.7413;1.0000" values="0;0;1;1;0;0"/></text>
+  <rect class="gate-box" x="430" y="372" width="170" height="86" rx="6"/>
+  <g transform="translate(442,384)"><rect class="badge-code" x="0" y="0" width="22" height="22" rx="5"/><text class="badge-glyph-code" x="11" y="16" text-anchor="middle">{ }</text></g>
+  <text class="card-t txt" x="472" y="400">the gate</text>
+  <text class="sub txt-mute" x="444" y="424">your code, no model call</text>
+  <text class="mono txt-mute" x="444" y="444">in the taxonomy?</text>
+  <rect class="ring-bad" x="426" y="368" width="178" height="94" rx="9" fill="none" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.2933;0.3013;0.3600;0.3680;1.0000" values="0;0;1;1;0;0"/></rect>
+  <rect class="ring-good" x="426" y="368" width="178" height="94" rx="9" fill="none" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.6000;0.6080;0.6533;0.6613;1.0000" values="0;0;1;1;0;0"/></rect>
+  <path class="wire" d="M515,462 L515,510" marker-end="url(#arw)"/><text class="sub txt-mute" x="529" y="492">checks it against</text>
+  <rect class="code-box" x="396" y="514" width="250" height="88" rx="6"/>
+  <text class="tag-lbl txt-mute" x="410" y="536">CATALOG TAXONOMY</text>
+  <rect class="tax-hit" x="404" y="545" width="234" height="17" rx="3" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.6000;0.6080;0.7600;0.7680;1.0000" values="0;0;1;1;0;0"/></rect>
+  <text class="mono-t txt" x="410" y="558">office/desks/standing-desks</text>
+  <text class="mono-t txt" x="410" y="576">office/desks/fixed-height-desks</text>
+  <text class="mono-t txt" x="410" y="594">bedroom/kids/bunk-beds</text>
+  <g opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.2933;0.3013;0.3600;0.3680;1.0000" values="0;0;1;1;0;0"/><text class="mono-t txt-bad" x="668" y="554">"furniture/desks/sit-stand"</text><text class="sub txt-bad" x="668" y="574">is not one of these three. Reject it.</text></g>
+  <g opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.6000;0.6080;0.7600;0.7680;1.0000" values="0;0;1;1;0;0"/><text class="mono-t txt-good" x="668" y="554">"office/desks/standing-desks"</text><text class="sub txt-good" x="668" y="574">matches row one. Let it through.</text></g>
+  <text class="sub txt-back" x="356" y="264" text-anchor="end" opacity="0">re-ask the same step<animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.3600;0.3680;0.5867;0.5947;1.0000" values="0;0;1;1;0;0"/></text>
+  <text class="chain-lbl txt-chain" x="572" y="294" text-anchor="end">the chain</text>
+  <text class="sub txt-mute" x="572" y="312" text-anchor="end">the answer becomes</text>
+  <text class="sub txt-mute" x="572" y="328" text-anchor="end">text in prompt 2</text>
+  <g opacity="0.35"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.7533;0.7693;1.0000" values="0.35;0.35;1;1"/>
+  <rect class="code-box" x="650" y="106" width="360" height="140" rx="6"/>
+  <g transform="translate(662,118)"><rect class="badge-code" x="0" y="0" width="22" height="22" rx="5"/><text class="badge-glyph-code" x="11" y="16" text-anchor="middle">{ }</text></g>
+  <text class="card-t txt" x="692" y="134">prompt 2</text>
+  <text class="mono txt" x="664" y="164">Write listing copy for the</text>
+  <text class="mono txt" x="664" y="182">Aldsworth Sit-Stand Desk</text>
+  <text class="mono txt" x="664" y="214">in category</text>
+  </g>
+  <rect class="slot-empty" x="764" y="198" width="228" height="24" rx="4"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.0000;0.0080;0.7600;0.7680;1.0000" values="0;0;1;1;0;0"/></rect>
+  <g opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.7533;0.7613;1.0000" values="0;0;1;1"/><rect class="slot-full" x="764" y="198" width="228" height="24" rx="4"/><text class="mono txt-good" x="770" y="215">"office/desks/standing-desks"</text></g>
+  <g opacity="0.35"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.7533;0.7693;1.0000" values="0.35;0.35;1;1"/>
+  <rect class="model-box" x="742" y="272" width="176" height="64" rx="32"/>
+  <g transform="translate(778,304)"><rect class="chip-body" x="-13.5" y="-13.5" width="27" height="27" rx="6"/><rect class="chip-inner" x="-9.5" y="-9.5" width="19" height="19" rx="3.5"/><line class="chip-pin" x1="-6.5" y1="-13.5" x2="-6.5" y2="-18"/><line class="chip-pin" x1="-6.5" y1="13.5" x2="-6.5" y2="18"/><line class="chip-pin" x1="-13.5" y1="-6.5" x2="-18" y2="-6.5"/><line class="chip-pin" x1="13.5" y1="-6.5" x2="18" y2="-6.5"/><circle class="chip-pad" cx="-6.5" cy="-20.5" r="2"/><circle class="chip-pad" cx="-6.5" cy="20.5" r="2"/><circle class="chip-pad" cx="-20.5" cy="-6.5" r="2"/><circle class="chip-pad" cx="20.5" cy="-6.5" r="2"/><line class="chip-pin" x1="0.0" y1="-13.5" x2="0.0" y2="-18"/><line class="chip-pin" x1="0.0" y1="13.5" x2="0.0" y2="18"/><line class="chip-pin" x1="-13.5" y1="0.0" x2="-18" y2="0.0"/><line class="chip-pin" x1="13.5" y1="0.0" x2="18" y2="0.0"/><circle class="chip-pad" cx="0.0" cy="-20.5" r="2"/><circle class="chip-pad" cx="0.0" cy="20.5" r="2"/><circle class="chip-pad" cx="-20.5" cy="0.0" r="2"/><circle class="chip-pad" cx="20.5" cy="0.0" r="2"/><line class="chip-pin" x1="6.5" y1="-13.5" x2="6.5" y2="-18"/><line class="chip-pin" x1="6.5" y1="13.5" x2="6.5" y2="18"/><line class="chip-pin" x1="-13.5" y1="6.5" x2="-18" y2="6.5"/><line class="chip-pin" x1="13.5" y1="6.5" x2="18" y2="6.5"/><circle class="chip-pad" cx="6.5" cy="-20.5" r="2"/><circle class="chip-pad" cx="6.5" cy="20.5" r="2"/><circle class="chip-pad" cx="-20.5" cy="6.5" r="2"/><circle class="chip-pad" cx="20.5" cy="6.5" r="2"/><text class="chip-txt" x="0" y="2.9" text-anchor="middle">LLM</text></g>
+  <text class="card-t txt" x="812" y="300">model</text>
+  <text class="sub-s txt-mute" x="812" y="318">answers may vary</text>
+  <rect class="data-box" x="650" y="372" width="360" height="86" rx="6"/>
+  <text class="card-t txt-mute" x="664" y="396">response 2</text>
+  </g>
+  <rect class="ring-model" x="738" y="268" width="184" height="72" rx="36" fill="none" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.8400;0.8480;0.8933;0.9013;1.0000" values="0;0;1;1;0;0"/></rect>
+  <g opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.9333;0.9413;1.0000" values="0;0;1;1"/><text class="mono txt" x="664" y="422">{ "description": "Sit or stand your</text><text class="mono txt" x="664" y="442">  way through...", "bullets": [ ... ] }</text></g>
+  <circle r="7" class="neutral" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.0333;0.0413;0.1067;0.1147;1.0000" values="0;0;1;1;0;0"/><animateMotion dur="15.0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.0333;0.1067;1.0000" path="M215,246 L215,266"/></circle>
+  <circle r="7" class="bad" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.1667;0.1747;0.2200;0.2280;1.0000" values="0;0;1;1;0;0"/><animateMotion dur="15.0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.1667;0.2200;1.0000" path="M215,336 L215,366"/></circle>
+  <circle r="8" class="bad" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.2333;0.2413;0.2933;0.3013;1.0000" values="0;0;1;1;0;0"/><animateMotion dur="15.0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.2333;0.2933;1.0000" path="M380,415 L424,415"/></circle>
+  <g opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.3600;0.3680;0.4533;0.4613;1.0000" values="0;0;1;1;0;0"/><animateMotion dur="15.0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.3600;0.4533;1.0000" path="M452,372 C430,300 400,250 382,205"/><circle r="8" class="backfill"/></g>
+  <circle r="8" class="good" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.5400;0.5480;0.6000;0.6080;1.0000" values="0;0;1;1;0;0"/><animateMotion dur="15.0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.5400;0.6000;1.0000" path="M380,415 L424,415"/></circle>
+  <g opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.6533;0.6613;0.7667;0.7747;1.0000" values="0;0;1;1;0;0"/><animateMotion dur="15.0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.6533;0.7600;1.0000" path="M578,372 C620,300 680,246 878,210"/><rect class="pill" x="-110" y="-13" width="220" height="26" rx="13"/><text class="mono-s pill-txt" x="0" y="5" text-anchor="middle">"office/desks/standing-desks"</text></g>
+  <circle r="7" class="neutral" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.7800;0.7880;0.8400;0.8480;1.0000" values="0;0;1;1;0;0"/><animateMotion dur="15.0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.7800;0.8400;1.0000" path="M830,246 L830,266"/></circle>
+  <circle r="7" class="neutral" opacity="0"><animate attributeName="opacity" dur="15.0s" repeatCount="indefinite" calcMode="linear" keyTimes="0.0000;0.8933;0.9013;0.9467;0.9547;1.0000" values="0;0;1;1;0;0"/><animateMotion dur="15.0s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0.0000;0.8933;0.9467;1.0000" path="M830,336 L830,366"/></circle>
+  <g transform="translate(50,650)">
+  <rect class="code-box" x="0" y="0" width="34" height="26" rx="6"/>
+  <g transform="translate(6,2)"><rect class="badge-code" x="0" y="0" width="22" height="22" rx="5"/><text class="badge-glyph-code" x="11" y="16" text-anchor="middle">{ }</text></g>
+  <text class="sub txt-mute" x="44" y="18">your code · same result every run</text>
+  <rect class="model-box" x="284" y="0" width="46" height="26" rx="13"/>
+  <g transform="translate(307,13) scale(0.5)"><rect class="chip-body" x="-13.5" y="-13.5" width="27" height="27" rx="6"/><rect class="chip-inner" x="-9.5" y="-9.5" width="19" height="19" rx="3.5"/><line class="chip-pin" x1="-6.5" y1="-13.5" x2="-6.5" y2="-18"/><line class="chip-pin" x1="-6.5" y1="13.5" x2="-6.5" y2="18"/><line class="chip-pin" x1="-13.5" y1="-6.5" x2="-18" y2="-6.5"/><line class="chip-pin" x1="13.5" y1="-6.5" x2="18" y2="-6.5"/><circle class="chip-pad" cx="-6.5" cy="-20.5" r="2"/><circle class="chip-pad" cx="-6.5" cy="20.5" r="2"/><circle class="chip-pad" cx="-20.5" cy="-6.5" r="2"/><circle class="chip-pad" cx="20.5" cy="-6.5" r="2"/><line class="chip-pin" x1="0.0" y1="-13.5" x2="0.0" y2="-18"/><line class="chip-pin" x1="0.0" y1="13.5" x2="0.0" y2="18"/><line class="chip-pin" x1="-13.5" y1="0.0" x2="-18" y2="0.0"/><line class="chip-pin" x1="13.5" y1="0.0" x2="18" y2="0.0"/><circle class="chip-pad" cx="0.0" cy="-20.5" r="2"/><circle class="chip-pad" cx="0.0" cy="20.5" r="2"/><circle class="chip-pad" cx="-20.5" cy="0.0" r="2"/><circle class="chip-pad" cx="20.5" cy="0.0" r="2"/><line class="chip-pin" x1="6.5" y1="-13.5" x2="6.5" y2="-18"/><line class="chip-pin" x1="6.5" y1="13.5" x2="6.5" y2="18"/><line class="chip-pin" x1="-13.5" y1="6.5" x2="-18" y2="6.5"/><line class="chip-pin" x1="13.5" y1="6.5" x2="18" y2="6.5"/><circle class="chip-pad" cx="6.5" cy="-20.5" r="2"/><circle class="chip-pad" cx="6.5" cy="20.5" r="2"/><circle class="chip-pad" cx="-20.5" cy="6.5" r="2"/><circle class="chip-pad" cx="20.5" cy="6.5" r="2"/></g>
+  <text class="sub txt-mute" x="340" y="18">the model · answers may vary</text>
+  <rect class="data-box" x="570" y="0" width="34" height="26" rx="6"/>
+  <text class="sub txt-mute" x="614" y="18">data in flight, not a decision</text>
+  </g>
+</svg>

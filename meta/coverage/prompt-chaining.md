@@ -1,5 +1,13 @@
 # Coverage map: Prompt Chaining (chapter 3.1)
 
+> **Thesis** (the one sentence the chapter argues): *You split the prompt not for modularity but
+> because a single call cannot reliably hold the task, and the split is worthless without a gate.*
+>
+> **Budget:** standard pattern, ~2,000-2,800 prose words to the end of *In short* (code, sources,
+> and cross-links excluded). A ceiling, not a target.
+>
+> Covering a must-cover item in one clause is complete coverage. Length is not coverage.
+
 > Research-derived spec for what the chapter must cover to let a reader build a reliable
 > multi-step pipeline, and where to stop. Built from a 4-angle sweep (vendor/primary docs,
 > academic, failure-mode/compounding-error, skeptical read); practitioner writeups were
