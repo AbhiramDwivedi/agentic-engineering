@@ -1,0 +1,37 @@
+name: Dependency drift canary
+
+# Not a required check and never blocks a PR: this job exists to discover
+# upstream breakage on a schedule, not on whoever's unrelated branch happens
+# to touch listing-studio next. It installs the companion code WITHOUT
+# constraints.txt, i.e. the newest versions pyproject.toml's declared ranges
+# still allow, and runs the suite against that. When this job goes red, an
+# upstream release still inside our declared ranges has broken something;
+# the fix is a deliberate constraints.txt bump (see
+# listing-studio/constraints.txt), not an emergency, and not a fire drill for
+# whoever's PR happens to be open.
+on:
+  schedule:
+    - cron: "0 7 * * 1" # weekly, Monday 07:00 UTC
+  workflow_dispatch:
+
+jobs:
+  dependency-drift:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: listing-studio
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+      # Informational only: surfaces majors that pyproject.toml's ranges
+      # already exclude, so they show up here before someone hits them.
+      - name: List outdated packages (informational, does not fail the job)
+        if: always()
+        continue-on-error: true
+        run: pip list --outdated

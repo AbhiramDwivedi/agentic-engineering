@@ -12,25 +12,32 @@ echo "[pre-push] prose_lint (docs, --hard-only) ..."
 python meta/prose_lint.py $(find docs -name '*.md') --hard-only || fail=1
 
 echo "[pre-push] pytest (companion code + doc-sync, CI-parity install) ..."
-# Mirror CI exactly (test.yml: pip install -e ".[dev]" then pytest) inside a
-# throwaway venv holding ONLY the declared dependencies. The ambient dev venv
-# carries extras (e.g. pydantic pulled in transitively by langgraph) that mask an
-# undeclared dependency, so plain `python -m pytest` here would pass while CI
-# fails. Running against the isolated install is what makes that divergence
-# impossible. The venv is reused; it only reinstalls when pyproject.toml changes,
-# and because it never holds undeclared libs, a new unlisted import still fails
-# here even when pyproject is unchanged.
+# Mirror CI exactly (test.yml: pip install -e ".[dev]" -c constraints.txt, then
+# pytest) inside a throwaway venv holding ONLY the declared dependencies. The
+# ambient dev venv carries extras (e.g. pydantic pulled in transitively by
+# langgraph) that mask an undeclared dependency, so plain `python -m pytest`
+# here would pass while CI fails. Running against the isolated install is what
+# makes that divergence impossible. That covers UNDECLARED deps; it does not
+# by itself cover DRIFTING ones: pyproject.toml declares compatibility ranges,
+# not exact versions, and without a constraints file this venv and CI would
+# each resolve fresh from PyPI on their own schedule, so an upstream release
+# still inside the declared range could turn CI red on a branch that never
+# touched dependencies, with zero local signal. constraints.txt pins the exact
+# verified build and closes that gap. The venv is reused; it only reinstalls
+# when pyproject.toml OR constraints.txt changes, so a new unlisted import
+# still fails here (undeclared dep) and a bumped pin still forces a rebuild
+# (drifted dep).
 (
   cd listing-studio || exit 1
   CIVENV=".civenv"
-  MARK="$CIVENV/.pyproject.hash"
+  MARK="$CIVENV/.deps.hash"
   pick_py() { if [ -x "$CIVENV/bin/python" ]; then echo "$CIVENV/bin/python"; else echo "$CIVENV/Scripts/python.exe"; fi; }
-  cur="$(git hash-object pyproject.toml)"
+  cur="$(git hash-object pyproject.toml constraints.txt)"
   if [ ! -e "$(pick_py)" ] || [ "$(cat "$MARK" 2>/dev/null)" != "$cur" ]; then
-    echo "[pre-push]   (building CI-parity venv from pyproject.toml ...)"
+    echo "[pre-push]   (building CI-parity venv from pyproject.toml + constraints.txt ...)"
     rm -rf "$CIVENV"
     python -m venv "$CIVENV" || exit 1
-    "$(pick_py)" -m pip install -q -e ".[dev]" || exit 1
+    "$(pick_py)" -m pip install -q -e ".[dev]" -c constraints.txt || exit 1
     echo "$cur" > "$MARK"
   fi
   "$(pick_py)" -m pytest -q || exit 1
