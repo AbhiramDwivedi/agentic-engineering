@@ -73,17 +73,19 @@ when it is semantically load-bearing.
 
 | Agent | Model | Job |
 |---|---|---|
-| `coverage-researcher` | Opus | pre-writing deep research; emits the coverage map that sets scope |
+| `coverage-researcher` | Sonnet | pre-writing deep research (nine sweep angles, incl. the alias sweep, the everyday-engineer angle, incidents); emits the coverage map that sets scope |
 | `chapter-writer` | Opus | drafts/revises chapters against the meta/ constitution |
 | `prose-critic` | Opus | adversarial voice review; line-referenced findings, never rewrites |
 | `fact-checker` | Sonnet | verifies every citation and claim; argues the maturity verdict |
+| `cold-reader` | Sonnet (on purpose: a stronger reader under-reports confusion) | reads the draft as the everyday engineer it is for; reports undefined terms, the build test, the verify test, the quotable line |
 | `coder-tester` | Sonnet | builds the anchored, tested companion code in `listing-studio/` |
 
-The editor is always a different agent than the writer (see `meta/voice-and-style.md`).
+The `model:` line in each brief is authoritative; keep this table in sync with it. The editor is
+always a different agent than the writer (see `meta/voice-and-style.md`).
 **`/new-chapter <N.M Title>`** (`.claude/commands/new-chapter.md`) runs the whole pipeline:
 coverage-researcher → **author signs off the must-cover list** → coder-tester → chapter-writer
-→ prose-critic + fact-checker in parallel → reconcile → gates → ship. Scope sign-off is a hard
-stop; never skip it.
+→ prose-critic + fact-checker + cold-reader in parallel → reconcile → gates → ship. Scope
+sign-off is a hard stop; never skip it.
 
 ## Layout
 

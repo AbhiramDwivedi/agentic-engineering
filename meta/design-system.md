@@ -65,7 +65,22 @@ silently, so the menu grows deliberately and the reference keeps reading as auth
 **Titles are canonical nouns** ("Tool Use", "Fan-Out"), in the H1 and the nav both: a reference
 gets cited and searched by its nouns. The evocative phrase the chapter used to carry as a title
 moves into the gloss line under the head, which doubles as the chapter's one-line entry in the
-patterns index.
+patterns index. **The alias line carries the neighbours' names.** `*Also called: …*` lists the
+names the rest of the canon uses for the same idea (Anthropic's guide, OpenAI's, Google's, Gulli's
+*Agentic Design Patterns*, Ng's four patterns, LangChain, 12-Factor Agents), so a reader searching
+any of them lands here. The coverage map's alias sweep supplies it.
+
+**Reference-shaped material lives in `docs/catalogs/`**, not in chapters: the anti-patterns
+catalog, the quick-reference (with an *Also called* column), the decision frameworks, the dated
+state of play, the glossary, the hardening checklist and the security posture map, and three
+surfaces added 2026-08-15 for usability and long-run trust: **Reading Paths** (by use case and
+role: the everyday engineer arrives with a problem, not a taxonomy — and, added 2026-08-16, *the
+build path*: the chapters sequenced from a fifty-line loop to a production system, with the
+companion repo growing along it and a feature → chapter traceability table; a build path, not a
+build book), **the Incident File** (public
+agent failures, cited, each mapped to the pattern or guardrail that would have caught it), and
+**Changes** (a dated log of verdict moves and re-reviews). A chapter links to these; it never
+re-teaches them.
 
 ## 2. Components
 
@@ -82,8 +97,10 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 
 | Component | Markdown | Job |
 |---|---|---|
-| Lens line | one-line `<small class="chapter-meta">…</small>`, placed immediately above `## Sources` | maturity · who-decides · grounding · last-reviewed |
+| Lens line | one-line `<small class="chapter-meta">…</small>`, placed immediately above `## Sources` | maturity · who-decides · grounding · last-reviewed. When a verdict has moved, say so inline (`Established (was Contested, 2025-11)`) and log the move in `catalogs/changes.md` (created under Catalogs on first use); a visibly maintained verdict is what a reader trusts in 2028 |
 | Maturity lens | prose, one line | Standard / Established / Emerging / Contested. Never a radar. |
+| Alias line | `*Also called: …*` under the gloss | the neighbouring canon's names for the same idea (vendor guides, Gulli, Ng, LangChain, 12-Factor), for search and for the quick-reference's *Also called* column |
+| Reader-verifiable anchor | one sentence in prose, naming a public tool | where a tool the reader runs (a coding agent, a browser agent, a vendor SDK) visibly implements the mechanism; lets the reader check the claim on their own screen (voice-and-style rule 16) |
 | From production | `> **From production.** …` blockquote | the single first-hand-experience callout: a real scar or real hands-on use. Only if true. Public tools may be named (e.g. a scanner the author used); the confidential product is recast into the carrier, never named. |
 | In the companion repo | `> **In the companion repo.** …` blockquote | demonstrated, not shipped |
 | In Listing Studio | `> **In Listing Studio.** …` blockquote | the carrier instance, three sentences max |
@@ -105,6 +122,11 @@ and the reader who came for the idea leaves before the idea arrives.
 
 - **One primary listing.** The minimal shape that makes the pattern real, ideally under 30 lines.
   The contract or schema it depends on may stand beside it.
+- **Plain Python first.** The primary listing uses no framework, or the thinnest possible use of
+  one; frameworks and vendor SDKs appear only in the provider tabs at the end of How. The test: a
+  mid-level engineer with an HTTP client and a model key could build the minimal shape this
+  afternoon. 3.2's `dispatch` and `route_message` are the pattern; practitioners' standing advice
+  ("use the APIs directly, avoid abstraction layers") is the reason.
 - **Comments state constraints the code cannot show.** They never narrate the next line, and they
   never re-teach the chapter. If a docstring explains the pattern, the prose already did it better;
   cut it in the source, not just in the chapter.

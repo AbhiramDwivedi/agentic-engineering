@@ -1,8 +1,8 @@
-# 6.2 Synthesis
+# 6.4 Voice & Realtime Agents
 
-*Synthesis: assemble many model outputs into one polished artifact a human will actually use, with the brand-voice pass as one instance.*
+*Latency budgets first: turn detection, barge-in, speech-to-speech versus cascaded streaming pipelines, telephony, and per-minute economics.*
 
-*Also called: output assembly, fan-in, aggregation, deliverable assembly.*
+*Also called: voice agents, realtime agents, speech-to-speech (S2S), cascaded voice pipelines.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.
@@ -19,8 +19,8 @@ neighbours. To be written._
 
 ## How to do it
 
-_Code included from a tested file in `listing-studio/`, so the prose can't drift from working
-code. To be written._
+_The mechanics, with public tools named plainly where the reader can verify them; code only
+where a tested listing earns its place. To be written._
 
 ## Gotchas
 
@@ -31,7 +31,7 @@ _The real costs and when not to, feeding the
 
 _A weighted recommendation: what you would actually do. To be written._
 
-<small class="chapter-meta">**Maturity: Established** (assembling many outputs is common; the humanizer pass is our coinage) · *Grounding:* production</small>
+<small class="chapter-meta">**Maturity: Emerging** (settling fast; the cascaded pipeline is the dominant production shape today) · *Grounding:* research · *Last reviewed:* 2026-08</small>
 
 ## Sources
 

@@ -1,8 +1,8 @@
-# 9.1 Autonomous Agents
+# 9.1 Long-Running Agents
 
-*When you actually want autonomy: the model plans its own steps and loops until done, the one genuine agent loop.*
+*The campaign form of the outer loop: hours to days, unattended, self-set sub-goals, fresh contexts per session with a progress file, and a human who can still be reached. The loop itself lives in 2.5; the verify-and-retry wrapper in 3.7; this is what happens when both run for a long time.*
 
-*Also called: the agent loop, self-directed agents.*
+*Also called: autonomous agents, long-horizon agents, campaigns, always-on agents.*
 
 > **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.

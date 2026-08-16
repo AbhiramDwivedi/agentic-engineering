@@ -106,7 +106,7 @@ Each: why it matters, the failure mode if skipped, maturity, lead citation.
    need) or hand-build a chain for a task only a loop can shape. Term note: "loop
    engineering" is not standard vocabulary; the chapter says "the agent loop", defines it on
    first use, and points to [1.3 Workflow or Agent?](../foundations/workflow-or-agent.md)
-   for the spectrum and [9.1 Autonomous Agents](../frontier/when-you-want-autonomy.md) for
+   for the spectrum and [2.5 The Agent Loop](../the-unit/the-agent-loop.md) for
    loop depth rather than teaching the loop here. **Established** (the distinction is
    vendor-documented on both sides). (OpenAI, "A Practical Guide to Building Agents," p. 14,
    verbatim and dash-free: "Every orchestration approach needs the concept of a 'run',
@@ -184,7 +184,7 @@ Each: why it matters, the failure mode if skipped, maturity, lead citation.
 
 ## Out of scope (name it, point out)
 
-- Prompt wording and management at each individual step → [4.1 Prompt Management](../craft/prompts-are-source-code.md).
+- Prompt wording and management at each individual step → [4.1 Prompt Architecture & Management](../craft/prompts-are-source-code.md).
 - Building the LangGraph/LCEL chain API itself, or any framework's chain-construction syntax
   → the framework's own docs; this chapter shows the shape via the multi-provider code tabs,
   not a framework tutorial.

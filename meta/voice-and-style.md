@@ -74,6 +74,18 @@ sentence to a colleague without editing it.** A chapter that is merely inoffensi
     the claim at the confidence it has earned and moves on. Honest uncertainty about the *subject*
     stays in the body, where it is interesting ("no default router has settled"); bookkeeping about
     the *citation* goes below, where it is checkable.
+16. **Anchor to the reader's own screen where you can.** Where a tool the reader already runs (a
+    coding agent, a browser agent, a vendor agent SDK) visibly implements the mechanism, one
+    sentence pointing at it beats a paragraph of abstraction, because the reader can go and check.
+    "The sub-agent your coding agent spawns for a search is this pattern: a fresh window and a
+    narrow brief" is verifiable; "orchestrators delegate to workers" is not. Name public tools
+    plainly. The carrier is for the worked example, not a substitute for the world the reader
+    lives in.
+17. **Deflate to clarify, then build.** The deflation ("this is a dictionary") is a lens, not a
+    mood. On the same page the reader gets the constructive answer: the proven way to do the thing,
+    what it costs, what breaks. A chapter that only debunks fails the busy engineer as surely as
+    one that only hypes, and it reads as contrarian for sport. 3.2 is the shape: the dict, then LLM
+    routing done properly.
 
 ## The interest bar (checked before the critic, not after)
 
@@ -94,9 +106,20 @@ Before a draft goes to the critic, it must clear three positive checks:
 3. **A line worth quoting.** At least one sentence a reader would paste into a team chat. It is
    earned by a specific or by a judgment the author owns, never by a manufactured aphorism (see the
    anti-samples in `voice-samples.md`). If you cannot find one in your own draft, you have written a
-   summary of the topic rather than an argument about it.
+   summary of the topic rather than an argument about it. The line travels furthest when it is
+   *falsifiable*: a specific claim a reader could test and argue with. 12-Factor Agents' "past
+   roughly 40% context fill, quality degrades" is quoted across unaffiliated blogs for that reason;
+   nobody quotes a survey.
 
 A draft failing any of the three goes back before a single tell is counted.
+
+**Sought, not gated: a name for the idea.** Where the chapter's central idea can carry a short,
+plain name (*state, not memory*; *the router that isn't*; *the lethal trifecta*, borrowed with
+credit), give it one and use it consistently: in the gloss, in the anti-patterns catalog, in the
+quick-reference. Names are how a reference gets quoted for years (technical debt, the strangler fig,
+trunk-based development); cute names are how it gets mocked. The test: would an engineer say it in
+a design review without irony? Not every chapter has one, and a chapter is never sent back for
+lacking one. It is sent back for manufacturing one (see the anti-samples in `voice-samples.md`).
 
 ## The blandness checklist (the critic scores against this)
 

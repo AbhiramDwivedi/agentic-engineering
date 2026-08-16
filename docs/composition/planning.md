@@ -1,10 +1,10 @@
-# 4.1 Prompt Architecture & Management
+# 3.6 Planning & Task Decomposition
 
-*Prompts are source code: compose them deliberately (identity and scope, operating rules, injected context, output contract, ordered so the static prefix caches), then version them, review them, and roll them back like any other artifact.*
+*The model writes the sequence: plan-and-execute versus step-by-step, replanning on failure, and code that validates a plan before anything runs.*
 
-*Also called: prompt architecture, prompt composition, prompt versioning, PromptOps, prompts-as-code, automatic prompt optimization (pointer only; depth in 9.7).*
+*Also called: planning, plan-and-execute, task decomposition, prioritization, goal setting.*
 
-> **Stub: scaffolding, not finished writing.**
+> **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.
 > [Contributions welcome.](../contributing.md)
 
@@ -31,7 +31,7 @@ _The real costs and when not to, feeding the
 
 _A weighted recommendation: what you would actually do. To be written._
 
-<small class="chapter-meta">**Maturity: Standard** (treating prompts as versioned artifacts is accepted practice) · *Grounding:* production</small>
+<small class="chapter-meta">**Maturity: Established** (proven and common; the trade-off is plan rigidity against step-by-step drift) · *Grounding:* companion repo + research · *Last reviewed:* 2026-08</small>
 
 ## Sources
 

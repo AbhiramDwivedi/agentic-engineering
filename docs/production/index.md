@@ -1,6 +1,6 @@
 # Part VIII: Operating in Production
 
-The operator's part, thinner ground truth, more weather: observability, model selection, train-vs-prompt, cost, identity/security, and governance.
+The operator's part, thinner ground truth, more weather: observability, model selection, train-vs-prompt, cost, identity/security, governance, and how the thing is deployed and kept running.
 
 ## In this part
 
@@ -10,3 +10,4 @@ The operator's part, thinner ground truth, more weather: observability, model se
 - **8.4 Controlling Cost** *(planned)*
 - **8.5 Locks, PII & Identity** *(planned)*
 - **8.6 Governance & Compliance** *(planned)*
+- **8.7 Deployment & Runtimes** *(planned)*

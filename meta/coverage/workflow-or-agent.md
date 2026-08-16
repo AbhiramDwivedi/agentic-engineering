@@ -114,7 +114,7 @@ and a lead citation. `[+]` = a gap the stub must fill (the chapter is a stub, so
   Need a Framework?
 - **Eval vs. unit test** (why the model-driven end needs evals where the fixed path needs unit
   tests) → 4.2 Evaluation.
-- **Autonomous agents in depth** (the far ★★★ end, the one real agent loop) → 9.1 Autonomous Agents.
+- **Autonomous agents in depth** (the far ★★★ end, the one real agent loop) → 2.5 The Agent Loop, then 9.1 Long-Running Agents.
 - **The maturity lens** (the orthogonal trust axis) → about/how-we-label.
 
 ## Out of scope (name it, point out)
@@ -170,7 +170,7 @@ contrast by reference if an illustration is wanted.
    "named, not taught" satisfies the 1.1 promise — or do you want a one-paragraph *map* of the five
    (one line each) as an on-ramp to Part III, which would add one must-cover item?
 2. **Where does the ★★★ autonomous end stop in 1.3 vs. 9.1?** 1.3 should *place* high autonomy on
-   the spectrum and say "most value isn't here (yet)"; 9.1 Autonomous Agents owns the how-to and the
+   the spectrum and say "most value isn't here (yet)"; 2.5 The Agent Loop and 9.1 Long-Running Agents own the how-to and the
    one real agent loop. Confirm the seam: 1.3 = "where it sits and when it's worth it," 9.1 = "how
    to build it." Anything more than placement risks duplicating 9.1.
 3. **Last-reviewed stamp — yes?** The core guidance is durable but the cost/latency anchors and the
