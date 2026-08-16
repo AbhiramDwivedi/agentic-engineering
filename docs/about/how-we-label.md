@@ -13,8 +13,8 @@ deliberately the opposite register: a sentence you could imagine Martin Fowler w
 
 ## 1. The maturity lens
 
-A single, honestly-argued line near the top of each chapter places the technique on a four-rung
-scale:
+A single, honestly-argued line at the foot of each chapter, just above its sources, places the
+technique on a four-rung scale:
 
 | Lens | What it means | How to read it |
 |---|---|---|
@@ -27,6 +27,13 @@ The lens is the anti-hype function. When something is widely *talked about* but 
 the simpler thing*, it gets **Contested**, and the chapter says why. Concept and framing chapters
 carry no lens (`n/a`). Fast-moving topics also get a **Last reviewed** date, because a lens
 on this month's model landscape is only as good as its date.
+
+It sits at the foot of the chapter, not the head, and that placement is deliberate. The verdict is
+how you *check* a chapter, not how you *start* one, and a page that opens on its own metadata
+teaches nothing in the paragraph where it can least afford to lose you. The argument for the
+verdict runs in the prose where it belongs, and the label at the bottom records the call. For the
+verdicts side by side across every pattern, read the
+[quick-reference](../catalogs/quick-reference.md) instead.
 
 ## 2. Cited evidence
 

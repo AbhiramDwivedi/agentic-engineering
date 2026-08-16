@@ -1,7 +1,5 @@
 # 1.6 Do You Even Need a Framework?
 
-<small class="chapter-meta">**Maturity: Standard** (the build-vs-buy discipline and the cargo-cult caution) · *Who decides:* your code · *Grounding:* production + research · *Last reviewed:* 2026-06</small>
-
 *Build-vs-buy for agent plumbing. A framework is an abstraction over the tool loop, state, checkpointing, retries, and orchestration you would otherwise write yourself. For most teams shipping a real production system, it earns its place; the cases where the raw SDK wins are narrower than the "you don't need a framework" advice suggests.*
 
 ## Why you'd reach for it
@@ -93,6 +91,8 @@ The sharpest failure mode is the one with its own entry in the [Anti-Patterns Ca
 ## In short
 
 If you are shipping a real agentic system, assume you will want a framework and make it prove otherwise, because the plumbing is real, you will rebuild it under deadline, and you will rebuild it worse. The cases where the raw SDK wins are narrow and worth naming: a single agent calling one or two tools, a throwaway, or a hard requirement to own every layer. Decide on the criteria, not the hype: how much plumbing you would rebuild and whether you would rebuild it well, how graph-shaped your control flow is, whether this is your product or infrastructure, and your team's familiarity and lock-in tolerance. For graph-shaped, long-running, control-heavy production work, LangGraph is the strong default and the one this reference builds on; for a fast multi-agent prototype with less plumbing to express, CrewAI gets you there sooner. Whatever you pick, pick it because the criteria pointed there, never because a demo used it.
+
+<small class="chapter-meta">**Maturity: Standard** (the build-vs-buy discipline and the cargo-cult caution) · *Who decides:* your code · *Grounding:* production + research · *Last reviewed:* 2026-06</small>
 
 ## Sources
 

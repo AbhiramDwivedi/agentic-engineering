@@ -4,9 +4,7 @@ StateGraph as the reference sequential-graph shape.
 Illustration, not run in CI: needs an API key and a network call. The
 raw-SDK variants are prompt_chaining_responses.py (OpenAI Responses) and
 prompt_chaining_example.py (Anthropic Messages); both reuse the tested
-run_chain from chain.py instead of reimplementing the gate. LangGraph's
-control flow is graph edges, not Python function calls, so this tab
-expresses the same gate + retry-once + loud-abort shape as graph nodes.
+run_chain from chain.py instead of reimplementing the gate.
 """
 from __future__ import annotations
 
@@ -37,7 +35,6 @@ def categorize_node(state: ChainState) -> dict:
     """Step 3 (categorize), gated immediately after the call."""
     prompt = f"Categorize {state['title']} (SKU {state['supplier_sku']})."
     if state.get("category_error"):
-        # Re-ask the SAME step, feeding back the gate's structured error.
         prompt += f" Previous attempt was rejected: {state['category_error']}"
     decision = categorize_chain.invoke(prompt)
     gate = validate_category(decision)
@@ -49,7 +46,7 @@ def categorize_node(state: ChainState) -> dict:
 
 
 def route_after_gate(state: ChainState) -> str:
-    """The gate's routing decision: continue, retry once, or abort loudly."""
+    """continue, retry once, or abort."""
     if state["category_error"] is None:
         return "continue"
     if state["attempt"] < 2:
@@ -58,7 +55,7 @@ def route_after_gate(state: ChainState) -> str:
 
 
 def abort_node(state: ChainState) -> dict:
-    """The retry also failed: abort loudly. No silent pass-through."""
+    """The retry also failed: abort loudly."""
     raise RuntimeError(
         f"categorize step failed its gate twice: {state['category_error']}"
     )

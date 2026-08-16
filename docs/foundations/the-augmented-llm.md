@@ -1,10 +1,8 @@
 # 1.4 The Augmented LLM
 
-<small class="chapter-meta">**Maturity: Standard** (the accepted base unit of agentic systems) · *Who decides:* the model (it chooses whether and when to call the tool) · *Grounding:* production + research</small>
-
 *The atom every agentic pattern builds on: a model call paired with a contract (a state object) and at least one tool.*
 
-## 1. Why you'd reach for it
+## Why you'd reach for it
 
 Ask a bare model to set the listed price for the Aldsworth desk and it will answer. It will give you a number, in a confident sentence, every time. The number is the problem. The model has no way to know Northvale's minimum advertised price, because that floor lives in Stockwell's pricing rules, not in the model's weights, and a price below it is a contract violation with the supplier. A plain model call cannot look the floor up, cannot enforce it, and cannot hand you a value your code can act on without re-parsing English. It is fluent and unconnected, a bad combination for a step where a wrong number is a liability.
 
@@ -20,7 +18,7 @@ Reach for the augmented unit when:
 
 You do not need it when a plain model call already does the job: a one-shot summary, a classification a human reads, a draft nobody's code depends on. If nothing downstream acts on the result and the model needs nothing it doesn't already hold, a bare call is the simpler thing, and you should use it.
 
-## 2. What it actually is
+## What it actually is
 
 The augmented LLM is not a product or a framework. It is a unit of composition: one model call, paired with one or more tools the model can invoke, and a typed state object the node reads from and writes back to. Nothing else. Anthropic describes this as the base unit of any agentic system,[^anthropic] and the framing is useful precisely because it is minimal: if you understand this unit, you understand what every more complex pattern (fan-out, evaluator-optimizer, specialist panel) is built from.
 
@@ -61,7 +59,7 @@ class ListingState(TypedDict):
                                 # price node runs
 ```
 
-## 3. How to do it
+## How to do it
 
 The unit and the node look like this across the three provider shapes. It is deliberately the smallest thing that shows all three parts at once: one model call, one tool, one typed state object, with nothing extra to read past. The mental model is shared across providers; the wire format is not, so each tab is one vendor's shape. LangGraph leads because it is the carrier's stack; the raw OpenAI Responses and Anthropic Messages variants follow for readers on those SDKs. The shape of the unit is identical in all three; only the field names move (Anthropic's `input_schema` against OpenAI's `parameters`, and so on).
 
@@ -282,7 +280,7 @@ The unit and the node look like this across the three provider shapes. It is del
 
 > **In the companion repo.** `listing-studio/augmented_llm/` holds the state TypedDict, the MAP-floor tool, and all three provider variants of `price_node`. The tool logic is unit-tested offline; the illustration files are compile-checked.
 
-## 4. Gotchas
+## Gotchas
 
 The unit is simple enough that its costs hide in plain sight. Three are worth naming before you build a pipeline of these.
 
@@ -292,9 +290,11 @@ The unit is simple enough that its costs hide in plain sight. Three are worth na
 
 **State contract drift is the failure that doesn't show up in this chapter.** A single node is honest because the contract is right there in the `TypedDict`. The risk arrives when you have a dozen nodes and one of them starts writing a key another never reads, or renames a field, or leaves `price_cents` `None` on a path a downstream node assumes is set. The schema documents the shape but does not enforce that producers and consumers agree on meaning; that agreement is a thing you maintain. The depth lives in [5.1 State, Not Memory](../knowledge/state-not-memory.md); the warning here is that the unit looks safer in isolation than a graph of units will be.
 
-## 5. In short
+## In short
 
 Default to the augmented unit whenever a step has to act on the world or hand a result to code: a model call, one or more tools the model may choose to invoke, and a typed state object the node reads and writes. Keep the tool set minimal so the schema does not tax every call, cap any tool loop so a stuck model fails loud, and treat the state contract as something you maintain across nodes, not something the schema guarantees. When a step needs none of that, a bare model call is the simpler and correct choice; do not reach for the unit out of habit. Build this one well and the rest of the reference is arrangements of it: chain them, fan them out, loop one against another, and the patterns in Part III fall out of the same atom.
+
+<small class="chapter-meta">**Maturity: Standard** (the accepted base unit of agentic systems) · *Who decides:* the model (it chooses whether and when to call the tool) · *Grounding:* production + research</small>
 
 ## Sources
 

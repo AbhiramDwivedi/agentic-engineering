@@ -1,7 +1,5 @@
 # 1.1 It's Still Engineering
 
-<small class="chapter-meta">**Maturity: n/a** (a framing chapter, not a technique) · *Grounding:* reflection on production experience</small>
-
 *The thesis the rest of the reference rests on: building with agents is still engineering, most "agentic patterns" are familiar design patterns with a model dropped into one slot, and the way to tell the genuinely new ones apart is to ask who makes the decision.*
 
 ## Why you'd reach for it
@@ -63,6 +61,8 @@ That gap is not a reason to disengage. It is the reason this reference exists. I
 ## In short
 
 Treat agentic engineering as engineering. When you meet a new "pattern," ask who makes the structural decision: if the model decides, take it seriously as something new and plan for its non-determinism with evals and gates; if your code decides, recognize the design pattern you already know and test it the way you always have. Do not let a label move a component into the wrong cost-and-risk bucket. The rest of this reference makes one promise in exchange for reading on: every technique is labelled by how proven it is, from Standard down to Contested, and every non-obvious claim cites its evidence, so you can tell signal from noise yourself. How those labels work is spelled out in **[How We Label](../about/how-we-label.md)**.
+
+<small class="chapter-meta">**Maturity: n/a** (a framing chapter, not a technique) · *Grounding:* reflection on production experience</small>
 
 ## Sources
 

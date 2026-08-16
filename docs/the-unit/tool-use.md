@@ -1,14 +1,12 @@
 # 2.1 Tool Use
 
-<small class="chapter-meta">**Maturity: Standard** (every major vendor ships it, and the base of the augmented LLM) · *Grounding:* production + research</small>
-
 *Giving the model hands. You describe a function to the model; the model decides when to call it; your code runs the call and owns the result.*
 
 > "Tool access is one of the highest-leverage primitives you can give an agent."[^2]
 >
 > Anthropic, *Tool use with Claude*
 
-## 1. Why you'd reach for it
+## Why you'd reach for it
 
 A language model can reason about almost anything you put in the prompt, but it cannot reach outside it. It has no way to look up a fact that postdates its training, read a row from your database, or change anything in the world. And here is the part that does the damage: when a task needs one of those things, the model does not stop and say so. It produces something plausible instead.
 
@@ -25,7 +23,7 @@ That is the trigger in general: reach for a tool when the answer lives outside t
 
 And the counter-trigger: when your own code already holds the answer and no judgement is needed, call the code and leave the model out of it. That line also separates this from the next chapter: a tool reaches outside the model, while [structured output](structured-output.md) just shapes what the model already produced. Both lean on the same JSON-schema machinery; only tool use runs a function.
 
-## 2. What it actually is
+## What it actually is
 
 A tool is two things: a function in your code, and a description of that function the model can read. You give the model the description as a JSON schema. With LangGraph, you decorate the function and the framework generates the schema from your type hints and docstring:
 
@@ -98,7 +96,7 @@ The model never sees the function body. It picks a tool from the `description` a
 
 **Maturity: Standard.** Every major vendor ships tool use, and Anthropic places it at the base of the augmented LLM, the unit it treats as the foundation of an agentic system.[^1] The benchmarks bear this out: on suites like SWE-bench, giving a model even basic tools produces large jumps in what it can do.[^2]
 
-## 3. How to do it
+## How to do it
 
 Wiring it up is a short loop: offer the tool, let the model decide, run the call, hand back the result, repeat until it answers. Rounded boxes are the model deciding; rectangles are your code:
 
@@ -314,7 +312,7 @@ The default `tool_choice` of `auto` lets the model decide each turn; `required` 
 
 > **In Listing Studio.** This is step 6 of the pipeline, **price**. The model proposes the number, `check_price` rules on it, and a listing cannot leave `draft` until the check passes. Your code owns that gate.
 
-## 4. Gotchas
+## Gotchas
 
 An agent with tools can do real damage, so most of the work is in the failure modes.
 
@@ -332,9 +330,11 @@ An agent with tools can do real damage, so most of the work is in the failure mo
 
 7. **Tools cost tokens, attention, and time.** Every schema rides in the input on every request, so a large tool surface taxes every call: fifty tools can fill the window with JSON before the model reads the task, and a longer menu is also a harder choice, so selection accuracy falls as the set grows. Keep the visible set small, and once the catalog outgrows the window, send only the tools relevant to the step instead of the whole registry. Revealing the relevant subset on demand rather than the whole catalog upfront is *progressive disclosure*, the same idea Agent Skills use to stay cheap; [Skills](skills.md) covers it, and [MCP](mcp.md) covers connecting tools at that scale. Each call is also one more round trip, so trace every call and a failed run can be replayed.[^2] Redact the arguments first, though: a tool call can carry a customer's address or an API key, and a trace store is a bad place for either to leak.[^6]
 
-## 5. In short
+## In short
 
 Give the model the price-check tool, but never let an unchecked price reach `review`. The model owns the proposal and the retry. Your code owns the schema, the validation, the permissions, and the final say on whether anything the tool returns is acted on.
+
+<small class="chapter-meta">**Maturity: Standard** (every major vendor ships it, and the base of the augmented LLM) · *Grounding:* production + research</small>
 
 ## Sources
 

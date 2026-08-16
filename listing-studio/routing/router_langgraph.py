@@ -6,12 +6,7 @@ Illustration, not run in CI: needs an API key and a network call. The
 raw-SDK variants are router_responses.py (OpenAI Responses) and
 router_anthropic.py (Anthropic Messages); both reuse the tested
 route_message from route.py instead of reimplementing the classify-then-
-handle shape. LangGraph's control flow is graph edges, not Python function
-calls, so this tab expresses the same decision as a conditional-edges
-"router function" -- the same keyword LangGraph uses for 3.1's
-route_after_gate, a pure code-decided gate with no classifier at all. Here
-the function wraps a genuine model decision instead; the name alone never
-tells you which.
+handle shape.
 """
 from __future__ import annotations
 
@@ -44,29 +39,22 @@ def classify_node(state: RouterState) -> dict:
 
 
 def route_after_classify(state: RouterState) -> str:
-    """The routing decision: low confidence or an off-taxonomy read never
-    forces its way into a real category -- it goes to escalate instead."""
+    """Low confidence or an off-taxonomy read escalates instead of guessing."""
     decision = state["decision"]
     if decision.category == Category.UNCLEAR or decision.confidence < 0.6:
         return "escalate"
     return decision.category.value
 
 
-def billing_node(state: RouterState) -> dict:
-    return {"response": f"[billing] {state['message']}", "escalated": False}
-
-
-def listing_issue_node(state: RouterState) -> dict:
-    return {"response": f"[listing_issue] {state['message']}", "escalated": False}
-
-
-def account_node(state: RouterState) -> dict:
-    return {"response": f"[account] {state['message']}", "escalated": False}
+def _handler_node(label: str):
+    """One specialist node per category; only the label differs."""
+    def node(state: RouterState) -> dict:
+        return {"response": f"[{label}] {state['message']}", "escalated": False}
+    return node
 
 
 def escalate_node(state: RouterState) -> dict:
-    """No handler is confident enough to own this message: hand off to a
-    human instead of forcing a guess."""
+    """No handler is confident enough: hand off to a human."""
     decision = state["decision"]
     return {
         "response": (
@@ -79,9 +67,9 @@ def escalate_node(state: RouterState) -> dict:
 
 builder = StateGraph(RouterState)
 builder.add_node("classify", classify_node)
-builder.add_node("billing", billing_node)
-builder.add_node("listing_issue", listing_issue_node)
-builder.add_node("account", account_node)
+builder.add_node("billing", _handler_node("billing"))
+builder.add_node("listing_issue", _handler_node("listing_issue"))
+builder.add_node("account", _handler_node("account"))
 builder.add_node("escalate", escalate_node)
 builder.add_edge(START, "classify")
 builder.add_conditional_edges(

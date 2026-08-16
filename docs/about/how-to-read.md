@@ -27,19 +27,45 @@ surfaces, and we reach for them only when the pipeline genuinely can't make the 
 One world, a few surfaces. The pipeline carries the first-hand *From production* stories; the
 siblings are demonstrated in the companion repo.
 
+### About the war stories
+
+Listing Studio is invented. The scars are not.
+
+The systems I actually shipped these patterns in are private and will stay that way, so the
+stories are recast into this commerce world: the domain changes, the specialists get new hats, the
+product loses its name. What survives the recasting is everything that makes a war story worth
+reading: the argument in the design review, the thing that broke, the fix that didn't work, the
+number that mattered. When you read *"we almost shipped a router,"* someone almost shipped a
+router. It just wasn't a router for supplier feeds.
+
+The alternative was to strip the stories down until they were safe, which is how you get prose
+like *"the production system this carrier recasts exhibited the failure mode described above."*
+True, unobjectionable, and worth nobody's time. I'd rather tell you the story in a costume than
+not tell you the story.
+
+Anything **not** grounded in first-hand experience is labelled as what it is: demonstrated in the
+companion repo, drawn from research, or reasoned. That line never moves.
+
 ## The shape of every chapter
 
 Each chapter hits the same beats, so you always know where to look:
 
-1. **The decision it resolves:** one line, up top.
-2. **The way in:** a concrete hook, a scene, a question, a real failure.
-3. **The durable principle:** the part that won't age.
-4. **The litmus test:** model decides or code decides?
-5. **How to do it:** code pulled from a tested file, so the prose can't drift from reality.
-6. **When *not* to / the anti-pattern:** which feeds the [catalog](../catalogs/anti-patterns.md).
-7. **In the carrier:** where this lives in Listing Studio.
-8. **Maturity + evidence:** a quiet lens line up top (Standard / Established / Emerging /
-   Contested), cited sources, and a *From production* note where I've shipped it.
+1. **The gloss:** one italic line under the title. What this is, in miniature.
+2. **Why you'd reach for it:** the way in. A scar, a failure, a provocation, then what the pattern
+   costs you if you skip it.
+3. **What it actually is:** the definition, who makes the decision (the model, or your code?), and
+   how it differs from the two or three patterns it gets confused with.
+4. **How to do it:** a shape diagram, code pulled from a tested file so the prose can't drift from
+   reality, and one run traced step by step.
+5. **Gotchas:** the real costs, when *not* to use it, and the anti-pattern it feeds, which lands in
+   the [catalog](../catalogs/anti-patterns.md).
+6. **In short:** what I'd actually do.
+7. **The lens line, then sources:** maturity (Standard / Established / Emerging / Contested),
+   who decides, what the claim is grounded in, and every citation.
+
+That last one sits at the *bottom* on purpose. It's how you check the work, not how you start
+reading. If you want the verdicts across every pattern at a glance, the
+[quick-reference](../catalogs/quick-reference.md) is one table.
 
 ## Suggested paths
 

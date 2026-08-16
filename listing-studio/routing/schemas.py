@@ -13,12 +13,7 @@ from pydantic import BaseModel, ConfigDict
 
 # --8<-- [start:routing-schemas]
 class Category(str, Enum):
-    """The closed taxonomy an unlabeled merchant message can land in.
-
-    unclear is a member of the taxonomy, not a bolted-on afterthought: the
-    classifier names it as the answer whenever nothing else fits, instead of
-    a low-confidence guess getting forced into one of the real categories.
-    """
+    """The closed taxonomy an unlabeled merchant message can land in."""
     BILLING = "billing"
     LISTING_ISSUE = "listing_issue"
     ACCOUNT = "account"
@@ -26,8 +21,7 @@ class Category(str, Enum):
 
 
 class RouteDecision(BaseModel):
-    """The classifier's output: which category owns this message, and how
-    sure it is."""
+    """Which category owns the message, and how confident the model is."""
     model_config = ConfigDict(extra="forbid")
 
     category: Category
