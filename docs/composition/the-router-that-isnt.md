@@ -77,8 +77,10 @@ in the decision:
   nearest-neighbour search over example utterances attached to each route.[^semrouter]
 - **an LLM classifier**: the model reads the input and picks the category, fresh every request.
 
-Only the third is agentic in any useful sense, and only its decision has to be evaluated the way
-you evaluate model output. The first is ordinary engineering and has been for decades: a table
+A dispatch table is not an agentic pattern.
+
+Only the third arrangement is, and only its decision has to be evaluated the way you evaluate
+model output. The first is ordinary engineering and has been for decades: a table
 from key to handler fronts interpreters, event loops, and web frameworks, and the pattern catalogs
 wrote it up for the web tier more than twenty years ago.[^fowler][^j2ee] The middle one is the
 right answer more often than its share of the conference talks suggests, because when categories
