@@ -97,6 +97,27 @@ A draft that fails any of the three comes back to you before anyone counts a tel
   `docs/catalogs/glossary.md`. A citation is not a definition.
 - **Diagram language:** rounded `( )` = the model decides; rectangle `[ ]` = your code decides;
   hexagon `{{ }}` = a capability. One shape diagram in How; a numbered run trace after the code.
+- **Plain Python first.** The primary listing uses no framework, or the thinnest possible use of
+  one; frameworks and vendor SDKs appear only in the provider tabs. A mid-level engineer with an
+  HTTP client and a model key should be able to build the minimal shape this afternoon.
+- **The alias line names the neighbours.** `*Also called:*` carries the names the rest of the
+  canon uses for this idea (from the coverage map's alias sweep: Anthropic, OpenAI, Google, Gulli's
+  *Agentic Design Patterns*, Ng, LangChain, 12-Factor). It is how a reader searching any of them
+  lands here.
+- **Anchor to the reader's own screen where you can** (voice-and-style rule 16). Where the coverage
+  map supplies a verified reader-verifiable anchor (a public tool the reader runs that visibly
+  implements the mechanism), spend one sentence on it in prose. Name public tools plainly; never
+  speculate about internals the map did not cite.
+- **Deflate to clarify, then build** (rule 17). If the chapter deflates something, the constructive
+  answer (the proven way, its cost, what breaks) is on the same page. A page that only debunks
+  fails.
+- **A named idea, where one is earned** (sought, not gated). If the coverage map or your own draft
+  yields a short plain name for the chapter's central idea, use it consistently in the gloss and
+  name it in your report so the anti-patterns catalog and quick-reference can pick it up. Never
+  manufacture one; the manufactured aphorism is on the tell-list.
+- **Write for the engineer who has shipped one chatbot.** A `cold-reader` agent will read your
+  draft as that person and report every term it could not follow and whether it could build the
+  How. Pre-empt it: define at first use, gloss the carrier, keep the primary listing buildable.
 
 ## Working method
 

@@ -47,19 +47,25 @@ unverified items.
 
 ## Stage 4 — Adversarial QA (parallel)
 
-Spawn **prose-critic** and **fact-checker** on the draft at the same time. Both get the
-chapter path; the fact-checker also gets the coverage-map path. The critic returns
-line-referenced voice and carrier-continuity findings; the fact-checker returns per-citation
-verdicts, the must-cover completeness walk (covered / partial / missing per signed-off item),
-and its own read on the maturity verdict. A **missing** must-cover item sends the draft back
-to stage 3; it is not reconcilable away.
+Spawn **prose-critic**, **fact-checker**, and **cold-reader** on the draft at the same time. All
+three get the chapter path; the fact-checker also gets the coverage-map path; the cold-reader gets
+**only** the chapter path (it reads cold, by design). The critic returns line-referenced voice and
+carrier-continuity findings; the fact-checker returns per-citation verdicts, the must-cover
+completeness walk (covered / partial / missing per signed-off item), and its own read on the
+maturity verdict; the cold-reader returns the everyday-engineer read: the ninety-second test, every
+undefined term at the point it was met, the build test on the How, the verify test, and the line it
+would quote (or that there is none). A **missing** must-cover item sends the draft back to stage 3;
+it is not reconcilable away. A cold-reader "no" on the ninety-second test or "no line worth
+quoting" is an interest-bar failure and also goes back to stage 3.
 
 ## Stage 5 — Reconcile
 
 Apply the findings yourself, cutting hard. Technical fidelity wins conflicts: code blocks,
 citations, and links must survive intact. If the fact-checker downgraded the maturity verdict,
 the chapter takes the downgrade. Anything the critic flagged that you keep, you must be able
-to defend as semantically load-bearing.
+to defend as semantically load-bearing. Cold-reader findings are fixed by **defining, glossing,
+and linking**, never by thinning the argument or cutting the chapter to the reader's current
+knowledge; the page must lift the reader, not meet them where they stand.
 
 ## Stage 6 — Gates (all must pass)
 

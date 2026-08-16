@@ -25,6 +25,23 @@
   itself as it goes ("the front door of a supplier-feed pipeline"). What is forbidden is
   presupposition: carrier internals used as if the reader already knows them.
 
+  THE FIRST-TIME-READER CHECK (the everyday engineer). The reader this is for has shipped one
+  chatbot and is building the second thing. Every term of art is defined or linked at first use;
+  the How can be built this afternoon from the primary listing (plain Python, no framework) plus
+  a model key; and a `cold-reader` agent reads the draft as that engineer in Stage 4 and reports
+  what it could not follow. Confusion is fixed by defining and glossing, never by thinning the
+  argument. Where a tool the reader already runs (a coding agent, a browser agent, a vendor SDK)
+  visibly implements the mechanism, one sentence naming it lets them verify the claim on their own
+  screen (voice-and-style rule 16).
+
+  A NAMED IDEA, WHERE ONE IS EARNED (sought, not gated). If the chapter's central idea can carry
+  a short plain name ("state, not memory", "the router that isn't"), use it consistently: gloss,
+  anti-patterns catalog, quick-reference. Never manufacture one; a chapter is sent back for a
+  forced name, never for lacking one (voice-and-style, the interest bar).
+
+  DEFLATE TO CLARIFY, THEN BUILD (voice-and-style rule 17). If the chapter deflates something,
+  the constructive answer (the proven way, its cost, what breaks) is on the same page.
+
   COMPLETENESS CHECK (the classic pattern form, kept as content, not as headings).
   The Alexandrian fields map onto our flow; before a chapter ships, confirm each is answered:
     Context + Problem  -> Why (the gap, the cost story)
@@ -50,7 +67,11 @@
 to solution, in one or two sentences. This line is also the chapter's entry in the patterns index,
 so it must stand alone.>*
 
-*Also called: <common aliases>.*
+*Also called: <common aliases, including the names the neighbouring canon uses for this idea:
+Anthropic's guide, OpenAI's, Google's, both Gulli books (Agentic Design Patterns 2025; Building AI
+Agents 2026), Ng's four patterns, LangChain, 12-Factor Agents, and the daily tools' own terms. The
+coverage map's alias sweep supplies them; they feed the quick-reference's Also-called column and
+they are how a reader searching any of those names lands here>.*
 
 ## Why you'd reach for it
 <!--
@@ -98,7 +119,9 @@ so it must stand alone.>*
   A hand-authored SVG may take the mermaid's place, and only its place, when boxes and arrows
   hide the thing the reader has to see. Argue for it; see design-system.md.
   Then ONE PRIMARY LISTING: the cheapest thing that works, ideally under 30 lines, with the
-  contract it depends on beside it. AFTER THE CODE, ONE RUN AS A NUMBERED TRACE. Five plain steps
+  contract it depends on beside it. PLAIN PYTHON, NO FRAMEWORK: frameworks and vendor SDKs live in
+  the provider tabs at the end of How, never in the primary listing (design-system, the diet).
+  AFTER THE CODE, ONE RUN AS A NUMBERED TRACE. Five plain steps
   teach runtime behaviour faster than a second listing does; when in doubt add a trace step, not
   more code.
   THEN THE MULTIPLICITY SCALE-UP: the singular-to-plural step every production reader hits (one
@@ -150,7 +173,11 @@ so it must stand alone.>*
 <small class="chapter-meta">**Maturity: <Standard|Established|Emerging|Contested|n/a>** (<half-sentence justification>) · *Who decides:* <the model | your code | a feature | n/a> · *Grounding:* <production | companion repo | research | reasoned></small>
 <!-- add for fast-moving topics:  · *Last reviewed:* YYYY-MM. Keep the <small> on ONE line:
      Material-only syntax (divs with markdown, !!! admonitions, tabs) breaks GitHub rendering,
-     and every page must read correctly in both places. -->
+     and every page must read correctly in both places.
+     When a verdict has MOVED since the chapter first shipped, say so inline, e.g.
+     **Maturity: Established (was Contested, 2025-11)**, and log the move with a one-line reason
+     in docs/catalogs/changes.md (create the page under Catalogs on first use if it does not exist yet).
+     A verdict that is visibly maintained is the trust signal. -->
 
 ## Sources
 <!-- Footnotes. Every non-obvious claim above carries one, and the epistemic caveats live here. -->
