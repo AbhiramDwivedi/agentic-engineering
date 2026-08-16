@@ -107,7 +107,7 @@ fresh write — every item is a gap `[+]`, none `[*]`.
 - **Evaluation** — measuring schema-adherence and content correctness as a metric → 4.2 Evaluation.
 - **Guardrails & Safety** — validating/encoding output before it acts downstream (the LLM05 depth)
   → 4.4 Guardrails & Safety (planned).
-- **Output Assembly** — turning the typed object into the shipped deliverable → 6.2 Output Assembly
+- **Output Assembly** — turning the typed object into the shipped deliverable → 6.2 Synthesis
   (planned).
 - **Live schema-adherence numbers** (JSONSchemaBench, per-model JSON-validity rates) → link, do not
   hardcode; they rot.

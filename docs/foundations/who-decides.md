@@ -66,7 +66,7 @@ One pattern refuses to sort cleanly, and saying so is part of the credibility. *
 
 ### Two that are not patterns
 
-Two more in the catalog are not patterns at all. **Structured output**, constraining the model to return a typed shape, is a capability the model has, the junior partner to tool use, not a structure you arrange. ([2.2 Structured Output](../the-unit/structured-output.md).) **Two-pass generation** and **the humanizer** (the brand-voice polish in step 8) are local coinages, instances of broader ideas, useful labels for a team but not entries in any canon. ([6.2 Output Assembly](../io-boundary/producing-the-deliverable.md).) Naming them honestly as coinages, rather than selling them as discovered patterns, is the same discipline the litmus enforces everywhere.
+Two more in the catalog are not patterns at all. **Structured output**, constraining the model to return a typed shape, is a capability the model has, the junior partner to tool use, not a structure you arrange. ([2.2 Structured Output](../the-unit/structured-output.md).) **Two-pass generation** and **the humanizer** (the brand-voice polish in step 8) are local coinages, instances of broader ideas, useful labels for a team but not entries in any canon. ([6.2 Synthesis](../io-boundary/producing-the-deliverable.md).) Naming them honestly as coinages, rather than selling them as discovered patterns, is the same discipline the litmus enforces everywhere.
 
 Sort the whole set and it lands like this:
 

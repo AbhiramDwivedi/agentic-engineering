@@ -1,10 +1,10 @@
-# 4.1 Prompt Architecture & Management
+# 6.3 Streaming & Agent UX
 
-*Prompts are source code: compose them deliberately (identity and scope, operating rules, injected context, output contract, ordered so the static prefix caches), then version them, review them, and roll them back like any other artifact.*
+*Where the user meets the agent: streaming tokens and events, showing tool calls and progress honestly, interruption and steering, approval UI, generative UI.*
 
-*Also called: prompt architecture, prompt composition, prompt versioning, PromptOps, prompts-as-code, automatic prompt optimization (pointer only; depth in 9.7).*
+*Also called: streaming, agent UI, agentic UX, AG-UI, generative UI (A2UI, MCP Apps).*
 
-> **Stub: scaffolding, not finished writing.**
+> **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.
 > [Contributions welcome.](../contributing.md)
 
@@ -31,7 +31,7 @@ _The real costs and when not to, feeding the
 
 _A weighted recommendation: what you would actually do. To be written._
 
-<small class="chapter-meta">**Maturity: Standard** (treating prompts as versioned artifacts is accepted practice) · *Grounding:* production</small>
+<small class="chapter-meta">**Maturity: Established (streaming) / Emerging (generative UI)** (streaming is table stakes; the UI protocols are still settling) · *Grounding:* companion repo + research · *Last reviewed:* 2026-08</small>
 
 ## Sources
 

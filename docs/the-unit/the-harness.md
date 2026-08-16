@@ -1,10 +1,10 @@
-# 4.1 Prompt Architecture & Management
+# 2.6 The Harness
 
-*Prompts are source code: compose them deliberately (identity and scope, operating rules, injected context, output contract, ordered so the static prefix caches), then version them, review them, and roll them back like any other artifact.*
+*Everything around the loop that your code decides: the execution boundary, verification, permissions and hooks, memory, the context pipeline, tracing. The your-code half of the litmus test, assembled on one page.*
 
-*Also called: prompt architecture, prompt composition, prompt versioning, PromptOps, prompts-as-code, automatic prompt optimization (pointer only; depth in 9.7).*
+*Also called: harness engineering, scaffolding, the agent runtime, "model proposes, code disposes".*
 
-> **Stub: scaffolding, not finished writing.**
+> **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.
 > [Contributions welcome.](../contributing.md)
 
@@ -31,7 +31,7 @@ _The real costs and when not to, feeding the
 
 _A weighted recommendation: what you would actually do. To be written._
 
-<small class="chapter-meta">**Maturity: Standard** (treating prompts as versioned artifacts is accepted practice) · *Grounding:* production</small>
+<small class="chapter-meta">**Maturity: Standard** (the term and the practice are canonical in 2026; the pieces are older than the name) · *Grounding:* companion repo + research · *Last reviewed:* 2026-08</small>
 
 ## Sources
 

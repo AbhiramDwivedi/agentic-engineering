@@ -74,8 +74,8 @@ when it is semantically load-bearing.
 | Agent | Model | Job |
 |---|---|---|
 | `coverage-researcher` | Sonnet | pre-writing deep research (nine sweep angles, incl. the alias sweep, the everyday-engineer angle, incidents); emits the coverage map that sets scope |
-| `chapter-writer` | Fable | drafts/revises chapters against the meta/ constitution |
-| `prose-critic` | Fable | adversarial voice review; line-referenced findings, never rewrites |
+| `chapter-writer` | Opus | drafts/revises chapters against the meta/ constitution |
+| `prose-critic` | Opus | adversarial voice review; line-referenced findings, never rewrites |
 | `fact-checker` | Sonnet | verifies every citation and claim; argues the maturity verdict |
 | `cold-reader` | Sonnet (on purpose: a stronger reader under-reports confusion) | reads the draft as the everyday engineer it is for; reports undefined terms, the build test, the verify test, the quotable line |
 | `coder-tester` | Sonnet | builds the anchored, tested companion code in `listing-studio/` |

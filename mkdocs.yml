@@ -97,6 +97,8 @@ nav:
       - "2.2 Structured Output": the-unit/structured-output.md
       - "2.3 Skills": the-unit/skills.md
       - "2.4 MCP": the-unit/mcp.md
+      - "2.5 The Agent Loop (planned)": the-unit/the-agent-loop.md
+      - "2.6 The Harness (planned)": the-unit/the-harness.md
   - III. Composition:
       - composition/index.md
       - "3.1 Prompt Chaining": composition/prompt-chaining.md
@@ -104,12 +106,16 @@ nav:
       - "3.3 Orchestrator-Workers": composition/fan-out.md
       - "3.4 Evaluator-Optimizer": composition/evaluator-optimizer.md
       - "3.5 The Specialist Panel": composition/specialist-panel.md
+      - "3.6 Planning & Task Decomposition (planned)": composition/planning.md
+      - "3.7 The Outer Loop (planned)": composition/the-outer-loop.md
   - IV. The Craft of Control:
       - craft/index.md
-      - "4.1 Prompt Management": craft/prompts-are-source-code.md
+      - "4.1 Prompt Architecture & Management": craft/prompts-are-source-code.md
       - "4.2 Evaluation": craft/proving-it-works.md
       - "4.3 Human-in-the-Loop (planned)": craft/human-in-the-loop.md
       - "4.4 Guardrails & Safety (planned)": craft/guardrails-and-safety.md
+      - "4.5 Reasoning & Thinking Budgets (planned)": craft/reasoning-and-thinking-budgets.md
+      - "4.6 Prompt Injection & the Lethal Trifecta (planned)": craft/prompt-injection.md
   - V. Knowledge & Memory:
       - knowledge/index.md
       - "5.1 State, Not Memory": knowledge/state-not-memory.md
@@ -119,7 +125,9 @@ nav:
   - VI. The I/O Boundary:
       - io-boundary/index.md
       - "6.1 Ingestion (planned)": io-boundary/getting-the-mess-in.md
-      - "6.2 Output Assembly (planned)": io-boundary/producing-the-deliverable.md
+      - "6.2 Synthesis (planned)": io-boundary/producing-the-deliverable.md
+      - "6.3 Streaming & Agent UX (planned)": io-boundary/streaming-and-agent-ux.md
+      - "6.4 Voice & Realtime Agents (planned)": io-boundary/voice-and-realtime-agents.md
   - VII. Reliability:
       - reliability/index.md
       - "7.1 Retry & Graceful Degradation (planned)": reliability/which-failures-sink-the-ship.md
@@ -133,12 +141,16 @@ nav:
       - "8.4 Controlling Cost (planned)": production/controlling-cost.md
       - "8.5 Locks, PII & Identity (planned)": production/locks-pii-identity.md
       - "8.6 Governance & Compliance (planned)": production/governance-and-compliance.md
+      - "8.7 Deployment & Runtimes (planned)": production/deployment-and-runtimes.md
   - IX. The Frontier:
       - frontier/index.md
-      - "9.1 Autonomous Agents (planned)": frontier/when-you-want-autonomy.md
+      - "9.1 Long-Running Agents (planned)": frontier/when-you-want-autonomy.md
       - "9.2 Multi-Agent (planned)": frontier/more-than-one-agent.md
       - "9.3 The Protocol Landscape (planned)": frontier/protocol-landscape.md
       - "9.4 Sandboxing (planned)": frontier/sandboxing.md
+      - "9.5 Computer Use & Browser Agents (planned)": frontier/computer-use-and-browser-agents.md
+      - "9.6 Coding Agents (planned)": frontier/coding-agents.md
+      - "9.7 Self-Improving Systems (planned)": frontier/self-improving-systems.md
   - Catalogs & Appendices:
       - "A. The Anti-Patterns Catalog": catalogs/anti-patterns.md
       - "B. Pattern Quick-Reference": catalogs/quick-reference.md
@@ -147,4 +159,7 @@ nav:
       - "E. Glossary": catalogs/glossary.md
       - "F. The Hardening Checklist (planned)": catalogs/hardening-checklist.md
       - "G. The Security Posture Map (planned)": catalogs/security-posture.md
+      - "H. Reading Paths (planned)": catalogs/reading-paths.md
+      - "I. The Incident File (planned)": catalogs/incident-file.md
+      - "J. Changes (planned)": catalogs/changes.md
   - Contributing: contributing.md

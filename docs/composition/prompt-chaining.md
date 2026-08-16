@@ -113,7 +113,7 @@ the next step a small validated state, a run that dies at step six restarts from
 state; a loop keeps its state as one evolving transcript, with no equally clean place to resume
 from. The loop wins when the shape of the task is unknown before the run starts.
 [1.3 Workflow or Agent?](../foundations/workflow-or-agent.md) owns the full spectrum;
-[9.1 Autonomous Agents](../frontier/when-you-want-autonomy.md) owns the loop.
+[2.5 The Agent Loop](../the-unit/the-agent-loop.md) owns the loop.
 
 ## How to do it
 
@@ -250,7 +250,7 @@ concurrently even though each product's chain is serial.
 The LangGraph tab shows the whole graph, since the sequential graph is the reference shape for a
 chain.[^langgraph] The two raw-SDK tabs define only the step functions and hand them to the shared,
 tested `run_chain` above. How you word each step's prompt belongs to
-[4.1 Prompt Management](../craft/prompts-are-source-code.md).
+[4.1 Prompt Architecture & Management](../craft/prompts-are-source-code.md).
 
 === "LangGraph"
 
@@ -484,4 +484,4 @@ predict when to decompose, as still settling.
 - [3.3 Orchestrator-Workers](fan-out.md): where steps have no ordering dependency, fan them out in parallel instead of chaining them.
 - [3.4 Evaluator-Optimizer](evaluator-optimizer.md): the model judging its own output and deciding whether to loop, the genuinely new sibling this pattern gets mistaken for.
 - [4.3 Human-in-the-Loop](../craft/human-in-the-loop.md): the gate failure that needs a person rather than a retry.
-- [9.1 Autonomous Agents](../frontier/when-you-want-autonomy.md): the agent loop in depth, the other end of the comparison above.
+- [2.5 The Agent Loop](../the-unit/the-agent-loop.md): the agent loop in depth, the other end of the comparison above.

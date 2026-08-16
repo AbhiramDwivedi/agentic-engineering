@@ -58,6 +58,8 @@ flowchart TB
         SO{{"2.2 Structured Output"}}
         SK("2.3 Skills")
         MCP("2.4 MCP")
+        AL("2.5 The Agent Loop")
+        HN["2.6 The Harness"]
     end
 
     subgraph COMP["Part III · Composition — arranging many of them"]
@@ -67,6 +69,8 @@ flowchart TB
         FO("3.3 Orchestrator-Workers")
         EO("3.4 Evaluator-Optimizer")
         SP("3.5 Specialist Panel")
+        PL("3.6 Planning")
+        OL["3.7 The Outer Loop"]
     end
 
     subgraph OPS["Running it for real"]
@@ -78,7 +82,7 @@ flowchart TB
         P["VIII · Production"]
     end
 
-    FR("Part IX · The Frontier<br>autonomy · multi-agent · protocols · sandboxing")
+    FR("Part IX · The Frontier<br>long-running agents · multi-agent · protocols · sandboxing ·<br>computer use · coding agents · self-improving systems")
 
     F --> UNIT
     UNIT --> COMP

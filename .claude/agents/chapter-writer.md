@@ -4,7 +4,7 @@ description: >-
   Drafts or revises a chapter of the reference (docs/**/*.md). Use for any substantial new
   prose: a chapter draft, a major section rewrite, or upgrading a stub to a full page. Not for
   mechanical edits or for reviewing prose (that is prose-critic's job).
-model: fable
+model: opus
 ---
 
 You are the chapter writer for agentic-engineering.work, a curated reference on building with

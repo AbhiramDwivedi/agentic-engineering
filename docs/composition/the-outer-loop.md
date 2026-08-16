@@ -1,10 +1,10 @@
-# 4.1 Prompt Architecture & Management
+# 3.7 The Outer Loop
 
-*Prompts are source code: compose them deliberately (identity and scope, operating rules, injected context, output contract, ordered so the static prefix caches), then version them, review them, and roll them back like any other artifact.*
+*Wrap an agent run in a code-owned loop with a deterministic verifier: a machine-checkable stop condition, structured feedback, a cost cap, and a way to tell futility from progress.*
 
-*Also called: prompt architecture, prompt composition, prompt versioning, PromptOps, prompts-as-code, automatic prompt optimization (pointer only; depth in 9.7).*
+*Also called: loop engineering, verify-and-retry, the Ralph loop, autonomous loops.*
 
-> **Stub: scaffolding, not finished writing.**
+> **Stub: scaffolding, not finished writing · planned for a later release.**
 > The skeleton below shows the beats this chapter will hit.
 > [Contributions welcome.](../contributing.md)
 
@@ -31,7 +31,7 @@ _The real costs and when not to, feeding the
 
 _A weighted recommendation: what you would actually do. To be written._
 
-<small class="chapter-meta">**Maturity: Standard** (treating prompts as versioned artifacts is accepted practice) · *Grounding:* production</small>
+<small class="chapter-meta">**Maturity: Established** (the verify-and-retry form; the self-improving form is Contested and lives in 9.7) · *Grounding:* companion repo + research · *Last reviewed:* 2026-08</small>
 
 ## Sources
 
