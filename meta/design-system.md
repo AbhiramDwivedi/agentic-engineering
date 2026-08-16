@@ -92,7 +92,7 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 | Code | inline, synced to a tested file by `tests/test_doc_sync.py` | shown in full, cannot drift |
 | Expandable listing | `<details markdown><summary>…</summary>` around a code fence | long listings whose story the diagram + trace already tell; collapses on GitHub and the site both |
 | Shape diagram | ` ```mermaid ` flowchart in How | the pattern's runtime shape, in the shared visual language |
-| Mechanism diagram | hand-authored `.svg`, referenced as a plain image, in place of the mermaid | rare: where the mermaid draws the boxes but hides the thing the reader actually has to see (3.1's splice). Same visual language, same slot. Must stay legible as a still, because GitHub strips the animation |
+| Mechanism diagram | hand-authored `.svg`, referenced as a plain image | rare: where the drawing hides the thing the reader actually has to see (3.1's splice; 3.3's worker count). Same visual language, and it takes the slot of whichever visual it supersedes (3.1's mermaid, 3.3's illustration) rather than being added alongside. Must stay legible as a still, because GitHub strips the animation |
 | Framework differences | short `####` subsections | only where implementations differ (tabs are Material-only) |
 | Citation | footnote | every non-obvious claim |
 | See also | links | cross-links to related chapters |
@@ -147,11 +147,15 @@ palettes per diagram.
 arrows, which is enough for most patterns and not enough for a pattern whose difficulty is what
 moves along the arrow. 3.1 is the case that earned it: a flowchart of the gated chain leaves the
 splice, the previous answer becoming text inside the next prompt, entirely invisible, and that is
-the part readers get wrong. Such a diagram keeps the shared visual language, sits in the mermaid's
-slot rather than beside it, animates with SMIL only, carries its palette in an internal
-`prefers-color-scheme` block, and must still teach when frozen, because GitHub renders the still
-and drops the motion. Anything that reads as decoration belongs in the chapter illustration
-instead.
+the part readers get wrong. 3.3 is the second: parallel boxes converging on a merge look the same
+whether the box count came from a literal or from a model call, so that diagram runs two products
+through the step and lets you count the workers, and it takes the chapter illustration's slot
+because the illustration was making the same point less precisely. Such a diagram keeps the shared
+visual language, replaces a visual rather than joining one, animates with SMIL only, carries its
+palette in an internal `prefers-color-scheme` block, and must still teach when frozen, because
+GitHub renders the still and drops the motion. That last one is a design constraint, not a
+courtesy: build the finished state as the default and let the animation play up to it, never the
+reverse.
 
 ## 5. Taxonomy and evidence
 

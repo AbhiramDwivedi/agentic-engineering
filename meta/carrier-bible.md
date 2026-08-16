@@ -100,9 +100,23 @@ until every step has reported back**.
 | 4 | **write copy** | draft `description` and `bullets` | prompt chaining |
 | 5 | **content blocks** | build page sections, each from a specialist viewpoint | specialist panel |
 | 6 | **price** | set `price_cents` within MAP and margin rules | tool use, guardrails |
-| 7 | **assemble launch package** | fan out to write listing + email + ad copy in parallel | orchestrator-workers |
+| 7 | **assemble launch package** | fixed fan-out for the three standard deliverables; then a model-decided list of extra ones, one worker each | parallelization (fixed half) + orchestrator-workers (dynamic half) |
 | 8 | **brand-voice polish** | rewrite everything to one voice, less robotic | the humanizer |
 | 9 | **publish** | validate, write to the catalog, mark `published` | dispatch, observer |
+
+**Step 7 has two halves, on purpose** (ratified 2026-07-29, for chapter 3.3). Every product gets
+the same three launch deliverables — the storefront listing, the merchant announcement email, and
+the ad copy — written by three workers running at once. Code decides that; it is the same three
+every time, on every product, and it is ordinary parallelism, not an agentic decision. Then a
+second fan-out: the model reads the finished listing and names which *extra* deliverables this
+particular product needs, and one worker runs per item it named. The Aldsworth desk's Prop 65 and
+BIFMA claims pull a compliance insert; its MAP flag pulls a price-compliant ad variant; its bulky
+freight pulls an assembly-and-delivery blurb. A phone case pulls none of them and the second
+fan-out is empty. **The worker count is not in the code.** That half is orchestrator-workers, and
+the contrast between the two halves inside one step is the chapter's teaching device — keep them
+distinguishable in any code or prose that touches step 7. Chapter 3.5 owns the *content blocks* in
+step 5; step 7's dynamic half is about deliverables and channels, not page sections, so the two
+don't collide.
 
 The **front door** is the dispatcher (the "router that isn't one"): a static dispatch table
 keyed on `event_type`. Events arrive already labelled, whether from the UI (Maya's *Generate
@@ -135,6 +149,13 @@ teaching object because it exercises everything at once and is mundane enough no
 When a chapter needs a second product (to show variety), use **a kids' bunk bed** from the same
 supplier: compliance-heavy in a different way (entrapment and guardrail rules), assembly-
 intensive, bulky-shipping.
+
+When a chapter needs a **deliberately boring product**, one that triggers nothing and needs no
+special handling, use **a phone case** (`supplier_sku` `NV-PHONECASE-01`): no compliance regime, no
+MAP flag, no freight or assembly story. It exists to be the empty case, the input where a
+conditional path correctly does nothing, which the desk and the bunk bed both fail to demonstrate
+because they trigger everything. (Added 2026-07-29 for chapter 3.3, where the zero-worker fan-out
+is the payoff.)
 
 ---
 
