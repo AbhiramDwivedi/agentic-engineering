@@ -11,10 +11,15 @@ requires-python = ">=3.11"
 # @server.list_tools() decorator and renamed CallToolResult.isError to
 # is_error, which breaks docs_server.py / client.py and the chapter code
 # quoting them (docs/the-unit/mcp.md). Migrating is separate, larger work.
-dependencies = ["pydantic>=2", "mcp>=1.0,<2", "anyio>=4"]
+# pydantic and anyio are capped below their next major on the same
+# precautionary logic: an unbounded range lets a future breaking release
+# resolve straight into CI with no warning. constraints.txt pins the exact
+# verified build day to day; these caps are the outer backstop for when
+# someone bumps a pin past a major on purpose.
+dependencies = ["pydantic>=2,<3", "mcp>=1.0,<2", "anyio>=4,<5"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0"]
+dev = ["pytest>=8.0,<10"]
 
 # Each chapter's companion code is its own top-level package (pricing/,
 # augmented_llm/, ...). Declare them explicitly so the editable install does not
