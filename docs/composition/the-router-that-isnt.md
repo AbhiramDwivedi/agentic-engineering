@@ -467,7 +467,7 @@ keep `unclear` in the taxonomy, escalate low confidence to a person, and stand u
 set before you trust the thing in front of customers. The dispatch side fails loudly if you build
 its deny branch. The routing side never will, so instrument it.
 
-<small class="chapter-meta">**Maturity: Standard (static dispatch) · Established (LLM routing)** (the dispatch table is a decades-old idiom; LLM routing is vendor-documented with settling trade-offs) · *Who decides:* your code (dispatch) / the model (LLM routing) · *Grounding:* production + companion repo · *Last reviewed:* 2026-07</small>
+<small class="chapter-meta">**Maturity: Standard (static dispatch) · Established (LLM routing)** (the dispatch table is a decades-old idiom; LLM routing is vendor-documented with settling trade-offs) · *Who decides:* your code (dispatch) / the model (LLM routing) · *Grounding:* production (dispatch) + companion repo (routing) · *Last reviewed:* 2026-07</small>
 
 ## Sources
 
