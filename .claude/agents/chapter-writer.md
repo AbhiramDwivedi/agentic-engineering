@@ -52,8 +52,9 @@ A draft that fails any of the three comes back to you before anyone counts a tel
   link, not a section.
 - **Dual rendering.** No `!!!` admonitions, no content tabs, no `{ .md-button }`, no markdown
   inside block-level `<div>`s. Callouts are bold-labelled blockquotes; the lens line is a
-  single-line `<small class="chapter-meta">…</small>`; diagrams are Mermaid; long listings may
-  collapse in `<details markdown><summary>`.
+  single-line `<small class="chapter-meta">…</small>`; the explanatory diagram is a hand-authored
+  `.svg` referenced as a plain image (Mermaid is the fallback); long listings may collapse in
+  `<details markdown><summary>`.
 - **Multi-provider code.** Show it in Material content tabs (`=== "…"`): the **LangGraph** tab
   first and default, then OpenAI Responses, then Anthropic Messages, with consistent tab labels so
   they link. The tab group goes **last in How**, under a `#### Wiring it to a provider` heading,
@@ -95,8 +96,15 @@ A draft that fails any of the three comes back to you before anyone counts a tel
 - **Define named techniques.** The first time a chapter uses a named technique, pattern, or acronym
   (ReAct, RAG, MCP, evaluator-optimizer), give it a one-clause definition or link its entry in
   `docs/catalogs/glossary.md`. A citation is not a definition.
-- **Diagram language:** rounded `( )` = the model decides; rectangle `[ ]` = your code decides;
-  hexagon `{{ }}` = a capability. One shape diagram in How; a numbered run trace after the code.
+- **The explanatory diagram goes in What it actually is**, directly under the crisp definition
+  paragraph. It is the definition in picture form and it is the chapter's ONE diagram; the bar is
+  that a reader who looks at nothing else can say what the pattern is and who decides. You do not
+  draw it: leave the image line in place with the alt text you want,
+  `![<full sentence describing the drawing>](<slug>-<name>.svg)`, and the **diagrammer** agent
+  produces the file at Stage 3.5 against your draft. Reach for a ```mermaid fence in that slot only
+  when the shape genuinely is the whole story, and say why in your report. Put NO diagram in How; a
+  numbered run trace after the code does that work. **Visual language:** rounded `( )` = the model
+  decides; rectangle `[ ]` = your code decides; hexagon `{{ }}` = a capability.
 - **Plain Python first.** The primary listing uses no framework, or the thinnest possible use of
   one; frameworks and vendor SDKs appear only in the provider tabs. A mid-level engineer with an
   HTTP client and a model key should be able to build the minimal shape this afternoon.

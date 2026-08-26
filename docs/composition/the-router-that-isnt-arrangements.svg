@@ -1,0 +1,228 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 824 712" width="824" height="712" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">Routing and dispatch: three arrangements wear the same name, and only one puts the model in the decision</title>
+  <desc id="desc">Three rows, each led by a verdict on who decided. In the first, your code decided when it wrote the table: a feed event arrives already carrying a solid label reading price_update, and a rectangle looks that label up and sends it to the matching pipeline, so nothing decides at runtime. In the second, your code decided when it chose the examples: a merchant message arrives with an empty dashed label slot, and a dashed rectangle runs a nearest-neighbour search over example utterances and fills the label in. In the third, the model decides, this request: the same unlabelled message reaches a rounded box where the model classifies it fresh, fills the label in, and routes to billing or listing issues, with anything below the confidence floor escalating to a human. The label slot is the difference: in row one it arrives full, in rows two and three it arrives empty and something has to fill it. Only the third row is an agentic pattern, and only its decision has to be evaluated the way you evaluate model output.</desc>
+  <style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .h2 { font-size: 12.5px; }
+  .row-n { font-size: 22px; font-weight: 800; }
+  .col-k { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+  .card-t { font-size: 12.5px; font-weight: 700; letter-spacing: .02em; }
+  .box-t { font-size: 12.5px; font-weight: 700; }
+  .sub { font-size: 11px; }
+  .sub-s { font-size: 11px; }
+  .hand-t { font-size: 11px; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 600; }
+  .verdict-t { font-size: 13.5px; font-weight: 800; }
+  .foot-t { font-size: 12.5px; font-weight: 700; }
+
+  .code-box, .model-box, .data-box, .soft-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .code-box-nn { stroke-dasharray: 8 5; }
+  .hand-box { stroke-width: 1.5; }
+  .wire { fill: none; stroke-width: 2; }
+  .wire-model { fill: none; stroke-width: 2.5; }
+  .slot-empty { fill: none; stroke-dasharray: 4 4; stroke-width: 1.5; }
+  .rule { stroke-width: 1; }
+  .rail { stroke-width: 3; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .soft-box { fill: #f7f8fb; stroke: #ccd2e0; }
+  .hand-box { fill: #ffffff; stroke: #c3cad9; }
+  .hand-box-esc { fill: #fdf2f2; stroke: #e0a3a0; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #6a45b0; }
+  .txt-esc { fill: #c62828; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-model { stroke: #7e57c2; }  .mk-model { fill: #7e57c2; }
+  .rule { stroke: #e2e6ef; }
+  .rail-code { stroke: #4f5b93; }
+  .rail-model { stroke: #7e57c2; }
+  .slot-empty { stroke: #8b93a6; }
+  .slot-full { fill: #e8ecf7; stroke: #4f5b93; stroke-width: 1.5; }
+  .slot-made { fill: #f0e8fb; stroke: #7e57c2; stroke-width: 1.5; }
+  .dot-code { fill: #4f5b93; }
+  .dot-model { fill: #7e57c2; }
+  .row-n { fill: #b8c0d2; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .soft-box { fill: #1b1f29; stroke: #3a4155; }
+  .hand-box { fill: #1b1f29; stroke: #4a5266; }
+  .hand-box-esc { fill: #2e1f1f; stroke: #8c4a47; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #c4aee8; }
+  .txt-esc { fill: #ff8a80; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-model { stroke: #b39ddb; }  .mk-model { fill: #b39ddb; }
+  .rule { stroke: #2b3140; }
+  .rail-code { stroke: #939ed4; }
+  .rail-model { stroke: #b39ddb; }
+  .slot-empty { stroke: #a2abc0; }
+  .slot-full { fill: #2c3350; stroke: #939ed4; }
+  .slot-made { fill: #3a2f52; stroke: #b39ddb; }
+  .dot-code { fill: #939ed4; }
+  .dot-model { fill: #b39ddb; }
+  .row-n { fill: #4a5266; }
+  }
+  </style>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-wire"/>
+    </marker>
+    <marker id="arm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-model"/>
+    </marker>
+  </defs>
+
+  <rect class="page-bg" x="0.5" y="0.5" width="823" height="711" rx="10"/>
+
+  <!-- ── header ───────────────────────────────────────────────────────────── -->
+  <text class="h1 txt" x="24" y="38">Three arrangements answer to the name "router".</text>
+  <text class="h2 txt-mute" x="24" y="60">On the architecture diagram they are the same box. What separates them is where the label comes from.</text>
+  <line class="rule" x1="24" y1="78" x2="800" y2="78"/>
+  <text class="col-k txt-mute" x="24" y="99">WHO DECIDED</text>
+  <text class="col-k txt-mute" x="196" y="99">THE INPUT</text>
+  <text class="col-k txt-mute" x="366" y="99">THE FRONT DOOR</text>
+  <text class="col-k txt-mute" x="576" y="99">WHERE IT GOES</text>
+
+  <!-- ══ ROW 1 — a dispatch table: no classifier ═══════════════════════════ -->
+  <g>
+    <line class="rail rail-code" x1="26" y1="122" x2="26" y2="212"/>
+    <text class="verdict-t txt-code" x="40" y="142">Your code</text>
+    <text class="sub txt-mute" x="40" y="160">decided when it</text>
+    <text class="sub txt-mute" x="40" y="175">wrote the table</text>
+    <text class="row-n" x="40" y="206">1</text>
+
+    <!-- input: the label is already attached -->
+    <rect class="data-box" x="180" y="126" width="152" height="82" rx="8"/>
+    <text class="card-t txt" x="194" y="149">feed event</text>
+    <rect class="slot-full" x="194" y="161" width="124" height="26" rx="13"/>
+    <text class="mono-s txt-code" x="206" y="178">price_update</text>
+    <text class="sub-s txt-mute" x="194" y="200">the caller supplied it</text>
+
+    <line class="wire" x1="334" y1="167" x2="362" y2="167" marker-end="url(#ar)"/>
+    <circle class="dot-code" cx="334" cy="167" r="4.5" opacity="0">
+      <animate attributeName="cx" values="334;334;362;362" dur="6s" keyTimes="0;0.06;0.2;1" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0;0" dur="6s" keyTimes="0;0.06;0.2;0.24;1" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- decider: a rectangle, your code -->
+    <rect class="code-box" x="364" y="131" width="184" height="72" rx="6"/>
+    <text class="box-t txt" x="380" y="156">look the label up</text>
+    <text class="sub txt-mute" x="380" y="175">a dict from key to handler</text>
+    <text class="sub-s txt-mute" x="380" y="192">nothing decides at runtime</text>
+
+    <line class="wire" x1="550" y1="167" x2="574" y2="167" marker-end="url(#ar)"/>
+
+    <rect class="hand-box" x="576" y="131" width="224" height="22" rx="5"/>
+    <text class="hand-t txt" x="588" y="146">price-update pipeline</text>
+    <rect class="hand-box" x="576" y="157" width="224" height="22" rx="5"/>
+    <text class="hand-t txt-mute" x="588" y="172">stock-update pipeline</text>
+    <rect class="hand-box-esc" x="576" y="183" width="224" height="22" rx="5"/>
+    <text class="hand-t txt-esc" x="588" y="198">unknown key: deny and log</text>
+  </g>
+
+  <line class="rule" x1="24" y1="236" x2="800" y2="236"/>
+
+  <!-- ══ ROW 2 — a classifier, but no model call ═══════════════════════════ -->
+  <g>
+    <line class="rail rail-code" x1="26" y1="290" x2="26" y2="380"/>
+    <text class="verdict-t txt-code" x="40" y="310">Your code</text>
+    <text class="sub txt-mute" x="40" y="328">decided when it chose</text>
+    <text class="sub txt-mute" x="40" y="343">the examples</text>
+    <text class="row-n" x="40" y="374">2</text>
+
+    <rect class="data-box" x="180" y="294" width="152" height="82" rx="8"/>
+    <text class="card-t txt" x="194" y="317">merchant message</text>
+    <rect class="slot-empty" x="194" y="329" width="124" height="26" rx="13"/>
+    <text class="sub-s txt-mute" x="223" y="346">no label</text>
+    <text class="sub-s txt-mute" x="194" y="368">free text, unlabelled</text>
+
+    <line class="wire" x1="334" y1="335" x2="362" y2="335" marker-end="url(#ar)"/>
+    <circle class="dot-code" cx="334" cy="335" r="4.5" opacity="0">
+      <animate attributeName="cx" values="334;334;362;362" dur="6s" keyTimes="0;0.06;0.2;1" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0;0" dur="6s" keyTimes="0;0.06;0.2;0.24;1" repeatCount="indefinite"/>
+    </circle>
+
+    <rect class="code-box code-box-nn" x="364" y="299" width="184" height="72" rx="6"/>
+    <text class="box-t txt" x="380" y="324">nearest neighbour</text>
+    <text class="sub txt-mute" x="380" y="343">over example utterances</text>
+    <text class="sub-s txt-mute" x="380" y="360">a real per-request decision</text>
+
+    <line class="wire" x1="550" y1="335" x2="574" y2="335" marker-end="url(#ar)"/>
+    <rect class="slot-full" x="576" y="288" width="96" height="22" rx="11"/>
+    <text class="mono-s txt-code" x="590" y="303">billing</text>
+    <text class="sub-s txt-mute" x="680" y="303">the label, made here</text>
+
+    <rect class="hand-box" x="576" y="318" width="224" height="22" rx="5"/>
+    <text class="hand-t txt" x="588" y="333">billing handler</text>
+    <rect class="hand-box" x="576" y="344" width="224" height="22" rx="5"/>
+    <text class="hand-t txt-mute" x="588" y="359">listing-issue handler</text>
+  </g>
+
+  <line class="rule" x1="24" y1="404" x2="800" y2="404"/>
+
+  <!-- ══ ROW 3 — an LLM classifier: the model decides ══════════════════════ -->
+  <g>
+    <line class="rail rail-model" x1="26" y1="458" x2="26" y2="562"/>
+    <text class="verdict-t txt-model" x="40" y="478">The model</text>
+    <text class="sub txt-mute" x="40" y="496">decides, fresh,</text>
+    <text class="sub txt-mute" x="40" y="511">this request</text>
+    <text class="row-n" x="40" y="546">3</text>
+
+    <rect class="data-box" x="180" y="462" width="152" height="82" rx="8"/>
+    <text class="card-t txt" x="194" y="485">merchant message</text>
+    <rect class="slot-empty" x="194" y="497" width="124" height="26" rx="13"/>
+    <text class="sub-s txt-mute" x="223" y="514">no label</text>
+    <text class="sub-s txt-mute" x="194" y="536">free text, unlabelled</text>
+
+    <line class="wire" x1="334" y1="503" x2="362" y2="503" marker-end="url(#ar)"/>
+    <circle class="dot-model" cx="334" cy="503" r="4.5" opacity="0">
+      <animate attributeName="cx" values="334;334;362;362" dur="6s" keyTimes="0;0.06;0.2;1" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0;0" dur="6s" keyTimes="0;0.06;0.2;0.24;1" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- rounded: the model decides -->
+    <rect class="model-box" x="364" y="467" width="184" height="72" rx="36"/>
+    <text class="box-t txt" x="394" y="492">model: classify</text>
+    <text class="sub txt-mute" x="394" y="511">picks from your closed set</text>
+    <text class="sub-s txt-mute" x="394" y="528">never invents a category</text>
+    <circle class="dot-model" cx="382" cy="503" r="4" opacity="0.9">
+      <animate attributeName="r" values="4;4;7;4;4" dur="6s" keyTimes="0;0.24;0.32;0.4;1" repeatCount="indefinite"/>
+    </circle>
+
+    <line class="wire-model" x1="550" y1="503" x2="574" y2="503" marker-end="url(#arm)"/>
+    <rect class="slot-made" x="576" y="456" width="96" height="22" rx="11"/>
+    <text class="mono-s txt-model" x="590" y="471">billing</text>
+    <text class="sub-s txt-mute" x="680" y="471">the label, made here</text>
+
+    <rect class="hand-box" x="576" y="486" width="224" height="22" rx="5"/>
+    <text class="hand-t txt" x="588" y="501">billing handler</text>
+    <rect class="hand-box" x="576" y="512" width="224" height="22" rx="5"/>
+    <text class="hand-t txt-mute" x="588" y="527">listing-issue handler</text>
+    <rect class="hand-box-esc" x="576" y="538" width="224" height="22" rx="5"/>
+    <text class="hand-t txt-esc" x="588" y="553">below the floor: a human</text>
+  </g>
+
+  <line class="rule" x1="24" y1="586" x2="800" y2="586"/>
+
+  <!-- ── footer: the litmus verdict ────────────────────────────────────────── -->
+  <g>
+    <rect class="soft-box" x="24" y="604" width="776" height="86" rx="8"/>
+    <text class="foot-t txt" x="42" y="630">Rows 1 and 2 are rectangles: your code decided, once, before the run.</text>
+    <text class="foot-t txt" x="42" y="650">Row 3 is rounded: the model decides, per request.</text>
+    <text class="sub txt-mute" x="42" y="672">Only row 3 is an agentic pattern, and only its decision has to be evaluated the way you evaluate model output.</text>
+  </g>
+</svg>

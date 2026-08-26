@@ -45,6 +45,17 @@ unverified items.
 > authed. Contributors without it use **chapter-writer** alone, the portable default. Either way
 > the output is one draft at the chapter path; everything from Stage 4 on is identical.
 
+## Stage 3.5 — The explanatory diagram
+
+Spawn **diagrammer** with the chapter path and its coverage-map path. It draws the one diagram the
+chapter carries, the definition in picture form, and places it under the crisp definition
+paragraph in *What it actually is*. It runs after the draft on purpose: the drawing states the
+argument the chapter actually made, not the one the outline promised.
+
+It writes the `.svg` and the image line, nothing else. If it reports that the drawing and the
+definition paragraph disagree, reconcile that now rather than at Stage 5 — usually the prose is
+the thing that drifted.
+
 ## Stage 4 — Adversarial QA (parallel)
 
 Spawn **prose-critic**, **fact-checker**, and **cold-reader** on the draft at the same time. All
@@ -54,7 +65,7 @@ carrier-continuity findings; the fact-checker returns per-citation verdicts, the
 completeness walk (covered / partial / missing per signed-off item), and its own read on the
 maturity verdict; the cold-reader returns the everyday-engineer read: the ninety-second test, every
 undefined term at the point it was met, the build test on the How, the verify test, and the line it
-would quote (or that there is none). A **missing** must-cover item sends the draft back to stage 3;
+would quote (or that there is none), and the picture-alone test on the diagram in *What*. A **missing** must-cover item sends the draft back to stage 3;
 it is not reconcilable away. A cold-reader "no" on the ninety-second test or "no line worth
 quoting" is an interest-bar failure and also goes back to stage 3.
 
@@ -72,7 +83,7 @@ knowledge; the page must lift the reader, not meet them where they stand.
 ```bash
 cd listing-studio && python -m pytest          # includes doc-sync
 cd .. && mkdocs build --strict
-python meta/prose_lint.py docs/<chapter>.md   # HARD-fails signposting + narrated-significance; reports a slop score
+python meta/prose_lint.py docs/<chapter>.md --diagram-strict   # HARD-fails signposting + narrated-significance and a What section with no diagram; reports a slop score
 ```
 
 Run the **humanizer** (de-slop) pass on the final prose as a separate editor, never the writer

@@ -92,8 +92,9 @@ markdown). That rules out Material-only syntax in content: no `!!!` admonitions,
 markdown inside block-level `<div>`s. Content tabs are banned except for the multi-provider code
 blocks below (the one accepted exception): there they render as clickable tabs on the site and
 degrade to literal markers on GitHub's raw view, a tradeoff taken for the code-switching experience. Callouts are
-bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams are mermaid
-(GitHub renders it natively).
+bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams are a hand-authored
+`.svg` referenced as a plain image, or mermaid as the fallback (GitHub renders both natively, and
+renders the SVG's still frame).
 
 | Component | Markdown | Job |
 |---|---|---|
@@ -108,8 +109,9 @@ bold-labelled blockquotes; the lens line is a single-line `<small>`; diagrams ar
 | Stub notice | `> **Stub.** …` blockquote | scaffolding, not finished writing |
 | Code | inline, synced to a tested file by `tests/test_doc_sync.py` | shown in full, cannot drift |
 | Expandable listing | `<details markdown><summary>…</summary>` around a code fence | long listings whose story the diagram + trace already tell; collapses on GitHub and the site both |
-| Shape diagram | ` ```mermaid ` flowchart in How | the pattern's runtime shape, in the shared visual language |
-| Mechanism diagram | hand-authored `.svg`, referenced as a plain image | rare: where the drawing hides the thing the reader actually has to see (3.1's splice; 3.3's worker count). Same visual language, and it takes the slot of whichever visual it supersedes (3.1's mermaid, 3.3's illustration) rather than being added alongside. Must stay legible as a still, because GitHub strips the animation |
+| Explanatory diagram | hand-authored `.svg` referenced as a plain image, **in What it actually is** | the definition in picture form, one per chapter: what the pattern is and who makes the decision, readable on its own. Default form. Same visual language. Must stay legible as a still, because GitHub strips the animation |
+| Shape diagram (fallback) | ` ```mermaid ` flowchart, same slot | the runtime shape where the shape genuinely is the whole story. Legal, no longer the default; the chapter has to say why boxes and arrows suffice |
+| Wiring diagram | ` ```mermaid `, in How | rare and clearly secondary: an implementation view the explanatory diagram deliberately abstracts away. Not a second try at the definition |
 | Framework differences | short `####` subsections | only where implementations differ (tabs are Material-only) |
 | Citation | footnote | every non-obvious claim |
 | See also | links | cross-links to related chapters |
@@ -159,25 +161,55 @@ Callouts are bold-labelled blockquotes (the dual-rendering constraint above); an
 is a site-side CSS enhancement that must degrade cleanly on GitHub. Restraint is the point. If
 it starts to look like a technology radar, it is wrong.
 
-**Diagrams are mermaid** (diffable, PR-able) and share one visual language sitewide: **rounded
-nodes = the model decides; rectangles = your code decides; hexagons = a capability, not a
-pattern.** That is the litmus test drawn. Every pattern chapter carries one shape diagram in
-How; the homepage carries the overall map in the same language. Plain theme colours, no custom
-palettes per diagram.
+### The explanatory diagram *(the rule, revised 2026-08-26)*
 
-**The one exception is a hand-authored SVG**, and it has to be argued for. Mermaid draws boxes and
-arrows, which is enough for most patterns and not enough for a pattern whose difficulty is what
-moves along the arrow. 3.1 is the case that earned it: a flowchart of the gated chain leaves the
-splice, the previous answer becoming text inside the next prompt, entirely invisible, and that is
-the part readers get wrong. 3.3 is the second: parallel boxes converging on a merge look the same
-whether the box count came from a literal or from a model call, so that diagram runs two products
-through the step and lets you count the workers, and it takes the chapter illustration's slot
-because the illustration was making the same point less precisely. Such a diagram keeps the shared
-visual language, replaces a visual rather than joining one, animates with SMIL only, carries its
-palette in an internal `prefers-color-scheme` block, and must still teach when frozen, because
-GitHub renders the still and drops the motion. That last one is a design constraint, not a
-courtesy: build the finished state as the default and let the animation play up to it, never the
-reverse.
+**Every chapter carries one explanatory diagram, and it lives in "What it actually is."** It is
+the definition in picture form, and it sits under the crisp definition paragraph, before the
+labels and the disambiguation. The bar: a reader who looks at nothing but that drawing can say
+what the pattern is and who makes the decision. Everything after it is the argument that backs
+the picture up.
+
+That placement is the whole point of the revision. The diagram used to open *How to do it*, which
+made it an implementation aid; a reader who wanted to know what the pattern *was* had already
+walked past it. 3.2 is the case that exposed it. Its drawing is a side-by-side of the two
+arrangements, rounded node against rectangle, which is the chapter's thesis exactly, and it sat
+fifty-nine lines below the section that defines the pattern.
+
+**One diagram, not two.** A chapter that wants a second picture is usually a chapter whose first
+one is not carrying the definition. Where a genuinely separate *wiring* view earns its place, it
+goes in How and is clearly secondary.
+
+**Hand-authored SVG is the default.** Mermaid draws boxes and arrows, which is enough when the
+shape is the whole story and not enough for a pattern whose difficulty is what *moves along the
+arrow*. On a reference whose spine is *who makes the decision*, that difficulty is usually the
+chapter. 3.1 is the founding case: a flowchart of the gated chain leaves the splice, the previous
+answer becoming text inside the next prompt, entirely invisible, and that is the part readers get
+wrong. 3.3 is the second: parallel boxes converging on a merge look the same whether the box count
+came from a literal or from a model call, so that diagram runs two products through the step and
+lets you count the workers.
+
+**Mermaid is the fallback, and a chapter that reaches for it has to say why** boxes and arrows are
+the whole story. It stays legal, it stays diffable and PR-able, and it is the right answer for a
+shape whose only content is the shape. It is no longer the default.
+
+Both obey one visual language sitewide: **rounded nodes = the model decides; rectangles = your
+code decides; hexagons = a capability, not a pattern.** That is the litmus test drawn. The
+homepage carries the overall map in the same language. Plain theme colours, no custom palettes
+per diagram.
+
+A hand-authored SVG additionally: animates with SMIL only, carries its palette in an internal
+`prefers-color-scheme` block, names itself in `<title>` and `<desc>` for screen readers, and
+**must still teach when frozen**, because GitHub renders the still and drops the motion. That last
+one is a design constraint, not a courtesy: build the finished state as the default and let the
+animation play up to it, never the reverse.
+
+**Decorative illustrations are not part of the system.** A rendered scene that dramatises the way
+in is not an explanatory diagram, and next to one it reads as padding on a page selling rigour.
+3.1 and 3.2 carried one each; both were cut on 2026-08-26.
+
+The diagram is produced by the **diagrammer** agent at Stage 3.5 of the pipeline, against the
+drafted chapter and the signed-off thesis. `prose_lint.py` reports a chapter whose *What* section
+has no diagram, and fails on it under `--diagram-strict`.
 
 ## 5. Taxonomy and evidence
 
@@ -200,13 +232,16 @@ How a chapter is actually made, in order:
 5. **Draft** in the reference register, anchored on 1-4.
 6. **Voice pass**, one writer, continuous, over the whole chapter. Where several engines drafted,
    the merge happens first and fuses coverage only; the voice pass rewrites rather than stitches.
-7. **Interest bar** (author or a fresh reader): thesis, way in, quotable line. A draft that fails
+7. **Draw the explanatory diagram** against the drafted argument, and place it in *What it
+   actually is*. Drawn after the draft so it states the argument the chapter actually made, not
+   the one the outline promised.
+8. **Interest bar** (author or a fresh reader): thesis, way in, quotable line. A draft that fails
    goes back here, before anyone counts a tell. Boring dies at this gate, when the fix is cheap.
-8. **Adversarial QA panel** (independent agents): fact-checker, skeptic on the lenses,
+9. **Adversarial QA panel** (independent agents): fact-checker, skeptic on the lenses,
    confidentiality scrubber, code-drift checker, prose-critic against the voice spec.
-9. **Revise**, cutting hard.
-10. **Author read** (taste gate): overclaims get pulled.
-11. **Gates:** humanizer for residual tells, `mkdocs build --strict`, link check, citation
+10. **Revise**, cutting hard.
+11. **Author read** (taste gate): overclaims get pulled.
+12. **Gates:** humanizer for residual tells, `mkdocs build --strict`, link check, citation
     re-verify, read-aloud cadence.
 
 Agents do research and verification, where they are strong. The draft is written under the spec.

@@ -31,8 +31,6 @@ own call, and its one-field output gets validated against the real taxonomy befo
 runs at all. A failed check re-asks that step once with the validation error folded in; a second
 failure stops the run loudly, at the step that broke.
 
-![A conveyor-belt illustration of the gated chain: a categorize station reads the supplier spreadsheet, a gate checks that the category exists, a failed check loops back for one re-ask or drops to a loud abort, and only a small card carrying sku, title, and category rides forward to the write-copy station.](prompt-chaining-flow.jpg)
-
 Reach for a chain when:
 
 - the task decomposes into fixed subtasks you can name before the run;
@@ -57,9 +55,15 @@ user's goal."[^openai-guide] Each step is the augmented LLM of
 [1.4 The Augmented LLM](../foundations/the-augmented-llm.md), one model call with its contract,
 doing one job.
 
+Rectangles are your code deciding, rounded boxes are the model deciding, dashed boxes are data in
+flight. The string leaving the gate and landing in the empty slot in prompt 2 is the splice, and
+the splice is the pattern.
+
+![An animated schematic of two model calls side by side. Call 1 holds prompt 1, a model, and response 1. Its response names a category that does not exist, so your code's gate rejects it against the three-item catalog taxonomy shown underneath and sends it back to be re-asked with the rejection appended to the same prompt. The second answer passes the gate, and the validated category value then flies into an empty slot in prompt 2, which stays dimmed and unbuildable until it arrives.](prompt-chaining-flow.svg)
+
 That definition can be repeated fluently without being understood, which is what I discovered the
-first time I tried to explain the pattern out loud and heard myself waving at a row of boxes. So
-look at the join itself. Call 1 asks for a category and answers `"office/desks/standing-desks"`.
+first time I tried to explain the pattern out loud and heard myself waving at a row of boxes.
+Call 1 asks for a category and answers `"office/desks/standing-desks"`.
 Your code checks that string against the taxonomy, then pastes it into the text of prompt 2. Prompt
 2 now contains a substring that call 1 produced. That splice is the link the name refers to, and a
 chain of them is a chain of prompts, each one built partly out of the previous answer.
@@ -117,12 +121,7 @@ from. The loop wins when the shape of the task is unknown before the run starts.
 
 ## How to do it
 
-The example is the seam from the story above, categorize feeding write-copy, and here is one run of
-it in the reference's visual language. Rectangles are your code deciding, rounded boxes are the
-model deciding, dashed boxes are data in flight. The string leaving the gate and landing in the
-empty slot in prompt 2 is the splice.
-
-![An animated schematic of two model calls side by side. Call 1 holds prompt 1, a model, and response 1. Its response names a category that does not exist, so your code's gate rejects it against the three-item catalog taxonomy shown underneath and sends it back to be re-asked with the rejection appended to the same prompt. The second answer passes the gate, and the validated category value then flies into an empty slot in prompt 2, which stays dimmed and unbuildable until it arrives.](prompt-chaining-flow.svg)
+The example is the seam drawn above, categorize feeding write-copy.
 
 Each step's output is a typed contract, the capability from
 [2.2 Structured Output](../the-unit/structured-output.md) doing inter-step duty:
