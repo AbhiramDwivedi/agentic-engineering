@@ -52,8 +52,6 @@ If the model has to keep deciding what to do next, turn after turn, a one-time s
 is the wrong shape and you want [tool use](../the-unit/tool-use.md) or an agent loop. If there is
 only one handler, call it directly.
 
-![A greenhouse illustration of the same split: plants that arrive with a care tag are shelved into the alcove matching their tag, under a sign reading "the label decides"; one plant arrives untagged, so a gardener inspects it herself under a sign reading "no label, someone must decide", and a senior gardener sits at a nearby desk with a placard reading "not sure? ask".](the-router-that-isnt-doors.jpg)
-
 ## What it actually is
 
 Both mechanisms stand at the front of a system that has several handlers and must get each input
@@ -66,6 +64,12 @@ followup task", and allows the classification to be done by an LLM or by a more 
 classification model or algorithm.[^anthropic] Gulli's *Agentic Design Patterns* lands on the
 same definition and admits the same range: LLM-based, embedding-based, rule-based, and
 ML-model-based.[^gulli]
+
+Rounded shapes are the model deciding, rectangles are your code deciding. The label slot on each
+input is where the difference lives: in the first row it arrives full, and in the other two
+something has to fill it.
+
+![Three rows, each led by a verdict on who decided. In the first, your code decided when it wrote the table: a feed event arrives already carrying a solid label reading price_update, and a rectangle looks that label up and sends it to the matching pipeline, so nothing decides at runtime. In the second, your code decided when it chose the examples: a merchant message arrives with an empty dashed label slot, and a dashed rectangle runs a nearest-neighbour search over example utterances and fills the label in. In the third, the model decides, this request: the same unlabelled message reaches a rounded box where the model classifies it fresh, fills the label in, and routes to billing or listing issues, with anything below the confidence floor escalating to a human. The label slot is the difference: in row one it arrives full, in rows two and three it arrives empty and something has to fill it. Only the third row is an agentic pattern, and only its decision has to be evaluated the way you evaluate model output.](the-router-that-isnt-arrangements.svg)
 
 That range matters, because "routing" covers three arrangements and only one of them puts a model
 in the decision:
@@ -110,27 +114,8 @@ routing-shaped and belongs with the multi-agent material.[^openai-guide] The
 
 ## How to do it
 
-Both mechanisms, in the reference's visual language (rounded nodes are the model deciding,
-rectangles are your code):
-
-```mermaid
-flowchart LR
-    subgraph feed["labelled input: the supplier feed"]
-        E["feed event:<br>price_update"] --> T["dispatch table<br>lookup"]
-        T --> P["price-update<br>pipeline"]
-        T --> D["unknown event_type:<br>deny, log,<br>structured error"]
-    end
-    subgraph helpdesk["unlabelled input: the merchant helpdesk"]
-        M["merchant message"] --> C("model:<br>classify")
-        C --> B["billing handler"]
-        C --> L["listing-issue handler"]
-        C --> A["account handler"]
-        C --> X["unclear or low confidence:<br>escalate to a human"]
-    end
-```
-
-The classify call is the only rounded node on the page. Every other box, including both failure
-branches, is your code.
+The classify call is the only rounded shape in the drawing above. Every other box, including both
+failure branches, is your code.
 
 The dispatch side is the whole pattern in one function: the front door from the story above,
 taking supplier-feed events into a product-listing pipeline. The `event_type` arrives on an

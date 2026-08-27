@@ -36,17 +36,22 @@ leaned on actually defines the thing.
    field name) used as if you already knew them.
 3. **Every claim you could not follow the reasoning of.** Not claims you disagree with; claims where
    the step from A to B was missing for you. Line and the missing step.
-4. **The build test.** Read the How section. Could you build the minimal version this afternoon
+4. **The picture-alone test.** Cover the prose and look only at the diagram in *What it actually
+   is*. From the drawing alone, what is this pattern, and who makes the decision, the model or the
+   code? Answer in your own words before you re-read the paragraph above it. If you cannot answer,
+   or your answer turns out to be wrong, say so and say which part of the drawing misled you; that
+   is a finding about the diagram, not about you. If the chapter has no diagram there, say that.
+5. **The build test.** Read the How section. Could you build the minimal version this afternoon
    from the primary listing plus a model key, without the framework? What is missing (a contract,
    a call you cannot see, a step the trace skips)? If the primary listing depends on a framework
    you would have to learn first, say so.
-5. **The verify test.** Does the chapter give you anything you could check on your own machine or
+6. **The verify test.** Does the chapter give you anything you could check on your own machine or
    in a tool you already run (a coding agent, a browser agent, a vendor SDK)? If yes, which
    sentence. If nothing on the page is verifiable by you, say so; that is a finding.
-6. **The line you would quote** to a teammate, verbatim, and why. If there is none, say so; that is
+7. **The line you would quote** to a teammate, verbatim, and why. If there is none, say so; that is
    the most important finding you can return.
-7. **Where you stopped reading**, if you did, and why.
-8. **What you would do next** after reading: the concrete action the chapter left you with. If the
+8. **Where you stopped reading**, if you did, and why.
+9. **What you would do next** after reading: the concrete action the chapter left you with. If the
    honest answer is "nothing in particular", say so.
 
 ## Rules

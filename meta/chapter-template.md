@@ -96,8 +96,30 @@ they are how a reader searching any of those names lands here>.*
 
 ## What it actually is
 <!--
-  A crisp, quotable definition (one paragraph). Then commit to both labels IN PLAIN PROSE, without
-  naming the machinery:
+  A crisp, quotable definition (one paragraph).
+
+  THEN THE EXPLANATORY DIAGRAM, immediately under that paragraph. It is the definition in picture
+  form, and it is the chapter's one diagram. The bar: a reader who looks at nothing but this
+  drawing can say what the pattern is and who makes the decision. Everything after it is the
+  argument that backs the picture up.
+    - A HAND-AUTHORED .svg IS THE DEFAULT, referenced as a plain image:
+      ![<a full sentence describing what the drawing shows>](<slug>-<name>.svg)
+      It is drawn at Stage 3.5 by the diagrammer agent, against this draft. Leave the image line
+      in place with the alt text you want and let the diagrammer produce the file.
+    - MERMAID IS THE FALLBACK, in this same slot, when the shape genuinely is the whole story.
+      Say why boxes and arrows suffice; do not reach for it to save effort.
+  The visual language, on every diagram in the reference:
+    - rounded nodes ( )   = the model decides
+    - rectangles   [ ]    = your code decides
+    - hexagons     {{ }}  = a capability, not a pattern
+      ```mermaid
+      flowchart LR
+          A["your code"] --> B("the model decides") --> C["your code"]
+      ```
+  ONE DIAGRAM PER CHAPTER. A wanted second picture usually means the first is not carrying the
+  definition. See design-system.md, "The explanatory diagram".
+
+  AFTER THE DIAGRAM, commit to both labels IN PLAIN PROSE, without naming the machinery:
     - Does the model decide, or your code? Genuinely new, or engineering you already knew?
     - How proven is it, and on what evidence?
   Then disambiguate from the neighbours it actually gets confused with. Two or three, in prose,
@@ -107,18 +129,11 @@ they are how a reader searching any of those names lands here>.*
 
 ## How to do it
 <!--
-  THE SHAPE DIAGRAM comes first: one mermaid flowchart of the pattern's runtime shape.
-  The visual language, on every diagram in the reference:
-    - rounded nodes ( )   = the model decides
-    - rectangles   [ ]    = your code decides
-    - hexagons     {{ }}  = a capability, not a pattern
-      ```mermaid
-      flowchart LR
-          A["your code"] --> B("the model decides") --> C["your code"]
-      ```
-  A hand-authored SVG may take the mermaid's place, and only its place, when boxes and arrows
-  hide the thing the reader has to see. Argue for it; see design-system.md.
-  Then ONE PRIMARY LISTING: the cheapest thing that works, ideally under 30 lines, with the
+  NO DIAGRAM HERE. The explanatory diagram lives in What (above); this section is the build.
+  A separate mermaid WIRING view is allowed only when it shows implementation detail the
+  explanatory diagram deliberately abstracts away, and it is clearly secondary. It is not a
+  second attempt at the definition.
+  START WITH ONE PRIMARY LISTING: the cheapest thing that works, ideally under 30 lines, with the
   contract it depends on beside it. PLAIN PYTHON, NO FRAMEWORK: frameworks and vendor SDKs live in
   the provider tabs at the end of How, never in the primary listing (design-system, the diet).
   AFTER THE CODE, ONE RUN AS A NUMBERED TRACE. Five plain steps

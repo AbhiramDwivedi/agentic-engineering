@@ -20,6 +20,7 @@ Exit:   non-zero if any HARD tell is present in any file.
 """
 from __future__ import annotations
 
+import os
 import re
 import statistics
 import sys
@@ -101,6 +102,114 @@ AI_HEADER_FILLER = re.compile(r"^#{1,6}\s")
 NOMINALIZATION = re.compile(r"\b\w{4,}(tion|ment|ity|ness|ance|ence)\b", re.I)
 ADVERB = re.compile(r"\b\w{3,}ly\b", re.I)
 
+# --- budget check (design-system.md: "One chapter, one argument, sized to the argument") -----
+# The budget row is settled at Stage-1 sign-off and recorded in the chapter's coverage map.
+# Nothing used to read it back, which is how chapters drifted past their ceiling unnoticed.
+# Advisory by default while the backlog is worked down; --budget-strict makes it fail.
+BUDGET_RE = re.compile(
+    r"\*\*Budget:\*\*\s*([A-Za-z /&-]+?),\s*(?:up to\s*)?~?([\d,]+)\s*(?:[-–]\s*([\d,]+))?\s*prose words",
+    re.I)
+STOP_SECTION = re.compile(r"^##\s+(Sources|See also|Further reading)\b", re.I)
+
+
+def budget_for(path):
+    """Declared (kind, ceiling) from meta/coverage/<slug>.md, or None if unrecorded."""
+    slug = os.path.basename(path)[:-3]
+    cov = os.path.join(os.path.dirname(os.path.abspath(__file__)), "coverage", slug + ".md")
+    if not os.path.exists(cov):
+        return None
+    with open(cov, encoding="utf-8") as f:
+        text = re.sub(r"\n>\s*", " ", f.read())
+    m = BUDGET_RE.search(text)
+    if not m:
+        return None
+    return m.group(1).strip(), int((m.group(3) or m.group(2)).replace(",", ""))
+
+
+def argued_words(lines):
+    """Prose words to the end of *In short*, with code, footnote definitions, HTML and link
+    targets excluded. This is the count the budget table in design-system.md is defined over."""
+    kept = []
+    in_fence = False
+    for raw in lines:
+        line = raw.rstrip("\n")
+        if line.strip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        if STOP_SECTION.match(line):
+            break
+        if re.match(r"^\[\^[^\]]+\]:", line) or "--8<--" in line:
+            continue
+        if line.strip().startswith("<"):
+            continue
+        kept.append(re.sub(r"\]\([^)]+\)", "]", line))
+    return len(re.findall(r"[A-Za-z'’]+", " ".join(kept)))
+
+
+def budget_report(path, lines):
+    """One line: measured argued words against the declared ceiling. Returns overage (0 if OK,
+    -1 if the chapter has no recorded budget)."""
+    b = budget_for(path)
+    n = argued_words(lines)
+    if b is None:
+        print(f"  {path}: [budget] {n} argued words, no ceiling recorded in its coverage map")
+        return -1
+    kind, cap = b
+    over = n - cap
+    pct = round(100 * n / cap)
+    if over > 0:
+        print(f"  {path}: [budget] {n} argued words vs {cap} ceiling ({kind}): OVER by {over} ({pct}% of cap)")
+    else:
+        print(f"  {path}: [budget] {n} argued words vs {cap} ceiling ({kind}): OK ({pct}% of cap)")
+    return max(over, 0)
+
+
+# --- explanatory-diagram check (design-system.md: "The explanatory diagram") ------------------
+# Every chapter carries ONE diagram and it lives in "What it actually is": the definition in
+# picture form. Nothing read that back, which is how the diagram sat down in How for thirteen
+# chapters while the reader who wanted the definition walked past it.
+# Advisory by default while the backfill is worked down; --diagram-strict makes it fail.
+WHAT_HEADING = re.compile(r"^##\s+What it actually is\b", re.I)
+ANY_H2 = re.compile(r"^##\s+")
+IMAGE_START = re.compile(r"^!\[")
+MERMAID_FENCE = re.compile(r"^```mermaid\b")
+
+
+def diagram_report(path, lines):
+    """One line: does the chapter's *What it actually is* carry its explanatory diagram?
+    Returns 0 if present, 1 if the section exists without one, -1 if there is no such section."""
+    start = None
+    for i, raw in enumerate(lines):
+        if WHAT_HEADING.match(raw):
+            start = i + 1
+            break
+    if start is None:
+        return -1
+    body = []
+    for raw in lines[start:]:
+        if ANY_H2.match(raw):
+            break
+        body.append(raw)
+    svg = [l for l in body if IMAGE_START.match(l) and ".svg)" in l]
+    other_img = [l for l in body if IMAGE_START.match(l) and ".svg)" not in l]
+    mermaid = [l for l in body if MERMAID_FENCE.match(l)]
+    if svg:
+        extra = " (+ a second visual: one diagram per chapter)" if (len(svg) + len(mermaid) + len(other_img)) > 1 else ""
+        print(f"  {path}: [diagram] explanatory SVG in What: OK{extra}")
+        return 0
+    if mermaid:
+        print(f"  {path}: [diagram] mermaid fallback in What: OK "
+              f"(SVG is the default; the chapter has to say why boxes and arrows suffice)")
+        return 0
+    if other_img:
+        print(f"  {path}: [diagram] What carries an image but not an .svg diagram: check it is "
+              f"explanatory, not decorative")
+        return 1
+    print(f"  {path}: [diagram] MISSING: 'What it actually is' has no explanatory diagram")
+    return 1
+
 
 def strip_noise(lines: list[str]) -> list[tuple[int, str]]:
     """Return (line_no, text) for prose only: drop code fences, includes, HTML
@@ -155,7 +264,8 @@ def dual_render_hits(lines: list[str]) -> dict[str, list[int]]:
     return hits
 
 
-def main(path: str, hard_only: bool = False) -> int:
+def main(path: str, hard_only: bool = False, budget_strict: bool = False,
+         diagram_strict: bool = False) -> int:
     with open(path, encoding="utf-8") as f:
         lines = f.readlines()
     prose = strip_noise(lines)
@@ -219,6 +329,12 @@ def main(path: str, hard_only: bool = False) -> int:
         if slop > SLOP_MAX:
             print(f"  {path}: [note] slop score {slop} > {SLOP_MAX}/1k words "
                   f"(cadence density; advisory, not gated: short pages skew high)")
+        over = budget_report(path, lines)
+        nodiag = diagram_report(path, lines) > 0
+        if budget_strict and over > 0:
+            return 1
+        if diagram_strict and nodiag:
+            return 1
         return 1 if hard_count else 0
 
     print(f"\n=== prose_lint: {path} ===")
@@ -243,8 +359,12 @@ def main(path: str, hard_only: bool = False) -> int:
             print(f"  [{tag}] {label} x{len(lns)}: lines {shown}")
 
     print()
+    nodiag = diagram_report(path, lines) > 0
     if hard_count:
         print(f"FAIL: {hard_count} hard tell(s) present (dash/quote or dual-render violation). Fix before shipping.")
+        return 1
+    if diagram_strict and nodiag:
+        print("FAIL: no explanatory diagram in 'What it actually is' (design-system.md). Fix before shipping.")
         return 1
     if slop > SLOP_MAX:
         print(f"NOTE: slop score {slop} > {SLOP_MAX}/1k words (de-slop recommended; advisory, not gated).")
@@ -255,13 +375,43 @@ def main(path: str, hard_only: bool = False) -> int:
 if __name__ == "__main__":
     args = sys.argv[1:]
     hard_only = "--hard-only" in args
-    paths = [a for a in args if a != "--hard-only"]
+    budget_strict = "--budget-strict" in args
+    budget_audit = "--budget" in args
+    diagram_strict = "--diagram-strict" in args
+    flags = {"--hard-only", "--budget-strict", "--budget", "--diagram-strict"}
+    paths = [a for a in args if a not in flags]
     if not paths:
-        print("usage: python meta/prose_lint.py <file.md> [more.md ...] [--hard-only]")
+        print("usage: python meta/prose_lint.py <file.md> [more.md ...] "
+              "[--hard-only] [--budget] [--budget-strict] [--diagram-strict]")
         sys.exit(2)
+    if budget_audit:
+        # Standalone audit: every chapter's argued words against its declared ceiling.
+        rows = []
+        for p in paths:
+            with open(p, encoding="utf-8") as f:
+                lines = f.readlines()
+            b = budget_for(p)
+            n = argued_words(lines)
+            kind, cap = b if b else ("UNRECORDED", 0)
+            rows.append((os.path.basename(p)[:-3], kind, n, cap))
+        rows.sort(key=lambda r: -(r[2] / r[3]) if r[3] else 0)
+        print(f"{'chapter':<28}{'kind':<20}{'argued':>8}{'ceiling':>9}{'over':>8}{'%cap':>7}")
+        bad = 0
+        for slug, kind, n, cap in rows:
+            if not cap:
+                print(f"{slug:<28}{kind:<20}{n:>8}{'-':>9}{'-':>8}{'-':>7}")
+                continue
+            over = n - cap
+            if over > 0:
+                bad += 1
+            mark = "  <-- OVER" if over > 0 else ""
+            print(f"{slug:<28}{kind:<20}{n:>8}{cap:>9}{over:>+8}{round(100*n/cap):>6}%{mark}")
+        print(f"\n{bad} chapter(s) over ceiling.")
+        sys.exit(1 if (bad and budget_strict) else 0)
     rc = 0
     for p in paths:
-        rc |= main(p, hard_only=hard_only)
+        rc |= main(p, hard_only=hard_only, budget_strict=budget_strict,
+                   diagram_strict=diagram_strict)
     if hard_only:
         print("OK: no hard tells in any file." if rc == 0 else "FAIL: hard tell(s) present (see above).")
     sys.exit(rc)
