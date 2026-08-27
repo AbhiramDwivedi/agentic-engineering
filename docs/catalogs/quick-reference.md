@@ -15,7 +15,7 @@ lens (standard, or hype?). Click through for the full chapter.
 | [Dispatch table (front controller)](../composition/the-router-that-isnt.md) | your code | Standard |
 | [LLM routing](../composition/the-router-that-isnt.md) | the model | Established |
 | [Orchestrator-workers](../composition/fan-out.md) | the model (sizes its work) | Established |
-| [Evaluator-optimizer](../composition/evaluator-optimizer.md) | the model | Established |
+| [Evaluator-optimizer](../composition/evaluator-optimizer.md) | the model (the verdict) | Established (independent judge or external signal) / Contested (intrinsic) |
 | [Specialist panel](../composition/specialist-panel.md) | the model | Emerging |
 | [Retry & graceful degradation](../reliability/which-failures-sink-the-ship.md) | your code | Standard |
 | [The observer rule](../reliability/a-silent-failure-is-worse.md) | your code | Standard |

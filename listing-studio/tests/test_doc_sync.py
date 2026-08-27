@@ -126,6 +126,21 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 3.4 — Evaluator-Optimizer
+EVALUATOR_OPTIMIZER_CHAPTER = os.path.join(ROOT, "docs", "composition", "evaluator-optimizer.md")
+EVALUATOR_OPTIMIZER_PKG = os.path.join(ROOT, "listing-studio", "evaluator_optimizer")
+
+EVALUATOR_OPTIMIZER_ANCHORS = {
+    "eo-schemas":    "schemas.py",
+    "eo-evaluate":   "evaluate.py",
+    "eo-loop":       "loop.py",
+    "eo-best-of-n":  "best_of_n.py",
+    "eo-langgraph":  "evaluator_optimizer_langgraph.py",
+    "eo-responses":  "evaluator_optimizer_responses.py",
+    "eo-anthropic":  "evaluator_optimizer_example.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +246,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_evaluator_optimizer_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(EVALUATOR_OPTIMIZER_CHAPTER))
+    for name, fname in EVALUATOR_OPTIMIZER_ANCHORS.items():
+        region = _region(_read(os.path.join(EVALUATOR_OPTIMIZER_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/composition/evaluator-optimizer.md with "
+            f"listing-studio/evaluator_optimizer/{fname}."
         )

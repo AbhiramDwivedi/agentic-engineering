@@ -104,7 +104,7 @@ nav:
       - "3.1 Prompt Chaining": composition/prompt-chaining.md
       - "3.2 Routing & Dispatch": composition/the-router-that-isnt.md
       - "3.3 Orchestrator-Workers": composition/fan-out.md
-      - "3.4 Evaluator-Optimizer (planned)": composition/evaluator-optimizer.md
+      - "3.4 Evaluator-Optimizer": composition/evaluator-optimizer.md
       - "3.5 The Specialist Panel (planned)": composition/specialist-panel.md
       - "3.6 Planning & Task Decomposition (planned)": composition/planning.md
       - "3.7 The Outer Loop (planned)": composition/the-outer-loop.md
