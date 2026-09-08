@@ -1,0 +1,273 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 760" width="940" height="760" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">The specialist panel: a fixed roster runs three seats on every product, while a selected panel runs three on one and one on another</title>
+  <desc id="desc">The same panel step drawn twice, with a count of the seats that actually ran. In lane 1 your code decided: an Aldsworth desk and a phone case both feed one rectangle holding the literal roster of seo, pricing and compliance, and three seats run for either product, an SEO specialist on search terms, a pricing analyst on MAP and margin, and a compliance reviewer on warnings. The count reads three. In lane 2 the model decides which lenses this product calls for before any seat runs. The desk, carrying a Prop 65 warning and a MAP price floor, gets all three seats and a count of three. The phone case, with no compliance regime and no price floor, gets the SEO seat only, and the pricing and compliance seats are drawn as empty dashed outlines marked not selected, for a count of one. Either way the seats that ran feed one rectangle marked reconcile, in your code, which ranks compliance over pricing over seo and emits three named outputs: accepted, rejected, and conflict. The shapes carry the verdict: the roster is a rectangle because your code wrote it before any product arrived, the lens selector is rounded because the model makes that call per product, and the merge is a rectangle that never blends the losing claim away.</desc>
+  <style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .h2 { font-size: 12.5px; }
+  .row-n { font-size: 22px; font-weight: 800; }
+  .col-k { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+  .card-t { font-size: 12.5px; font-weight: 700; letter-spacing: .02em; }
+  .box-t { font-size: 12.5px; font-weight: 700; }
+  .seat-t { font-size: 11px; font-weight: 600; }
+  .sub { font-size: 11px; }
+  .sub-s { font-size: 11px; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 600; }
+  .verdict-t { font-size: 13.5px; font-weight: 800; }
+  .foot-t { font-size: 12.5px; font-weight: 700; }
+  .count { font-size: 26px; font-weight: 800; }
+  .count-lbl { font-size: 11px; font-weight: 700; }
+
+  .code-box, .model-box, .data-box, .soft-box, .seat-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .hand-box { stroke-width: 1.5; }
+  .seat-off { fill: none; stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .wire { fill: none; stroke-width: 2; }
+  .wire-model { fill: none; stroke-width: 2.5; }
+  .rule { stroke-width: 1; }
+  .rail { stroke-width: 3; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box, .seat-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .soft-box { fill: #f7f8fb; stroke: #ccd2e0; }
+  .hand-box { fill: #ffffff; stroke: #c3cad9; }
+  .seat-off { stroke: #aab2c4; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-faint { fill: #8b93a6; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #6a45b0; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-model { stroke: #7e57c2; }  .mk-model { fill: #7e57c2; }
+  .rule { stroke: #e2e6ef; }
+  .rail-code { stroke: #4f5b93; }
+  .rail-model { stroke: #7e57c2; }
+  .dot-code { fill: #4f5b93; }
+  .dot-model { fill: #7e57c2; }
+  .row-n { fill: #b8c0d2; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box, .seat-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .soft-box { fill: #1b1f29; stroke: #3a4155; }
+  .hand-box { fill: #1b1f29; stroke: #4a5266; }
+  .seat-off { stroke: #5a6478; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-faint { fill: #78829a; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #c4aee8; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-model { stroke: #b39ddb; }  .mk-model { fill: #b39ddb; }
+  .rule { stroke: #2b3140; }
+  .rail-code { stroke: #939ed4; }
+  .rail-model { stroke: #b39ddb; }
+  .dot-code { fill: #939ed4; }
+  .dot-model { fill: #b39ddb; }
+  .row-n { fill: #4a5266; }
+  }
+  </style>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-wire"/>
+    </marker>
+    <marker id="arm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-model"/>
+    </marker>
+  </defs>
+
+  <rect class="page-bg" x="0.5" y="0.5" width="939" height="759" rx="10"/>
+
+  <!-- ── header ───────────────────────────────────────────────────────────── -->
+  <text class="h1 txt" x="24" y="38">Both of these are called a specialist panel. Count the seats.</text>
+  <text class="h2 txt-mute" x="24" y="60">Same three viewpoints, same merge. The difference is whether anything decided which seats this product needs.</text>
+  <line class="rule" x1="24" y1="78" x2="916" y2="78"/>
+  <text class="col-k txt-mute" x="24" y="99">WHO DECIDED</text>
+  <text class="col-k txt-mute" x="184" y="99">THE PRODUCT</text>
+  <text class="col-k txt-mute" x="356" y="99">WHAT PICKS THE SEATS</text>
+  <text class="col-k txt-mute" x="604" y="99">THE SEATS THAT RUN</text>
+  <text class="col-k txt-mute" x="916" y="99" text-anchor="end">SEATS</text>
+
+  <!-- ══ LANE 1 — a roster written into the code ═══════════════════════════ -->
+  <g>
+    <line class="rail rail-code" x1="26" y1="124" x2="26" y2="224"/>
+    <text class="verdict-t txt-code" x="40" y="144">Your code</text>
+    <text class="sub txt-mute" x="40" y="162">decided when it wrote</text>
+    <text class="sub txt-mute" x="40" y="177">the roster</text>
+    <text class="row-n" x="40" y="216">1</text>
+
+    <rect class="data-box" x="184" y="122" width="152" height="48" rx="8"/>
+    <text class="card-t txt" x="198" y="142">Aldsworth desk</text>
+    <text class="sub-s txt-mute" x="198" y="160">Prop 65 &#183; MAP floor</text>
+
+    <rect class="data-box" x="184" y="178" width="152" height="48" rx="8"/>
+    <text class="card-t txt" x="198" y="198">Phone case</text>
+    <text class="sub-s txt-mute" x="198" y="216">no warnings, no floor</text>
+
+    <path class="wire" d="M336,146 C346,146 344,164 350,164" marker-end="url(#ar)"/>
+    <path class="wire" d="M336,202 C346,202 344,184 350,184" marker-end="url(#ar)"/>
+
+    <!-- rectangle: your code decides -->
+    <rect class="code-box" x="356" y="128" width="228" height="92" rx="6"/>
+    <text class="box-t txt" x="372" y="152">the roster, in your code</text>
+    <text class="mono-s txt-code" x="372" y="175">["seo", "pricing",</text>
+    <text class="mono-s txt-code" x="372" y="191"> "compliance"]</text>
+    <text class="sub-s txt-mute" x="372" y="212">the same three, every product</text>
+
+    <line class="wire" x1="584" y1="174" x2="600" y2="174" marker-end="url(#ar)"/>
+    <circle class="dot-code" cx="586" cy="174" r="4.5" opacity="0">
+      <animate attributeName="cx" values="586;586;598;598" dur="9s" keyTimes="0;0.04;0.12;1" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0;0" dur="9s" keyTimes="0;0.04;0.12;0.15;1" repeatCount="indefinite"/>
+    </circle>
+
+    <rect class="seat-box" x="604" y="140" width="232" height="24" rx="12"/>
+    <text class="seat-t txt" x="618" y="156">SEO specialist</text>
+    <text class="sub-s txt-mute" x="822" y="156" text-anchor="end">search terms</text>
+
+    <rect class="seat-box" x="604" y="169" width="232" height="24" rx="12"/>
+    <text class="seat-t txt" x="618" y="185">pricing analyst</text>
+    <text class="sub-s txt-mute" x="822" y="185" text-anchor="end">MAP, margin</text>
+
+    <rect class="seat-box" x="604" y="198" width="232" height="24" rx="12"/>
+    <text class="seat-t txt" x="618" y="214">compliance reviewer</text>
+    <text class="sub-s txt-mute" x="822" y="214" text-anchor="end">warnings</text>
+
+    <text class="count txt-code" x="916" y="178" text-anchor="end">3</text>
+    <text class="count-lbl txt-mute" x="916" y="198" text-anchor="end">seats</text>
+  </g>
+
+  <line class="rule" x1="24" y1="250" x2="916" y2="250"/>
+
+  <!-- ══ LANE 2 — the model turns the named lenses on or off ═══════════════ -->
+  <g>
+    <line class="rail rail-model" x1="26" y1="276" x2="26" y2="450"/>
+    <text class="verdict-t txt-model" x="40" y="296">The model</text>
+    <text class="sub txt-mute" x="40" y="314">decides which lenses</text>
+    <text class="sub txt-mute" x="40" y="329">this product calls for,</text>
+    <text class="sub txt-mute" x="40" y="344">before any seat runs</text>
+    <text class="row-n" x="40" y="442">2</text>
+
+    <!-- ── 2a: the desk, three lenses on ── -->
+    <rect class="data-box" x="184" y="275" width="152" height="76" rx="8"/>
+    <text class="card-t txt" x="198" y="297">Aldsworth desk</text>
+    <text class="sub-s txt-mute" x="198" y="317">Prop 65 warning</text>
+    <text class="sub-s txt-mute" x="198" y="336">MAP price floor</text>
+
+    <line class="wire" x1="336" y1="313" x2="352" y2="313" marker-end="url(#ar)"/>
+    <circle class="dot-code" cx="338" cy="313" r="4.5" opacity="0">
+      <animate attributeName="cx" values="338;338;350;350" dur="9s" keyTimes="0;0.02;0.09;1" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0;0" dur="9s" keyTimes="0;0.02;0.09;0.12;1" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- rounded: the model decides -->
+    <rect class="model-box" x="356" y="283" width="228" height="60" rx="30"/>
+    <circle class="dot-model" cx="378" cy="313" r="4">
+      <animate attributeName="r" values="4;4;7;4;4" dur="9s" keyTimes="0;0.12;0.17;0.22;1" repeatCount="indefinite"/>
+    </circle>
+    <text class="box-t txt" x="394" y="309">model: pick the lenses</text>
+    <text class="sub-s txt-mute" x="394" y="329">reads the product first</text>
+
+    <line class="wire-model" x1="584" y1="313" x2="600" y2="313" marker-end="url(#arm)"/>
+    <circle class="dot-model" cx="586" cy="313" r="4.5" opacity="0">
+      <animate attributeName="cx" values="586;586;598;598" dur="9s" keyTimes="0;0.22;0.29;1" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0;0" dur="9s" keyTimes="0;0.22;0.29;0.32;1" repeatCount="indefinite"/>
+    </circle>
+
+    <rect class="seat-box" x="604" y="272" width="232" height="24" rx="12"/>
+    <text class="seat-t txt" x="618" y="288">SEO specialist</text>
+    <text class="sub-s txt-mute" x="822" y="288" text-anchor="end">search terms</text>
+
+    <rect class="seat-box" x="604" y="301" width="232" height="24" rx="12"/>
+    <text class="seat-t txt" x="618" y="317">pricing analyst</text>
+    <text class="sub-s txt-mute" x="822" y="317" text-anchor="end">MAP, margin</text>
+
+    <rect class="seat-box" x="604" y="330" width="232" height="24" rx="12"/>
+    <text class="seat-t txt" x="618" y="346">compliance reviewer</text>
+    <text class="sub-s txt-mute" x="822" y="346" text-anchor="end">warnings</text>
+
+    <text class="count txt-model" x="916" y="317" text-anchor="end">3</text>
+    <text class="count-lbl txt-mute" x="916" y="337" text-anchor="end">seats</text>
+
+    <!-- ── 2b: the phone case, one lens on ── -->
+    <rect class="data-box" x="184" y="397" width="152" height="76" rx="8"/>
+    <text class="card-t txt" x="198" y="419">Phone case</text>
+    <text class="sub-s txt-mute" x="198" y="439">no compliance regime</text>
+    <text class="sub-s txt-mute" x="198" y="458">no price floor</text>
+
+    <line class="wire" x1="336" y1="435" x2="352" y2="435" marker-end="url(#ar)"/>
+    <circle class="dot-code" cx="338" cy="435" r="4.5" opacity="0">
+      <animate attributeName="cx" values="338;338;350;350" dur="9s" keyTimes="0;0.45;0.52;1" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0;0" dur="9s" keyTimes="0;0.45;0.52;0.55;1" repeatCount="indefinite"/>
+    </circle>
+
+    <rect class="model-box" x="356" y="405" width="228" height="60" rx="30"/>
+    <circle class="dot-model" cx="378" cy="435" r="4">
+      <animate attributeName="r" values="4;4;7;4;4" dur="9s" keyTimes="0;0.55;0.60;0.65;1" repeatCount="indefinite"/>
+    </circle>
+    <text class="box-t txt" x="394" y="431">model: pick the lenses</text>
+    <text class="sub-s txt-mute" x="394" y="451">reads the product first</text>
+
+    <line class="wire-model" x1="584" y1="435" x2="600" y2="435" marker-end="url(#arm)"/>
+    <circle class="dot-model" cx="586" cy="435" r="4.5" opacity="0">
+      <animate attributeName="cx" values="586;586;598;598" dur="9s" keyTimes="0;0.65;0.72;1" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0;0" dur="9s" keyTimes="0;0.65;0.72;0.75;1" repeatCount="indefinite"/>
+    </circle>
+
+    <rect class="seat-box" x="604" y="394" width="232" height="24" rx="12"/>
+    <text class="seat-t txt" x="618" y="410">SEO specialist</text>
+    <text class="sub-s txt-mute" x="822" y="410" text-anchor="end">search terms</text>
+
+    <rect class="seat-off" x="604" y="423" width="232" height="24" rx="12"/>
+    <text class="seat-t txt-faint" x="618" y="439">pricing analyst</text>
+    <text class="sub-s txt-faint" x="822" y="439" text-anchor="end">not selected</text>
+
+    <rect class="seat-off" x="604" y="452" width="232" height="24" rx="12"/>
+    <text class="seat-t txt-faint" x="618" y="468">compliance reviewer</text>
+    <text class="sub-s txt-faint" x="822" y="468" text-anchor="end">not selected</text>
+
+    <text class="count txt-model" x="916" y="439" text-anchor="end">1</text>
+    <text class="count-lbl txt-mute" x="916" y="459" text-anchor="end">seat</text>
+  </g>
+
+  <line class="rule" x1="24" y1="490" x2="916" y2="490"/>
+
+  <!-- ══ the merge, the same either way ════════════════════════════════════ -->
+  <g>
+    <text class="col-k txt-mute" x="24" y="530">AND THEN, EITHER WAY</text>
+    <path class="wire" d="M720,498 L720,512 Q720,518 714,518 L316,518 Q310,518 310,524 L310,536" marker-end="url(#ar)"/>
+
+    <rect class="code-box" x="184" y="542" width="252" height="84" rx="6"/>
+    <text class="box-t txt" x="200" y="566">reconcile, in your code</text>
+    <text class="sub-s txt-mute" x="200" y="586">merges whichever seats ran</text>
+    <text class="mono-s txt-code" x="200" y="610">compliance &gt; pricing &gt; seo</text>
+
+    <line class="wire" x1="436" y1="584" x2="454" y2="584" marker-end="url(#ar)"/>
+
+    <rect class="hand-box" x="460" y="548" width="396" height="24" rx="5"/>
+    <text class="mono-s txt-code" x="474" y="564">accepted</text>
+    <text class="sub-s txt-mute" x="546" y="564">the value that took the field, and whose it was</text>
+
+    <rect class="hand-box" x="460" y="577" width="396" height="24" rx="5"/>
+    <text class="mono-s txt-code" x="474" y="593">rejected</text>
+    <text class="sub-s txt-mute" x="546" y="593">the losing claim, and the rule that beat it</text>
+
+    <rect class="hand-box" x="460" y="606" width="396" height="24" rx="5"/>
+    <text class="mono-s txt-code" x="474" y="622">conflict</text>
+    <text class="sub-s txt-mute" x="546" y="622">the field, the dissenter, the winner</text>
+  </g>
+
+  <line class="rule" x1="24" y1="650" x2="916" y2="650"/>
+
+  <!-- ── footer: the litmus verdict ────────────────────────────────────────── -->
+  <g>
+    <rect class="soft-box" x="24" y="664" width="892" height="76" rx="8"/>
+    <text class="foot-t txt" x="42" y="690">Lane 1 is a rectangle: the roster was written before any product arrived, so the count never moves.</text>
+    <text class="foot-t txt" x="42" y="710">Lane 2 is rounded: the model turns the named lenses on or off, so the count is a property of the input.</text>
+    <text class="sub txt-mute" x="42" y="730">Only lane 2 is a structural decision. Either way the merge is your code, and the losing claim stays on the record.</text>
+  </g>
+</svg>
