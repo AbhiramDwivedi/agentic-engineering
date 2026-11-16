@@ -14,6 +14,7 @@ edit_uri: edit/main/docs/
 
 theme:
   name: material
+  custom_dir: overrides
   features:
     - navigation.sections
     - navigation.top
@@ -76,6 +77,9 @@ markdown_extensions:
 
 plugins:
   - search
+
+hooks:
+  - hooks/seo.py
 
 nav:
   - Home: index.md
