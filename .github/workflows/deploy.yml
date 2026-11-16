@@ -9,6 +9,8 @@ on:
     paths:
       - "docs/**"
       - "mkdocs.yml"
+      - "hooks/**"
+      - "overrides/**"
       - "requirements.txt"
       - "meta/prose_lint.py"
       - ".github/workflows/deploy.yml"
