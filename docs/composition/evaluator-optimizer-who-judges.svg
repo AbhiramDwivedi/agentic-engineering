@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 814" width="1060" height="814" role="img" aria-labelledby="eoTtl eoDesc">
+  <title id="eoTtl">The same draft-grade-revise loop drawn twice: only the node that renders the verdict changes</title>
+  <desc id="eoDesc">The same loop drawn twice, side by side, with one node different. On the left, chapter 3.4: the bar is a judgment, can a supplier answer this question with a value. On the right, chapter 3.7's loop: the bar is a rule, is the description 150 words or fewer. Both sides run the identical circuit. A rectangle of your code hands over the work, a rounded node drafts, and an evaluate() box runs two rungs, first the free exact checks and then the node that settles the verdict. That second rung is the only thing that differs: on the left it is rounded, a model grading the draft against a written rubric, which no function can compute; on the right it is a rectangle counting words against a limit, with no judgment anywhere in it. From there both sides are identical again: a verdict carrying passed, a score and specific reasons; a rectangle holding the cap of three rounds and the ratchet that keeps the best score rather than the last; and either the reasons routed back to the drafter or the best draft released. Look at what computes passed.</desc>
+
+  <style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 21px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .col-k { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .cont-k { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+  .bar-t { font-size: 13px; font-weight: 600; }
+  .verdict-t { font-size: 14.5px; font-weight: 800; }
+  .box-t { font-size: 13.5px; font-weight: 700; }
+  .card-t { font-size: 12.5px; font-weight: 700; letter-spacing: .02em; }
+  .sub { font-size: 12px; }
+  .sub-s { font-size: 11px; }
+  .hand-t { font-size: 11px; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; font-weight: 600; }
+  .badge-t { font-size: 17px; font-weight: 800; }
+  .foot-t { font-size: 13.5px; font-weight: 700; }
+
+  .code-box, .model-box, .soft-box, .well { stroke-width: 2; }
+  .data-box { stroke-width: 2; stroke-dasharray: 5 4; }
+  .swap { stroke-width: 3; }
+  .well { stroke-dasharray: 6 5; }
+  .hand-box { stroke-width: 1.5; }
+  .wire { fill: none; stroke-width: 2; }
+  .wire-back { fill: none; stroke-width: 2; stroke-dasharray: 7 5; }
+  .rule { stroke-width: 1; }
+  .badge { stroke-width: 2; }
+  .nub { fill: none; stroke-width: 1.5; opacity: .55; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .panel-bg { fill: #fafbfd; stroke: #e2e6ef; stroke-width: 1; }
+  .well { fill: #f2f4f9; stroke: #b9c1d3; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .soft-box { fill: #f7f8fb; stroke: #ccd2e0; }
+  .hand-box { fill: #ffffff; stroke: #c3cad9; }
+  .badge { fill: #ffffff; stroke: #8b93a6; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #6a45b0; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-back { stroke: #97a0b5; }
+  .nub { stroke: #97a0b5; }
+  .rule { stroke: #e2e6ef; }
+  .dot-model { fill: #7e57c2; }
+  .dot-code { fill: #4f5b93; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .panel-bg { fill: #1d1f29; stroke: #2b3140; }
+  .well { fill: #191b24; stroke: #3a4155; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .soft-box { fill: #1b1f29; stroke: #3a4155; }
+  .hand-box { fill: #1b1f29; stroke: #4a5266; }
+  .badge { fill: #21222c; stroke: #a2abc0; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #c4aee8; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-back { stroke: #78829a; }
+  .nub { stroke: #78829a; }
+  .rule { stroke: #2b3140; }
+  .dot-model { fill: #b39ddb; }
+  .dot-code { fill: #939ed4; }
+  }
+  </style>
+
+  <defs>
+    <marker id="eoAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-wire"/>
+    </marker>
+  </defs>
+
+  <rect class="page-bg" x="0.5" y="0.5" width="1059" height="813" rx="10"/>
+
+  <!-- ── header ───────────────────────────────────────────────────────────── -->
+  <text class="h1 txt" x="24" y="36">The same loop, drawn twice. One node is different.</text>
+  <text class="h2 txt-mute" x="24" y="58">Draft, grade, revise, stop at the cap — identical on both sides. What changes is the bar, and so who renders the verdict.</text>
+  <line class="rule" x1="24" y1="72" x2="1036" y2="72"/>
+
+  <!-- ══════════════════════ LEFT PANEL — 3.4, this chapter ═══════════════════ -->
+  <rect class="panel-bg" x="20.5" y="86.5" width="487" height="599" rx="10"/>
+
+  <text class="col-k txt-mute" x="36" y="110">3.4 EVALUATOR-OPTIMIZER · THIS CHAPTER</text>
+  <text class="bar-t txt" x="36" y="133">The bar: “can a supplier answer this with a value?”</text>
+  <text class="verdict-t txt-model" x="36" y="155">A judgment. Only a model renders it.</text>
+  <line class="rule" x1="36" y1="168" x2="492" y2="168"/>
+
+  <!-- 1. your code hands over the work -->
+  <rect class="code-box" x="78" y="180" width="410" height="50" rx="6"/>
+  <text class="box-t txt" x="94" y="202">your code hands over the work</text>
+  <text class="mono-s txt-code" x="94" y="221">leg_material, weight_capacity_lbs</text>
+
+  <line class="wire" x1="283" y1="230" x2="283" y2="244" marker-end="url(#eoAr)"/>
+
+  <!-- 2. the model drafts -->
+  <rect class="model-box" x="78" y="246" width="410" height="54" rx="27"/>
+  <text class="box-t txt" x="106" y="270">the model drafts</text>
+  <text class="sub txt-mute" x="106" y="289">one clarifying question per open attribute</text>
+
+  <line class="wire" x1="283" y1="300" x2="283" y2="314" marker-end="url(#eoAr)"/>
+
+  <!-- 3 + 4. evaluate(): two rungs, cheapest first -->
+  <rect class="well" x="78" y="316" width="410" height="160" rx="8"/>
+  <text class="cont-k txt-mute" x="94" y="335">EVALUATE() — WHAT COMPUTES <tspan class="mono-s">passed</tspan></text>
+
+  <rect class="code-box" x="92" y="345" width="382" height="46" rx="6"/>
+  <text class="box-t txt" x="108" y="366">the free exact checks</text>
+  <text class="sub txt-mute" x="108" y="384">no empties, no duplicates, every gap named</text>
+
+  <line class="wire" x1="283" y1="391" x2="283" y2="401" marker-end="url(#eoAr)"/>
+
+  <rect class="model-box swap" x="92" y="403" width="382" height="62" rx="31"/>
+  <text class="box-t txt" x="120" y="425">the model grades the draft</text>
+  <text class="sub txt-mute" x="120" y="443">against a written rubric</text>
+  <text class="sub-s txt-model" x="120" y="459">no function can compute this verdict</text>
+
+  <line class="wire" x1="283" y1="476" x2="283" y2="490" marker-end="url(#eoAr)"/>
+
+  <!-- 5. the verdict -->
+  <rect class="data-box" x="78" y="492" width="410" height="62" rx="8"/>
+  <text class="card-t txt" x="94" y="514">the verdict comes back</text>
+  <text class="mono-s txt-model" x="94" y="533">passed: false · score: 0.6</text>
+  <text class="sub-s txt-mute" x="94" y="549">reasons: “question 3 asks about materials in general”</text>
+
+  <line class="wire" x1="283" y1="554" x2="283" y2="570" marker-end="url(#eoAr)"/>
+
+  <!-- 6. your code stops it -->
+  <rect class="code-box" x="78" y="570" width="410" height="54" rx="6"/>
+  <text class="box-t txt" x="94" y="592">your code stops the loop</text>
+  <text class="sub txt-mute" x="94" y="611">cap: 3 rounds · keep the best score, not the last</text>
+
+  <line class="wire" x1="283" y1="624" x2="283" y2="640" marker-end="url(#eoAr)"/>
+
+  <rect class="hand-box" x="78" y="640" width="410" height="30" rx="5"/>
+  <text class="hand-t txt" x="94" y="659">release the best draft seen — passed, or capped</text>
+
+  <!-- the revise edge, wired -->
+  <path class="wire-back" d="M 78 597 H 58 Q 48 597 48 587 V 283 Q 48 273 58 273 H 76" marker-end="url(#eoAr)"/>
+  <text class="sub-s txt-mute" x="38" y="435" text-anchor="middle" transform="rotate(-90 38 435)">the reasons go back, never a bare “fail”</text>
+
+  <!-- ══════════════════════ RIGHT PANEL — 3.7, the loop next door ════════════ -->
+  <rect class="panel-bg" x="552.5" y="86.5" width="487" height="599" rx="10"/>
+
+  <text class="col-k txt-mute" x="568" y="110">3.7 THE OUTER LOOP · THE LOOP NEXT DOOR</text>
+  <text class="bar-t txt" x="568" y="133">The bar: “is the description 150 words or fewer?”</text>
+  <text class="verdict-t txt-code" x="568" y="155">A rule. A function renders it.</text>
+  <line class="rule" x1="568" y1="168" x2="1024" y2="168"/>
+
+  <!-- 1. your code hands over the work -->
+  <rect class="code-box" x="610" y="180" width="410" height="50" rx="6"/>
+  <text class="box-t txt" x="626" y="202">your code hands over the work</text>
+  <text class="sub txt-mute" x="626" y="221">the desk's attributes, and the 150-word limit</text>
+
+  <line class="wire" x1="815" y1="230" x2="815" y2="244" marker-end="url(#eoAr)"/>
+
+  <!-- 2. the model drafts -->
+  <rect class="model-box" x="610" y="246" width="410" height="54" rx="27"/>
+  <text class="box-t txt" x="638" y="270">the model drafts</text>
+  <text class="sub txt-mute" x="638" y="289">the product description and its bullets</text>
+
+  <line class="wire" x1="815" y1="300" x2="815" y2="314" marker-end="url(#eoAr)"/>
+
+  <!-- 3 + 4. evaluate(): the same two rungs -->
+  <rect class="well" x="610" y="316" width="410" height="160" rx="8"/>
+  <text class="cont-k txt-mute" x="626" y="335">EVALUATE() — WHAT COMPUTES <tspan class="mono-s">passed</tspan></text>
+
+  <rect class="code-box" x="624" y="345" width="382" height="46" rx="6"/>
+  <text class="box-t txt" x="640" y="366">the free exact checks</text>
+  <text class="sub txt-mute" x="640" y="384">non-empty, well-formed, every bullet present</text>
+
+  <line class="wire" x1="815" y1="391" x2="815" y2="401" marker-end="url(#eoAr)"/>
+
+  <rect class="code-box swap" x="624" y="403" width="382" height="62" rx="6"/>
+  <text class="box-t txt" x="640" y="425">a function counts the words</text>
+  <text class="sub txt-mute" x="640" y="443">against the limit written in your code</text>
+  <text class="sub-s txt-code" x="640" y="459">no judgment anywhere in this box</text>
+
+  <line class="wire" x1="815" y1="476" x2="815" y2="490" marker-end="url(#eoAr)"/>
+
+  <!-- 5. the verdict -->
+  <rect class="data-box" x="610" y="492" width="410" height="62" rx="8"/>
+  <text class="card-t txt" x="626" y="514">the verdict comes back</text>
+  <text class="mono-s txt-code" x="626" y="533">passed: false · score: 0.0</text>
+  <text class="sub-s txt-mute" x="626" y="549">reasons: “the description runs past 150 words”</text>
+
+  <line class="wire" x1="815" y1="554" x2="815" y2="570" marker-end="url(#eoAr)"/>
+
+  <!-- 6. your code stops it -->
+  <rect class="code-box" x="610" y="570" width="410" height="54" rx="6"/>
+  <text class="box-t txt" x="626" y="592">your code stops the loop</text>
+  <text class="sub txt-mute" x="626" y="611">cap: 3 rounds · keep the best score, not the last</text>
+
+  <line class="wire" x1="815" y1="624" x2="815" y2="640" marker-end="url(#eoAr)"/>
+
+  <rect class="hand-box" x="610" y="640" width="410" height="30" rx="5"/>
+  <text class="hand-t txt" x="626" y="659">release the best draft seen — passed, or capped</text>
+
+  <!-- the revise edge, wired -->
+  <path class="wire-back" d="M 610 597 H 590 Q 580 597 580 587 V 283 Q 580 273 590 273 H 608" marker-end="url(#eoAr)"/>
+  <text class="sub-s txt-mute" x="570" y="435" text-anchor="middle" transform="rotate(-90 570 435)">the reasons go back, never a bare “fail”</text>
+
+  <!-- ── the one difference, marked at the rung it lives on ───────────────── -->
+  <line class="nub" x1="508" y1="434" x2="514" y2="434"/>
+  <line class="nub" x1="546" y1="434" x2="552" y2="434"/>
+  <circle class="badge" cx="530" cy="434" r="15"/>
+  <text class="badge-t txt-mute" x="530" y="440" text-anchor="middle">≠</text>
+  <text class="sub-s txt-mute" x="530" y="556" text-anchor="middle" transform="rotate(-90 530 556)">the one rung that changes</text>
+
+  <!-- ── travelling dots: the still frame already teaches; these only move ─── -->
+  <circle class="dot-model" r="4.5" cx="0" cy="0" opacity="0">
+    <animateMotion dur="9s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"
+      path="M 283 232 V 597 H 58 Q 48 597 48 587 V 283 Q 48 273 58 273 H 283"/>
+    <animate attributeName="opacity" values="0;0.95;0.95;0" dur="9s" keyTimes="0;0.04;0.9;1" repeatCount="indefinite"/>
+  </circle>
+  <circle class="dot-code" r="4.5" cx="0" cy="0" opacity="0">
+    <animateMotion dur="9s" begin="1.2s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"
+      path="M 815 232 V 597 H 590 Q 580 597 580 587 V 283 Q 580 273 590 273 H 815"/>
+    <animate attributeName="opacity" values="0;0.95;0.95;0" dur="9s" begin="1.2s" keyTimes="0;0.04;0.9;1" repeatCount="indefinite"/>
+  </circle>
+
+  <line class="rule" x1="24" y1="708" x2="1036" y2="708"/>
+
+  <!-- ── footer: the payoff ───────────────────────────────────────────────── -->
+  <rect class="soft-box" x="24" y="720" width="1012" height="76" rx="8"/>
+  <text class="foot-t txt" x="42" y="744">Same boxes, same arrows, the same cap, the same ratchet. Only the second rung of evaluate() changes.</text>
+  <text class="sub txt-mute" x="42" y="765">That rung is the only place in either loop where a model decides anything.</text>
+  <text class="sub txt-mute" x="42" y="785">Telling them apart takes seconds: look at what computes <tspan class="mono-s">passed</tspan>. If a function can, you want the cheaper loop next door.</text>
+</svg>
