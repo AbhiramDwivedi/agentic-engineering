@@ -126,6 +126,21 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 3.5 — The Specialist Panel
+SPECIALIST_PANEL_CHAPTER = os.path.join(ROOT, "docs", "composition", "specialist-panel.md")
+SPECIALIST_PANEL_PKG = os.path.join(ROOT, "listing-studio", "specialist_panel")
+
+SPECIALIST_PANEL_ANCHORS = {
+    "panel-schemas":    "schemas.py",
+    "panel-roster":     "roster.py",
+    "panel-reconcile":  "reconcile.py",
+    "panel-ablation":   "ablation.py",
+    "panel-langgraph":  "specialist_panel_langgraph.py",
+    "panel-responses":  "specialist_panel_responses.py",
+    "panel-anthropic":  "specialist_panel_example.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +246,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_specialist_panel_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(SPECIALIST_PANEL_CHAPTER))
+    for name, fname in SPECIALIST_PANEL_ANCHORS.items():
+        region = _region(_read(os.path.join(SPECIALIST_PANEL_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/composition/specialist-panel.md with "
+            f"listing-studio/specialist_panel/{fname}."
         )
