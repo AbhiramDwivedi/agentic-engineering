@@ -127,8 +127,8 @@ def budget_for(path):
 
 
 def argued_words(lines):
-    """Prose words to the end of *In short*, with code, footnote definitions, HTML and link
-    targets excluded. This is the count the budget table in design-system.md is defined over."""
+    """Prose words to the end of *In short*, with code, footnote definitions, HTML, image alt
+    text and link targets excluded. This is the count the budget table in design-system.md is defined over."""
     kept = []
     in_fence = False
     for raw in lines:
@@ -144,6 +144,11 @@ def argued_words(lines):
             continue
         if line.strip().startswith("<"):
             continue
+        # Image alt text is an accessibility equivalent of the diagram, and the diagram itself
+        # is outside the budget. Counting the alt but not the picture it describes made a
+        # chapter measure ~175 words heavier the moment Stage 3.5 ran, with no prose changed
+        # (found 2026-09-07 on 3.5). Drop images before link targets, or the alt survives.
+        line = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", line)
         kept.append(re.sub(r"\]\([^)]+\)", "]", line))
     return len(re.findall(r"[A-Za-z'’]+", " ".join(kept)))
 

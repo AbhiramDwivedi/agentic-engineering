@@ -83,9 +83,15 @@ when it is semantically load-bearing.
 The `model:` line in each brief is authoritative; keep this table in sync with it. The editor is
 always a different agent than the writer (see `meta/voice-and-style.md`).
 **`/new-chapter <N.M Title>`** (`.claude/commands/new-chapter.md`) runs the whole pipeline:
-coverage-researcher → **author signs off the must-cover list** → coder-tester → chapter-writer
-→ prose-critic + fact-checker + cold-reader in parallel → reconcile → gates → ship. Scope
-sign-off is a hard stop; never skip it.
+coverage-researcher → **an independent second engine reviews the map, the researcher folds the
+findings in** → coder-tester → chapter-writer → prose-critic + fact-checker + cold-reader in
+parallel → reconcile → gates → **open a pull request**.
+
+The pipeline does not stop for author sign-off partway through (changed 2026-09-07); the **pull
+request is the author's review point**. Two rules make that safe, and neither may be skipped:
+the map is never reviewed only by the agent that wrote it (Stage 1.5), and no agent may add a
+first-hand production claim, coin a named idea, or edit a shipped chapter — those ship at their
+conservative default and appear as a checklist in the PR (Stage 1.6).
 
 ## Layout
 
