@@ -1,19 +1,49 @@
 {% extends "base.html" %}
 
+{#- hooks/seo.py has already HTML-escaped page.meta.description; Material's own
+    meta tags print it raw, so these do too and only escape what the hook did not. -#}
+
+{% block htmltitle %}
+  {% if page and page.is_homepage %}
+    <title>{{ config.site_name }}: an honest reference on building with agents</title>
+  {% else %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
+
 {% block extrahead %}
-  {% set desc = page.meta.description if page and page.meta and page.meta.description else config.site_description %}
-  {% set ptitle = page.title ~ " · " ~ config.site_name if page and page.title and not page.is_homepage else config.site_name %}
+  {% set desc = page.meta.description if page and page.meta and page.meta.description else config.site_description | trim | e %}
+  {% set ptitle = (page.title ~ " · " ~ config.site_name if page and page.title and not page.is_homepage else config.site_name) | e %}
+  {% set image = config.site_url ~ "images/social-card.png" %}
   {% if page and page.meta and page.meta.robots %}
     <meta name="robots" content="{{ page.meta.robots }}">
+  {% elif not page or not page.canonical_url %}
+    <meta name="robots" content="noindex">
+  {% else %}
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   {% endif %}
   <meta property="og:type" content="{{ 'website' if page and page.is_homepage else 'article' }}">
   <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta property="og:locale" content="en_US">
   <meta property="og:title" content="{{ ptitle }}">
   <meta property="og:description" content="{{ desc }}">
   {% if page and page.canonical_url %}
     <meta property="og:url" content="{{ page.canonical_url }}">
   {% endif %}
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="{{ image }}">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ config.site_name }}: who makes the decision, the model or your code?">
+  {% if page and page.meta and page.meta.date_published %}
+    <meta property="article:published_time" content="{{ page.meta.date_published }}">
+  {% endif %}
+  {% if page and page.meta and page.meta.date_modified %}
+    <meta property="article:modified_time" content="{{ page.meta.date_modified }}">
+  {% endif %}
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ ptitle }}">
   <meta name="twitter:description" content="{{ desc }}">
+  <meta name="twitter:image" content="{{ image }}">
+  <link rel="alternate" type="text/plain" title="llms.txt" href="{{ config.site_url }}llms.txt">
 {% endblock %}
