@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-labelledby="ttl desc">
+<title id="ttl">State or memory: the two boundary questions as a grid</title>
+<desc id="desc">A two by two grid. The rows ask who reads a stored thing: this run, to finish (state), or a future run, to behave differently (memory). The columns ask who writes it: your code, by schema; or the model, choosing what to keep. Top left, state your code writes: a typed record, reducers on shared fields, a checkpointer keyed by thread_id, and ADK temp: keys. Top right is empty, because state is code deciding throughout. Bottom left, memory your code writes: ADK user: and app: keys, a LangGraph Store write coded into a node, and a fixed rule such as saving the shopper's garage size. Bottom right, memory the model writes: the new half, taught in 5.3. A dashed progress file straddles the rows: state while its task still reads it, memory once a later task does.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 20px; font-weight: 700; }
+  .h2 { font-size: 13px; }
+  .tag { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .col { font-size: 14px; font-weight: 700; }
+  .row-big { font-size: 17px; font-weight: 800; letter-spacing: .04em; }
+  .row-sub { font-size: 12px; }
+  .item { font-size: 12.5px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+  .foot { font-size: 12px; font-style: italic; }
+  .code-box, .model-box { stroke-width: 2; }
+  .chip { stroke-width: 1.3; }
+  .ghost { stroke-width: 1.5; stroke-dasharray: 5 5; }
+  .straddle { stroke-width: 2; stroke-dasharray: 6 4; }
+  .rule { stroke-width: 1.2; stroke-dasharray: 3 4; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .chip-code { fill: #ffffff; stroke: #8f99c4; }
+  .chip-model { fill: #ffffff; stroke: #a98bdc; }
+  .ghost { fill: #fbfbfd; stroke: #aab2c4; }
+  .straddle { fill: #fffaf0; stroke: #b7791f; }
+  .rule { stroke: #aab2c4; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #6a45b0; }
+  .txt-edge { fill: #8a5a12; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .chip-code { fill: #1b1f29; stroke: #6c77a8; }
+  .chip-model { fill: #1b1f29; stroke: #8f78bd; }
+  .ghost { fill: #1b1f29; stroke: #5a6478; }
+  .straddle { fill: #2b2418; stroke: #d69e2e; }
+  .rule { stroke: #5a6478; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #c4aee8; }
+  .txt-edge { fill: #f0c36d; }
+  }
+</style>
+
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="599" rx="8"/>
+
+<text class="h1 txt" x="24" y="36">Two questions sort anything an agent stores</text>
+<text class="h2 txt-mute" x="24" y="58">The reader decides state or memory. The writer decides whether anything agentic is happening.</text>
+
+<!-- column headers -->
+<text class="tag txt-mute" x="24" y="96">WHO READS IT</text>
+<text class="tag txt-mute" x="152" y="84">WHO WRITES IT</text>
+<text class="col txt-code" x="152" y="104">your code, by schema</text>
+<text class="col txt-model" x="478" y="104">the model, choosing</text>
+
+<!-- row labels -->
+<text class="row-big txt" x="24" y="160">STATE</text>
+<text class="row-sub txt-mute" x="24" y="182">this run,</text>
+<text class="row-sub txt-mute" x="24" y="198">to finish</text>
+
+<text class="row-big txt" x="24" y="404">MEMORY</text>
+<text class="row-sub txt-mute" x="24" y="426">a future run,</text>
+<text class="row-sub txt-mute" x="24" y="442">to behave</text>
+<text class="row-sub txt-mute" x="24" y="458">differently</text>
+
+<!-- row divider -->
+<line class="rule" x1="24" y1="321" x2="776" y2="321"/>
+
+<!-- top left: state, code writes -->
+<rect class="code-box" x="152" y="116" width="314" height="178" rx="3"/>
+<rect class="chip chip-code" x="166" y="128" width="286" height="26" rx="2"/>
+<text class="item txt" x="178" y="145">typed record: schema, one writer per field</text>
+<rect class="chip chip-code" x="166" y="160" width="286" height="26" rx="2"/>
+<text class="item txt" x="178" y="177">reducers on fields with more than one writer</text>
+<rect class="chip chip-code" x="166" y="192" width="286" height="26" rx="2"/>
+<text class="item txt" x="178" y="209">checkpointer, keyed by <tspan class="mono">thread_id</tspan></text>
+<rect class="chip chip-code" x="166" y="224" width="286" height="26" rx="2"/>
+<text class="item txt" x="178" y="241">ADK <tspan class="mono">temp:</tspan> keys</text>
+<text class="foot txt-code" x="166" y="276">As old as databases. No model needed.</text>
+
+<!-- top right: empty -->
+<rect class="ghost" x="478" y="116" width="298" height="178" rx="18"/>
+<text class="item txt-mute" x="627" y="186" text-anchor="middle" font-weight="700">nothing here</text>
+<text class="item txt-mute" x="627" y="212" text-anchor="middle">State is code deciding throughout.</text>
+<text class="item txt-mute" x="627" y="232" text-anchor="middle">The model sees only the slice</text>
+<text class="item txt-mute" x="627" y="250" text-anchor="middle">a step renders into the prompt.</text>
+
+<!-- straddler: progress file -->
+<rect class="straddle" x="196" y="300" width="536" height="42" rx="4"/>
+<text class="item txt-edge" x="464" y="318" text-anchor="middle" font-weight="700">progress file: the hardest case</text>
+<text class="item txt-edge" x="464" y="335" text-anchor="middle">state while the task that wrote it still reads it, memory once a later task does</text>
+
+<!-- bottom left: memory, code writes -->
+<rect class="code-box" x="152" y="350" width="314" height="190" rx="3"/>
+<rect class="chip chip-code" x="166" y="362" width="286" height="26" rx="2"/>
+<text class="item txt" x="178" y="379">ADK <tspan class="mono">user:</tspan> and <tspan class="mono">app:</tspan> keys</text>
+<rect class="chip chip-code" x="166" y="394" width="286" height="26" rx="2"/>
+<text class="item txt" x="178" y="411">LangGraph Store, write coded into a node</text>
+<rect class="chip chip-code" x="166" y="426" width="286" height="42" rx="2"/>
+<text class="item txt" x="178" y="443">fixed rule: save the shopper's garage</text>
+<text class="item txt" x="178" y="460">size whenever they mention it</text>
+<text class="foot txt-code" x="166" y="496">Memory by scope,</text>
+<text class="foot txt-code" x="166" y="514">ordinary engineering by mechanism.</text>
+
+<!-- bottom right: memory, model writes -->
+<rect class="model-box" x="478" y="350" width="298" height="190" rx="18"/>
+<rect class="chip chip-model" x="494" y="362" width="266" height="26" rx="13"/>
+<text class="item txt" x="508" y="379">LangGraph Store, write the model chooses</text>
+<rect class="chip chip-model" x="494" y="394" width="266" height="42" rx="13"/>
+<text class="item txt" x="508" y="411">the model decides what is</text>
+<text class="item txt" x="508" y="428">worth keeping</text>
+<text class="foot txt-model" x="494" y="496">The new half: the agentic part,</text>
+<text class="foot txt-model" x="494" y="514">taught in 5.3 Memory.</text>
+
+<!-- legend -->
+<rect class="code-box" x="152" y="562" width="22" height="16" rx="2"/>
+<text class="item txt-mute" x="182" y="575">rectangle: your code decides</text>
+<rect class="model-box" x="380" y="562" width="22" height="16" rx="8"/>
+<text class="item txt-mute" x="410" y="575">rounded: the model decides</text>
+</svg>

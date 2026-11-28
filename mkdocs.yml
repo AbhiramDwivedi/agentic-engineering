@@ -123,7 +123,7 @@ nav:
       - "4.6 Prompt Injection & the Lethal Trifecta (planned)": craft/prompt-injection.md
   - V. Knowledge & Memory:
       - knowledge/index.md
-      - "5.1 State, Not Memory (planned)": knowledge/state-not-memory.md
+      - "5.1 State, Not Memory": knowledge/state-not-memory.md
       - "5.2 Retrieval (RAG) (planned)": knowledge/retrieval-rag.md
       - "5.3 Memory (planned)": knowledge/real-memory.md
       - "5.4 Compaction (planned)": knowledge/compaction-and-the-window.md
