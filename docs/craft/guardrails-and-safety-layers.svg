@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 660" width="800" height="660" role="img" aria-labelledby="ttl desc">
+<title id="ttl">Guards run after the polish, cheapest first, and the desk's 300 lb claim stops at the record check</title>
+<desc id="desc">A rounded model box, the brand-voice polish, may rewrite anything: the desk copy that said holds up to 250 lb comes back as holds 300 lb with ease. Your code then runs four guards on the polished copy, cheapest first. Layer 1, schema, checks the copy's shape. Layer 2, claim versus record, compares every number and safety claim with the catalog record. Layer 3, the leak check, scans for data that must not leave, such as a supplier contact's email. These three are rules with no model call. Layer 4 is the only model call: a rounded classifier model returns a risk score, and your code blocks at or above a threshold; on a timeout or error it fails closed, to review. Each layer returns a verdict, and any block goes to review, where a person reads the copy, with no rewrite and no retry. Two products run through the stack. The desk passes schema, then the claim check blocks it, claims 300 lb, record says 250, so the leak check and the classifier never run and the desk goes to review. The phone case passes all four layers and publishes. Tally: the desk stopped at layer 2 with 0 classifier calls; the phone case went through all four with 1. A legend notes that rounded shapes are where the model decides and rectangles are where your code decides.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 20px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .sub { font-size: 11.5px; }
+  .band-t { font-size: 11.5px; font-weight: 700; }
+  .num { font-size: 12px; font-weight: 700; }
+  .code-box, .model-box, .bad-box, .ok-box { stroke-width: 2; }
+  .wire { fill: none; stroke-width: 2; }
+  .lane { fill: none; stroke-width: 3; }
+  .exit { fill: none; stroke-width: 1.5; }
+  .chip { stroke-width: 1.5; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .bad-box { fill: #fbf1f0; stroke: #b3423a; }
+  .ok-box { fill: #f0f8f3; stroke: #2e7d4f; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .chip-ok { fill: #ffffff; stroke: #2e7d4f; }
+  .chip-bad { fill: #fbf1f0; stroke: #b3423a; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .txt-bad { fill: #b3423a; }
+  .txt-ok { fill: #2e7d4f; }
+  .wire, .exit { stroke: #97a0b5; }
+  .lane-ok { stroke: #2e7d4f; }
+  .lane-bad { stroke: #b3423a; }
+  .mk-wire { fill: #97a0b5; }
+  .mk-ok { fill: #2e7d4f; }
+  .mk-bad { fill: #b3423a; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #161a22; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .bad-box { fill: #2e1f22; stroke: #ef8a80; }
+  .ok-box { fill: #1b2a22; stroke: #7bc79a; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .chip-ok { fill: #1b1f29; stroke: #7bc79a; }
+  .chip-bad { fill: #2e1f22; stroke: #ef8a80; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .txt-bad { fill: #ef8a80; }
+  .txt-ok { fill: #7bc79a; }
+  .wire, .exit { stroke: #78829a; }
+  .lane-ok { stroke: #7bc79a; }
+  .lane-bad { stroke: #ef8a80; }
+  .mk-wire { fill: #78829a; }
+  .mk-ok { fill: #7bc79a; }
+  .mk-bad { fill: #ef8a80; }
+  }
+</style>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" class="mk-wire"/>
+  </marker>
+  <marker id="arw-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" class="mk-ok"/>
+  </marker>
+  <marker id="arw-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" class="mk-bad"/>
+  </marker>
+</defs>
+
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="659" rx="10"/>
+
+<text class="h1 txt" x="40" y="36">Guards run after the last rewrite, cheapest first</text>
+<text class="h2 txt-mute" x="40" y="58">Each layer returns a verdict, and a block goes to a person unrewritten.</text>
+
+<!-- the polish: the model rewrites -->
+<rect class="model-box" x="40" y="74" width="560" height="56" rx="28"/>
+<text class="card-t txt-model" x="66" y="97">Brand-voice polish (step 8): the model may rewrite anything</text>
+<text class="sub txt" x="66" y="116">Desk: "holds up to 250 lb" comes back as "holds 300 lb with ease"</text>
+
+<!-- lane headers -->
+<text class="sub txt-mute" x="56" y="160">Your code runs the guards on the polished copy:</text>
+<text class="band-t txt-ok" x="460" y="160" text-anchor="middle">phone case</text>
+<text class="band-t txt-bad" x="545" y="160" text-anchor="middle">desk</text>
+
+<!-- layer 1: schema -->
+<rect class="code-box" x="40" y="172" width="560" height="64" rx="4"/>
+<text class="card-t txt-code" x="56" y="196">1  Schema</text>
+<text class="sub txt" x="56" y="214">Is the copy the right shape?</text>
+<text class="sub txt-mute" x="56" y="229">rule, no model call</text>
+
+<!-- layer 2: claim vs record -->
+<rect class="code-box" x="40" y="248" width="560" height="64" rx="4"/>
+<text class="card-t txt-code" x="56" y="272">2  Claim vs record</text>
+<text class="sub txt" x="56" y="290">Every number and safety claim against the record</text>
+<text class="sub txt-mute" x="56" y="305">rule, no model call</text>
+
+<!-- layer 3: leak check -->
+<rect class="code-box" x="40" y="324" width="560" height="64" rx="4"/>
+<text class="card-t txt-code" x="56" y="348">3  Leak check</text>
+<text class="sub txt" x="56" y="366">Data that must not leave, like a supplier's email</text>
+<text class="sub txt-mute" x="56" y="381">rule, no model call</text>
+
+<!-- layer 4: classifier -->
+<rect class="code-box" x="40" y="400" width="560" height="96" rx="4"/>
+<text class="card-t txt-code" x="56" y="424">4  Classifier</text>
+<text class="sub txt-mute" x="152" y="424">the only model call</text>
+<rect class="model-box" x="56" y="434" width="150" height="28" rx="14"/>
+<text class="sub txt-model" x="131" y="452" text-anchor="middle">model: a risk score</text>
+<path class="wire" d="M206,448 L222,448" marker-end="url(#arw)"/>
+<text class="sub txt" x="228" y="452">code blocks at or above</text>
+<text class="sub txt" x="228" y="467">a threshold</text>
+<text class="band-t txt-bad" x="56" y="485">Timeout or error: fails closed, to review</text>
+
+<!-- block exits from every layer into review -->
+<path class="exit" d="M600,204 L618,204" marker-end="url(#arw)"/>
+<path class="exit" d="M600,356 L618,356" marker-end="url(#arw)"/>
+<path class="exit" d="M600,448 L618,448" marker-end="url(#arw)"/>
+
+<!-- review -->
+<rect class="bad-box" x="620" y="172" width="140" height="324" rx="4"/>
+<text class="card-t txt-bad" x="634" y="196">Review</text>
+<text class="sub txt" x="634" y="215">Blocks land here.</text>
+<text class="sub txt" x="634" y="233">A person reads it.</text>
+<text class="sub txt" x="634" y="251">No rewrite,</text>
+<text class="sub txt" x="634" y="267">no retry.</text>
+<text class="sub txt-bad" x="634" y="298">Desk: "claims</text>
+<text class="sub txt-bad" x="634" y="314">300 lb; record</text>
+<text class="sub txt-bad" x="634" y="330">says 250"</text>
+
+<!-- phone case lane: passes all four, publishes -->
+<path class="lane lane-ok" d="M460,130 L460,520" marker-end="url(#arw-ok)"/>
+<rect class="chip chip-ok" x="438" y="194" width="44" height="20" rx="3"/>
+<text class="band-t txt-ok" x="460" y="208" text-anchor="middle">pass</text>
+<rect class="chip chip-ok" x="438" y="270" width="44" height="20" rx="3"/>
+<text class="band-t txt-ok" x="460" y="284" text-anchor="middle">pass</text>
+<rect class="chip chip-ok" x="438" y="346" width="44" height="20" rx="3"/>
+<text class="band-t txt-ok" x="460" y="360" text-anchor="middle">pass</text>
+<rect class="chip chip-ok" x="438" y="438" width="44" height="20" rx="3"/>
+<text class="band-t txt-ok" x="460" y="452" text-anchor="middle">pass</text>
+
+<!-- desk lane: passes schema, blocked at the record check -->
+<path class="lane lane-bad" d="M545,130 L545,270"/>
+<rect class="chip chip-ok" x="523" y="194" width="44" height="20" rx="3"/>
+<text class="band-t txt-ok" x="545" y="208" text-anchor="middle">pass</text>
+<rect class="chip chip-bad" x="519" y="269" width="52" height="22" rx="3"/>
+<text class="band-t txt-bad" x="545" y="284" text-anchor="middle">block</text>
+<path class="lane lane-bad" d="M571,280 L616,280" marker-end="url(#arw-bad)"/>
+<text class="sub txt-mute" x="545" y="360" text-anchor="middle">never ran</text>
+<text class="sub txt-mute" x="545" y="452" text-anchor="middle">never ran</text>
+
+<!-- publish -->
+<rect class="ok-box" x="40" y="522" width="560" height="40" rx="4"/>
+<text class="card-t txt-ok" x="56" y="547">Publish</text>
+<text class="sub txt" x="120" y="547">only when all four layers pass</text>
+
+<!-- tally -->
+<text class="num txt-bad" x="40" y="592">Desk: stopped at layer 2, classifier calls: 0</text>
+<text class="num txt-ok" x="420" y="592">Phone case: all four layers, calls: 1</text>
+
+<!-- legend -->
+<rect class="model-box" x="40" y="618" width="34" height="18" rx="9"/>
+<text class="sub txt-mute" x="82" y="631">the model decides</text>
+<rect class="code-box" x="220" y="618" width="34" height="18" rx="2"/>
+<text class="sub txt-mute" x="262" y="631">your code decides</text>
+</svg>
