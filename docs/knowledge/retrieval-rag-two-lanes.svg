@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="800" height="520" role="img" aria-labelledby="ttl desc">
+<title id="ttl">Retrieval: one search your code owns, wired two ways, classic RAG and agentic retrieval</title>
+<desc id="desc">Two lanes run from a question to an answer through the same large search box. In classic RAG, rectangles for your code embed the question, search and fill a template before a rounded model box answers. In agentic retrieval, a rounded model box writes the query, calls the search box (tenant filter, lexical and dense scoring, rank fusion, a result cap) and may loop back to search again; a found-nothing exit returns a structured empty result.</desc>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" class="mk-wire"/>
+  </marker>
+</defs>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 21px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .big-t { font-size: 15px; font-weight: 700; }
+  .row-t { font-size: 12.5px; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .sub { font-size: 11.5px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; }
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .wire { fill: none; stroke-width: 2; }
+  .rule { stroke-width: 1; }
+
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .wire { stroke: #97a0b5; }
+  .mk-wire { fill: #97a0b5; }
+  .wire-model { stroke: #7e57c2; }
+  .rule { stroke: #e2e6ef; }
+  .page-bg { fill: #ffffff; }
+
+  @media (prefers-color-scheme: dark) {
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .wire { stroke: #78829a; }
+  .mk-wire { fill: #78829a; }
+  .wire-model { stroke: #b39ddb; }
+  .rule { stroke: #2b3140; }
+  .page-bg { fill: #161a22; }
+  }
+</style>
+
+<rect class="page-bg" x="0" y="0" width="800" height="520"/>
+
+<!-- Heading -->
+<text class="h1 txt" x="16" y="32">One search you own, wired two ways</text>
+<text class="h2 txt-mute" x="16" y="54">The search box is the same code in both lanes. What changes is who decides to call it.</text>
+
+<!-- Legend -->
+<rect class="code-box" x="16" y="68" width="22" height="14" rx="2"/>
+<text class="sub txt" x="44" y="80">your code decides</text>
+<rect class="model-box" x="168" y="68" width="22" height="14" rx="7"/>
+<text class="sub txt" x="196" y="80">the model decides</text>
+<rect class="data-box" x="322" y="68" width="22" height="14" rx="2"/>
+<text class="sub txt" x="350" y="80">data</text>
+
+<!-- Lane 1 header -->
+<text class="tag-lbl txt-code" x="16" y="114">CLASSIC RAG</text>
+<text class="sub txt-mute" x="16" y="131">Your code runs the same lookup on every question. The model decides nothing about the search.</text>
+
+<!-- Lane 1 row -->
+<rect class="data-box" x="16" y="152" width="66" height="46" rx="2"/>
+<text class="card-t txt" x="49" y="180" text-anchor="middle">question</text>
+<path class="wire" d="M82,175 L94,175" marker-end="url(#arr)"/>
+
+<rect class="code-box" x="96" y="150" width="160" height="50" rx="2"/>
+<text class="card-t txt" x="176" y="171" text-anchor="middle">embed the question</text>
+<text class="sub txt-mute" x="176" y="188" text-anchor="middle">on every question</text>
+<path class="wire" d="M256,175 L304,175" marker-end="url(#arr)"/>
+
+<path class="wire" d="M500,175 L514,175" marker-end="url(#arr)"/>
+<rect class="code-box" x="516" y="150" width="112" height="50" rx="2"/>
+<text class="card-t txt" x="572" y="171" text-anchor="middle">fill a template</text>
+<text class="sub txt-mute" x="572" y="188" text-anchor="middle">with the top k</text>
+<path class="wire" d="M628,175 L638,175" marker-end="url(#arr)"/>
+
+<rect class="model-box" x="640" y="150" width="74" height="50" rx="14"/>
+<text class="card-t txt" x="677" y="171" text-anchor="middle">model</text>
+<text class="sub txt-model" x="677" y="188" text-anchor="middle">answers</text>
+<path class="wire" d="M714,175 L722,175" marker-end="url(#arr)"/>
+<rect class="data-box" x="724" y="152" width="60" height="46" rx="2"/>
+<text class="card-t txt" x="754" y="180" text-anchor="middle">answer</text>
+
+<!-- Lane divider, either side of the shared search box -->
+<line class="rule" x1="16" y1="262" x2="290" y2="262"/>
+<line class="rule" x1="516" y1="262" x2="784" y2="262"/>
+
+<!-- Shared search box -->
+<rect class="code-box" x="306" y="150" width="194" height="305" rx="2"/>
+<text class="big-t txt" x="403" y="174" text-anchor="middle">search</text>
+<text class="sub txt-code" x="403" y="191" text-anchor="middle">your code, in both lanes</text>
+<line class="rule" x1="318" y1="204" x2="488" y2="204"/>
+<text class="row-t txt" x="320" y="226">1  tenant filter</text>
+<text class="sub txt-mute" x="336" y="242">from the session</text>
+<text class="row-t txt" x="320" y="270">2  lexical + dense scoring</text>
+<text class="row-t txt" x="320" y="300">3  rank fusion</text>
+<text class="row-t txt" x="320" y="330">4  cap the results at k</text>
+<line class="rule" x1="318" y1="348" x2="488" y2="348"/>
+<rect class="data-box" x="318" y="360" width="170" height="82" rx="2"/>
+<text class="sub txt-mute" x="330" y="380">returns a result:</text>
+<text class="mono txt" x="330" y="402">found: true, chunks</text>
+<text class="mono txt" x="330" y="424">found: false, a note</text>
+
+<!-- Lane 2 header -->
+<text class="tag-lbl txt-model" x="16" y="296">AGENTIC RETRIEVAL</text>
+<text class="sub txt-mute" x="16" y="314">The model decides whether to search,</text>
+<text class="sub txt-mute" x="16" y="330">what to search for, and when to stop.</text>
+
+<!-- Lane 2 row -->
+<rect class="data-box" x="16" y="377" width="66" height="46" rx="2"/>
+<text class="card-t txt" x="49" y="405" text-anchor="middle">question</text>
+<path class="wire" d="M82,400 L94,400" marker-end="url(#arr)"/>
+
+<rect class="model-box" x="96" y="375" width="160" height="50" rx="14"/>
+<text class="card-t txt" x="176" y="396" text-anchor="middle">model writes the query</text>
+<text class="sub txt-model" x="176" y="413" text-anchor="middle">or skips the search</text>
+<text class="sub txt-model" x="278" y="366" text-anchor="middle">tool call</text>
+<path class="wire wire-model" d="M256,400 L304,400" marker-end="url(#arr)"/>
+
+<path class="wire" d="M500,400 L514,400" marker-end="url(#arr)"/>
+<rect class="model-box" x="516" y="375" width="198" height="50" rx="14"/>
+<text class="card-t txt" x="615" y="396" text-anchor="middle">model reads the result</text>
+<text class="sub txt-model" x="615" y="413" text-anchor="middle">searches again, or answers</text>
+<path class="wire" d="M714,400 L722,400" marker-end="url(#arr)"/>
+<rect class="data-box" x="724" y="377" width="60" height="46" rx="2"/>
+<text class="card-t txt" x="754" y="405" text-anchor="middle">answer</text>
+
+<!-- Loop back: search again -->
+<path class="wire wire-model" d="M615,425 L615,478 L176,478 L176,427" marker-end="url(#arr)"/>
+<text class="sub txt-model" x="396" y="500" text-anchor="middle">search again: the model decides; your code caps the rounds</text>
+</svg>
