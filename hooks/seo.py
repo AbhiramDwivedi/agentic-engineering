@@ -28,7 +28,18 @@ from pathlib import Path
 
 PLANNED = "(planned)"
 MAX_DESC = 160
-AUTHOR_URL = "https://github.com/AbhiramDwivedi"
+AUTHOR_PAGE = "about/author.md"
+# Person facts, each traceable to the author page or the author site. Edit them
+# together with docs/about/author.md, never one without the other.
+AUTHOR_SAME_AS = [
+    "https://author.agentic-engineering.work/",
+    "https://github.com/AbhiramDwivedi",
+    "https://www.linkedin.com/in/ram-dwivedi/",
+]
+AUTHOR_JOB_TITLE = "Senior Architect"
+AUTHOR_EMPLOYER = "Publicis Sapient"
+AUTHOR_KNOWS_ABOUT = ["Platform architecture", "Distributed systems",
+                      "Agentic AI systems", "AI platform engineering", "DevOps"]
 LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/"
 SOCIAL_IMAGE = "images/social-card.png"
 
@@ -157,8 +168,12 @@ _CHAPTER = re.compile(r"^(\d+\.\d+|[A-J]\.) ")
 def _entities(config):
     base = config["site_url"]
     desc = " ".join(config["site_description"].split())
+    author_url = base + AUTHOR_PAGE.removesuffix(".md") + "/"
     author = {"@type": "Person", "@id": base + "#author", "name": config["site_author"],
-              "url": AUTHOR_URL, "sameAs": [AUTHOR_URL]}
+              "alternateName": "Ram Dwivedi", "url": author_url, "sameAs": AUTHOR_SAME_AS,
+              "jobTitle": AUTHOR_JOB_TITLE,
+              "worksFor": {"@type": "Organization", "name": AUTHOR_EMPLOYER},
+              "knowsAbout": AUTHOR_KNOWS_ABOUT}
     website = {"@type": "WebSite", "@id": base + "#website", "url": base,
                "name": config["site_name"], "description": desc, "inLanguage": "en",
                "publisher": {"@id": author["@id"]}}
@@ -190,7 +205,9 @@ def _jsonld(page, config):
     info = _pages.get(page.file.src_uri)
     if not info or info["planned"]:
         return None
-    if _CHAPTER.match(page.title or ""):
+    if page.file.src_uri == AUTHOR_PAGE:
+        kind = "ProfilePage"
+    elif _CHAPTER.match(page.title or ""):
         kind = "TechArticle"
     elif page.is_index:
         kind = "CollectionPage"
@@ -204,6 +221,8 @@ def _jsonld(page, config):
         node.update({"headline": page.title, "mainEntityOfPage": page.canonical_url,
                      "publisher": {"@id": author["@id"]},
                      "isPartOf": [{"@id": website["@id"]}, {"@id": book["@id"]}]})
+    if kind == "ProfilePage":
+        node["mainEntity"] = {"@id": author["@id"]}
     if info["description"]:
         node["description"] = info["description"]
     if info["created"]:

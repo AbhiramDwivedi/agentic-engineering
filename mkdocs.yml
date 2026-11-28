@@ -87,6 +87,7 @@ nav:
       - The Litmus Test: about/litmus-test.md
       - How We Label: about/how-we-label.md
       - How to Read This: about/how-to-read.md
+      - About the Author: about/author.md
   - I. Foundations:
       - foundations/index.md
       - "1.1 It's Still Engineering": foundations/its-still-engineering.md
