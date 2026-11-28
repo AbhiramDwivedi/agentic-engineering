@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" width="800" height="700" role="img" aria-labelledby="ttl desc">
 <title id="ttl">The agent loop: the model picks each step and when to stop, your code decides which of five exits the run took</title>
-<desc id="desc">A rounded box at the top is the model: it reads everything so far and picks the next step, a tool call or a stop. Below it a rectangle is your code, which branches on how the turn ended. On tool_use, your code runs each call and sends any failure back as an error result the model can read, then asks two questions. If the same call has failed three times, the run exits stalled. If the step cap is reached, it exits ceiling. Otherwise the results are appended and the model is called again. On end_turn, the model's claim of done goes to a code check: was a price queued, at or above the 39900 floor? Yes gives clean, the only exit that is an answer. No gives false_done. Any other stop reason, such as max_tokens or refusal, exits abnormal_stop with no answer. A strip along the bottom traces one real run for the Aldsworth desk: lookup_market times out and comes back as an error, the model retries and gets 41900, 44500 and 39900, check_price passes 41900, submit_for_review queues 41900, and at step 5 the model ends its turn, the check confirms 41900 is queued above the floor, and the run exits clean. Steps 1 to 4 went around the tool_use loop; step 5 went through the check.</desc>
+<desc id="desc">A rounded box at the top is the model: it reads everything so far and picks the next step, a tool call or a stop. Below it a rectangle is your code, which branches on how the turn ended. On tool_use, your code runs each call and sends any failure back as an error result the model can read, then asks two questions. If the same call has failed three times, the run exits stalled. If the step cap is reached, it exits ceiling. Otherwise the results are appended and the model is called again. On end_turn, the model's claim of done goes to a code check: was a price queued, at or above the 39900 floor? Yes gives clean, the only exit that is an answer. No gives false_done. Any other stop reason, such as max_tokens or refusal, exits abnormal_stop with no answer. A strip along the bottom traces one real run for the Aldsworth desk: get_competitor_prices times out and comes back as an error, the model retries and gets 41900, 44500 and 39900, check_price passes 41900, submit_for_review queues 41900, and at step 5 the model ends its turn, the check confirms 41900 is queued above the floor, and the run exits clean. Steps 1 to 4 went around the tool_use loop; step 5 went through the check.</desc>
 <style>
   text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   .h1 { font-size: 19px; font-weight: 700; }
@@ -140,16 +140,16 @@
 <g>
 <rect class="data-box" x="26" y="554" width="140" height="70" rx="4"/>
 <circle class="dot" cx="42" cy="570" r="9"/><text class="num dot-txt" x="42" y="574" text-anchor="middle">1</text>
-<text class="mono-s txt" x="56" y="574">lookup_market</text>
-<text class="s txt-mute" x="36" y="595">feed times out</text>
-<text class="s txt-bad" x="36" y="612">is_error: true</text>
+<text class="mono-s txt" x="36" y="590" style="font-size:9.5px">get_competitor_prices</text>
+<text class="s txt-mute" x="36" y="606">feed times out</text>
+<text class="s txt-bad" x="36" y="620">is_error: true</text>
 </g>
 <g>
 <rect class="data-box" x="178" y="554" width="140" height="70" rx="4"/>
 <circle class="dot" cx="194" cy="570" r="9"/><text class="num dot-txt" x="194" y="574" text-anchor="middle">2</text>
-<text class="mono-s txt" x="208" y="574">lookup_market</text>
-<text class="s txt-mute" x="188" y="595">retried: ok</text>
-<text class="mono-s txt" x="188" y="612">41900 44500 39900</text>
+<text class="mono-s txt" x="188" y="590" style="font-size:9.5px">get_competitor_prices</text>
+<text class="s txt-mute" x="188" y="606">retried: ok</text>
+<text class="mono-s txt" x="188" y="620">41900 44500 39900</text>
 </g>
 <g>
 <rect class="data-box" x="330" y="554" width="140" height="70" rx="4"/>

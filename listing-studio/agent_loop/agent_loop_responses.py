@@ -7,20 +7,22 @@ from .loop import CONTINUE, END, Call, Turn
 
 # --8<-- [start:loop-responses]
 def to_turn(response) -> Turn:
-    """Map a Responses result onto a Turn. Look at status and refusals, not just calls."""
-    calls = [
-        Call(i.call_id, i.name, json.loads(i.arguments))
-        for i in response.output
-        if i.type == "function_call"
-    ]
-    if calls:
-        return Turn(response.output_text, calls, CONTINUE)
-    if response.status == "incomplete":  # max_output_tokens, content_filter
-        return Turn(response.output_text, [], response.incomplete_details.reason)
+    """Map a Responses result onto a Turn. Check status before reading any call."""
+    if response.status != "completed":  # incomplete, failed, cancelled
+        details = response.incomplete_details
+        return Turn(response.output_text, [], details.reason if details else response.status)
     parts = [p for i in response.output if i.type == "message" for p in i.content]
     if any(p.type == "refusal" for p in parts):
         return Turn(response.output_text, [], "refusal")
-    return Turn(response.output_text, [], END)
+    try:
+        calls = [
+            Call(i.call_id, i.name, json.loads(i.arguments))
+            for i in response.output
+            if i.type == "function_call"
+        ]
+    except json.JSONDecodeError:  # a malformed call is not a call
+        return Turn(response.output_text, [], "invalid_arguments")
+    return Turn(response.output_text, calls, CONTINUE if calls else END)
 # --8<-- [end:loop-responses]
 
 

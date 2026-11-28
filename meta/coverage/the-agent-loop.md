@@ -2,8 +2,8 @@
 
 > Research-derived spec for what the chapter must cover and where to stop. Angles run: vendor
 > docs (Anthropic, OpenAI, LangGraph, Google ADK), academic (ReAct), practitioner (SDK issue
-> trackers), daily-tool (Claude Code, Agent SDK), alias sweep, incidents. Skeptical-read angle:
-> skipped (no named defender of the contested claims was found; see Contested). Skipped: OWASP
+> trackers), daily-tool (Claude Code, Agent SDK), alias sweep, incidents, skeptical read (one
+> note on compounding errors; see Contested). Skipped: OWASP
 > (injection belongs to 2.1/4.6), benchmarks. Bar: definitive but tight; spec, not essay.
 
 ## The mental model
@@ -49,20 +49,23 @@ bible's one autonomous loop) only if the pipeline cannot show a point.
    works*.)
 3. **Ground truth each step.** Lead with *Building effective agents*: agents must "gain 'ground
    truth' from the environment at each step". ReAct (Yao et al., ICLR 2023) supports a trade-off,
-   not a clean win: in Table 1 ReAct trails CoT on HotpotQA and beats it on Fever, the best
+   not a clean win: in Table 1 ReAct trails CoT on HotpotQA and beats it on FEVER, the best
    results combine the two, and its error analysis shows less hallucination but more reasoning
    errors. State in words; freeze no numbers. **Established.**
 4. **Stall: the repeat.** ReAct documents the model "repetitively generat[ing] the previous
    thoughts and actions". This is the cited source for the stall guard: a code-side repeat
    detector (same call, same arguments) plus the turn cap. Beyond 2.1: it caps steps, not
-   repeats. **Established.**
-5. **False "done" (one line, link 3.7).** The inner loop cannot check its own claim of
-   completion; the verifier is 3.7. Name it, argue it in the thesis, defer depth.
+   repeats. **Emerging** (revised post-draft): ReAct documents the failure, not a tested
+   detector, and no cited source evaluates one.
+5. **False "done" (one line, link 3.7).** The inner loop's check is single-shot: code
+   (`verify`) labels the exit clean or false done and never sends the model back. The verifier
+   that feeds findings back and runs again is 3.7. Name it, argue it in the thesis, defer depth.
 6. **Imposed stops, and reporting which.** Turn cap, spend cap, no-progress guard; the result must
    say why it ended (`success`, `error_max_turns`, `error_max_budget_usd`, `error_during_execution`,
    `error_max_structured_output_retries`; `MaxTurnsExceeded`; `GraphRecursionError`). A cap hit
    with no final answer is not done. Defaults differ: Agent SDK "No limit"; OpenAI ships a
-   default; LangGraph's recursion default is now about 10,000 super-steps, so set your own.
+   default; LangGraph's recursion default is 10,007 super-steps from v1.1.4 (10,000 in 1.0.6 to
+   1.1.3), so set your own.
    **Standard.**
 7. **Failure and retry, beyond 2.1.** `is_error: true` mechanics, who owns the retry (model
    chooses, code caps; 7.1 owns code-owned retry), permission denials returned as results. 2.1
@@ -70,14 +73,17 @@ bible's one autonomous loop) only if the pipeline cannot show a point.
    *Writing tools for agents*.)
 8. **Context growth, whoever stores it.** The model reads the whole accumulated context every
    turn; a client that re-sends it, or an OpenAI `previous_response_id` / `conversation_id` store
-   that does not, still pays the tokens and the attention cost. Compaction can drop early
+   that does not, still pays twice: tokens that grow every turn, and recall that degrades as the
+   context grows (*Effective context engineering for AI agents*). Mitigation: trim each tool result
+   to what the next step needs before appending it (link 1.5). Compaction can drop early
    instructions (5.4). Beyond 2.1's one-line statelessness. **Standard.**
 9. **Parallel calls, beyond 2.1's one sentence.** One `tool_result` per block, results first,
    none omitted even on failure (the 400 error text). Read-only concurrent, mutating sequential
    is Agent SDK behaviour: attribute it. **Established.**
 10. **Gotcha: forced `tool_choice` builds a loop that never exits.** `tool_choice` is per-request
-    and "persists" only because the caller resends it. OpenAI's docs now state the framework
-    resets it to `auto` after a tool call (`reset_tool_choice`). History: issue #191, PR #263.
+    and "persists" only because the caller resends it. OpenAI's docs state the framework resets
+    it to `auto` after any tool call (`reset_tool_choice`, default `True`; the source applies no
+    condition on tool count). History: issue #191, PR #263.
     A gotcha, no tier.
 
 Dropped: hooks as a ranked item (one sentence, 2.6/4.3; one vendor doc); the loop-variant taxonomy
@@ -101,11 +107,15 @@ provider option tables; hosted loops (8.7); self-improving loops (9.7).
 - Non-synonym: Google ADK `LoopAgent` is "not controlled by an AI model, and is deterministic"
   (code decides; `max_iterations` defaults to `None`). Put it in the aliases box.
 - "Reasoning models collapse the loop": no named claimant found; omit unless the author supplies one.
+- Skeptical read: errors compound across turns. *Building effective agents* names "the potential
+  for compounding errors" and recommends stopping conditions such as a maximum iteration count;
+  tau-bench (arXiv:2406.12045, cited in 2.1) shows frontier models finishing fewer than half of
+  realistic multi-step tasks. Supports the ceiling and the code check; link 1.3 and 2.1.
 
 ## Maturity
 
 **Proposed verdict: Standard** for the shape and stop-reason branching; Established for ground
-truth and stall. The tuning of when to stop is less settled (one argued sentence). Fast-moving:
+truth; Emerging for stall detection (revised post-draft, see item 4). The tuning of when to stop is less settled (one argued sentence). Fast-moving:
 option names, defaults, subtypes, and Claude Code's 25,000-token tool-response default (verify
 before quoting). **Last reviewed: 2026-11.**
 
@@ -114,13 +124,17 @@ before quoting). **Last reviewed: 2026-11.**
 *the agent loop*, *the agentic loop*, *the ReAct loop* (Yao et al.), *the tool-use loop*, *turn*
 (Agent SDK; OpenAI), *super-step* (LangGraph), *iteration limit / max turns / recursion limit*.
 The SDK "tool runner" is a helper, not a synonym. Non-synonyms: ADK `LoopAgent`; `/loop`, `/goal`
-(3.7). Perceive/Plan/Act/Observe: omit until a primary source is confirmed. Gulli: single-loop
-material has a home here; outer loop, handoffs, graphs are 3.7, 9.2, 1.6.
+(3.7). *inner loop* is this site's own term (the outer loop is 3.7). Related principle, not a
+synonym: 12-Factor Agents, Factor 8 "Own your control flow". Perceive/Plan/Act/Observe: omit until
+a primary source is confirmed. Gulli: single-loop material has a home here; outer loop, handoffs,
+graphs are 3.7, 9.2, 1.6. Gulli chapter titles not yet pinned; candidates for the alias line need
+author sign-off.
 
 ## Reader-verifiable anchors
 
 1. Agent SDK: set `max_turns` equal to the tool rounds; observe `error_max_turns` and no `result`.
-2. OpenAI Agents SDK: tool plus `max_turns=2`; observe `MaxTurnsExceeded`, add the handler.
+2. OpenAI Agents SDK: a task that needs a tool call, with `max_turns=1` (one turn is one model
+   call); observe `MaxTurnsExceeded`, add the handler.
 3. Messages API: set `max_tokens` very low on a tool task; observe `max_tokens` and no tool call.
 
 ## Incidents
@@ -140,7 +154,7 @@ stops" (the model decides, not the loop) and "everything is the tool result" (no
 - Anthropic, *Building effective agents*, 2024-12-19.
   https://www.anthropic.com/engineering/building-effective-agents
 - Anthropic, *Handling stop reasons*. https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons
-- Google ADK, *LoopAgent* (non-synonym; opened by the second reviewer).
+- Google ADK, *Loop agents* (non-synonym). https://adk.dev/agents/workflow-agents/loop-agents/
 - Anthropic, *Handle tool calls* (Claude API docs).
   https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls
 - Anthropic, *How the agent loop works* (Agent SDK docs).
@@ -148,13 +162,18 @@ stops" (the model decides, not the loop) and "everything is the tool result" (no
 - Anthropic, *How Claude Code works*. https://code.claude.com/docs/en/how-claude-code-works
 - Anthropic, *Writing effective tools for agents*, 2025-09-11.
   https://www.anthropic.com/engineering/writing-tools-for-agents
-- Anthropic, *Getting started with loops*, 2026-06-30 (de Oliveira, Segner).
+- Anthropic, *Loop engineering: Getting started with loops*, 2026-06-30 (de Oliveira, Segner).
   https://claude.com/blog/getting-started-with-loops
 - OpenAI Agents SDK, *Running agents*. https://openai.github.io/openai-agents-python/running_agents/
 - OpenAI Agents SDK issue #191 and PR #263 (merged 2025-03-25).
   https://github.com/openai/openai-agents-python/issues/191 ;
   https://github.com/openai/openai-agents-python/pull/263
 - LangGraph, *Graph API* (recursion limit). https://docs.langchain.com/oss/python/langgraph/graph-api
+- Anthropic, *Effective context engineering for AI agents*, 2025-09-29.
+  https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+- OpenAI Agents SDK, *Agents* (`reset_tool_choice`). https://openai.github.io/openai-agents-python/agents/
+- OpenAI, *Conversation state*. https://developers.openai.com/api/docs/guides/conversation-state
+- 12-Factor Agents, Factor 8. https://github.com/humanlayer/12-factor-agents
 
 **Verify before quoting:** SDK option names, result subtypes, turn-counting rule, default recursion
 limit, budget-overshoot behavior, and Claude Code's 25,000-token tool-response cap are all
@@ -173,11 +192,12 @@ Settled so the chapter could be written; reversible at PR review.
 2. **Budget row: standard pattern (~2,000-2,800 prose words).** Ten must-cover items only fit
    because items 2, 5, 7 and 9 are one clause plus a link (to 1.2, 3.7 and 2.1).
 3. **Maturity: "Standard (the loop shape and branching on stop reason) · Established (ground
-   truth each step; stall detection)", Last reviewed 2026-11.** The tuning of when to stop gets the
+   truth each step; stall detection)", Last reviewed 2026-11.** Revised post-draft: stall
+   detection moved to Emerging (see the post-draft review below). The tuning of when to stop gets the
    one argued sentence, no tier.
 4. **Carrier: the Listing Studio multi-turn price step in the Carrier section.** No Repricer.
-5. **The second review was a Claude Opus pass, not an independent engine** (codex at its usage
-   limit). Disclosed in the PR; the author may re-run the codex review.
+5. **The second review was a Claude Opus pass, not an independent engine.** Disclosed in the PR.
+   An independent-engine review followed after drafting (last section).
 
 ## Author-only questions
 
@@ -186,11 +206,10 @@ Settled so the chapter could be written; reversible at PR review.
    none; omit the callout rather than invent one.*
 3. Which provider tab leads the code? *Default: LangGraph, with Anthropic Messages and OpenAI
    Responses as tabs, per the repo convention.*
-4. (Moot after review: the loop-variant taxonomy is handed to 3.7/9.1 as a pointer.) Adopt the
-   proposed thesis ("the model's 'I'm done' is a claim, not a fact")? *Default: yes.*
+4. (Closed: the thesis is ruling 1 above.)
 5. Include the Perceive/Plan/Act/Observe alias? *Default: omit until a primary source is confirmed.*
 
-## Second-reviewer pass (Claude Opus; codex unavailable, usage limit)
+## Second-reviewer pass (Claude Opus, not an independent engine)
 
 Checked against: Anthropic *Handling stop reasons* (live), ReAct via ar5iv (live), shipped 2.1
 (`docs/the-unit/tool-use.md`), carrier bible. Review notes folded in below.
@@ -200,7 +219,7 @@ Checked against: Anthropic *Handling stop reasons* (live), ReAct via ar5iv (live
 - **M1** accepted. 2.1 ships the loop, `MAX_STEPS`, "stateless, resend", id matching, actionable
   errors (verified). Items 1, 7, 8, 9 now carry "beyond 2.1" clauses.
 - **M2** accepted. Item 10 dropped to a pointer (3.7/9.1); Author question 4 closed.
-- **M3** accepted. Table 1 verified: ReAct 27.4 vs CoT 29.4 on HotpotQA, 60.9 vs 56.3 on Fever;
+- **M3** accepted. Table 1 verified: ReAct 27.4 vs CoT 29.4 on HotpotQA, 60.9 vs 56.3 on FEVER;
   best are combos. Lead cite moved to *Building effective agents*; no numbers frozen.
 - **M4** accepted. Repetition quote verified in ReAct; item 4 (stall) and item 5 (false done) added.
 - **M5** accepted in substance. Item 8 reworded to "whoever stores it"; the 25,000 cap moved to
@@ -214,6 +233,58 @@ Checked against: Anthropic *Handling stop reasons* (live), ReAct via ar5iv (live
   no-ceiling line is an anti-pattern.
 - **m2** accepted, not re-fetched (`reset_tool_choice`); item 10 reworded. **m3** accepted
   (subtypes and default contrast in item 6; subtypes not re-fetched). **m4** accepted, not
-  re-fetched; 3.7 map's "1,000" is for its owner to fix.
+  re-fetched.
 - **m5** accepted (ADK, `/loop`, `/goal`, tool-runner note). **m6** accepted (two ideas struck).
 - **m7** accepted (3.4, 4.6, 7.1, 8.4, 9.1 added). **m8** accepted; body trimmed, ICLR 2023 added.
+
+## Second-engine review (post-draft, agy)
+
+An independent engine reviewed the drafted chapter, its companion code and this map. Each finding
+was checked against the primary source or the code before it was applied.
+
+- **1** (Responses `to_turn` parses calls before checking `status`) accepted. `ResponseStatus` in
+  the OpenAI Python SDK includes `failed`, `cancelled`, `queued` and `in_progress`; a truncated
+  call is not parseable. Code fix: check status first, then refusals, then parse calls.
+- **2** (`FALSE_DONE` carries `answer`) accepted. The diagram and the code comment say only
+  `clean` is an answer; the claimed text moves to `detail`.
+- **3** (model ids) rejected. The ids in the chapter and code are current and intentional.
+- **4** (`reset_tool_choice` "two cases") accepted. PR #263 did limit the reset to two cases; the
+  current SDK source resets whenever
+  `reset_tool_choice` is true and the agent has used a tool; the docs give the default as `True`.
+  Gotcha 1 and item 10 corrected; the Agents page added as a source.
+- **5** (LangGraph tab misreads the end state) accepted, and worse than reported: the
+  `langchain-openai` (main branch, 2026-11) sends a `gpt-6` model with tools through the Responses API, where
+  `finish_reason` holds the status (`completed`), so a clean run read as abnormal. Code fix: read
+  `normalized_finish_reason` and the refusal field; classification made testable offline.
+- **6** (anti-patterns cross-reference) accepted, modified: the catalog has no such entry and is
+  shipped, so the claim was dropped from the chapter instead.
+- **7** (context economy) accepted. Item 8 and Gotcha 2 now name both costs and the trimming
+  mitigation, linking 1.5.
+- **8** (`verify` ownership vs 3.7; seams) accepted, modified. Item 5 and the chapter now say
+  `verify` labels the exit once and 3.7 is the verifier that sends findings back. 4.5 added to See
+  also; 2.6 and 3.4 stay in See also (budget).
+- **9** (stall detection Established) accepted. No cited source tests a detector; moved to
+  Emerging in item 4, Maturity, and the chapter's maturity line. Flagged for the author.
+- **10** (`compaction` stop reason) rejected. The stop-reasons page lists seven values and no
+  `compaction`. The counted sentence was cut for length anyway, so no count is frozen.
+- **11** (`lookup_market` duplicates 2.1's `get_competitor_prices`) accepted. Code, tests, chapter
+  and diagram rename to the 2.1 name.
+- **12** (refusal context reset; `is_error` asymmetry) accepted, modified. The Responses
+  `function_call_output` has no error field, now stated in Gotcha 5. The context-reset claim is
+  rejected: the stop-reasons page says to retry on another model and says nothing of a reset.
+- **13** (thesis bundled) rejected. The thesis is ruling 1; the chapter states it in the subtitle
+  and the definition.
+- **14** (aliases, super-step wording) accepted, modified. The chapter's super-step wording is
+  fixed; Aliases add *inner loop* and 12-Factor Agents Factor 8 as a related principle. Gulli
+  chapter titles and any alias-line additions are left for author sign-off.
+- **15** (stale sources) accepted, modified. ADK URL, the loop-engineering post's full title,
+  FEVER, the LangGraph default by version, a closed Author question 4 and a removed dangling
+  reference. The tools post keeps its short title; the reviewer's proposed title was wrong.
+- **16** (anchor 2 can succeed) accepted. One turn is one model call, so the anchor now uses
+  `max_turns=1`.
+- **17** (skeptical read) accepted, modified. One note on compounding errors added under
+  Contested; striking the named idea is left to the author (Author question 1 already defaults
+  to none).
+- **18** (prose rough edges, process notes in this map) accepted. "Fictional" dropped, trace step
+  1 tightened, footnote 5 adds OpenAI's conversation-state guide, and the process commentary in
+  this map was removed.

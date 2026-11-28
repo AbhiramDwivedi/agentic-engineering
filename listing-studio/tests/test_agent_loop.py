@@ -1,7 +1,9 @@
 """Offline tests for chapter 2.5: a scripted model, the five exits, no network."""
 from types import SimpleNamespace as NS
 
-from agent_loop import agent_loop_example, agent_loop_responses, tools as tools_mod
+from agent_loop import (
+    agent_loop_example, agent_loop_langgraph, agent_loop_responses, tools as tools_mod,
+)
 from agent_loop.loop import (
     ABNORMAL, CEILING, CLEAN, CONTINUE, END, FALSE_DONE, STALLED, Call, Turn, run_loop,
 )
@@ -52,8 +54,8 @@ def flaky_feed(failures):
 def test_timeout_is_an_error_result_the_model_recovers_from(monkeypatch):
     monkeypatch.setattr(tools_mod, "market_feed", flaky_feed(1))
     result, history, submitted = run([
-        call("lookup_market", 1, supplier_sku=SKU),
-        call("lookup_market", 2, supplier_sku=SKU),  # the retry
+        call("get_competitor_prices", 1, supplier_sku=SKU),
+        call("get_competitor_prices", 2, supplier_sku=SKU),  # the retry
         call("check_price", 3, supplier_sku=SKU, proposed_price_cents=41900),
         call("submit_for_review", 4, supplier_sku=SKU, price_cents=41900),
         Turn("Submitted 41900.", [], END),
@@ -79,20 +81,22 @@ def test_refusal_is_not_an_answer():
 
 def test_same_failing_call_repeated_stalls(monkeypatch):
     monkeypatch.setattr(tools_mod, "market_feed", flaky_feed(99))
-    result, _, _ = run([call("lookup_market", supplier_sku=SKU)], max_steps=10)
+    result, _, _ = run([call("get_competitor_prices", supplier_sku=SKU)], max_steps=10)
     assert result.exit == STALLED and result.steps == 3
 
 
 def test_retry_with_different_arguments_is_not_a_stall(monkeypatch):
     monkeypatch.setattr(tools_mod, "market_feed", flaky_feed(99))
-    turns = [call("lookup_market", i, supplier_sku=f"S{i}") for i in range(1, 4)]
+    turns = [call("get_competitor_prices", i, supplier_sku=f"S{i}") for i in range(1, 4)]
     result, _, _ = run(turns + [Turn("gave up", [], END)])
     assert result.exit == FALSE_DONE  # not STALLED: three different calls
+    assert result.answer is None and result.detail == "gave up"
 
 
 def test_done_without_submitting_is_false_done():
     result, _, submitted = run([Turn("All done.", [], END)])
     assert result.exit == FALSE_DONE and not submitted
+    assert result.answer is None and result.detail == "All done."
 
 
 def test_done_after_a_price_below_the_floor_is_false_done():
@@ -101,6 +105,7 @@ def test_done_after_a_price_below_the_floor_is_false_done():
         Turn("Submitted, done.", [], END),
     ])
     assert submitted == [38900] and result.exit == FALSE_DONE
+    assert result.answer is None and result.detail == "Submitted, done."
 
 
 def test_step_cap_ends_a_model_that_never_stops():
@@ -129,6 +134,9 @@ def test_responses_status_and_refusal_map_to_turns():
         return NS(output=output, output_text="x", status=status,
                   incomplete_details=NS(reason=reason) if reason else None)
 
+    cut = NS(type="function_call", call_id="k2", name="check_price",
+             arguments='{"supplier_sku": "NV-')
+
     fn = NS(type="function_call", call_id="k1", name="check_price",
             arguments='{"supplier_sku": "S", "proposed_price_cents": 1}')
     msg = NS(type="message", content=[NS(type="output_text")])
@@ -138,3 +146,27 @@ def test_responses_status_and_refusal_map_to_turns():
     assert to_turn(resp([msg])).stop == END
     assert to_turn(resp([msg], "incomplete", "max_output_tokens")).stop == "max_output_tokens"
     assert to_turn(resp([refused])).stop == "refusal"
+    truncated = to_turn(resp([cut], "incomplete", "max_output_tokens"))
+    assert truncated.stop == "max_output_tokens" and truncated.calls == []
+    assert to_turn(resp([fn], "failed")).stop == "failed"
+    assert to_turn(resp([fn], "cancelled")).stop == "cancelled"
+    assert to_turn(resp([cut])).stop == "invalid_arguments"
+
+
+def test_langgraph_end_state_is_classified():
+    classify = agent_loop_langgraph.classify_end
+
+    def msg(meta, **extra):
+        return NS(response_metadata=meta, additional_kwargs=extra, content="Done.")
+
+    ok, bad = [41900], []
+    r = classify(msg({"finish_reason": "stop"}), ok, SKU)
+    assert r.exit == CLEAN and r.answer == "Done."
+    r = classify(msg({"finish_reason": "completed", "normalized_finish_reason": "stop"}), ok, SKU)
+    assert r.exit == CLEAN
+    r = classify(msg({"finish_reason": "stop"}, refusal="no"), ok, SKU)
+    assert r.exit == ABNORMAL and r.detail == "refusal"
+    r = classify(msg({"finish_reason": "length"}), ok, SKU)
+    assert r.exit == ABNORMAL and r.detail == "length"
+    r = classify(msg({"finish_reason": "stop"}), bad, SKU)
+    assert r.exit == FALSE_DONE and r.answer is None

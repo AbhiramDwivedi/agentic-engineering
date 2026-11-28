@@ -37,7 +37,7 @@ class Result:
     exit: str  # one of the five above
     answer: str | None
     steps: int
-    detail: str = ""  # the provider's stop reason, when the exit is ABNORMAL
+    detail: str = ""  # the stop reason (ABNORMAL) or the claim (FALSE_DONE)
 # --8<-- [end:loop-types]
 
 
@@ -57,8 +57,9 @@ def run_loop(model, tools, history, verify, max_steps=8, max_repeats=3) -> Resul
         history.append({"role": "assistant", "text": turn.text, "calls": turn.calls})
         if turn.stop == END:
             # The model says it is done. Your code checks the claim.
-            exit_ = CLEAN if verify() else FALSE_DONE
-            return Result(exit_, turn.text, step)
+            if verify():
+                return Result(CLEAN, turn.text, step)
+            return Result(FALSE_DONE, None, step, detail=turn.text)  # a claim, kept for logs
         if turn.stop != CONTINUE:
             # Truncated, refused, paused: no tool call, and no answer.
             return Result(ABNORMAL, None, step, detail=turn.stop)

@@ -9,7 +9,7 @@ def market_feed(supplier_sku: str) -> list[int]:
 
 # --8<-- [start:loop-tools]
 def make_tools(submitted: list) -> dict:
-    def lookup_market(supplier_sku: str) -> dict:
+    def get_competitor_prices(supplier_sku: str) -> dict:
         """Competitor prices for a product, in cents."""
         # Raises TimeoutError when the feed is slow; the loop turns that into
         # an is_error result the model can read and retry.
@@ -21,7 +21,7 @@ def make_tools(submitted: list) -> dict:
         return {"queued": True, "price_cents": price_cents}
 
     return {
-        "lookup_market": lookup_market,
+        "get_competitor_prices": get_competitor_prices,
         "check_price": check_price,
         "submit_for_review": submit_for_review,
     }
