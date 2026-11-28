@@ -119,7 +119,7 @@ nav:
       - "4.2 Evaluation (planned)": craft/proving-it-works.md
       - "4.3 Human-in-the-Loop (planned)": craft/human-in-the-loop.md
       - "4.4 Guardrails & Safety (planned)": craft/guardrails-and-safety.md
-      - "4.5 Reasoning & Thinking Budgets (planned)": craft/reasoning-and-thinking-budgets.md
+      - "4.5 Reasoning & Thinking Budgets": craft/reasoning-and-thinking-budgets.md
       - "4.6 Prompt Injection & the Lethal Trifecta (planned)": craft/prompt-injection.md
   - V. Knowledge & Memory:
       - knowledge/index.md
