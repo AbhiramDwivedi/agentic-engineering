@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 590" width="800" height="590" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">The outer loop: your code calls the agent, runs the verifier itself, and owns every branch of the verdict</title>
+  <desc id="desc">Two zones side by side. On the left, inside the model's turn, sits one rounded box: an agent attempt, one complete run in which the model decides and proposes a price. On the right is a large zone labelled your code, the controller, and every box in it is a rectangle. Your code calls the agent for attempt n with the failures so far. The agent hands back a price, 34900, and your code passes it to a verifier, a plain function that checks MAP and margin. The verifier's result goes to a rectangle that branches on the verdict. A pass goes to publish the price. A fail turns into feedback text, price 34900 is below MAP 39900, which is the only thing that crosses back into the model's side, as input to the next attempt. When the attempt cap is hit, or the same failure comes back twice, the loop gives up, and a merchandiser, a person outside the loop, gets the failures. The verifier, the verdict, publish and give up all sit inside your code; the model never sees the verifier run and never votes on the verdict, it only reads the feedback text your code chose to send.</desc>
+  <style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .h2 { font-size: 12.5px; }
+  .col-k { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+  .box-t { font-size: 12.5px; font-weight: 700; }
+  .sub { font-size: 11px; }
+  .lab { font-size: 11px; font-weight: 600; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 600; }
+  .foot-t { font-size: 12.5px; font-weight: 700; }
+
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .hand-box-esc { stroke-width: 1.5; }
+  .zone { stroke-width: 1.5; }
+  .zone-model { stroke-dasharray: 6 5; }
+  .wire { fill: none; stroke-width: 2; }
+  .wire-model { fill: none; stroke-width: 2.5; }
+  .wire-fb { fill: none; stroke-width: 2; stroke-dasharray: 6 4; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .zone-code { fill: #f5f7fc; stroke: #4f5b93; }
+  .zone-model { fill: #fbf8fe; stroke: #b39ddb; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #ffffff; stroke: #8b93a6; }
+  .pass-box { fill: #eef1f9; stroke: #4f5b93; }
+  .hand-box-esc { fill: #fdf2f2; stroke: #e0a3a0; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #6a45b0; }
+  .txt-esc { fill: #c62828; }
+  .wire { stroke: #4f5b93; }  .mk-wire { fill: #4f5b93; }
+  .wire-model { stroke: #7e57c2; }  .mk-model { fill: #7e57c2; }
+  .wire-fb { stroke: #8b93a6; }  .mk-fb { fill: #8b93a6; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .zone-code { fill: #1d2130; stroke: #939ed4; }
+  .zone-model { fill: #241f30; stroke: #7e6aa8; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #8a93a8; }
+  .pass-box { fill: #262b3d; stroke: #939ed4; }
+  .hand-box-esc { fill: #2e1f1f; stroke: #8c4a47; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #c4aee8; }
+  .txt-esc { fill: #ff8a80; }
+  .wire { stroke: #939ed4; }  .mk-wire { fill: #939ed4; }
+  .wire-model { stroke: #b39ddb; }  .mk-model { fill: #b39ddb; }
+  .wire-fb { stroke: #a2abc0; }  .mk-fb { fill: #a2abc0; }
+  }
+  </style>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-wire"/>
+    </marker>
+    <marker id="arm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-model"/>
+    </marker>
+    <marker id="arf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-fb"/>
+    </marker>
+  </defs>
+
+  <rect class="page-bg" x="0.5" y="0.5" width="799" height="589" rx="10"/>
+
+  <!-- header -->
+  <text class="h1 txt" x="24" y="36">The outer loop: your code holds the verdict</text>
+  <text class="h2 txt-mute" x="24" y="58">rounded = the model decides · rectangle = your code decides</text>
+
+  <!-- zones -->
+  <rect class="zone zone-model" x="20" y="80" width="228" height="400" rx="16"/>
+  <text class="col-k txt-model" x="36" y="102">INSIDE THE MODEL'S TURN</text>
+
+  <rect class="zone zone-code" x="266" y="80" width="514" height="400" rx="6"/>
+  <text class="col-k txt-code" x="282" y="102">YOUR CODE: THE CONTROLLER</text>
+
+  <!-- the agent attempt (model decides) -->
+  <rect class="model-box" x="44" y="206" width="180" height="96" rx="24"/>
+  <text class="box-t txt" x="134" y="234" text-anchor="middle">Agent attempt</text>
+  <text class="sub txt-mute" x="134" y="254" text-anchor="middle">one complete run</text>
+  <text class="sub txt-model" x="134" y="272" text-anchor="middle">the model decides,</text>
+  <text class="sub txt-model" x="134" y="288" text-anchor="middle">proposes a price</text>
+
+  <!-- call the agent -->
+  <rect class="code-box" x="300" y="118" width="210" height="52"/>
+  <text class="box-t txt" x="405" y="140" text-anchor="middle">Call the agent</text>
+  <text class="sub txt-mute" x="405" y="158" text-anchor="middle">attempt n, with failures so far</text>
+  <path class="wire" d="M 300 144 L 134 144 L 134 204" marker-end="url(#ar)"/>
+
+  <!-- price out -->
+  <path class="wire-model" d="M 224 254 L 298 254" marker-end="url(#arm)"/>
+  <text class="mono-s txt-model" x="261" y="245" text-anchor="middle">34900</text>
+
+  <!-- verifier -->
+  <rect class="code-box" x="300" y="224" width="210" height="60"/>
+  <text class="box-t txt" x="405" y="246" text-anchor="middle">Verifier</text>
+  <text class="sub txt" x="405" y="263" text-anchor="middle">checks MAP and margin</text>
+  <text class="sub txt-mute" x="405" y="278" text-anchor="middle">a function, not a model</text>
+
+  <path class="wire" d="M 405 284 L 405 316" marker-end="url(#ar)"/>
+
+  <!-- verdict branch -->
+  <rect class="code-box" x="300" y="318" width="210" height="48"/>
+  <text class="box-t txt" x="405" y="340" text-anchor="middle">Branch on the verdict</text>
+  <text class="sub txt-mute" x="405" y="356" text-anchor="middle">your code reads the result</text>
+
+  <!-- pass -> publish -->
+  <path class="wire" d="M 510 330 L 540 330 L 540 270 L 568 270" marker-end="url(#ar)"/>
+  <text class="lab txt-code" x="548" y="300">pass</text>
+  <rect class="pass-box" x="570" y="246" width="190" height="48"/>
+  <text class="box-t txt" x="665" y="268" text-anchor="middle">Publish the price</text>
+  <text class="sub txt-mute" x="665" y="285" text-anchor="middle">only a verified price ships</text>
+
+  <!-- cap / futility -> give up -->
+  <path class="wire" d="M 510 354 L 540 354 L 540 400 L 568 400" marker-end="url(#ar)"/>
+  <text class="lab txt-esc" x="548" y="384">stop</text>
+  <rect class="code-box" x="570" y="374" width="190" height="56"/>
+  <text class="box-t txt" x="665" y="396" text-anchor="middle">Give up</text>
+  <text class="sub txt-mute" x="665" y="412" text-anchor="middle">attempt cap hit, or the</text>
+  <text class="sub txt-mute" x="665" y="425" text-anchor="middle">same failure twice</text>
+
+  <path class="wire" d="M 665 430 L 665 504" marker-end="url(#ar)"/>
+  <rect class="hand-box-esc" x="570" y="506" width="190" height="40" rx="4"/>
+  <text class="box-t txt-esc" x="665" y="524" text-anchor="middle">Merchandiser</text>
+  <text class="sub txt-mute" x="665" y="539" text-anchor="middle">gets the failures</text>
+
+  <!-- fail -> feedback -->
+  <path class="wire" d="M 405 366 L 405 398" marker-end="url(#ar)"/>
+  <text class="lab txt-code" x="413" y="387">fail</text>
+  <rect class="data-box" x="300" y="400" width="210" height="58" rx="3"/>
+  <text class="sub txt-mute" x="405" y="418" text-anchor="middle">feedback text</text>
+  <text class="mono-s txt" x="405" y="434" text-anchor="middle">"price 34900 is below</text>
+  <text class="mono-s txt" x="405" y="449" text-anchor="middle">MAP 39900"</text>
+
+  <!-- feedback crosses back: the only thing the model sees -->
+  <path class="wire-fb" d="M 300 429 L 134 429 L 134 304" marker-end="url(#arf)"/>
+  <text class="lab txt-mute" x="142" y="372">into the</text>
+  <text class="lab txt-mute" x="142" y="386">next attempt</text>
+  <text class="sub txt-model" x="36" y="452">sees only the feedback text,</text>
+  <text class="sub txt-model" x="36" y="467">never the verdict</text>
+
+  <!-- footer payoff -->
+  <text class="foot-t txt" x="24" y="512">Every path from the verdict</text>
+  <text class="foot-t txt" x="24" y="530">stays in your code.</text>
+  <text class="sub txt-mute" x="24" y="550">The model gets no vote on pass, retry or quit.</text>
+</svg>

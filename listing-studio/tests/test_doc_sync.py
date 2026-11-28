@@ -126,6 +126,19 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 3.7 — The Outer Loop
+OUTER_LOOP_CHAPTER = os.path.join(ROOT, "docs", "composition", "the-outer-loop.md")
+OUTER_LOOP_PKG = os.path.join(ROOT, "listing-studio", "outer_loop")
+
+OUTER_LOOP_ANCHORS = {
+    "outer-verifier":   "verifier.py",
+    "outer-loop":       "loop.py",
+    "outer-langgraph":  "outer_loop_langgraph.py",
+    "outer-responses":  "outer_loop_responses.py",
+    "outer-anthropic":  "outer_loop_example.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +244,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_outer_loop_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(OUTER_LOOP_CHAPTER))
+    for name, fname in OUTER_LOOP_ANCHORS.items():
+        region = _region(_read(os.path.join(OUTER_LOOP_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/composition/the-outer-loop.md with "
+            f"listing-studio/outer_loop/{fname}."
         )

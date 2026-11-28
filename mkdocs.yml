@@ -112,7 +112,7 @@ nav:
       - "3.4 Evaluator-Optimizer (planned)": composition/evaluator-optimizer.md
       - "3.5 The Specialist Panel (planned)": composition/specialist-panel.md
       - "3.6 Planning & Task Decomposition (planned)": composition/planning.md
-      - "3.7 The Outer Loop (planned)": composition/the-outer-loop.md
+      - "3.7 The Outer Loop": composition/the-outer-loop.md
   - IV. The Craft of Control:
       - craft/index.md
       - "4.1 Prompt Architecture & Management (planned)": craft/prompts-are-source-code.md
