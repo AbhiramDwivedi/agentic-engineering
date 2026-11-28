@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 590" width="800" height="590" role="img" aria-labelledby="ttl desc">
+<title id="ttl">The harness in two halves: steering text the model reads, and enforcement checks every proposed tool call must pass</title>
+<desc id="desc">A harness in two zones around one model. Steering, on top, is text the model reads and may ignore: the system prompt, tool descriptions, skills, and a pinned drafts-only rule. The model, drawn rounded, proposes a call such as write_draft with target live. Enforcement passes it through five checks in order: the session tool list, which does not offer publish; permission rules, where the first match in the list wins and no match means deny; pre-tool hooks, where the strictest verdict wins; the sandbox, where the tool runs; and a post-tool hook that checks the draft after it is already written. Each outcome returns to the model as a tool result. Before each model call a limits check ends the run at the 400-cent spend cap, so turn 9 never runs. A legend notes that the rounded shape is where the model decides, rectangles are where your code decides, and dashed boxes are text the model reads.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 21px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .sub { font-size: 11.5px; }
+  .seat-sub { font-size: 11px; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .ghost { stroke-dasharray: 5 5; stroke-width: 1.5; }
+  .zone { stroke-width: 1.5; }
+  .wire, .wire-bad, .wire-ok { fill: none; stroke-width: 2; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .zone { fill: #f8f9fd; stroke: #4f5b93; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .ghost { fill: none; stroke: #aab2c4; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .txt-bad { fill: #b3423a; }
+  .txt-ok { fill: #2e7d4f; }
+  .wire { stroke: #97a0b5; }
+  .mk-wire { fill: #97a0b5; }
+  .wire-bad { stroke: #b3423a; }
+  .mk-bad { fill: #b3423a; }
+  .wire-ok { stroke: #2e7d4f; }
+  .mk-ok { fill: #2e7d4f; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #161a22; stroke: #2b3140; }
+  .zone { fill: #1a1e29; stroke: #939ed4; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .ghost { stroke: #5a6478; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .txt-bad { fill: #ef8a80; }
+  .txt-ok { fill: #7bc79a; }
+  .wire { stroke: #78829a; }
+  .mk-wire { fill: #78829a; }
+  .wire-bad { stroke: #ef8a80; }
+  .mk-bad { fill: #ef8a80; }
+  .wire-ok { stroke: #7bc79a; }
+  .mk-ok { fill: #7bc79a; }
+  }
+</style>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" class="mk-wire"/>
+  </marker>
+  <marker id="arw-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" class="mk-bad"/>
+  </marker>
+  <marker id="arw-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" class="mk-ok"/>
+  </marker>
+</defs>
+
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="589" rx="10"/>
+
+<text class="h1 txt" x="20" y="36">One proposed tool call, and every check it has to pass</text>
+<text class="h2 txt-mute" x="20" y="58">Steering text sits above the model; enforcement code rules on the call before and after the tool runs.</text>
+
+<!-- Steering zone -->
+<rect class="ghost" x="20" y="74" width="760" height="112" rx="6"/>
+<text class="tag-lbl txt-model" x="36" y="94">STEERING</text>
+<text class="sub txt-mute" x="116" y="94">text the model reads on every request, and may ignore</text>
+
+<rect class="data-box" x="36" y="104" width="172" height="70" rx="3"/>
+<text class="card-t txt" x="48" y="124">System prompt</text>
+<text class="sub txt-mute" x="48" y="143">drafts only, never publish,</text>
+<text class="sub txt-mute" x="48" y="160">flag odd prices</text>
+
+<rect class="data-box" x="220" y="104" width="172" height="70" rx="3"/>
+<text class="card-t txt" x="232" y="124">Tool descriptions</text>
+<text class="sub txt-mute" x="232" y="143">what each tool does</text>
+<text class="sub txt-mute" x="232" y="160">and when to call it</text>
+
+<rect class="data-box" x="404" y="104" width="172" height="70" rx="3"/>
+<text class="card-t txt" x="416" y="124">Skills</text>
+<text class="sub txt-mute" x="416" y="143">instructions loaded</text>
+<text class="sub txt-mute" x="416" y="160">when the task needs them</text>
+
+<rect class="data-box" x="588" y="104" width="172" height="70" rx="3"/>
+<text class="card-t txt" x="600" y="124">Pinned rule</text>
+<text class="sub txt-mute" x="600" y="143">"drafts only" is kept</text>
+<text class="sub txt-mute" x="600" y="160">when history compacts</text>
+
+<path class="wire" d="M90,186 L90,232" marker-end="url(#arw)"/>
+<text class="sub txt-mute" x="100" y="201">model reads</text>
+
+<!-- Model -->
+<rect class="model-box" x="20" y="236" width="140" height="120" rx="16"/>
+<text class="card-t txt-model" x="90" y="260" text-anchor="middle">Model</text>
+<text class="sub txt" x="90" y="278" text-anchor="middle">proposes a call</text>
+<text class="mono-s txt" x="90" y="304" text-anchor="middle">write_draft(</text>
+<text class="mono-s txt" x="90" y="320" text-anchor="middle">target="live")</text>
+<text class="sub txt-mute" x="90" y="342" text-anchor="middle">or publish(...)</text>
+
+<!-- Enforcement zone -->
+<rect class="zone" x="176" y="206" width="604" height="332" rx="6"/>
+<text class="tag-lbl txt-code" x="192" y="226">ENFORCEMENT</text>
+<text class="sub txt-mute" x="300" y="226">code that runs on every proposal, which the model cannot argue with</text>
+
+<path class="wire" d="M160,292 L190,292" marker-end="url(#arw)"/>
+
+<!-- Seats -->
+<rect class="code-box" x="192" y="240" width="100" height="104" rx="2"/>
+<text class="card-t txt" x="242" y="262" text-anchor="middle">Session</text>
+<text class="card-t txt" x="242" y="278" text-anchor="middle">tool list</text>
+<text class="seat-sub txt-mute" x="242" y="302" text-anchor="middle">publish is</text>
+<text class="seat-sub txt-mute" x="242" y="317" text-anchor="middle">not offered</text>
+
+<path class="wire" d="M292,292 L308,292" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="310" y="240" width="100" height="104" rx="2"/>
+<text class="card-t txt" x="360" y="262" text-anchor="middle">Permission</text>
+<text class="card-t txt" x="360" y="278" text-anchor="middle">rules</text>
+<text class="seat-sub txt-mute" x="360" y="302" text-anchor="middle">first match in</text>
+<text class="seat-sub txt-mute" x="360" y="317" text-anchor="middle">your list wins</text>
+<text class="seat-sub txt-mute" x="360" y="332" text-anchor="middle">no match: deny</text>
+
+<path class="wire" d="M410,292 L426,292" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="428" y="240" width="100" height="104" rx="2"/>
+<text class="card-t txt" x="478" y="262" text-anchor="middle">Pre-tool</text>
+<text class="card-t txt" x="478" y="278" text-anchor="middle">hooks</text>
+<text class="seat-sub txt-mute" x="478" y="302" text-anchor="middle">strictest</text>
+<text class="seat-sub txt-mute" x="478" y="317" text-anchor="middle">verdict wins</text>
+
+<path class="wire" d="M528,292 L544,292" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="546" y="240" width="100" height="104" rx="2"/>
+<text class="card-t txt" x="596" y="262" text-anchor="middle">Sandbox</text>
+<text class="seat-sub txt-mute" x="596" y="302" text-anchor="middle">the tool runs,</text>
+<text class="seat-sub txt-mute" x="596" y="317" text-anchor="middle">limited to what</text>
+<text class="seat-sub txt-mute" x="596" y="332" text-anchor="middle">it may touch</text>
+
+<path class="wire" d="M646,292 L662,292" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="664" y="240" width="100" height="104" rx="2"/>
+<text class="card-t txt" x="714" y="262" text-anchor="middle">Post-tool</text>
+<text class="card-t txt" x="714" y="278" text-anchor="middle">hook</text>
+<text class="seat-sub txt-mute" x="714" y="302" text-anchor="middle">runs after the</text>
+<text class="seat-sub txt-mute" x="714" y="317" text-anchor="middle">write; flags a</text>
+<text class="seat-sub txt-mute" x="714" y="332" text-anchor="middle">bad draft</text>
+
+<!-- Outcomes dropping into the result lane -->
+<path class="wire-bad" d="M242,344 L242,380" marker-end="url(#arw-bad)"/>
+<path class="wire-bad" d="M360,344 L360,380" marker-end="url(#arw-bad)"/>
+<path class="wire-bad" d="M478,344 L478,380" marker-end="url(#arw-bad)"/>
+<path class="wire-ok" d="M714,344 L714,380" marker-end="url(#arw-ok)"/>
+
+<rect class="data-box" x="192" y="384" width="572" height="68" rx="3"/>
+<text class="mono-s txt-bad" x="242" y="406" text-anchor="middle">no such tool</text>
+<text class="mono-s txt-bad" x="242" y="422" text-anchor="middle">'publish'</text>
+<text class="mono-s txt-bad" x="360" y="406" text-anchor="middle">rule: deny</text>
+<text class="mono-s txt-bad" x="360" y="422" text-anchor="middle">write_draft</text>
+<text class="mono-s txt-bad" x="478" y="406" text-anchor="middle">hook: deny</text>
+<text class="mono-s txt-ok" x="714" y="406" text-anchor="middle">ok: draft</text>
+<text class="mono-s txt-ok" x="714" y="422" text-anchor="middle">written</text>
+<text class="sub txt-mute" x="204" y="443">Each outcome returns as a tool result. A refusal is an error the model can read.</text>
+
+<!-- Limits and the way back to the model -->
+<path class="wire" d="M300,452 L300,470" marker-end="url(#arw)"/>
+<rect class="code-box" x="192" y="472" width="300" height="52" rx="2"/>
+<text class="card-t txt" x="208" y="493">Limits, checked before each model call</text>
+<text class="sub txt-mute" x="208" y="512">step cap, spend cap: 400 cents in this run</text>
+
+<path class="wire-bad" d="M492,498 L536,498" marker-end="url(#arw-bad)"/>
+<rect class="code-box" x="540" y="472" width="224" height="52" rx="2"/>
+<text class="card-t txt-bad" x="556" y="493">At the cap, the run ends</text>
+<text class="sub txt-mute" x="556" y="512">spend_cap, and turn 9 never runs</text>
+
+<path class="wire" d="M192,498 L90,498 L90,360" marker-end="url(#arw)"/>
+<text class="sub txt-mute" x="98" y="452">under cap:</text>
+<text class="sub txt-mute" x="98" y="468">next turn</text>
+
+<!-- Legend -->
+<rect class="model-box" x="20" y="554" width="34" height="20" rx="8"/>
+<text class="sub txt-mute" x="62" y="568">the model decides</text>
+<rect class="code-box" x="190" y="554" width="34" height="20" rx="2"/>
+<text class="sub txt-mute" x="232" y="568">your code decides</text>
+<rect class="data-box" x="362" y="554" width="34" height="20" rx="2"/>
+<text class="sub txt-mute" x="404" y="568">text the model reads</text>
+</svg>

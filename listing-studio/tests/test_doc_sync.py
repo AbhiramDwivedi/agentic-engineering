@@ -232,3 +232,31 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
         )
+
+
+# Chapter 2.6 — The Harness
+HARNESS_CHAPTER = os.path.join(ROOT, "docs", "the-unit", "the-harness.md")
+HARNESS_PKG = os.path.join(ROOT, "listing-studio", "harness")
+
+HARNESS_ANCHORS = {
+    "policy":               "policy.py",
+    "hook":                 "hook.py",
+    "limits":               "limits.py",
+    "compact":              "compact.py",
+    "trace":                "trace.py",
+    "loop":                 "loop.py",
+    "harness-langgraph":    "harness_langgraph.py",
+    "harness-openai":       "harness_openai_agents.py",
+    "harness-anthropic":    "harness_claude_agent_sdk.py",
+}
+
+
+def test_harness_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(HARNESS_CHAPTER))
+    for name, fname in HARNESS_ANCHORS.items():
+        region = _region(_read(os.path.join(HARNESS_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/the-unit/the-harness.md with "
+            f"listing-studio/harness/{fname}."
+        )
