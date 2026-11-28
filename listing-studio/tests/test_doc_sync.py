@@ -232,3 +232,27 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
         )
+
+
+# Chapter 5.4 — Compaction
+COMPACTION_CHAPTER = os.path.join(ROOT, "docs", "knowledge", "compaction-and-the-window.md")
+COMPACTION_PKG = os.path.join(ROOT, "listing-studio", "compaction")
+
+COMPACTION_ANCHORS = {
+    "compaction-window":  "window.py",
+    "compaction-mask":    "ladder.py",
+    "compaction-compact": "ladder.py",
+    "compaction-state":   "state.py",
+    "compaction-probe":   "probe.py",
+}
+
+
+def test_compaction_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(COMPACTION_CHAPTER))
+    for name, fname in COMPACTION_ANCHORS.items():
+        region = _region(_read(os.path.join(COMPACTION_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/knowledge/compaction-and-the-window.md with "
+            f"listing-studio/compaction/{fname}."
+        )

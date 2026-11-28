@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 640" width="800" height="640" role="img" aria-labelledby="ttl desc">
+<title id="ttl">The compaction ladder: each rung saves tokens and loses something, and pins and state sit outside it</title>
+<desc id="desc">The compaction ladder, lightest rung first. Rung 1, your code masks old tool results, keeping a key to each, so the text is restorable. Rung 2, code trims long messages, and the cut part is gone unless archived. Rung 3, the model summarizes older turns, and whatever the summary leaves out, such as the desk's 27-48 range, is gone unless archived. Rung 4, code offloads content to files and keeps a path, so the agent can read it back. Rung 5, code isolates a sub-task in a sub-agent's own window, and only its result returns. Beside the ladder, outside every rung, sit the pinned "drafts only" rule and a state record your code owns, holding the desk's 27-48 range. Code assembles the next call's window from the pins, the rendered state record and the compacted history. A legend notes that rounded shapes are where the model decides and rectangles are where your code decides.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 20px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .sub { font-size: 11.5px; }
+  .tag { font-size: 11.5px; font-weight: 700; }
+  .num { font-size: 13px; font-weight: 700; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+  .code-box, .model-box { stroke-width: 2; }
+  .wire { fill: none; stroke-width: 2; }
+  .zone { fill: none; stroke-width: 1.5; stroke-dasharray: 6 4; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .keep-box { fill: #f0f8f3; stroke: #2e7d4f; stroke-width: 2; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .txt-bad { fill: #b3423a; }
+  .txt-ok { fill: #2e7d4f; }
+  .wire, .zone { stroke: #97a0b5; }
+  .mk-wire { fill: #97a0b5; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #161a22; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .keep-box { fill: #1b2a22; stroke: #7bc79a; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .txt-bad { fill: #ef8a80; }
+  .txt-ok { fill: #7bc79a; }
+  .wire, .zone { stroke: #78829a; }
+  .mk-wire { fill: #78829a; }
+  }
+</style>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" class="mk-wire"/>
+  </marker>
+</defs>
+
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="639" rx="10"/>
+
+<text class="h1 txt" x="40" y="36">The compaction ladder: every rung saves tokens and loses something</text>
+<text class="h2 txt-mute" x="40" y="58">Some things sit outside every rung.</text>
+
+<!-- weight gutter -->
+<path class="wire" d="M52,112 L52,500" marker-end="url(#arw)"/>
+
+<!-- rung 1: clear -->
+<rect class="code-box" x="70" y="80" width="450" height="72" rx="4"/>
+<text class="num txt-code" x="86" y="102">1</text>
+<text class="card-t txt-code" x="104" y="102">Mask old tool results</text>
+<text class="tag txt-ok" x="506" y="102" text-anchor="end">restorable</text>
+<text class="sub txt" x="104" y="122">Swaps each old result for a placeholder with its key.</text>
+<text class="sub txt-mute" x="104" y="140">Loses: the result text, until code fetches it back by key.</text>
+
+<!-- rung 2: trim -->
+<rect class="code-box" x="70" y="166" width="450" height="72" rx="4"/>
+<text class="num txt-code" x="86" y="188">2</text>
+<text class="card-t txt-code" x="104" y="188">Trim long messages</text>
+<text class="tag txt-bad" x="506" y="188" text-anchor="end">gone unless archived</text>
+<text class="sub txt" x="104" y="208">Cuts each long message down to a length limit.</text>
+<text class="sub txt-mute" x="104" y="226">Loses: the cut part of each message.</text>
+
+<!-- rung 3: summarize (the model decides) -->
+<rect class="model-box" x="70" y="252" width="450" height="72" rx="26"/>
+<text class="num txt-model" x="92" y="274">3</text>
+<text class="card-t txt-model" x="110" y="274">Summarize older turns</text>
+<text class="tag txt-bad" x="500" y="274" text-anchor="end">gone unless archived</text>
+<text class="sub txt" x="110" y="294">The model rewrites the older turns as one message.</text>
+<text class="sub txt-mute" x="110" y="312">Loses: what the summary leaves out, like the desk's 27-48 range.</text>
+
+<!-- rung 4: offload -->
+<rect class="code-box" x="70" y="338" width="450" height="72" rx="4"/>
+<text class="num txt-code" x="86" y="360">4</text>
+<text class="card-t txt-code" x="104" y="360">Offload to files</text>
+<text class="tag txt-ok" x="506" y="360" text-anchor="end">restorable</text>
+<text class="sub txt" x="104" y="380">Writes bulky content to a file, keeps the path in the window.</text>
+<text class="sub txt-mute" x="104" y="398">Loses: the content from view, until the agent reads it back.</text>
+
+<!-- rung 5: isolate -->
+<rect class="code-box" x="70" y="424" width="450" height="72" rx="4"/>
+<text class="num txt-code" x="86" y="446">5</text>
+<text class="card-t txt-code" x="104" y="446">Isolate a sub-task</text>
+<rect class="model-box" x="248" y="432" width="84" height="20" rx="10" stroke-width="1.5"/>
+<text class="sub txt-model" x="290" y="446" text-anchor="middle">sub-agent</text>
+<text class="tag txt-mute" x="506" y="446" text-anchor="end">only the result</text>
+<text class="sub txt" x="104" y="466">The sub-agent works in its own window; its result returns.</text>
+<text class="sub txt-mute" x="104" y="484">Loses: the sub-task's whole working window.</text>
+
+<!-- outside the summarizer's reach -->
+<rect class="zone" x="540" y="80" width="220" height="416" rx="8"/>
+<text class="card-t txt" x="556" y="104">Outside every rung</text>
+<text class="sub txt-mute" x="556" y="122">No rewrite touches these.</text>
+
+<rect class="keep-box" x="556" y="138" width="188" height="104" rx="4"/>
+<text class="card-t txt-ok" x="570" y="160">Pinned rule</text>
+<text class="mono-s txt" x="570" y="182">"drafts only"</text>
+<text class="sub txt" x="570" y="204">Skipped by every rung:</text>
+<text class="sub txt" x="570" y="220">never masked, trimmed</text>
+<text class="sub txt" x="570" y="236">or summarized.</text>
+
+<rect class="keep-box" x="556" y="258" width="188" height="120" rx="4"/>
+<text class="card-t txt-ok" x="570" y="280">State record</text>
+<text class="sub txt-mute" x="570" y="297">owned by your code</text>
+<text class="mono-s txt" x="570" y="318">NV-ALDSWORTH-DM</text>
+<text class="mono-s txt" x="570" y="336">height: 27-48 in</text>
+<text class="sub txt" x="570" y="358">Written the moment the</text>
+<text class="sub txt" x="570" y="372">decision is made.</text>
+
+<text class="sub txt" x="556" y="404">Code renders both into</text>
+<text class="sub txt" x="556" y="420">every call, after any</text>
+<text class="sub txt" x="556" y="436">compaction. A summary</text>
+<text class="sub txt" x="556" y="452">that drops 27-48 cannot</text>
+<text class="sub txt" x="556" y="468">drop it from here.</text>
+
+<!-- into the next window -->
+<path class="wire" d="M295,496 L295,532" marker-end="url(#arw)"/>
+<path class="wire" d="M650,496 L650,532" marker-end="url(#arw)"/>
+<rect class="code-box" x="40" y="534" width="720" height="58" rx="4"/>
+<text class="card-t txt-code" x="60" y="556">Your code assembles the next call's window</text>
+<text class="mono-s txt" x="60" y="578">pins + rendered state record + compacted history</text>
+
+<!-- legend -->
+<rect class="model-box" x="40" y="606" width="34" height="18" rx="9"/>
+<text class="sub txt-mute" x="82" y="619">the model decides</text>
+<rect class="code-box" x="220" y="606" width="34" height="18" rx="2"/>
+<text class="sub txt-mute" x="262" y="619">your code decides</text>
+<rect class="keep-box" x="400" y="606" width="34" height="18" rx="2"/>
+<text class="sub txt-mute" x="442" y="619">held by code, outside the ladder</text>
+</svg>
