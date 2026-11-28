@@ -126,6 +126,17 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 6.4 — Voice & Realtime Agents
+VOICE_CHAPTER = os.path.join(ROOT, "docs", "io-boundary", "voice-and-realtime-agents.md")
+VOICE_PKG = os.path.join(ROOT, "listing-studio", "voice_turns")
+
+VOICE_ANCHORS = {
+    "voice-states":    "turns.py",
+    "voice-endpoint":  "turns.py",
+    "voice-bargein":   "turns.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +242,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_voice_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(VOICE_CHAPTER))
+    for name, fname in VOICE_ANCHORS.items():
+        region = _region(_read(os.path.join(VOICE_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/io-boundary/voice-and-realtime-agents.md with "
+            f"listing-studio/voice_turns/{fname}."
         )
