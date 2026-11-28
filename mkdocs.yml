@@ -146,7 +146,7 @@ nav:
       - "8.4 Controlling Cost (planned)": production/controlling-cost.md
       - "8.5 Locks, PII & Identity (planned)": production/locks-pii-identity.md
       - "8.6 Governance & Compliance (planned)": production/governance-and-compliance.md
-      - "8.7 Deployment & Runtimes (planned)": production/deployment-and-runtimes.md
+      - "8.7 Deployment & Runtimes": production/deployment-and-runtimes.md
   - IX. The Frontier:
       - frontier/index.md
       - "9.1 Long-Running Agents (planned)": frontier/when-you-want-autonomy.md

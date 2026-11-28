@@ -125,6 +125,17 @@ FAN_OUT_ANCHORS = {
     "fanout-anthropic":  "fan_out_example.py",
 }
 
+JOBS_CHAPTER = os.path.join(ROOT, "docs", "production", "deployment-and-runtimes.md")
+JOBS_PKG = os.path.join(ROOT, "listing-studio", "jobs")
+
+JOBS_ANCHORS = {
+    "jobs-record":      "queue.py",
+    "jobs-endpoint":    "queue.py",
+    "jobs-lease":       "queue.py",
+    "jobs-idempotent":  "queue.py",
+    "jobs-supervisor":  "queue.py",
+}
+
 
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
@@ -231,4 +242,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_jobs_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(JOBS_CHAPTER))
+    for name, fname in JOBS_ANCHORS.items():
+        region = _region(_read(os.path.join(JOBS_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/production/deployment-and-runtimes.md with "
+            f"listing-studio/jobs/{fname}."
         )
