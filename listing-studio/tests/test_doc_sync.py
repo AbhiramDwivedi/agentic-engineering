@@ -126,6 +126,22 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 6.2 — Synthesis
+ASSEMBLY_CHAPTER = os.path.join(ROOT, "docs", "io-boundary", "producing-the-deliverable.md")
+ASSEMBLY_PKG = os.path.join(ROOT, "listing-studio", "assembly")
+
+ASSEMBLY_ANCHORS = {
+    "assembly-schemas":    "schemas.py",
+    "assembly-template":   "template.py",
+    "assembly-checks":     "checks.py",
+    "assembly-polish":     "polish.py",
+    "assembly-gate":       "gate.py",
+    "assembly-langgraph":  "polish_langgraph.py",
+    "assembly-responses":  "polish_responses.py",
+    "assembly-anthropic":  "polish_anthropic.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +247,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_assembly_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(ASSEMBLY_CHAPTER))
+    for name, fname in ASSEMBLY_ANCHORS.items():
+        region = _region(_read(os.path.join(ASSEMBLY_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/io-boundary/producing-the-deliverable.md with "
+            f"listing-studio/assembly/{fname}."
         )

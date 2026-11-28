@@ -130,7 +130,7 @@ nav:
   - VI. The I/O Boundary:
       - io-boundary/index.md
       - "6.1 Ingestion (planned)": io-boundary/getting-the-mess-in.md
-      - "6.2 Synthesis (planned)": io-boundary/producing-the-deliverable.md
+      - "6.2 Synthesis": io-boundary/producing-the-deliverable.md
       - "6.3 Streaming & Agent UX (planned)": io-boundary/streaming-and-agent-ux.md
       - "6.4 Voice & Realtime Agents (planned)": io-boundary/voice-and-realtime-agents.md
   - VII. Reliability:
