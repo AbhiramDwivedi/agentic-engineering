@@ -232,3 +232,27 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
         )
+
+
+# Chapter 5.3 -- Real Memory
+MEMORY_CHAPTER = os.path.join(ROOT, "docs", "knowledge", "real-memory.md")
+MEMORY_PKG = os.path.join(ROOT, "listing-studio", "memory")
+
+MEMORY_ANCHORS = {
+    "memory-entry":      "schemas.py",
+    "memory-store":      "store.py",
+    "memory-recall":     "store.py",
+    "memory-langgraph":  "memory_langgraph.py",
+    "memory-responses":  "memory_responses.py",
+    "memory-anthropic":  "memory_anthropic.py",
+}
+
+
+def test_memory_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(MEMORY_CHAPTER))
+    for name, fname in MEMORY_ANCHORS.items():
+        region = _region(_read(os.path.join(MEMORY_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/knowledge/real-memory.md with listing-studio/memory/{fname}."
+        )
