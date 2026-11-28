@@ -137,7 +137,7 @@ nav:
       - reliability/index.md
       - "7.1 Retry & Graceful Degradation (planned)": reliability/which-failures-sink-the-ship.md
       - "7.2 Observer (planned)": reliability/a-silent-failure-is-worse.md
-      - "7.3 Checkpointing (planned)": reliability/stopping-gracefully.md
+      - "7.3 Checkpointing": reliability/stopping-gracefully.md
   - VIII. Operating in Production:
       - production/index.md
       - "8.1 Observability (planned)": production/seeing-inside.md
