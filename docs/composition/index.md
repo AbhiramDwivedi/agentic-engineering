@@ -10,4 +10,4 @@ Arranging many units into a system, the patterns. The most-developed material, a
 - **3.4 Evaluator-Optimizer**
 - **3.5 The Specialist Panel**
 - **3.6 Planning & Task Decomposition** *(planned)*
-- **3.7 The Outer Loop** *(planned)*
+- **3.7 The Outer Loop**
