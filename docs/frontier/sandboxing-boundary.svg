@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 540" width="800" height="540" role="img" aria-labelledby="ttl desc">
+<title id="ttl">Sandboxing: a boundary your code draws around the code the model proposes</title>
+<desc id="desc">The model proposes code, which passes into a boundary drawn by your code with three walls labelled network, filesystem, and environment and secrets. Inside, the running code reaches only an allowed workspace folder and allowed hosts; its attempts to reach any other host, the rest of the disk and ~/.ssh, or the host's environment variables and API keys are denied at the wall. A bounded result with an exit code, output capped with a truncated flag, and a timeout flag flows back to the model. Your code fixes the policy before the model speaks; the walls hold only as far as the backend that enforces them at the OS or hypervisor.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .sub { font-size: 11.5px; }
+  .cap { font-size: 12px; }
+  .mono-t { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; }
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .wall { fill: none; stroke-width: 4; }
+  .wire { fill: none; stroke-width: 2; }
+  .deny { fill: none; stroke-width: 1.8; stroke-dasharray: 4 4; }
+  .x { stroke-width: 3; stroke-linecap: round; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .wall { stroke: #4f5b93; }
+  .tag-bg { fill: #ffffff; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .deny { stroke: #b0b7c8; }
+  .x { stroke: #c62828; }
+  .txt-deny { fill: #c62828; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .wall { stroke: #939ed4; }
+  .tag-bg { fill: #21222c; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .deny { stroke: #5a6478; }
+  .x { stroke: #ef9a9a; }
+  .txt-deny { fill: #ef9a9a; }
+  }
+</style>
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="539" rx="8"/>
+
+<!-- outside the walls: what the code may not reach -->
+<rect class="data-box" x="510" y="24" width="160" height="44" rx="6"/>
+<text class="card-t txt" x="590" y="43" text-anchor="middle">any other host</text>
+<text class="sub txt-mute" x="590" y="60" text-anchor="middle">the open internet</text>
+
+<rect class="data-box" x="664" y="330" width="126" height="56" rx="6"/>
+<text class="card-t txt" x="727" y="352" text-anchor="middle">rest of the disk</text>
+<text class="mono-t txt-mute" x="727" y="372" text-anchor="middle">~/.ssh</text>
+
+<rect class="data-box" x="480" y="444" width="180" height="44" rx="6"/>
+<text class="card-t txt" x="570" y="463" text-anchor="middle">host env vars</text>
+<text class="sub txt-mute" x="570" y="480" text-anchor="middle">API keys, tokens</text>
+
+<!-- the boundary: your code decides what is reachable -->
+<rect class="wall" x="210" y="90" width="440" height="330" rx="2"/>
+<text class="tag-lbl txt-code" x="226" y="116">BOUNDARY</text>
+<text class="sub txt-mute" x="226" y="132">built by your code</text>
+
+<!-- the three walls -->
+<rect class="tag-bg" x="240" y="81" width="84" height="18"/>
+<text class="tag-lbl txt-code" x="282" y="94" text-anchor="middle">NETWORK</text>
+<g transform="translate(650,170) rotate(90)">
+  <rect class="tag-bg" x="-52" y="-9" width="104" height="18"/>
+  <text class="tag-lbl txt-code" x="0" y="4" text-anchor="middle">FILESYSTEM</text>
+</g>
+<rect class="tag-bg" x="240" y="411" width="200" height="18"/>
+<text class="tag-lbl txt-code" x="340" y="424" text-anchor="middle">ENVIRONMENT &amp; SECRETS</text>
+
+<!-- inside: what the policy allows -->
+<rect class="data-box" x="345" y="112" width="140" height="40" rx="6"/>
+<text class="card-t txt" x="415" y="130" text-anchor="middle">allowed hosts</text>
+<text class="sub txt-mute" x="415" y="146" text-anchor="middle">on the allowlist</text>
+
+<rect class="data-box" x="495" y="196" width="135" height="52" rx="6"/>
+<text class="card-t txt" x="562" y="217" text-anchor="middle">workspace folder</text>
+<text class="sub txt-mute" x="562" y="236" text-anchor="middle">read and write</text>
+
+<!-- the proposed code, running -->
+<rect class="data-box" x="260" y="215" width="200" height="80" rx="6"/>
+<text class="card-t txt" x="360" y="245" text-anchor="middle">the proposed code,</text>
+<text class="card-t txt" x="360" y="263" text-anchor="middle">running</text>
+<text class="sub txt-mute" x="360" y="282" text-anchor="middle">whatever the model intends</text>
+
+<path class="wire" d="M400,215 L400,154" marker-end="url(#arw)"/>
+<path class="wire" d="M460,232 L493,226" marker-end="url(#arw)"/>
+
+<!-- denied attempts, stopped at each wall -->
+<path class="deny" d="M440,215 L580,90"/>
+<g transform="translate(580,90)"><line class="x" x1="-7" y1="-7" x2="7" y2="7"/><line class="x" x1="-7" y1="7" x2="7" y2="-7"/></g>
+<path class="deny" d="M460,285 L650,358"/>
+<g transform="translate(650,358)"><line class="x" x1="-7" y1="-7" x2="7" y2="7"/><line class="x" x1="-7" y1="7" x2="7" y2="-7"/></g>
+<path class="deny" d="M440,295 L560,420"/>
+<g transform="translate(560,420)"><line class="x" x1="-7" y1="-7" x2="7" y2="7"/><line class="x" x1="-7" y1="7" x2="7" y2="-7"/></g>
+<text class="sub txt-deny" x="596" y="110">denied</text>
+<text class="sub txt-deny" x="596" y="384">denied</text>
+<text class="sub txt-deny" x="574" y="412">denied</text>
+
+<!-- the bounded result: your code shapes what goes back -->
+<rect class="code-box" x="230" y="320" width="222" height="78" rx="2"/>
+<text class="card-t txt" x="244" y="341">bounded result</text>
+<text class="mono-t txt" x="244" y="360">exit code (or none)</text>
+<text class="mono-t txt" x="244" y="376">output, capped</text>
+<text class="mono-t txt" x="244" y="392">truncated? timed out?</text>
+
+<!-- the model -->
+<rect class="model-box" x="20" y="196" width="150" height="84" rx="26"/>
+<text class="card-t txt-model" x="95" y="228" text-anchor="middle">model</text>
+<text class="sub txt" x="95" y="248" text-anchor="middle">proposes code</text>
+<text class="sub txt-mute" x="95" y="264" text-anchor="middle">chooses what to run</text>
+
+<path class="wire" d="M170,240 L258,250" marker-end="url(#arw)"/>
+<text class="sub txt-mute" x="174" y="232">code</text>
+<path class="wire" d="M230,370 L95,370 L95,282" marker-end="url(#arw)"/>
+<text class="sub txt-mute" x="104" y="362">result</text>
+
+<!-- what the drawing does and does not claim -->
+<text class="cap txt-mute" x="20" y="512">Your code fixes the policy before the model speaks. The walls hold only as far as the backend</text>
+<text class="cap txt-mute" x="20" y="528">that enforces them: an OS sandbox, gVisor or a microVM, not the policy object on its own.</text>
+</svg>
