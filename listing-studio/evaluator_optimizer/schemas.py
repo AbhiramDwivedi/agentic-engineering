@@ -7,7 +7,7 @@ and pass the schema to whichever provider API they use.
 """
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 # --8<-- [start:eo-schemas]
@@ -25,6 +25,6 @@ class Verdict(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     passed: bool
-    score: float          # 0.0-1.0; the ratchet compares drafts on this
+    score: float = Field(ge=0.0, le=1.0)  # 0.0-1.0; the ratchet compares drafts on this
     reasons: list[str]    # e.g. "question 2 duplicates question 1"
 # --8<-- [end:eo-schemas]

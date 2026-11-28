@@ -30,7 +30,7 @@ DEFAULT_MAX_ITERATIONS = 3
 @dataclass
 class LoopResult:
     """passed: whether the loop ended on a passing verdict. draft: the
-    best-scoring attempt seen, not necessarily the last one drafted.
+    passing draft, or the best-scoring one when capped.
     verdict: the Verdict that scored `draft`. iterations: rounds run.
     stopped_reason: "passed" or "capped"."""
     passed: bool
@@ -41,7 +41,7 @@ class LoopResult:
 
 
 def run_loop(
-    drafter_fn: Any,  # callable(gaps, feedback: Verdict | None) -> ClarifyingQuestions
+    drafter_fn: Any,  # callable(gaps, previous: ClarifyingQuestions | None, feedback: Verdict | None) -> ClarifyingQuestions
     judge_fn: Any,     # callable(gaps, draft) -> Verdict
     gaps: list[str],
     max_iterations: int = DEFAULT_MAX_ITERATIONS,
@@ -54,10 +54,11 @@ def run_loop(
     """
     best_draft: Optional[ClarifyingQuestions] = None
     best_verdict: Optional[Verdict] = None
+    previous: Optional[ClarifyingQuestions] = None
     feedback: Optional[Verdict] = None
 
     for i in range(1, max_iterations + 1):
-        draft = drafter_fn(gaps, feedback)
+        draft = drafter_fn(gaps, previous, feedback)
         verdict = evaluate(judge_fn, gaps, draft)
 
         if best_verdict is None or verdict.score > best_verdict.score:
@@ -68,6 +69,7 @@ def run_loop(
                 passed=True, draft=draft, verdict=verdict,
                 iterations=i, stopped_reason="passed",
             )
+        previous = draft  # the draft the critique is about, not the best
         feedback = verdict  # the specific critique, never a bare "fail"
 
     return LoopResult(

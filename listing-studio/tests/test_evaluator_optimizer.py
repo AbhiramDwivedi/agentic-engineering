@@ -145,7 +145,7 @@ def test_loop_passes_on_round_one_with_no_wasted_judge_calls():
     draft_calls = {"n": 0}
     judge_calls = {"n": 0}
 
-    def drafter_fn(gaps, feedback):
+    def drafter_fn(gaps, previous, feedback):
         draft_calls["n"] += 1
         return _good_shaped_draft(f"v{draft_calls['n']}")
 
@@ -169,7 +169,7 @@ def test_loop_revises_and_then_passes():
     draft_calls = {"n": 0}
     judge_calls = {"n": 0}
 
-    def drafter_fn(gaps, feedback):
+    def drafter_fn(gaps, previous, feedback):
         draft_calls["n"] += 1
         if draft_calls["n"] > 1:
             assert feedback is not None and feedback.reasons  # the critique crossed, not a bare "fail"
@@ -196,7 +196,7 @@ def test_loop_caps_out_and_returns_the_failure_contract_intact():
     scores = [0.3, 0.5, 0.4]
     draft_calls = {"n": 0}
 
-    def drafter_fn(gaps, feedback):
+    def drafter_fn(gaps, previous, feedback):
         draft_calls["n"] += 1
         return _good_shaped_draft(f"v{draft_calls['n']}")
 
@@ -223,7 +223,7 @@ def test_loop_ratchet_discards_a_worse_revision():
     scores = [0.8, 0.3]  # the revision is strictly worse
     draft_calls = {"n": 0}
 
-    def drafter_fn(gaps, feedback):
+    def drafter_fn(gaps, previous, feedback):
         draft_calls["n"] += 1
         return _good_shaped_draft(f"v{draft_calls['n']}")
 
@@ -237,6 +237,53 @@ def test_loop_ratchet_discards_a_worse_revision():
     assert result.iterations == 2  # both rounds ran and were graded
     assert result.verdict.score == 0.8  # the earlier, better verdict
     assert "v1" in result.draft.questions[0]  # the earlier, better draft
+
+
+def test_drafter_receives_previous_draft():
+    """Round 1 gets (None, None); each later round gets the draft just
+    judged and its verdict, even when that draft scored lower than the best."""
+    scores = [0.6, 0.2, 0.3]
+    seen, drafts, verdicts = [], [], []
+
+    def drafter_fn(gaps, previous, feedback):
+        seen.append((previous, feedback))
+        d = _good_shaped_draft(f"v{len(seen)}")
+        drafts.append(d)
+        return d
+
+    def judge_fn(gaps, draft):
+        v = Verdict(passed=False, score=scores[len(verdicts)], reasons=["needs work"])
+        verdicts.append(v)
+        return v
+
+    run_loop(drafter_fn, judge_fn, GAPS, max_iterations=3)
+
+    assert seen[0] == (None, None)
+    assert seen[1][0] is drafts[0] and seen[1][1] is verdicts[0]
+    assert seen[2][0] is drafts[1] and seen[2][1] is verdicts[1]  # last draft, not best
+
+
+def test_pass_beats_higher_scoring_failure():
+    scores, flags = [0.8, 0.7], [False, True]
+    drafts = []
+
+    def drafter_fn(gaps, previous, feedback):
+        drafts.append(_good_shaped_draft(f"v{len(drafts) + 1}"))
+        return drafts[-1]
+
+    def judge_fn(gaps, draft):
+        i = len(drafts) - 1
+        return Verdict(passed=flags[i], score=scores[i], reasons=[])
+
+    result = run_loop(drafter_fn, judge_fn, GAPS)
+
+    assert result.passed is True and result.verdict.passed
+    assert result.draft is drafts[1] and result.verdict.score == 0.7
+
+
+def test_verdict_score_out_of_range_rejected():
+    with pytest.raises(ValidationError):
+        Verdict(passed=False, score=1.5, reasons=[])
 
 
 # ---------------------------------------------------------------------------
@@ -278,7 +325,7 @@ def test_best_of_n_never_revises():
         return _good_shaped_draft(f"v{len(calls)}")
 
     def judge_fn(gaps, draft):
-        return Verdict(passed=False, score=float(len(calls)), reasons=[])
+        return Verdict(passed=False, score=len(calls) / 10, reasons=[])
 
     run_best_of_n(drafter_fn, judge_fn, GAPS, n=4)
 

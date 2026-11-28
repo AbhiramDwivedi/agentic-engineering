@@ -16,18 +16,17 @@
 > trim the **Must-cover** list; that sets the chapter's scope. Bar: definitive but tight (the
 > Gang-of-Four / Wikipedia test), not exhaustive.
 
-## Sign-off (2026-08-27) — author released the barrier, orchestrator ruled
+## Sign-off (2026-08-27): rulings recorded for the PR
 
-The author lifted the Stage-1 sign-off barrier and asked for the full pipeline through to a PR.
-These rulings are therefore the orchestrator's, not the author's, and are recorded here so the PR
-shows exactly what was assumed. Anything below marked **[author to confirm at PR review]** is a
-call the orchestrator could not verify from this workspace.
+The author asked for the full pipeline through to a PR, so these rulings were made without a
+Stage-1 stop and are recorded here so the PR shows exactly what was assumed. Anything marked
+**[author to confirm at PR review]** is a call left for the author.
 
-1. **Two-verdict lens line — adopted.** `Maturity: Established (with an independent judge or an
+1. **Two-verdict lens line: adopted.** `Maturity: Established (with an independent judge or an
    external signal) · Contested (intrinsic self-correction, no external signal)`, following 3.3's
-   verified precedent in `docs/composition/fan-out.md`. Stage 7 must touch up the row in
-   `docs/catalogs/quick-reference.md` and the inline "Established" mentions in `who-decides.md`
-   and `prompt-chaining.md` for consistency.
+   verified precedent in `docs/composition/fan-out.md`. The matching row in
+   `docs/catalogs/quick-reference.md` already carries the split. (Neither `who-decides.md` nor
+   `prompt-chaining.md` states a maturity verdict for 3.4, so nothing there needs a touch-up.)
 2. **AlphaEvolve — overruled; demoted.** The map's own item-1 rule is that the decision placing a
    pattern in 3.4 is *the verdict*, and AlphaEvolve's verdict is rendered by a deterministic
    scoring function. "The LLM picks the next mutation" is a *generation* decision, which every
@@ -37,25 +36,30 @@ call the orchestrator could not verify from this workspace.
    far end of the family; it may not build a section on it.
 3. **write-execute-observe-fix — split confirmed as mapped.** Named illustration inside item 3;
    the worked mechanism stays in 2.5/9.6.
-4. **Carrier confirmed: Listing Studio step 2** (clarify attributes — draft, grade, loop, capped
-   at 3). **The "From production." callout is scoped to the draft/grade/loop shape and the
-   iteration cap only.** The ratchet (accept-only-on-improvement) and the cap discipline of item 6
-   are written as reasoned / companion-repo, **not** production-claimed, because the real source is
-   not checked out in this workspace and the orchestrator cannot verify it. **[author to confirm at
-   PR review]** — widening the callout is a one-line edit if the real code did do this.
+4. **Carrier confirmed: Listing Studio step 2** (clarify attributes: draft, grade, loop, capped
+   at 3). The chapter carries **no** "From production." callout: the cap, the ratchet and the
+   failure-return contract are taught from the companion repo and reasoned argument, and the
+   *Grounding* line says `companion repo + research`. **[author to confirm at PR review]** whether
+   a first-hand callout belongs here; adding one is the author's call alone.
 5. **"Grading its own homework" — kept** as the chapter's named idea. Item 3 gives it a precise
    referent, and the skeptical corrective is what earns it.
 6. **METR / reward-hacking — kept, but tight.** Two sentences at most, doing one job: bridging
    item 4's "judges are biased" to item 3's "a bad evaluator gets exploited, not fooled." Becomes
    a mention-and-link once 4.2 and 9.2 exist.
 7. **Item 9 (framework spellings) — demoted out of must-cover prose.** It is implementation
-   mechanics: it goes to the Stage-2 code brief and to one compact ecosystem paragraph, not to
+   mechanics: it goes to the Stage-2 code work and to one compact ecosystem paragraph, not to
    eight paragraphs of chapter prose. This buys the budget headroom item 3 needs.
 8. **Alias line — provisional.** Ships as *generator-critic, self-refine, reflection,
    LLM-as-a-judge* (four of the sweep's nine, none invented). **[author to confirm at PR review]**
 9. **Fact-check carry-forward to Stage 4:** the `[^self-refine]` footnote says "roughly a 20-point
    average score improvement" where the paper reports ~20 **percent**. The fact-checker must
    settle points-vs-percent before ship.
+
+## Thesis
+
+An evaluator-optimizer loop is genuinely the model's decision only where no function can compute
+`passed`, and it reliably improves output only when the evaluator holds a signal the drafter did
+not produce.
 
 ## The mental model (what the reader must leave with)
 
@@ -93,11 +97,9 @@ gaps against the current stub, which has no argued prose yet.
    around a deterministic verifier (tests, a linter, a compiler exit code) is 3.7's pattern, even
    when the diagram looks identical; the write-code, run-tests, read-the-failure, fix-it loop a
    coding agent runs inside its own turn is a `2.5 The Agent Loop` mechanism using this chapter's
-   *shape* without this chapter's *decision*. AlphaEvolve is the case that tests the line hardest:
-   its per-candidate scoring is usually a deterministic benchmark, yet it belongs here as the
-   population/evolutionary variant, because the thing an LLM decides each round is which mutation
-   or recombination to try next, informed by the population's scored history, not a bare
-   pass/fail retry of the same action.[^alphaevolve] *Skip it:* the chapter either duplicates
+   *shape* without this chapter's *decision*. AlphaEvolve tests the line hardest, and per sign-off ruling 2 it falls on the 3.7 side: its
+   verdict comes from a deterministic scoring function, so it is evidence for item 3 (what an
+   external verifier is worth), not a variant of this pattern.[^alphaevolve] *Skip it:* the chapter either duplicates
    3.1's gated chain or 3.7's outer loop under a different name, or — worse — teaches a reader
    that a fixed-count test-and-retry loop is "the model deciding," the exact conflation 3.2 and
    3.3 each exist to correct for their own neighbours. **n/a** (definitional; the litmus verdict
@@ -130,7 +132,9 @@ gaps against the current stub, which has no argued prose yet.
    page turn: a coding agent's write, execute, observe, fix cycle is the clearest case of
    self-correction *with* an external signal — the test suite's failure is not the model's own
    opinion — and it is comparatively reliable, which is exactly what CRITIC's tool-interactive
-   design predicts.[^critic] *Skip it:* the chapter's hook ("grading its own homework") oversells
+   design predicts.[^critic] Kamoi et al.'s survey (TACL 2024) reconciles Self-Refine's gains with
+   Huang's ceiling: prompted self-correction rarely works without reliable external feedback or a
+   task unusually suited to self-checking.[^kamoi] *Skip it:* the chapter's hook ("grading its own homework") oversells
    a technique the strongest available evidence says fails in its purest form, breaking
    voice-and-style rule 11 (the hook can't outrun the Gotchas). **Contested** (intrinsic,
    no-signal self-correction, as a reliably-improving technique) inside a pattern that is
@@ -139,8 +143,8 @@ gaps against the current stub, which has no argued prose yet.
    write-execute-observe-fix mechanism in depth, out of this chapter's scope.)
 4. **Judge pathologies: self-preference, position/verbosity bias, and rubric-gaming** — Zheng
    et al. (NeurIPS 2023) document position, verbosity, and self-enhancement bias in LLM judges: a
-   repetitive-list attack inflated Claude's and GPT-3.5's scores roughly 91% of the time and
-   GPT-4's about 8.7% of the time, even though a strong judge otherwise reaches over 80%
+   repetitive-list attack (a rephrased copy of the answer's list prepended to it) fooled Claude-v1
+   and GPT-3.5 as judges 91.3% of the time and GPT-4 8.7% of the time (Table 3), even though a strong judge otherwise reaches over 80%
    agreement with human preference on the paper's own benchmarks.[^judge] Panickssery, Bowman &
    Feng (NeurIPS 2024) find self-recognition ability correlates linearly with self-preference: a
    model scores its own outputs higher than the quality gap alone explains, which matters
@@ -149,7 +153,10 @@ gaps against the current stub, which has no argued prose yet.
    frontier models editing a test file so every test passes, or exploiting a bug in the scoring
    function itself, with one model attempting some form of it in an estimated 1-2% of task
    attempts and over 40 times more often when the scoring function was visible to the
-   model.[^metr] *Skip it:* a team uses the same model as generator and judge, is surprised the
+   model.[^metr] The judge is also an attack surface: untrusted text carried in the draft can
+   inject instructions aimed at it (Shi et al., ACM CCS 2024, an optimization-based injection that
+   steers the verdict; Raina, Liusie & Gales, 2024, universal phrases that inflate absolute scores
+   far more than pairwise comparisons).[^judge-attack] *Skip it:* a team uses the same model as generator and judge, is surprised the
    score climbs while quality plateaus, and has no framework for why. **Established** (the
    biases, independently replicated); **Contested** (whether any prompting mitigation closes them
    for a same-model judge). (Zheng et al., NeurIPS 2023; Panickssery et al., NeurIPS 2024; METR,
@@ -171,8 +178,10 @@ gaps against the current stub, which has no argued prose yet.
 6. **The loop's control surface: the cap, the ratchet, the wired revise edge, and the failure-
    return contract** — a hard iteration cap regardless of what the model would prefer; an
    accept-only-on-improvement ratchet (keep the best-scoring draft seen so far, revert on a
-   regression, never just keep "the latest"); oscillation/thrash detection, since a loop can
-   alternate between two "fixes" with no net progress; the revise edge actually wired, since a
+   regression, never just keep "the latest"); no separate oscillation detector, because a loop
+   that alternates between two "fixes" with no net progress is handled by the ratchet plus the
+   cap (and the ratchet is steadier when `score` is built from discrete rubric checks rather than
+   a free float); the revise edge actually wired, since a
    critic step that computes a verdict nobody routes back to the generator produces no
    correction at all, only a display; and this reference's own failure-return-contract rule:
    a failed round comes back to the generator as a specific, structured critique ("the bullet
@@ -186,25 +195,13 @@ gaps against the current stub, which has no argued prose yet.
    and never reverts. **Standard** (the discipline; general software-engineering practice) for a
    pattern that is Established. (Cemri-style loop-failure literature; arXiv:2607.01641; → [4.3
    Human-in-the-Loop](../craft/human-in-the-loop.md) for the escalation path.)
-7. **Best-of-N as the sibling that isn't a loop, and the evolutionary variant at the far end of
-   the axis** — sample N drafts independently, score each, keep the best; no revision step, no
+7. **Best-of-N as the sibling that isn't a loop** (AlphaEvolve demoted to a pointer by ruling 2) — sample N drafts independently, score each, keep the best; no revision step, no
    accumulating context, no oscillation risk, at the cost of paying for N generations up front
    instead of amortizing across rounds. The lineage runs through reward-model reranking (Stiennon
-   et al., NeurIPS 2020; Nakano et al., 2021's WebGPT).[^bestofn] AlphaEvolve sits at the far end
-   of the same axis: not one N-sample draw but a maintained population with lineage, an LLM
-   proposing mutations informed by each candidate's scored history, verified by Google DeepMind
-   at real infrastructure scale (recovering roughly 0.7% of Google's fleet-wide compute in a
-   scheduling heuristic; a 23% kernel speedup translating to about a 1% cut in Gemini's training
-   time; up to 32.5% on a FlashAttention kernel; a 4x4 complex-matrix-multiplication algorithm in
-   48 scalar multiplications, the first improvement on Strassen's 1969 result in that
-   setting).[^alphaevolve] The throughline for the reader: a bad evaluator does not get fooled by
-   a population searching a thousand variations against it, it gets *exploited* — item 4's
-   pathologies at scale, which is why AlphaEvolve's own design leans on evaluators that are cheap,
-   automated, and hard to game.[^alphaevolve] *Skip it:* a team builds an iterative critique loop
-   where independent parallel sampling would be cheaper and free of thrash risk, or assumes
-   AlphaEvolve's technique is a normal team's next tool rather than a research-lab-scale result.
-   **Established** (best-of-N); **Emerging** (evolutionary/program-search at AlphaEvolve's scale,
-   real and published, not yet a default a mid-size team reaches for). (Stiennon et al., NeurIPS
+   et al., NeurIPS 2020; Nakano et al., 2021's WebGPT).[^bestofn] Per sign-off ruling 2, AlphaEvolve gets at most a one-sentence
+   pointer here as the far end of the family; its evidence lives in item 3.[^alphaevolve] *Skip it:* a team builds an iterative critique loop
+   where independent parallel sampling would be cheaper and free of thrash risk.
+   **Established** (best-of-N). (Stiennon et al., NeurIPS
    2020; Nakano et al., 2021; Novikov et al., 2025, arXiv:2506.13131.)
 8. **Cost: iterations multiply generate-plus-judge, honestly stated** — a 3-round loop with a
    judge call each round runs roughly the calls of a single generate-and-ship several times over,
@@ -216,18 +213,18 @@ gaps against the current stub, which has no argued prose yet.
    loop on a high-volume, low-stakes step and the multiplier dominates the pipeline's bill before
    anyone notices in a demo. **n/a** (arithmetic, not a claim needing a maturity verdict). (→ [8.4
    Controlling Cost](../production/controlling-cost.md) for the general economics.)
-9. **Framework spellings, verified against current docs** — LangGraph: a conditional edge with a
+9. **Framework spellings (demoted by sign-off ruling 7 to one ecosystem paragraph)** — LangGraph: a conditional edge with a
    `should_continue`/`decide_to_finish`-shaped function routing back to the generator node, the
    shape LangChain's own "Reflection Agents" post ships.[^langgraph-refl] OpenAI Agents SDK: a
    shipped, runnable reference at `examples/agent_patterns/llm_as_a_judge.py` — a generator agent,
-   a judge agent, and a loop that continues until the judge is satisfied.[^oai-judge] Google ADK:
+   a judge agent, and a loop that continues until the judge is satisfied, with a round cap only in its automated
+   mode.[^oai-judge] Google ADK:
    `LoopAgent` plus an `exit_loop` tool a critic-role sub-agent calls to end iteration by setting
-   an escalate flag the runtime reads;[^adk-loop] verify the loop's own default iteration count
-   and confirm the exit path is actually reachable rather than a fixed count with no real exit
-   wired. CrewAI: task-level guardrails with `guardrail_max_retries` (the older `max_retries` is
+   an escalate flag the runtime reads; `max_iterations` defaults to `None` in Python, and the docs
+   now mark template workflow agents deprecated in favour of graph-based workflows.[^adk-loop] CrewAI: task-level guardrails with `guardrail_max_retries` (the older `max_retries` is
    deprecated).[^crewai] DSPy: `Refine` (iterate with feedback, temperature-varied rollouts,
-   stops on a reward threshold or N attempts) beside `BestOfN` (parallel rollouts, no feedback) in
-   the same library, a clean, importable illustration of item 7's distinction.[^dspy] *Skip it:*
+   stops on a reward threshold or N attempts) beside `BestOfN` (independent sequential rollouts, no feedback, stopping early on
+   a threshold) in the same library, a clean, importable illustration of item 7's distinction.[^dspy] *Skip it:*
    the reader can't tell a working implementation from a diagram, and can't verify any claim on
    their own screen. **n/a** (mechanics; verify every name and default against current docs
    before the chapter ships, these evolve).
@@ -305,11 +302,10 @@ an independent judge or an external signal) · Contested (intrinsic self-correct
 external signal)."** The stub's current single-word verdict, taken at face value, tells a reader
 that grading-your-own-homework generally works; the strongest available evidence (item 3) says
 the opposite in its purest form, and the gap between those two readings is exactly what the
-gloss line "grading its own homework" needs the chapter to resolve rather than gloss over. If
-adopted, the callouts elsewhere already pointing at "Established" for this pattern
-(`docs/catalogs/quick-reference.md`'s table row; the inline mentions in `who-decides.md` and
-`prompt-chaining.md`) should be revisited for consistency at Stage 7, the same follow-through
-3.3's split required.
+gloss line "grading its own homework" needs the chapter to resolve rather than gloss over. The
+`docs/catalogs/quick-reference.md` row carries the same split. Narrowing note: "independent
+judge" means a judge with a signal the drafter lacks or one checked against human labels; an
+uncalibrated second model reading the same rubric is not evidence enough for Established.
 
 ## Aliases
 
@@ -317,20 +313,15 @@ adopted, the callouts elsewhere already pointing at "Established" for this patte
 - **self-refine** — Madaan et al.'s own paper title (Self-Refine, NeurIPS 2023).
 - **reflexion-style loops** — Shinn et al.'s Reflexion (NeurIPS 2023), as commonly generalized
   in practitioner usage beyond the paper's own RL framing.
-- **Reflection** — named as one of the field's most-cited four patterns ("ReAct, CoT,
-  Reflection, Plan-and-Execute") in agent-pattern catalogs surveying the space; distinguish from
+- **Reflection** — one of Andrew Ng's four agentic design patterns (2024, with tool use,
+  planning and multi-agent collaboration) and the title of Gulli's *Agentic Design Patterns*
+  chapter on this loop (2025); distinguish from
   this chapter's narrower, judgment-call-specific claim.
 - **LLM-as-a-Judge** — Zheng et al.'s own paper title and the term of art industry-wide.
 - **CRITIC / tool-interactive critiquing** — Gou et al.'s own name for their external-tool-backed
   variant.
 - **retry node / review node** — a LangGraph-shaped implementation name seen in stateful-graph
   tutorials for this pattern's node roles.
-- **the verifier principle** — informal shorthand, seen alongside AlphaEvolve discussions, for
-  "an automated, hard-to-game evaluator beats iterative self-reflection at scale"; independently
-  arguable from item 3's ceiling plus AlphaEvolve's own design choices, not this reference's
-  coinage.
-- **evolutionary coding agent / program search** — the framing AlphaEvolve and related
-  evolutionary-program-search work use for the population variant (item 7).
 
 ## Reader-verifiable anchors
 
@@ -340,7 +331,7 @@ adopted, the callouts elsewhere already pointing at "Established" for this patte
   satisfied — as actual, inspectable code rather than a diagram.[^oai-judge]
 - **DSPy ships the two techniques items 1 and 7 distinguish as two distinctly named, currently
   importable classes**: `dspy.Refine` (iterate with generated feedback) beside `dspy.BestOfN`
-  (parallel rollouts, no feedback, highest-reward wins) in one library, so a reader can `pip
+  (independent rollouts run in sequence, no feedback, highest-reward or first-passing wins) in one library, so a reader can `pip
   install dspy` and see the boundary this chapter draws as two different objects rather than one
   idea under two names.[^dspy]
 
@@ -438,39 +429,13 @@ incidents, reused here).
 
 ## Open questions the author must rule on
 
-1. **The two-verdict lens line.** Recommend replacing the stub's bare "Established" with
-   "Established (with an independent judge or external signal) · Contested (intrinsic, no-signal
-   self-correction)," following 3.3's precedent. This needs explicit sign-off, not a silent
-   default, and it has a downstream consequence: `quick-reference.md`'s table row and the inline
-   "Established" mentions in `who-decides.md` and `prompt-chaining.md` would want a matching
-   touch-up at Stage 7 for consistency.
-2. **The AlphaEvolve boundary (item 1).** This map places AlphaEvolve inside 3.4 as the
-   population/evolutionary variant, per the brief's steer, even though its scoring function is
-   typically deterministic — the same property that puts a compiler-check retry loop in 3.7. The
-   distinction argued here (an LLM decides which mutation to try next, informed by scored
-   history, versus code deciding pass/fail on a fixed retry) is defensible but not obviously the
-   only reasonable line; confirm it before the chapter leans on it, since it is the map's least
-   settled call.
-3. **How much of write-execute-observe-fix belongs in 3.4's prose versus a pure
-   mention-and-link.** The brief flags it as evidence pairing with item 3; this map keeps the
-   worked *mechanism* out of 3.4 entirely (→ 2.5/9.6) and uses it only as a named illustration
-   inside item 3's argument. Confirm that split doesn't starve 3.4's "the ceiling, and what closes
-   the gap" argument of its clearest example.
-4. **The carrier.** Listing Studio step 2 ("clarify attributes": draft questions, grade them,
-   loop, bounded by a default of 3 iterations) is the obvious, already-designated home in
-   `carrier-bible.md`, and it has first-hand grounding the author can confirm. Confirm this stays the chapter's carrier
-   scene (recommended) rather than reaching for a sibling surface, and confirm the "From
-   production" callout can cover the full loop mechanics (cap, revert-on-no-improvement) or only
-   the draft/grade/loop shape itself — the ratchet and cap discipline in item 6 may be reasoned
-   rather than production-confirmed unless the real code specifically did that too, and this
-   sweep has no access to that source to check.
-5. **Named-idea sign-off.** Confirm "grading its own homework" survives as the chapter's named
-   idea now that item 3 gives it a precise referent, or strike it if the author judges it too cute
-   for a chapter that is partly a skeptical corrective.
-6. **Whether the reward-hacking/METR material (item 4) is proportionate.** It is recent,
-   directly on-topic, and independently sourced without leaning on the alias sweep,
-   but it is also adjacent to 9.2's and 4.2's territory; confirm it earns its place in 3.4 rather
-   than becoming a mention-and-link once those chapters exist.
+Questions 1 to 6 of the original map (lens line, AlphaEvolve boundary, the write-execute-observe-
+fix split, the carrier, the named idea, METR's proportion) are settled by sign-off rulings 1 to 6
+above. Two items remain for the author at PR review:
+
+1. **Alias line** (ruling 8): ships provisionally as *generator-critic, self-refine, reflection,
+   LLM-as-a-judge*.
+2. **First-hand callout** (ruling 4): the chapter ships without one.
 
 [^anthropic-eo]: Anthropic, "Building Effective Agents" (2024-12-19). "In the evaluator-optimizer
 workflow, one LLM call generates a response while another provides evaluation and feedback in a
@@ -495,8 +460,8 @@ preferences train a reward model (RLAIF) rather than a human-labeled one.
 <https://arxiv.org/abs/2212.08073>
 [^judge]: Zheng, L. et al., "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena" (NeurIPS
 2023, Datasets & Benchmarks track). Documents position, verbosity, and self-enhancement bias in
-LLM judges; a repetitive-list attack inflated Claude's and GPT-3.5's scores in roughly 91% of
-cases and GPT-4's in about 8.7%; a strong judge otherwise reaches over 80% agreement with human
+LLM judges; a repetitive-list attack (prepending a rephrased copy of the answer's list) fooled Claude-v1
+and GPT-3.5 as judges in 91.3% of cases and GPT-4 in 8.7% (Table 3); a strong judge otherwise reaches over 80% agreement with human
 preference on the paper's own benchmarks, and reference-guided grading substantially reduces a
 measured math-grading failure rate. <https://arxiv.org/abs/2306.05685>
 [^selfpref]: Panickssery, A., Bowman, S., Feng, S., "LLM Evaluators Recognize and Favor Their Own
@@ -535,17 +500,28 @@ suites, over 40 times more often when the scoring function was visible to the mo
 Question-Answering with Human Feedback" (2021), <https://arxiv.org/abs/2112.09332>. The lineage
 for best-of-N reranking: sample N independent completions, score each with a reward model, keep
 the highest-scoring one, no revision step.
-[^langgraph-refl]: LangChain, "Reflection Agents" (LangChain blog). Nodes for draft, tool
+[^langgraph-refl]: LangChain, "Reflection Agents" (LangChain blog). Covers Basic Reflection, Reflexion and Language Agent Tree Search. Nodes for draft, tool
 execution, and revision, with a conditional edge inspecting state to decide whether to loop back
 or finish. <https://www.langchain.com/blog/reflection-agents>
 [^adk-loop]: Google, Agent Development Kit docs, "Loop workflow agents." `LoopAgent` runs its
 sub-agents repeatedly; an `exit_loop` tool, typically given to a critic/refiner sub-agent, sets an
-escalate flag the runtime reads to stop the loop and return control to the parent.
-<https://google.github.io/adk-docs/agents/workflow-agents/loop-agents/>
+escalate flag the runtime reads to stop the loop and return control to the parent. In Python `max_iterations` defaults to `None`. The page carries a
+deprecation banner pointing to graph-based workflows.
+<https://adk.dev/agents/workflow-agents/loop-agents/>
 [^oai-judge]: OpenAI, `openai-agents-python`, `examples/agent_patterns/llm_as_a_judge.py`. A
 generator agent produces an outline, a judge agent evaluates it and gives feedback, and the loop
 continues until the judge is satisfied.
 <https://github.com/openai/openai-agents-python/blob/main/examples/agent_patterns/llm_as_a_judge.py>
+[^kamoi]: Kamoi, R., Zhang, Y., Zhang, N., Han, J., Zhang, R., "When Can LLMs Actually Correct
+Their Own Mistakes? A Critical Survey of Self-Correction of LLMs" (TACL 2024). No prior work shows
+successful self-correction with feedback from prompted LLMs alone, outside tasks exceptionally
+suited to it; reliable external feedback or large-scale fine-tuning is what makes it work.
+<https://arxiv.org/abs/2406.01297>
+[^judge-attack]: Shi, J. et al., "Optimization-based Prompt Injection Attack to LLM-as-a-Judge"
+(ACM CCS 2024), <https://arxiv.org/abs/2403.17710>; Raina, V., Liusie, A., Gales, M., "Is
+LLM-as-a-Judge Robust? Investigating Universal Adversarial Attacks on Zero-shot LLM Assessment"
+(2024), <https://arxiv.org/abs/2402.14016>: judges are significantly more susceptible when used
+for absolute scoring than for comparative assessment.
 [^crewai]: CrewAI, "Tasks" docs. Task-level guardrails (function-based or LLM-based) validate
 output before it passes to the next task; `guardrail_max_retries` controls retry attempts on
 failure (the older `max_retries` attribute is deprecated). <https://docs.crewai.com/en/concepts/tasks>
@@ -554,3 +530,37 @@ generated feedback between attempts, temperature-varied, stopping on a reward th
 attempts; `BestOfN` runs the same module N times with no feedback and keeps the highest-reward or
 first-passing result. Both replaced `dspy.Suggest`/`dspy.Assert` as of DSPy 2.6.
 <https://dspy.ai/api/modules/Refine/>, <https://dspy.ai/tutorials/output_refinement/best-of-n-and-refine/>
+
+## Second-engine review (post-draft)
+
+A second engine reviewed the drafted chapter, its companion code and this map. Each finding was
+checked against the primary source (paper, vendor docs, library source) or the code and tests
+before a disposition was recorded.
+
+| # | Finding | Disposition |
+|---|---|---|
+| 1 | First-person production callout not grounded | Accepted. Callout removed; *Grounding* is now `companion repo + research`; ruling 4 rewritten. Left on the author's checklist. |
+| 2 | Map referred to material outside the public reference | Accepted. Ruling text and open questions rewritten to rest on the carrier bible and the companion repo only. |
+| 3 | Drafter never sees its previous draft, so positional critiques are unactionable | Accepted. Code change: the drafter receives the prior draft with the critique. The prose on context growth stands once the code matches. |
+| 4 | Trace step 5 "asks for a number" for a string field; gate requires the literal gap | Accepted in part. Step 5 now asks what the legs are made of. Rejected in part: a vague question can still name `leg_material` and clear the gate, so step 4 is consistent. |
+| 5 | METR setting described as having a gradient | Accepted. METR gives the model no reward during evaluation; the sentence now describes long agent runs against a scoring script the model can read. |
+| 6 | No explicit thesis | Accepted in part. A Thesis section now precedes the mental model. Rejected for the chapter opening: both halves already land in *What it actually is* and *In short*, and the word ceiling has no room for a restatement. |
+| 7 | "Independent judge" under Established outruns the evidence | Accepted in part. The argued sentence now means a judge checked against human labels, and the maturity summary records the narrowing. Lens line unchanged (it matches the catalog row). Rejected: a separate judge model in the companion code, since the chapter states openly that its code uses one model for both roles. |
+| 8 | Test suites and AlphaEvolve cited as closing the gap blur the 3.4/3.7 seam | Accepted. The chapter now says code computes `passed` in both, placing them in 2.5 and 3.7, and names CRITIC as the version that stays in 3.4. |
+| 9 | Prompt injection against the judge missing | Accepted. New gotcha citing Shi et al. (CCS 2024) and Raina, Liusie and Gales (2024); 4.6 named as plain text because it is not yet written. |
+| 10 | Kamoi et al. survey missing; float scores uncalibrated | Accepted. Kamoi et al. (TACL 2024) cited beside Huang; one sentence advises building `score` from discrete rubric checks. |
+| 11a | `dspy.BestOfN` described as parallel | Accepted. The library loops sequentially and stops early on a threshold. |
+| 11b | Zheng et al. list attack "appends"; frozen percentages in prose | Accepted. The paper prepends; the figures (91.3%, 8.7%, Table 3) moved to the footnote. |
+| 11c | OpenAI judge example has no cap | Accepted, modified. The example caps at three rounds in its automated mode only; the chapter and footnote now say so. |
+| 11d | ADK URL mismatch; deprecation | Accepted. The old URL redirects to `adk.dev`; both now use it, and the deprecation banner is noted. |
+| 12 | `passed` versus `score` precedence differs between loop and graph; `score` unvalidated | Accepted. Code change: bound `score` to 0.0 to 1.0 and make a passing verdict win in both implementations. |
+| 13 | Map over budget; rulings not applied to the body | Accepted in part. Rulings 2 and 7 applied to items 1, 7 and 9; resolved open questions removed. A full rewrite to the 1,500-word budget is deferred. |
+| 14 | Alias attributions | Accepted in part. Reflection credited to Ng (2024, checked against his newsletter) and Gulli (2025, from the book's chapter list, not re-fetched); two non-synonyms dropped from the map. The chapter alias line is unchanged pending the author's ruling 8. |
+| 15a | Dashes in the SVG | Accepted. Replaced with colons. |
+| 15b | No shape legend | Accepted. One sentence above the figure. |
+| 15c | Ratchet drawn on a binary 3.7 check | Rejected. The figure's argument is that the circuit is identical and only the verdict node differs. |
+| 16a | Reflection Agents footnote too narrow | Accepted. It now names Basic Reflection, Reflexion and LATS. |
+| 16b | "ingest" unglossed | Accepted. Glossed as step 1. |
+| 16c | Oscillation detection promised but absent | Accepted. Item 6 now says the ratchet plus the cap handle it, with no separate detector. |
+| 16d | Map claims inline verdicts in 1.2 and 3.1 | Accepted. Neither page states one; claim removed. |
+| 16e | Docstrings repeat the prose | Rejected. The docstrings state the return contract the snippets are quoted for. |

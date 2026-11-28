@@ -45,10 +45,12 @@ _JUDGE_TOOL = {
 
 
 # --8<-- [start:eo-anthropic]
-def drafter_fn(gaps: list[str], feedback: Verdict | None) -> ClarifyingQuestions:
+def drafter_fn(
+    gaps: list[str], previous: ClarifyingQuestions | None, feedback: Verdict | None
+) -> ClarifyingQuestions:
     prompt = f"Draft one clarifying question per open attribute: {gaps}."
-    if feedback is not None:
-        prompt += f" Fix these problems: {feedback.reasons}"
+    if previous is not None and feedback is not None:
+        prompt += f" Previous questions: {previous.questions}. Fix these problems: {feedback.reasons}"
     reply = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=1024,

@@ -24,7 +24,7 @@ Anthropic's guide, which named the workflow, draws roughly the same boundary: it
 
 ## What it actually is
 
-Evaluator-optimizer is two model calls in a loop: "one LLM call generates a response while another provides evaluation and feedback in a loop," in Anthropic's words.[^anthropic-eo] The drafter goes again with the feedback in hand, and the loop repeats until the evaluation passes or your code stops it. The literature calls that first call the generator; this chapter says drafter, matching the code below.
+Evaluator-optimizer is two model calls in a loop: "one LLM call generates a response while another provides evaluation and feedback in a loop," in Anthropic's words.[^anthropic-eo] The drafter goes again with the feedback in hand, and the loop repeats until the evaluation passes or your code stops it. The literature calls that first call the generator; this chapter says drafter, matching the code below. Below, rectangles are your code deciding and rounded boxes the model.
 
 ![The same loop drawn twice, side by side, with one node different. On the left, chapter 3.4: the bar is a judgment, can a supplier answer this question with a value. On the right, chapter 3.7's loop: the bar is a rule, is the description 150 words or fewer. Both sides run the identical circuit. A rectangle of your code hands over the work, a rounded node drafts, and an evaluate() box runs two rungs, first the free exact checks and then the node that settles the verdict. That second rung is the only thing that differs: on the left it is rounded, a model grading the draft against a written rubric, which no function can compute; on the right it is a rectangle counting words against a limit, which any function can compute. From there both sides are identical again: a verdict carrying passed, a score and specific reasons; a rectangle holding the cap of three rounds and the ratchet that keeps the best score rather than the last; and either the reasons routed back to the drafter or the best draft released. Look at what computes passed.](evaluator-optimizer-who-judges.svg)
 
@@ -32,13 +32,13 @@ What the model decides here is small and specific: whether the draft is good eno
 
 The loop next door is identical on a whiteboard. The moment the check is something a deterministic function renders (a compiler exit code, a test's pass count, a word count) the deciding has moved into your code. Generate, check, maybe retry is then [3.7 The Outer Loop](the-outer-loop.md)'s pattern wearing this chapter's picture: same boxes, same arrows, a different owner of the verdict. [3.1 Prompt Chaining](prompt-chaining.md) draws the same line at smaller scale: a chain's gate is a code check with a fixed retry behind it. To tell them apart, look at what computes `passed`.
 
-None of this was invented in 2025, and the lineage shows what makes the loop work. Self-Refine (Madaan et al., NeurIPS 2023) proved the cheap version: one model as generator, critic and refiner, no additional training, gains across the seven tasks it evaluated.[^self-refine] Reflexion (Shinn et al., NeurIPS 2023) got more out of the same calls by keeping the critique, a verbal reflection in an episodic memory buffer carried into the next attempt, a semantic gradient standing in for a weight update.[^reflexion] CRITIC (Gou et al., ICLR 2024) went further and changed what the evaluator eats: its critic calls external tools, a search engine or a code interpreter, and checks the draft against what comes back.[^critic] The idea is older than any of them. Constitutional AI (Bai et al., 2022) has a written constitution drive a model's critique and revision of its own output, and the AI-labeled preferences that fall out become training signal rather than a loop at inference ([8.3 To Train or to Prompt](../production/train-or-prompt.md)).[^cai]
+None of this was invented in 2025, and the lineage shows what makes the loop work. Self-Refine (Madaan et al., NeurIPS 2023) proved the cheap version: one model as generator, critic and refiner, no additional training, gains across the seven tasks it evaluated.[^self-refine] Reflexion (Shinn et al., NeurIPS 2023) got more out of the same calls by keeping the critique, a verbal reflection in an episodic memory buffer carried into the next attempt, a semantic gradient standing in for a weight update.[^reflexion] CRITIC (Gou et al., ICLR 2024) went further and changed what the evaluator eats: its critic calls external tools, a search engine or a code interpreter, and checks the draft against what comes back.[^critic] The idea is older: Constitutional AI (Bai et al., 2022) has a written constitution drive critique and revision, but as training signal rather than an inference loop ([8.3 To Train or to Prompt](../production/train-or-prompt.md)).[^cai]
 
-CRITIC changed the evaluator's diet for a reason: a model grading its own work with nothing else to go on is not reliably better than its own first attempt, and can be worse. Huang et al. (ICLR 2024) isolate that case and name it *intrinsic* self-correction (no external feedback, the model checking only its own reasoning), and find LLMs "struggle to self-correct their responses" under it, in several settings talking themselves out of a correct first answer.[^huang] Planning shows the same shape. Valmeekam, Marquez and Kambhampati found that self-critique degraded plan generation and that the critic produced false-positive verifications, certifying plans that did not work.[^stechly1] Stechly et al. later generalize the limitation across reasoning and planning tasks broadly.[^stechly2]
+CRITIC changed the evaluator's diet for a reason: a model grading its own work with nothing else to go on is not reliably better than its own first attempt, and can be worse. Huang et al. (ICLR 2024) isolate that case and name it *intrinsic* self-correction (no external feedback, the model checking only its own reasoning), and find LLMs "struggle to self-correct their responses" under it, in several settings talking themselves out of a correct first answer.[^huang] Kamoi et al.'s survey reconciles the two camps: the gains come with reliable external feedback or on tasks unusually suited to self-checking.[^kamoi] Planning shows the same shape. Valmeekam, Marquez and Kambhampati found that self-critique degraded plan generation and that the critic produced false-positive verifications, certifying plans that did not work.[^stechly1] Stechly et al. later generalize the limitation across reasoning and planning tasks broadly.[^stechly2]
 
-What closes the gap is a signal the drafter did not produce. If you use a coding agent, you have watched the everyday case work: write, execute, observe, fix, where the test suite's failure is a fact about the code rather than an opinion about it ([2.5 The Agent Loop](../the-unit/the-agent-loop.md) and [9.6 Coding Agents](../frontier/coding-agents.md) own the mechanism). CRITIC's tool-calling critic is the same move made deliberately.[^critic] At the far end of the scale, DeepMind's AlphaEvolve scores a population of candidate programs with an automated evaluator rather than letting the model read its own work, and that setup produced a 4x4 complex-matrix-multiplication algorithm using 48 scalar multiplications, beating, in that setting, Strassen's 1969 algorithm, the textbook method for multiplying matrices in fewer multiplications.[^alphaevolve] Put something in the evaluator's hands that the drafter does not already believe.
+What closes the gap is a signal the drafter did not produce. If you use a coding agent, you have watched the everyday case work: write, execute, observe, fix, where the test suite's failure is a fact about the code rather than an opinion about it ([2.5 The Agent Loop](../the-unit/the-agent-loop.md) and [9.6 Coding Agents](../frontier/coding-agents.md) own the mechanism). DeepMind's AlphaEvolve does it at scale, scoring candidate programs with an automated evaluator, and found a 4x4 complex-matrix-multiplication algorithm using 48 scalar multiplications, an improvement in that setting on Strassen's 1969 algorithm.[^alphaevolve] In both, code computes `passed`, so they belong to 2.5 and 3.7; what they prove is the value of the signal. CRITIC is the version that stays in this chapter: its critic fetches a search result or runs code, and the model still renders the verdict.[^critic] Put something in the evaluator's hands that the drafter does not already believe.
 
-With an independent judge or an external signal, this is an established workflow, with a research lineage behind it and vendor documentation in front of it. Grading its own homework and nothing more is contested, and the burden of proof sits on the loop rather than on the skeptic.
+With an external signal, or a judge checked against human labels, this is an established workflow, with a research lineage behind it and vendor documentation in front of it. Grading its own homework and nothing more is contested, and the burden of proof sits on the loop rather than on the skeptic.
 
 [3.5 The Specialist Panel](specialist-panel.md) runs fixed personas over one input once and nothing revises; [4.4 Guardrails & Safety](../craft/guardrails-and-safety.md) rejects or redacts and never asks for a rewrite. A fan-out synthesizer that grades its own reconciliation and goes round again has quietly become this loop ([3.3 Orchestrator-Workers](fan-out.md)).
 
@@ -61,7 +61,7 @@ class Verdict(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     passed: bool
-    score: float          # 0.0-1.0; the ratchet compares drafts on this
+    score: float = Field(ge=0.0, le=1.0)  # 0.0-1.0; the ratchet compares drafts on this
     reasons: list[str]    # e.g. "question 2 duplicates question 1"
 ```
 
@@ -78,7 +78,7 @@ DEFAULT_MAX_ITERATIONS = 3
 @dataclass
 class LoopResult:
     """passed: whether the loop ended on a passing verdict. draft: the
-    best-scoring attempt seen, not necessarily the last one drafted.
+    passing draft, or the best-scoring one when capped.
     verdict: the Verdict that scored `draft`. iterations: rounds run.
     stopped_reason: "passed" or "capped"."""
     passed: bool
@@ -89,7 +89,7 @@ class LoopResult:
 
 
 def run_loop(
-    drafter_fn: Any,  # callable(gaps, feedback: Verdict | None) -> ClarifyingQuestions
+    drafter_fn: Any,  # callable(gaps, previous: ClarifyingQuestions | None, feedback: Verdict | None) -> ClarifyingQuestions
     judge_fn: Any,     # callable(gaps, draft) -> Verdict
     gaps: list[str],
     max_iterations: int = DEFAULT_MAX_ITERATIONS,
@@ -102,10 +102,11 @@ def run_loop(
     """
     best_draft: Optional[ClarifyingQuestions] = None
     best_verdict: Optional[Verdict] = None
+    previous: Optional[ClarifyingQuestions] = None
     feedback: Optional[Verdict] = None
 
     for i in range(1, max_iterations + 1):
-        draft = drafter_fn(gaps, feedback)
+        draft = drafter_fn(gaps, previous, feedback)
         verdict = evaluate(judge_fn, gaps, draft)
 
         if best_verdict is None or verdict.score > best_verdict.score:
@@ -116,6 +117,7 @@ def run_loop(
                 passed=True, draft=draft, verdict=verdict,
                 iterations=i, stopped_reason="passed",
             )
+        previous = draft  # the draft the critique is about, not the best
         feedback = verdict  # the specific critique, never a bare "fail"
 
     return LoopResult(
@@ -128,9 +130,9 @@ Four controls in that listing do the work.
 
 The cap is unconditional. Three rounds, whatever the model would prefer, and the number lives in your code rather than in a prompt. A round count is one ceiling; a spend limit and a wall-clock deadline bound what it does not. It guards a measured failure mode: a 2026 static-analysis sweep of 6,549 public LLM-agent repositories confirmed 68 unbounded-loop failures across 47 projects at 91.9% precision.[^ial]
 
-Inside the cap, the ratchet decides what survives. `best_verdict` moves only when a draft scores strictly higher than the one it replaces, so a worse revision still gets graded, still counts against `iterations`, and is then discarded. Without it you return whatever the last round produced, and a loop that alternates between two "fixes" with no net progress hands you whichever one it happened to stop on.
+Inside the cap, the ratchet decides what survives. `best_verdict` moves only when a draft scores strictly higher than the one it replaces, so a worse revision still gets graded, still counts against `iterations`, and is then discarded. Without it you return whatever the last round produced, and a loop that alternates between two "fixes" with no net progress hands you whichever one it happened to stop on. The ratchet is only as steady as the number it compares, so build `score` from discrete rubric checks rather than a float the judge invents.
 
-The revise edge is what makes any of that a loop. In plain Python it is one line, `feedback = verdict`, plus the top of the `for`. Leave it out and you get a system that computes a verdict, logs it, and carries on with the draft it already had: a judge's bill and a decorated trace.
+The revise edge is what makes any of that a loop. In plain Python it is two lines, `previous = draft` and `feedback = verdict`, plus the top of the `for`. Leave it out and you get a system that computes a verdict, logs it, and carries on with the draft it already had: a judge's bill and a decorated trace.
 
 Then the exit, which is a contract. `LoopResult` never raises, never returns `None`, and never dresses a failing draft as a pass. It carries `passed`, the best draft, the verdict that scored it, and `stopped_reason`, so the caller decides once, in code, what a capped run means: ship the best draft anyway, escalate to a person ([4.3 Human-in-the-Loop](../craft/human-in-the-loop.md)), or fail closed. Letting that fall out of wherever the loop happened to be when the cap hit is how a mediocre draft ships with nobody choosing to.
 
@@ -181,19 +183,19 @@ def evaluate(judge_fn: Any, gaps: list[str], draft: ClarifyingQuestions) -> Verd
 
 Be honest about which parts of the task have a real termination condition. "No more than 150 words" is machine-checkable and the loop can prove it is done. "Are these good clarifying questions" cannot be proved at all; that loop runs on a judgment plus a cap, and calling the cap a stop condition does not make it one.
 
-One run on the Aldsworth desk, whose feed row ingest has already parsed:
+One run on the Aldsworth desk, whose feed row step 1 (ingest) has already parsed:
 
-1. Step 2 hands `run_loop` the two gaps ingest could not fill, `leg_material` and `weight_capacity_lbs`. `feedback` is `None`, so the drafter writes cold.
+1. Step 2 hands `run_loop` the two gaps step 1 could not fill, `leg_material` and `weight_capacity_lbs`. `feedback` is `None`, so the drafter writes cold.
 2. The first draft asks three questions, two of them about the frame. `gate_draft` finds no empty strings and no duplicates, but no question names `weight_capacity_lbs`, so `evaluate` returns `passed=False`, `score=0.0` and one reason, and the judge is never called. A missing gap is the kind of failure a validator can see; the loose question from the opening is not, and it is still in the draft. The failed round costs a drafter call and nothing else.
 3. `best_verdict` is `None`, so this failing draft becomes `best` by default, `feedback` becomes that verdict, and the loop goes round.
 4. The second draft covers both gaps, clears the gate, and reaches the judge, which returns *"passed: false, score: 0.6, reasons: ['question 3 asks about materials in general and cannot be answered with a value for leg_material']"*. 0.6 beats 0.0, so the ratchet moves `best` forward, and that reason is what the drafter sees next.
-5. The third draft names the field and asks for a number. The judge returns `passed=True` with `score=0.9`, and `run_loop` returns immediately: `iterations=3`, `stopped_reason="passed"`. Had it failed too, the caller would have got `passed=False`, `stopped_reason="capped"`, and the best draft seen.
+5. The third draft asks what the legs are made of, a question a supplier answers in one word. The judge returns `passed=True` with `score=0.9`, and `run_loop` returns immediately: `iterations=3`, `stopped_reason="passed"`. Had it failed too, the caller would have got `passed=False`, `stopped_reason="capped"`, and the best draft seen.
 
 The loop scales two ways, and they trade against each other.
 
 Going from one round to many grows the context as well as the count: every round after the first carries the previous draft and its critique into the prompt, so tokens per round rise alongside the rounds. Forward the critique and not the transcript ([5.4 Compaction](../knowledge/compaction-and-the-window.md)); a loop that appends the full history of its own failures spends more on remembering them than on fixing them.
 
-The other direction trades revision for parallelism. Best-of-N is the sibling that never loops: sample N drafts independently, score each, keep the highest. The draws carry nothing forward and cannot thrash, at the cost of paying for N generations up front and learning nothing from what the judge said. They also run at once, where a revision loop is sequential, so N drafts can cost more and still land sooner. The lineage runs through reward-model reranking, scoring each draw with a model trained to predict which output a human would prefer, from Stiennon et al.'s summarization work to WebGPT.[^bestofn] The difference shows in the signature below: gaps only, no feedback to carry.
+The other direction trades revision for parallelism. Best-of-N is the sibling that never loops: sample N drafts independently, score each, keep the highest. The draws carry nothing forward and cannot thrash, at the cost of paying for N generations up front and learning nothing from what the judge said. They also run at once, where a revision loop is sequential, so N drafts can cost more and still land sooner. Its lineage is reward-model reranking.[^bestofn] The difference shows in the signature below: gaps only, no feedback to carry.
 
 <details markdown><summary>Best-of-N: the same evaluator, no revision round</summary>
 
@@ -219,11 +221,9 @@ def run_best_of_n(
 
 </details>
 
-DSPy, a framework for composing LLM calls as typed modules rather than prompt strings, ships both as separate classes, `dspy.Refine` (iterate with generated feedback) beside `dspy.BestOfN` (parallel rollouts, no feedback), so the boundary is two objects you can import rather than one idea under two names.[^dspy]
+DSPy, a framework for composing LLM calls as typed modules rather than prompt strings, ships both as separate classes, `dspy.Refine` (iterate with generated feedback) beside `dspy.BestOfN` (independent rollouts, no feedback), so the boundary is two objects you can import rather than one idea under two names.[^dspy]
 
-> **From production.** The version of this loop I shipped ran this shape, and the cap was three. Nobody argued with three: it was a default that turned out to be fine rather than a number anyone measured.
-
-The common frameworks each ship a spelling of this loop, differing mostly in where the cap lives. LangGraph makes it a conditional edge back to the drafting node, the shape LangChain's Reflection Agents post publishes.[^langgraph-refl] The OpenAI Agents SDK ships it runnable: `examples/agent_patterns/llm_as_a_judge.py` is a generator agent, a judge agent, and a loop that runs until the judge is satisfied.[^oai-judge] Google's Agent Development Kit (ADK) gives you a `LoopAgent` and an `exit_loop` tool for the critic, with no default iteration cap, so `max_iterations` is yours to set.[^adk-loop] CrewAI puts the same idea at task level with `guardrail_max_retries`.[^crewai]
+The common frameworks each ship a spelling of this loop, differing mostly in where the cap lives. LangGraph makes it a conditional edge back to the drafting node, the shape LangChain's Reflection Agents post publishes.[^langgraph-refl] The OpenAI Agents SDK ships it runnable: `examples/agent_patterns/llm_as_a_judge.py` is a generator agent, a judge agent, and a loop that runs until the judge is satisfied, capped only in its automated mode.[^oai-judge] Google's Agent Development Kit (ADK) gives you a `LoopAgent` and an `exit_loop` tool for the critic, with no default iteration cap, so `max_iterations` is yours to set.[^adk-loop] CrewAI puts the same idea at task level with `guardrail_max_retries`.[^crewai]
 
 #### Wiring it to a provider
 
@@ -246,7 +246,10 @@ The common frameworks each ship a spelling of this loop, differing mostly in whe
         on every round after the first."""
         prompt = f"Draft one clarifying question per open attribute: {state['gaps']}."
         if state.get("verdict") is not None and not state["verdict"].passed:
-            prompt += f" Fix these problems: {state['verdict'].reasons}"
+            prompt += (
+                f" Previous questions: {state['draft'].questions}."
+                f" Fix these problems: {state['verdict'].reasons}"
+            )
         draft = draft_chain.invoke(prompt)
         return {"draft": draft, "iteration": state.get("iteration", 0) + 1}
 
@@ -263,7 +266,7 @@ The common frameworks each ship a spelling of this loop, differing mostly in whe
         higher score."""
         verdict = evaluate(_judge_fn, state["gaps"], state["draft"])
         best_draft, best_verdict = state.get("best_draft"), state.get("best_verdict")
-        if best_verdict is None or verdict.score > best_verdict.score:
+        if verdict.passed or best_verdict is None or verdict.score > best_verdict.score:
             best_draft, best_verdict = state["draft"], verdict
         return {"verdict": verdict, "best_draft": best_draft, "best_verdict": best_verdict}
 
@@ -296,10 +299,12 @@ The common frameworks each ship a spelling of this loop, differing mostly in whe
 === "OpenAI Responses API"
 
     ```python
-    def drafter_fn(gaps: list[str], feedback: Verdict | None) -> ClarifyingQuestions:
+    def drafter_fn(
+        gaps: list[str], previous: ClarifyingQuestions | None, feedback: Verdict | None
+    ) -> ClarifyingQuestions:
         prompt = f"Draft one clarifying question per open attribute: {gaps}."
-        if feedback is not None:
-            prompt += f" Fix these problems: {feedback.reasons}"
+        if previous is not None and feedback is not None:
+            prompt += f" Previous questions: {previous.questions}. Fix these problems: {feedback.reasons}"
         response = client.responses.create(
             model="gpt-5.5",
             input=[{"role": "user", "content": prompt}],
@@ -343,10 +348,12 @@ The common frameworks each ship a spelling of this loop, differing mostly in whe
 === "Anthropic Messages API"
 
     ```python
-    def drafter_fn(gaps: list[str], feedback: Verdict | None) -> ClarifyingQuestions:
+    def drafter_fn(
+        gaps: list[str], previous: ClarifyingQuestions | None, feedback: Verdict | None
+    ) -> ClarifyingQuestions:
         prompt = f"Draft one clarifying question per open attribute: {gaps}."
-        if feedback is not None:
-            prompt += f" Fix these problems: {feedback.reasons}"
+        if previous is not None and feedback is not None:
+            prompt += f" Previous questions: {previous.questions}. Fix these problems: {feedback.reasons}"
         reply = client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=1024,
@@ -381,13 +388,15 @@ The common frameworks each ship a spelling of this loop, differing mostly in whe
 
 ## Gotchas
 
-**The judge has a thumb on the scale.** Zheng et al. document position, verbosity and self-enhancement bias in LLM judges. Their repetitive-list attack, padding an answer with a restatement of its own list, inflated Claude-v1's and GPT-3.5's scores roughly 91% of the time against 8.7% for GPT-4, the same strong judge that otherwise reaches over 80% agreement with human preference on that paper's benchmarks.[^judge] Panickssery, Bowman and Feng add the finding that bites hardest here: self-recognition ability correlates linearly with self-preference, so a model scores its own output higher than the quality gap explains.[^selfpref] In most implementations, this chapter's companion code included, drafter and evaluator are the same model. Reach first for an external signal, a tool result or a test outcome, because it does not run through the judge's taste. The prompting mitigations are damage control: a different model as judge, the draft's provenance hidden from it, reference-guided grading (handing the judge a worked answer to compare against rather than grading in the abstract), randomized order wherever two candidates are compared. Worth doing, and none of them a fix, because independence is a matter of degree. Two calls to the same model in different roles are one opinion asked twice, and two different models can still share a training-era taste.
+**The judge has a thumb on the scale.** Zheng et al. document position, verbosity and self-enhancement bias in LLM judges. Padding an answer with a restatement of its own list fooled two of the three judges they tested almost every time.[^judge] Panickssery, Bowman and Feng add the finding that bites hardest here: self-recognition ability correlates linearly with self-preference, so a model scores its own output higher than the quality gap explains.[^selfpref] In most implementations, this chapter's companion code included, drafter and evaluator are the same model. Reach first for an external signal, a tool result or a test outcome, because it does not run through the judge's taste. The prompting mitigations are damage control: a different model as judge, the draft's provenance hidden from it, reference-guided grading (scoring against a worked answer), randomized order wherever two candidates are compared. Worth doing, and none of them a fix, because independence is a matter of degree. Two calls to the same model in different roles are one opinion asked twice, and two different models can still share a training-era taste.
 
 Whether any of them closes the gap for a same-model pair is unsettled. Treat a judge you have not checked against human labels as an instrument with an unknown offset ([4.2 Evaluation](../craft/proving-it-works.md)).
 
-**A bad evaluator gets exploited, not fooled.** METR, the lab that runs independent frontier-model evaluations, watched models monkey-patch the evaluator function, overwrite an equality operator, and stub out a timing function. Reward hacking ran more than 43 times more often on one of its task suites than the other. METR's own explanation is a maybe: on that suite the model could see the entire scoring function.[^metr] Their setting has a gradient and a visible scorer and yours is three capped rounds of a prompt, but the mechanism carries: your drafter reads the rubric's own reasons every round, which is the visible-scoring-function case in miniature. Optimization pressure finds the holes in a rubric the way it finds them in a benchmark, and the symptom is a score that climbs while the output stops getting better.
+**A bad evaluator gets exploited, not fooled.** METR, an independent evaluation lab, watched models monkey-patch the evaluator function, overwrite an equality operator, and stub out a timing function. Reward hacking ran more than 43 times more often on one of its task suites than the other. METR's own explanation is a maybe: on that suite the model could see the entire scoring function.[^metr] Their setting is long agent runs against a scoring script the model can read, and yours is three capped rounds of a prompt, but the mechanism carries: your drafter reads the rubric's own reasons every round, which is the visible-scoring-function case in miniature. Optimization pressure finds the holes in a rubric the way it finds them in a benchmark, and the symptom is a score that climbs while the output stops getting better.
 
-**The multiplier is per iteration.** Three rounds with a judge call in each is six model calls where generate-and-ship is one, and the free gate is what keeps it below that: in the run above it rejected round one before the judge ever saw it, so the worked example cost five. Treat that as a multiplier on generation cost rather than a fixed overhead, and price it before putting it on a high-volume, low-stakes step ([8.4 Controlling Cost](../production/controlling-cost.md)). Run the arithmetic on your own token prices.[^cost]
+**The draft is an input to the judge.** Untrusted text in it, a supplier's spec sheet quoted into a question, can carry instructions aimed at the grader. Optimized injections steer LLM judges toward a chosen verdict, and short universal phrases inflate absolute scores far more than pairwise comparisons (4.6 Prompt Injection & the Lethal Trifecta).[^judge-attack]
+
+**The multiplier is per iteration.** Three rounds with a judge call in each is six model calls where generate-and-ship is one, and the free gate is what keeps it below that: in the run above it rejected round one before the judge ever saw it, so the worked example cost five. Price that multiplier, at your own token rates, before putting the loop on a high-volume, low-stakes step ([8.4 Controlling Cost](../production/controlling-cost.md)).[^cost]
 
 **A rubber stamp, or a judge that never says yes.** Both are common and cheap to detect, so log `score` and `stopped_reason` on every run. If nothing ever fails the first round, the rubric is decoration and you are paying a judge call to admire the drafter. If every run ends at `capped`, the bar sits above what the drafter can reach and the loop is a three-call tax. Neither shows up in a demo, because a demo is one run.
 
@@ -397,7 +406,7 @@ Whether any of them closes the gap for a same-model pair is unsettled. Treat a j
 
 Build the loop where the bar is a judgment you can write down but cannot compute, and build its controls first: an unconditional cap, a ratchet that keeps the best draft rather than the last, a verdict carrying reasons and not a bare fail, a revise edge that routes back, and one decision made in code about what a capped run ships. Run the free checks before the paid ones. Give the evaluator a signal the drafter did not produce, or at minimum a different model reading a rubric it did not write; where you cannot, keep the cap at two or three and treat the loop as polish rather than repair, because the evidence for a model fixing its own work unaided points the other way. If the critiques are not helping, draw N independently instead. And before any of it, check what computes `passed`. If a function can, you want the cheaper loop next door.
 
-<small class="chapter-meta">**Maturity: Established (with an independent judge or an external signal) · Contested (intrinsic self-correction, no external signal)** (the workflow is vendor-named with a 2022-2024 research lineage behind it, and that same literature finds a model checking only its own reasoning is not reliably better than its own first attempt, and can be worse) · *Who decides:* the model (the verdict) · *Grounding:* production + research · *Last reviewed:* 2026-08</small>
+<small class="chapter-meta">**Maturity: Established (with an independent judge or an external signal) · Contested (intrinsic self-correction, no external signal)** (the workflow is vendor-named with a 2022-2024 research lineage behind it, and that same literature finds a model checking only its own reasoning is not reliably better than its own first attempt, and can be worse) · *Who decides:* the model (the verdict) · *Grounding:* companion repo + research · *Last reviewed:* 2026-08</small>
 
 ## Sources
 
@@ -410,15 +419,19 @@ Build the loop where the bar is a judgment you can write down but cannot compute
 [^stechly1]: Valmeekam, K., Marquez, M., Kambhampati, S., "Can Large Language Models Really Improve by Self-critiquing Their Own Plans?" (2023). Self-critique degrades plan-generation performance and produces false-positive verifications. <https://arxiv.org/abs/2310.08118>
 [^stechly2]: Stechly, K., Valmeekam, K., Kambhampati, S., "On the Self-Verification Limitations of Large Language Models on Reasoning and Planning Tasks" (2024). <https://arxiv.org/abs/2402.08115>
 [^alphaevolve]: Novikov, A. et al. (Google DeepMind), "AlphaEvolve: A coding agent for scientific and algorithmic discovery" (2025). An LLM-driven evolutionary loop over a population of candidate programs, each scored by an automated evaluator function. Its reported infrastructure results (fleet-compute recovery, kernel speedups) are snapshot measurements of one system at one moment and will move; the 4x4 complex-matrix-multiplication result, 48 scalar multiplications and the first improvement on Strassen's 1969 algorithm in that setting, is a discrete published finding. <https://arxiv.org/abs/2506.13131>
-[^judge]: Zheng, L. et al., "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena" (NeurIPS 2023, Datasets & Benchmarks track). Documents position, verbosity and self-enhancement bias in LLM judges. The repetitive-list attack (appending a restatement of the answer's own list) inflated Claude-v1's and GPT-3.5's scores roughly 91% of the time against 8.7% for GPT-4; GPT-4 as judge otherwise reaches over 80% agreement with human preference on the paper's own benchmarks. Both figures are benchmark-specific and model-generation-specific; cite the finding, not a frozen percentage. <https://arxiv.org/abs/2306.05685>
+[^judge]: Zheng, L. et al., "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena" (NeurIPS 2023, Datasets & Benchmarks track). Documents position, verbosity and self-enhancement bias in LLM judges. The repetitive-list attack (prepending a rephrased copy of the answer's own list) fooled Claude-v1 and GPT-3.5 as judges 91.3% of the time against 8.7% for GPT-4 (Table 3); GPT-4 as judge otherwise reaches over 80% agreement with human preference on the paper's own benchmarks. Both figures are benchmark-specific and model-generation-specific; cite the finding, not a frozen percentage. <https://arxiv.org/abs/2306.05685>
 [^selfpref]: Panickssery, A., Bowman, S., Feng, S., "LLM Evaluators Recognize and Favor Their Own Generations" (NeurIPS 2024). Self-recognition ability correlates linearly with self-preference bias. <https://arxiv.org/abs/2404.13076>
 [^metr]: METR (Model Evaluation and Threat Research), "Recent Frontier Models Are Reward Hacking" (2025-06-05). Observed reward-hacking behavior during task evaluation, including monkey-patching the evaluator function, overwriting an equality operator, and stubbing out a timing function. Reward hacking was "more than 43x more common on RE-Bench tasks than HCAST tasks, perhaps because on RE-Bench tasks the model was able to see the entire scoring function": METR states the visibility explanation as a conjecture, not a measured cause, and this page keeps that hedge. An early, evolving estimate on a specific benchmark pair. <https://metr.org/blog/2025-06-05-recent-reward-hacking/>
 [^ial]: Hou, Wang, Zhao, Wang, "When Agents Do Not Stop: Uncovering Infinite Agentic Loops in LLM Agents" (submitted 2026-07-02). Static analysis across 6,549 public LLM-agent repositories; 68 confirmed unbounded-loop failures across 47 projects, at 91.9% precision. <https://arxiv.org/abs/2607.01641>
 [^cost]: No per-iteration cost figure specific to this pattern surfaced in the research for this page. The multiplier is arithmetic over your own provider's token prices and your own round count, not a published benchmark number.
 [^bestofn]: Stiennon, N. et al., "Learning to Summarize from Human Feedback" (NeurIPS 2020), <https://arxiv.org/abs/2009.01325>; Nakano, R. et al., "WebGPT: Browser-Assisted Question-Answering with Human Feedback" (2021), <https://arxiv.org/abs/2112.09332>. The lineage for best-of-N reranking: sample N independent completions, score each with a reward model, keep the highest, with no revision step.
-[^langgraph-refl]: LangChain, "Reflection Agents." Nodes for draft, tool execution and revision, with a conditional edge inspecting state to decide whether to loop back or finish. <https://www.langchain.com/blog/reflection-agents>
-[^oai-judge]: OpenAI, the public `openai/openai-agents-python` repository, `examples/agent_patterns/llm_as_a_judge.py`. A generator agent produces an outline, a judge agent evaluates it and returns feedback, and the loop continues until the judge is satisfied. <https://github.com/openai/openai-agents-python/blob/main/examples/agent_patterns/llm_as_a_judge.py>
-[^adk-loop]: Google, Agent Development Kit docs, "Loop agents." `LoopAgent` runs its sub-agents repeatedly; an `exit_loop` tool, typically given to a critic or refiner sub-agent, sets an escalate flag the runtime reads to stop the loop. There is no default iteration cap: without an explicit `max_iterations`, the loop runs until a sub-agent escalates, so the ceiling is something you supply. <https://adk.dev/agents/workflow-agents/loop-agents/>
+[^langgraph-refl]: LangChain, "Reflection Agents." Covers Basic Reflection, Reflexion and Language Agent Tree Search; the graphs use nodes for drafting, tool execution and revision, with a conditional edge inspecting state to decide whether to loop back or finish. <https://www.langchain.com/blog/reflection-agents>
+[^oai-judge]: OpenAI, the public `openai/openai-agents-python` repository, `examples/agent_patterns/llm_as_a_judge.py`. A generator agent produces an outline, a judge agent evaluates it and returns feedback, and the loop continues until the judge is satisfied. The `while True` loop has no round cap in interactive mode; `max_rounds = 3` applies only in its automated mode. <https://github.com/openai/openai-agents-python/blob/main/examples/agent_patterns/llm_as_a_judge.py>
+[^adk-loop]: Google, Agent Development Kit docs, "Loop agents." `LoopAgent` runs its sub-agents repeatedly; an `exit_loop` tool, typically given to a critic or refiner sub-agent, sets an escalate flag the runtime reads to stop the loop. There is no default iteration cap: without an explicit `max_iterations`, the loop runs until a sub-agent escalates, so the ceiling is something you supply. The page now carries a deprecation banner pointing to graph-based workflows; the loop semantics are unchanged, but check the current recommendation before building on `LoopAgent`. <https://adk.dev/agents/workflow-agents/loop-agents/>
+[^kamoi]: Kamoi, R., Zhang, Y., Zhang, N., Han, J., Zhang, R., "When Can LLMs Actually Correct Their Own Mistakes? A Critical Survey of Self-Correction of LLMs" (TACL 2024). Finds no prior work demonstrating successful self-correction with feedback from prompted LLMs alone, except on tasks exceptionally suited to it; self-correction works with reliable external feedback or after large-scale fine-tuning. <https://arxiv.org/abs/2406.01297>
+
+[^judge-attack]: Shi, J. et al., "Optimization-based Prompt Injection Attack to LLM-as-a-Judge" (ACM CCS 2024), <https://arxiv.org/abs/2403.17710>; Raina, V., Liusie, A., Gales, M., "Is LLM-as-a-Judge Robust? Investigating Universal Adversarial Attacks on Zero-shot LLM Assessment" (2024), <https://arxiv.org/abs/2402.14016>, which finds judges significantly more susceptible to universal attack phrases when used for absolute scoring than for comparative assessment.
+
 [^crewai]: CrewAI, "Tasks" docs. Task-level guardrails validate output before it passes to the next task; `guardrail_max_retries` controls retry attempts on failure, and the older `max_retries` attribute is deprecated in its favour. Re-confirm against the version you install. <https://docs.crewai.com/en/concepts/tasks>
 [^dspy]: DSPy, `Refine` and `BestOfN` module docs. `Refine` runs a module up to N times with generated feedback between attempts, stopping on a reward threshold or N attempts; `BestOfN` runs the same module N times with no feedback and keeps the highest-reward or first-passing result. <https://dspy.ai/api/modules/Refine/>, <https://dspy.ai/tutorials/output_refinement/best-of-n-and-refine/>
 

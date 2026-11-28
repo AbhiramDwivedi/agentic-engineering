@@ -44,7 +44,10 @@ def draft_node(state: ClarifyState) -> dict:
     on every round after the first."""
     prompt = f"Draft one clarifying question per open attribute: {state['gaps']}."
     if state.get("verdict") is not None and not state["verdict"].passed:
-        prompt += f" Fix these problems: {state['verdict'].reasons}"
+        prompt += (
+            f" Previous questions: {state['draft'].questions}."
+            f" Fix these problems: {state['verdict'].reasons}"
+        )
     draft = draft_chain.invoke(prompt)
     return {"draft": draft, "iteration": state.get("iteration", 0) + 1}
 
@@ -61,7 +64,7 @@ def evaluate_node(state: ClarifyState) -> dict:
     higher score."""
     verdict = evaluate(_judge_fn, state["gaps"], state["draft"])
     best_draft, best_verdict = state.get("best_draft"), state.get("best_verdict")
-    if best_verdict is None or verdict.score > best_verdict.score:
+    if verdict.passed or best_verdict is None or verdict.score > best_verdict.score:
         best_draft, best_verdict = state["draft"], verdict
     return {"verdict": verdict, "best_draft": best_draft, "best_verdict": best_verdict}
 
