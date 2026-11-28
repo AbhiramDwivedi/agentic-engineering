@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 600" width="820" height="600" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">Voice agent: an agent loop inside a turn-taking controller that your code owns</title>
+  <desc id="desc">The caller's audio arrives as one continuous stream with no send button and enters a large rectangle, the turn-taking controller, where your code decides. Along its top are four duties: endpointing, where (in the test configuration) 700 ms of silence closes the turn; barge-in, where 300 ms of talking over a reply counts as an interruption; flushing playback, which stops the audio the user talked over; and truncating the transcript, which keeps only the words that actually played. A closed turn passes down to a rounded node inside the controller, where the model decides: it chooses the reply and which tool to call. This is the fixed-timeout design; in semantic end-of-turn designs a model also decides when the turn is over. The model is either a cascaded path, speech-to-text into a text model into text-to-speech, or one speech-to-speech model that hears audio and speaks audio. The reply leaves the controller as audio to the caller. A truncation arrow runs from the controller down to the transcript the next turn is built from, and writes back only what played: the caller's turn ending "it's about 200 square feet", then the agent's turn "it should heat a [interrupted]", with the rest of the reply never played and so never written.</desc>
+  <style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .h2 { font-size: 12.5px; }
+  .col-k { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+  .box-t { font-size: 12.5px; font-weight: 700; }
+  .sub { font-size: 11px; }
+  .line-t { font-size: 12.5px; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+
+  .code-box, .model-box, .cap-box, .soft-box { stroke-width: 2; }
+  .duty-box { stroke-width: 1.5; }
+  .wire { fill: none; stroke-width: 2; }
+  .wire-trunc { fill: none; stroke-width: 2.5; }
+  .ghost { fill: none; stroke-dasharray: 4 4; stroke-width: 1.5; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .duty-box { fill: #ffffff; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .cap-box { fill: #ffffff; stroke: #8b93a6; }
+  .soft-box { fill: #f7f8fb; stroke: #ccd2e0; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #6a45b0; }
+  .txt-esc { fill: #c62828; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-trunc { stroke: #4f5b93; }  .mk-code { fill: #4f5b93; }
+  .ghost { stroke: #8b93a6; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .duty-box { fill: #1b1f29; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .cap-box { fill: #1b1f29; stroke: #78829a; }
+  .soft-box { fill: #1b1f29; stroke: #3a4155; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #c4aee8; }
+  .txt-esc { fill: #ff8a80; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-trunc { stroke: #939ed4; }  .mk-code { fill: #939ed4; }
+  .ghost { stroke: #a2abc0; }
+  }
+  </style>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-wire"/>
+    </marker>
+    <marker id="arc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-code"/>
+    </marker>
+  </defs>
+
+  <rect class="page-bg" x="0.5" y="0.5" width="819" height="599" rx="10"/>
+
+  <!-- header -->
+  <text class="h1 txt" x="24" y="38">A voice agent is an agent loop inside a turn-taking controller.</text>
+  <text class="h2 txt-mute" x="24" y="60">Here your code owns the turns. The model decides the reply and the tool calls.</text>
+
+  <!-- input: caller audio -->
+  <text class="box-t txt" x="20" y="262">Caller audio</text>
+  <text class="sub txt-mute" x="20" y="278">one continuous</text>
+  <text class="sub txt-mute" x="20" y="292">stream, no send</text>
+  <text class="sub txt-mute" x="20" y="306">button</text>
+  <line class="wire" x1="20" y1="320" x2="138" y2="320" marker-end="url(#ar)"/>
+
+  <!-- the controller: your code decides -->
+  <rect class="code-box" x="140" y="80" width="540" height="324" rx="2"/>
+  <text class="col-k txt-code" x="152" y="104">TURN-TAKING CONTROLLER · YOUR CODE DECIDES</text>
+
+  <rect class="duty-box" x="152" y="118" width="124" height="66" rx="2"/>
+  <text class="box-t txt" x="162" y="138">Endpointing</text>
+  <text class="sub txt-mute" x="162" y="155">700 ms of silence</text>
+  <text class="sub txt-mute" x="162" y="170">closes the turn</text>
+
+  <rect class="duty-box" x="284" y="118" width="124" height="66" rx="2"/>
+  <text class="box-t txt" x="294" y="138">Barge-in</text>
+  <text class="sub txt-mute" x="294" y="155">300 ms over a reply</text>
+  <text class="sub txt-mute" x="294" y="170">is an interruption</text>
+
+  <rect class="duty-box" x="416" y="118" width="124" height="66" rx="2"/>
+  <text class="box-t txt" x="426" y="138">Flush playback</text>
+  <text class="sub txt-mute" x="426" y="155">stop the audio the</text>
+  <text class="sub txt-mute" x="426" y="170">user talked over</text>
+
+  <rect class="duty-box" x="548" y="118" width="124" height="66" rx="2"/>
+  <text class="box-t txt" x="553" y="138">Truncate transcript</text>
+  <text class="sub txt-mute" x="553" y="155">keep only the words</text>
+  <text class="sub txt-mute" x="553" y="170">that actually played</text>
+
+  <!-- closed turn handed to the model -->
+  <line class="wire" x1="214" y1="184" x2="214" y2="206" marker-end="url(#ar)"/>
+  <text class="sub txt-mute" x="222" y="199">a closed turn</text>
+
+  <!-- the model: rounded, the model decides -->
+  <rect class="model-box" x="170" y="208" width="480" height="180" rx="20"/>
+  <text class="col-k txt-model" x="410" y="232" text-anchor="middle">THE MODEL DECIDES</text>
+  <text class="line-t txt" x="410" y="250" text-anchor="middle">the reply, and which tool to call</text>
+
+  <text class="sub txt-mute" x="202" y="270">cascaded</text>
+  <polygon class="cap-box" points="214,278 302,278 314,300 302,322 214,322 202,300"/>
+  <text class="sub txt" x="258" y="304" text-anchor="middle">speech-to-text</text>
+  <line class="wire" x1="314" y1="300" x2="352" y2="300" marker-end="url(#ar)"/>
+  <rect class="model-box" x="354" y="278" width="112" height="44" rx="14"/>
+  <text class="box-t txt-model" x="410" y="304" text-anchor="middle">text model</text>
+  <line class="wire" x1="466" y1="300" x2="504" y2="300" marker-end="url(#ar)"/>
+  <polygon class="cap-box" points="518,278 606,278 618,300 606,322 518,322 506,300"/>
+  <text class="sub txt" x="562" y="304" text-anchor="middle">text-to-speech</text>
+
+  <text class="sub txt-mute" x="410" y="340" text-anchor="middle">or</text>
+  <rect class="model-box" x="250" y="348" width="320" height="30" rx="14"/>
+  <text class="box-t txt-model" x="410" y="368" text-anchor="middle">one speech-to-speech model: audio in, audio out</text>
+
+  <!-- output: reply audio -->
+  <text class="box-t txt" x="694" y="278">Reply audio</text>
+  <text class="sub txt-mute" x="694" y="294">to the caller</text>
+  <line class="wire" x1="680" y1="310" x2="800" y2="310" marker-end="url(#ar)"/>
+
+  <!-- truncation writes back only what played -->
+  <path class="wire-trunc" d="M 664 184 L 664 444" marker-end="url(#arc)"/>
+  <text class="sub txt-code" x="690" y="420">writes back only</text>
+  <text class="sub txt-code" x="690" y="434">what played</text>
+
+  <!-- transcript -->
+  <rect class="soft-box" x="16" y="446" width="788" height="92" rx="2"/>
+  <text class="col-k txt-mute" x="32" y="468">TRANSCRIPT · WHAT THE NEXT TURN IS BUILT FROM</text>
+  <text class="line-t txt-mute" x="32" y="494">Caller:</text>
+  <text class="mono-s txt" x="92" y="494">… it's about 200 square feet</text>
+  <text class="line-t txt-mute" x="32" y="520">Agent:</text>
+  <text class="mono-s txt" x="92" y="520">it should heat a <tspan class="txt-esc">[interrupted]</tspan></text>
+  <rect class="ghost" x="330" y="508" width="44" height="16" rx="2"/>
+  <rect class="ghost" x="380" y="508" width="44" height="16" rx="2"/>
+  <rect class="ghost" x="430" y="508" width="44" height="16" rx="2"/>
+  <rect class="ghost" x="480" y="508" width="44" height="16" rx="2"/>
+  <text class="sub txt-mute" x="536" y="520">the rest never played, so it is never written</text>
+
+  <!-- legend -->
+  <rect class="model-box" x="24" y="560" width="26" height="16" rx="7"/>
+  <text class="sub txt-mute" x="58" y="572">rounded: the model decides</text>
+  <rect class="code-box" x="236" y="560" width="26" height="16" rx="2"/>
+  <text class="sub txt-mute" x="270" y="572">rectangle: your code decides</text>
+  <polygon class="cap-box" points="460,560 480,560 486,568 480,576 460,576 454,568"/>
+  <text class="sub txt-mute" x="494" y="572">hexagon: a capability</text>
+</svg>
