@@ -126,6 +126,26 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 4.2 -- Evaluation
+EVALS_CHAPTER = os.path.join(ROOT, "docs", "craft", "proving-it-works.md")
+EVALS_PKG = os.path.join(ROOT, "listing-studio", "evals")
+
+EVALS_ANCHORS = {
+    "evals-cases":            "cases.py",
+    "evals-code-grader":      "graders.py",
+    "evals-judge-grader":     "graders.py",
+    "evals-calibrate":        "calibrate.py",
+    "evals-floor":            "calibrate.py",
+    "evals-harness":          "harness.py",
+    "evals-fake-system":      "example.py",
+    "evals-fake-judge":       "example.py",
+    "evals-example-run":      "example.py",
+    "evals-judge-langgraph":  "judge_langgraph.py",
+    "evals-judge-responses":  "judge_responses.py",
+    "evals-judge-anthropic":  "judge_anthropic.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +251,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_evals_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(EVALS_CHAPTER))
+    for name, fname in EVALS_ANCHORS.items():
+        region = _region(_read(os.path.join(EVALS_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/craft/proving-it-works.md with "
+            f"listing-studio/evals/{fname}."
         )
