@@ -10,3 +10,4 @@ The augmented LLM up close: a single model with tools, a machine-checkable contr
 - **2.4 MCP**
 - **2.5 The Agent Loop** *(planned)*
 - **2.6 The Harness** *(planned)*
+- **2.7 Decision Models**

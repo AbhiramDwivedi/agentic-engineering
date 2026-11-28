@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 610" width="800" height="610" role="img" aria-labelledby="ttl desc">
+<title id="ttl">Decision model: the model returns a distribution over your options, your code owns the threshold</title>
+<desc id="desc">Your code sends the Aldsworth desk listing and three true-or-false questions, one per compliance factor, to a decision model (the hexagon) in one request. It returns 0.02 true and 0.98 false for a missing Prop 65 warning, 0.98 true and 0.02 false for an unverified safety claim, and 0.02 true and 0.98 false for an overstated weight capacity. Against the dashed 0.90 threshold set in your code, that reads false, true, false, and any confident true blocks, so the listing is blocked. Had the safety answer been 0.55, no bar would cross and the listing would escalate. A second lane shows a bare label with no distribution, which your code escalates instead of trusting.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 20px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .col-h { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; }
+  .sub { font-size: 12px; }
+  .mono-t { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
+  .mono-b { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px; font-weight: 700; }
+  .badge-glyph-code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 700; }
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .verdict { stroke-width: 3; }
+  .data-box { stroke-dasharray: 5 4; }
+  .wire { fill: none; stroke-width: 2; }
+  .thr { fill: none; stroke-width: 2; stroke-dasharray: 6 4; }
+  .rule { stroke-width: 1; }
+
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .badge-code { fill: #4f5b93; }
+  .badge-glyph-code { fill: #eef1f9; }
+  .bar-hi { fill: #7e57c2; }
+  .bar-lo { fill: #cdb9ea; }
+  .thr { stroke: #4f5b93; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .rule { stroke: #e2e6ef; }
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+
+  @media (prefers-color-scheme: dark) {
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .badge-code { fill: #939ed4; }
+  .badge-glyph-code { fill: #262b3d; }
+  .bar-hi { fill: #b39ddb; }
+  .bar-lo { fill: #5a4b7a; }
+  .thr { stroke: #939ed4; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .rule { stroke: #2b3140; }
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  }
+</style>
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="609" rx="8"/>
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+
+<text class="h1 txt" x="16" y="34">The model returns numbers. Your code decides what they do.</text>
+<text class="h2 txt-mute" x="16" y="58">One listing, three questions your code wrote, one request, a distribution back for each.</text>
+
+<!-- column headers -->
+<text class="col-h txt-code" x="16" y="98">YOUR CODE ASKS</text>
+<text class="col-h txt-model" x="327" y="98" text-anchor="middle">CAPABILITY</text>
+<text class="col-h txt-model" x="418" y="98">DISTRIBUTION</text>
+<text class="col-h txt-code" x="726" y="98" text-anchor="middle">YOUR CODE</text>
+<text class="col-h txt-code" x="726" y="113" text-anchor="middle">PICKS</text>
+
+<!-- your code: listing + three predicates -->
+<rect class="code-box" x="16" y="108" width="222" height="218" rx="6"/>
+<rect class="badge-code" x="28" y="118" width="18" height="16" rx="4"/><text class="badge-glyph-code" x="37" y="130" text-anchor="middle">{ }</text>
+<text class="mono-t txt" x="54" y="130">NV-ALDSWORTH-DM</text>
+<text class="card-t txt" x="28" y="170">Prop 65 warning missing?</text>
+<text class="sub txt-mute" x="28" y="187">options: true · false</text>
+<text class="card-t txt" x="28" y="230">Unverified safety claim?</text>
+<text class="sub txt-mute" x="28" y="247">options: true · false</text>
+<text class="card-t txt" x="28" y="290">Weight capacity overstated?</text>
+<text class="sub txt-mute" x="28" y="307">options: true · false</text>
+
+<!-- one request into the capability -->
+<path class="wire" d="M238,230 L258,230" marker-end="url(#arw)"/>
+<polygon class="model-box" points="262,230 292,170 362,170 392,230 362,290 292,290"/>
+<text class="card-t txt" x="327" y="218" text-anchor="middle">decision</text>
+<text class="card-t txt" x="327" y="235" text-anchor="middle">model</text>
+<text class="sub txt-mute" x="327" y="256" text-anchor="middle">writes no text</text>
+<text class="sub txt-mute" x="327" y="160" text-anchor="middle">one request</text>
+
+<!-- three distributions out -->
+<path class="wire" d="M392,230 L410,172" marker-end="url(#arw)"/>
+<path class="wire" d="M392,230 L410,230" marker-end="url(#arw)"/>
+<path class="wire" d="M392,230 L410,288" marker-end="url(#arw)"/>
+
+<!-- threshold, owned by code: bars scale 0..1 over 160px from x=458; 0.90 at x=602 -->
+<line class="thr" x1="602" y1="146" x2="602" y2="316"/>
+<text class="sub txt-code" x="602" y="138" text-anchor="middle">threshold 0.90</text>
+
+<!-- row 1: Prop 65 -->
+<text class="sub txt-mute" x="452" y="166" text-anchor="end">true</text>
+<rect class="bar-lo" x="458" y="156" width="3.2" height="12" rx="1"/>
+<text class="mono-t txt" x="660" y="166" text-anchor="end">0.02</text>
+<text class="sub txt" x="452" y="185" text-anchor="end">false</text>
+<rect class="bar-hi" x="458" y="175" width="156.8" height="12" rx="1"/>
+<text class="mono-t txt" x="660" y="185" text-anchor="end">0.98</text>
+
+<!-- row 2: safety claim -->
+<text class="sub txt" x="452" y="225" text-anchor="end">true</text>
+<rect class="bar-hi" x="458" y="215" width="156.8" height="12" rx="1"/>
+<text class="mono-t txt" x="660" y="225" text-anchor="end">0.98</text>
+<text class="sub txt-mute" x="452" y="244" text-anchor="end">false</text>
+<rect class="bar-lo" x="458" y="234" width="3.2" height="12" rx="1"/>
+<text class="mono-t txt" x="660" y="244" text-anchor="end">0.02</text>
+
+<!-- row 3: weight capacity -->
+<text class="sub txt-mute" x="452" y="286" text-anchor="end">true</text>
+<rect class="bar-lo" x="458" y="276" width="3.2" height="12" rx="1"/>
+<text class="mono-t txt" x="660" y="286" text-anchor="end">0.02</text>
+<text class="sub txt" x="452" y="305" text-anchor="end">false</text>
+<rect class="bar-hi" x="458" y="295" width="156.8" height="12" rx="1"/>
+<text class="mono-t txt" x="660" y="305" text-anchor="end">0.98</text>
+
+<!-- your code picks -->
+<path class="wire" d="M666,176 L680,176" marker-end="url(#arw)"/>
+<rect class="code-box" x="684" y="162" width="84" height="28" rx="4"/><text class="mono-b txt" x="726" y="181" text-anchor="middle">false</text>
+<path class="wire" d="M666,230 L680,230" marker-end="url(#arw)"/>
+<rect class="code-box" x="684" y="216" width="84" height="28" rx="4"/><text class="mono-b txt" x="726" y="235" text-anchor="middle">true</text>
+<path class="wire" d="M666,291 L680,291" marker-end="url(#arw)"/>
+<rect class="code-box" x="684" y="277" width="84" height="28" rx="4"/><text class="mono-b txt" x="726" y="296" text-anchor="middle">false</text>
+
+<!-- combine in code -->
+<path class="wire" d="M726,305 L726,324 L540,324 L540,340" marker-end="url(#arw)"/>
+<rect class="code-box" x="420" y="344" width="240" height="84" rx="6"/>
+<rect class="badge-code" x="432" y="354" width="18" height="16" rx="4"/><text class="badge-glyph-code" x="441" y="366" text-anchor="middle">{ }</text>
+<text class="card-t txt" x="458" y="366">your code combines</text>
+<text class="sub txt" x="432" y="386">any confident true → block</text>
+<text class="sub txt" x="432" y="402">all false → pass</text>
+<text class="sub txt" x="432" y="418">otherwise → escalate</text>
+<path class="wire" d="M660,383 L680,383" marker-end="url(#arw)"/>
+<rect class="code-box verdict" x="684" y="364" width="96" height="38" rx="4"/><text class="mono-b txt" x="732" y="388" text-anchor="middle">block</text>
+
+<text class="sub txt-mute" x="16" y="370">Had the safety answer come back at 0.55,</text>
+<text class="sub txt-mute" x="16" y="388">no bar would cross 0.90 for it, and the</text>
+<text class="sub txt-mute" x="16" y="406">same code would return escalate.</text>
+
+<!-- second lane: missing distribution -->
+<line class="rule" x1="16" y1="444" x2="784" y2="444"/>
+<text class="card-t txt" x="16" y="470">When a provider returns a label and no distribution</text>
+<rect class="data-box" x="16" y="486" width="222" height="52" rx="6"/>
+<text class="mono-t txt" x="28" y="508">label: "false"</text>
+<text class="mono-t txt-mute" x="28" y="526">probabilities: none</text>
+<path class="wire" d="M238,512 L258,512" marker-end="url(#arw)"/>
+<rect class="code-box" x="262" y="486" width="398" height="52" rx="6"/>
+<rect class="badge-code" x="274" y="496" width="18" height="16" rx="4"/><text class="badge-glyph-code" x="283" y="508" text-anchor="middle">{ }</text>
+<text class="card-t txt" x="300" y="508">a label with no distribution is not certainty</text>
+<text class="sub txt-mute" x="274" y="528">your code never reads the label as 1.0</text>
+<path class="wire" d="M660,512 L680,512" marker-end="url(#arw)"/>
+<rect class="code-box verdict" x="684" y="493" width="96" height="38" rx="4"/><text class="mono-b txt" x="732" y="517" text-anchor="middle">escalate</text>
+<text class="sub txt-mute" x="732" y="550" text-anchor="middle">to a reviewer</text>
+
+<!-- legend -->
+<g transform="translate(16,574)">
+<rect class="code-box" x="0" y="0" width="46" height="24" rx="4"/><rect class="badge-code" x="14" y="4" width="18" height="16" rx="4"/><text class="badge-glyph-code" x="23" y="16" text-anchor="middle">{ }</text>
+<text class="sub txt-mute" x="56" y="17">your code · decides</text>
+<polygon class="model-box" points="230,12 238,0 258,0 266,12 258,24 238,24"/>
+<text class="sub txt-mute" x="276" y="17">capability · returns numbers</text>
+<rect class="data-box" x="490" y="0" width="46" height="24" rx="4"/>
+<text class="sub txt-mute" x="546" y="17">data, not a decision</text>
+</g>
+</svg>

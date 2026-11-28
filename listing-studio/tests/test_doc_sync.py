@@ -232,3 +232,26 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
         )
+
+
+# Chapter 2.7 — Decision Models
+DECISION_MODELS_CHAPTER = os.path.join(ROOT, "docs", "the-unit", "decision-models.md")
+DECISION_MODELS_PKG = os.path.join(ROOT, "listing-studio", "decision_models")
+
+DECISION_MODELS_ANCHORS = {
+    "dm-shapes":     "question.py",
+    "dm-decide":     "policy.py",
+    "dm-combine":    "policy.py",
+    "dm-calibrate":  "calibrate.py",
+}
+
+
+def test_decision_models_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(DECISION_MODELS_CHAPTER))
+    for name, fname in DECISION_MODELS_ANCHORS.items():
+        region = _region(_read(os.path.join(DECISION_MODELS_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/the-unit/decision-models.md with "
+            f"listing-studio/decision_models/{fname}."
+        )
