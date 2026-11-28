@@ -232,3 +232,27 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
         )
+
+
+# Chapter 8.2 — Which Model?
+MODEL_SELECT_CHAPTER = os.path.join(ROOT, "docs", "production", "which-model.md")
+MODEL_SELECT_PKG = os.path.join(ROOT, "listing-studio", "model_select")
+
+MODEL_SELECT_ANCHORS = {
+    "model-config":     "config.py",
+    "model-compare":    "compare.py",
+    "model-langgraph":  "model_select_langgraph.py",
+    "model-responses":  "model_select_responses.py",
+    "model-anthropic":  "model_select_example.py",
+}
+
+
+def test_model_select_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(MODEL_SELECT_CHAPTER))
+    for name, fname in MODEL_SELECT_ANCHORS.items():
+        region = _region(_read(os.path.join(MODEL_SELECT_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/production/which-model.md with "
+            f"listing-studio/model_select/{fname}."
+        )
