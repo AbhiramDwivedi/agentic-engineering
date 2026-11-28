@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 612" width="800" height="612" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">Locks, PII and identity: the model decides, and a check in your code sits on every crossing to the systems it touches</title>
+  <desc id="desc">On the left, a rounded box is the model, which decides. It picks a price, asks for rows, reads a record and makes a call. Every one of those crosses a rectangle, a check in your code, before it reaches what it touches on the right. On the write, the model's price of $379 was decided at version 1, the store sees the row is now at version 2, refuses it as a conflict, and the run re-reads and asks the model again; the listing store keeps $389 from the run that won. On the query, a data layer filters every query by a tenant bound from the signed-in session, set per transaction and never taken from the prompt, so a shared database holding every merchant's rows returns only this merchant's. For personal data, a supplier record carrying a contact's name and email passes a redaction step on its way into the prompt, which drops fields the task does not need and swaps the rest for placeholders, so the prompt sees EMAIL_1 rather than the address, and the same step runs before the trace and storage. On the call, the credential is scoped to the run, to one merchant, one task and 15 minutes, naming the merchant as subject and run 4812 as actor; anything outside it is denied with insufficient_scope, and the pricing API accepts only tokens issued for it. Four crossings, four checks, all in your code, and none of them asks the model to behave.</desc>
+  <style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .h2 { font-size: 12.5px; }
+  .col-k { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+  .box-t { font-size: 12.5px; font-weight: 700; }
+  .sub { font-size: 11px; }
+  .verdict-t { font-size: 13.5px; font-weight: 800; }
+  .code-box, .model-box, .soft-box { stroke-width: 2; }
+  .wire { fill: none; stroke-width: 2; }
+  .rule { stroke-width: 1; }
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .soft-box { fill: #f7f8fb; stroke: #ccd2e0; }
+  .band { fill: #f3f5fb; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #6a45b0; }
+  .txt-esc { fill: #c62828; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .rule { stroke: #e2e6ef; }
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .soft-box { fill: #1b1f29; stroke: #3a4155; }
+  .band { fill: #1d212c; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #c4aee8; }
+  .txt-esc { fill: #ef9a9a; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .rule { stroke: #2b3140; }
+  }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-wire"/>
+    </marker>
+  </defs>
+  <rect class="page-bg" x="0.5" y="0.5" width="799" height="611" rx="10"/>
+  <text class="h1 txt" x="24" y="38">The model decides. Your code checks every crossing.</text>
+  <text class="h2 txt-mute" x="24" y="60">Four boundaries: the write, the query, the personal data in context, and the credential on the call.</text>
+  <line class="rule" x1="24" y1="76" x2="776" y2="76"/>
+  <rect class="band" x="286" y="84" width="288" height="436" rx="8"/>
+  <text class="col-k txt-model" x="24" y="102">THE MODEL DECIDES</text>
+  <text class="col-k txt-code" x="300" y="102">YOUR CODE CHECKS</text>
+  <text class="col-k txt-mute" x="604" y="102">WHAT IT TOUCHES</text>
+  <rect class="model-box" x="24" y="114" width="140" height="398" rx="20"/>
+  <!-- row 1 -->
+  <text class="box-t txt-model" x="94" y="166" text-anchor="middle">picks a price</text>
+  <rect class="code-box" x="300" y="118" width="260" height="88" rx="3"/>
+  <text class="box-t txt" x="314" y="142">Store checks the version</text>
+  <text class="sub txt-mute" x="314" y="162">read at v1, but the row is now at v2</text>
+  <text class="sub txt-esc" x="314" y="178">refused: conflict, re-read</text>
+  <text class="sub txt-mute" x="314" y="194">then ask the model again, at v2</text>
+  <rect class="soft-box" x="604" y="124" width="172" height="76" rx="8"/>
+  <text class="box-t txt" x="690" y="150" text-anchor="middle">Listing store</text>
+  <text class="sub txt-mute" x="690" y="168" text-anchor="middle">keeps $389 at v2,</text>
+  <text class="sub txt-mute" x="690" y="183" text-anchor="middle">from the run that won</text>
+  <line class="wire" x1="166" y1="162" x2="296" y2="162" marker-end="url(#ar)"/>
+  <line class="wire" x1="562" y1="162" x2="600" y2="162" marker-end="url(#ar)"/>
+  <text class="sub txt-mute" x="232" y="154" text-anchor="middle">write $379</text>
+  <text class="sub txt-mute" x="232" y="180" text-anchor="middle">decided at v1</text>
+  <!-- row 2 -->
+  <text class="box-t txt-model" x="94" y="266" text-anchor="middle">asks for rows</text>
+  <rect class="code-box" x="300" y="218" width="260" height="88" rx="3"/>
+  <text class="box-t txt" x="314" y="242">Data layer filters by tenant</text>
+  <text class="sub txt-mute" x="314" y="262">tenant bound from the signed-in session,</text>
+  <text class="sub txt-mute" x="314" y="278">set per transaction, never from the prompt</text>
+  <text class="sub txt-code" x="314" y="294">returns this merchant's rows only</text>
+  <rect class="soft-box" x="604" y="224" width="172" height="76" rx="8"/>
+  <text class="box-t txt" x="690" y="250" text-anchor="middle">Shared database</text>
+  <text class="sub txt-mute" x="690" y="268" text-anchor="middle">every merchant's rows</text>
+  <text class="sub txt-mute" x="690" y="283" text-anchor="middle">behind one tool</text>
+  <line class="wire" x1="166" y1="262" x2="296" y2="262" marker-end="url(#ar)"/>
+  <line class="wire" x1="562" y1="262" x2="600" y2="262" marker-end="url(#ar)"/>
+  <text class="sub txt-mute" x="232" y="254" text-anchor="middle">query supplier rows</text>
+  <!-- row 3 -->
+  <text class="box-t txt-model" x="94" y="366" text-anchor="middle">reads a record</text>
+  <rect class="code-box" x="300" y="318" width="260" height="88" rx="3"/>
+  <text class="box-t txt" x="314" y="342">Redaction before it crosses</text>
+  <text class="sub txt-mute" x="314" y="362">drops fields the task does not need,</text>
+  <text class="sub txt-mute" x="314" y="378">swaps the rest for placeholders</text>
+  <text class="sub txt-code" x="314" y="394">same step before the trace and storage</text>
+  <rect class="soft-box" x="604" y="324" width="172" height="76" rx="8"/>
+  <text class="box-t txt" x="690" y="350" text-anchor="middle">Supplier record</text>
+  <text class="sub txt-mute" x="690" y="368" text-anchor="middle">a contact's name</text>
+  <text class="sub txt-mute" x="690" y="383" text-anchor="middle">and email</text>
+  <line class="wire" x1="602" y1="362" x2="564" y2="362" marker-end="url(#ar)"/>
+  <line class="wire" x1="298" y1="362" x2="168" y2="362" marker-end="url(#ar)"/>
+  <text class="sub txt-mute" x="232" y="354" text-anchor="middle">into the prompt</text>
+  <text class="sub txt-mute" x="232" y="380" text-anchor="middle">as &lt;EMAIL_1&gt;</text>
+  <!-- row 4 -->
+  <text class="box-t txt-model" x="94" y="466" text-anchor="middle">makes a call</text>
+  <rect class="code-box" x="300" y="418" width="260" height="88" rx="3"/>
+  <text class="box-t txt" x="314" y="442">Credential scoped to the run</text>
+  <text class="sub txt-mute" x="314" y="462">one merchant · one task · 15 minutes</text>
+  <text class="sub txt-mute" x="314" y="478">subject: merchant · actor: run 4812</text>
+  <text class="sub txt-esc" x="314" y="494">anything else: insufficient_scope</text>
+  <rect class="soft-box" x="604" y="424" width="172" height="76" rx="8"/>
+  <text class="box-t txt" x="690" y="450" text-anchor="middle">Pricing API</text>
+  <text class="sub txt-mute" x="690" y="468" text-anchor="middle">accepts only tokens</text>
+  <text class="sub txt-mute" x="690" y="483" text-anchor="middle">issued for it</text>
+  <line class="wire" x1="166" y1="462" x2="296" y2="462" marker-end="url(#ar)"/>
+  <line class="wire" x1="562" y1="462" x2="600" y2="462" marker-end="url(#ar)"/>
+  <text class="sub txt-mute" x="232" y="454" text-anchor="middle">call the pricing API</text>
+  <line class="rule" x1="24" y1="536" x2="776" y2="536"/>
+  <text class="verdict-t txt" x="24" y="562">Four crossings, four checks, all in your code. None of them asks the model to behave.</text>
+  <text class="sub txt-mute" x="24" y="586">Rounded: the model decides. Rectangle: your code decides. Each check refuses on its own; the model cannot argue past it.</text>
+</svg>
