@@ -125,6 +125,18 @@ FAN_OUT_ANCHORS = {
     "fanout-anthropic":  "fan_out_example.py",
 }
 
+# Chapter 6.1 — Ingestion
+INGESTION_CHAPTER = os.path.join(ROOT, "docs", "io-boundary", "getting-the-mess-in.md")
+INGESTION_PKG = os.path.join(ROOT, "listing-studio", "ingestion")
+
+INGESTION_ANCHORS = {
+    "ingest-document": "document.py",
+    "ingest-sniff":    "parse.py",
+    "ingest-csv":      "parse.py",
+    "ingest-route":    "parse.py",
+    "ingest-pages":    "router.py",
+}
+
 
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
@@ -231,4 +243,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_ingestion_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(INGESTION_CHAPTER))
+    for name, fname in INGESTION_ANCHORS.items():
+        region = _region(_read(os.path.join(INGESTION_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/io-boundary/getting-the-mess-in.md with "
+            f"listing-studio/ingestion/{fname}."
         )
