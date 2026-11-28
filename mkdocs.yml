@@ -104,6 +104,7 @@ nav:
       - "2.4 MCP": the-unit/mcp.md
       - "2.5 The Agent Loop (planned)": the-unit/the-agent-loop.md
       - "2.6 The Harness (planned)": the-unit/the-harness.md
+      - "2.7 Decision Models": the-unit/decision-models.md
   - III. Composition:
       - composition/index.md
       - "3.1 Prompt Chaining": composition/prompt-chaining.md
