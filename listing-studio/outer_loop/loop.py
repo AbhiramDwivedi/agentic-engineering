@@ -21,6 +21,8 @@ def run_outer_loop(
     rules: PriceRules,
     max_attempts: int = 3,                # hard attempt cap
 ) -> Outcome:
+    if max_attempts < 1:
+        raise ValueError("max_attempts must be at least 1")
     failures: list[str] = []
     for n in range(1, max_attempts + 1):
         price = attempt(failures)              # the model decides inside this call

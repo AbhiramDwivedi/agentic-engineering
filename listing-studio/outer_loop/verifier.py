@@ -24,6 +24,8 @@ def verify_price(price_cents: int, rules: PriceRules) -> Verdict:
     if price_cents < rules.map_cents:
         return Verdict(False, f"price {price_cents} is below MAP {rules.map_cents} "
                               f"for {rules.sku}; MAP is a hard floor.")
+    if price_cents <= 0:
+        return Verdict(False, f"price {price_cents} must be positive.")
     margin = (price_cents - rules.cost_cents) / price_cents
     if margin < rules.min_margin:
         return Verdict(False, f"margin {margin:.0%} is under the {rules.min_margin:.0%} "

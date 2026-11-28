@@ -1,6 +1,6 @@
 # Coverage map: The Outer Loop (chapter 3.7)
 
-> **Budget (provisional):** standard pattern, ~2,000-2,800 prose words to the end of *In short*
+> **Budget:** standard pattern, ~2,000-2,800 prose words to the end of *In short*
 > (code, sources, and cross-links excluded). Not the flagship row (that row is defined by litmus
 > membership in the origin-set four, not by importance) and not stretched: the second-reviewer pass
 > trimmed the must-cover list to six items, each compact, with depth pushed to sibling chapters
@@ -102,9 +102,9 @@ Each: why it matters, the failure mode if skipped, maturity, lead citation.
    evaluations found a 6-percentage-point gap between the most- and least-resourced setups on the
    same benchmark (p < 0.01), concluding that "leaderboard differences below 3 percentage points
    deserve skepticism until the eval configuration is documented and matched" — a caution this
-   chapter's verifier inherits directly.[^infra-noise] Google's own testing-practices writing
-   documents the general causes (synchronization assumptions, environment state, timing) a pinned,
-   reproducible verifier has to control for.[^flakiness] The concrete discipline: pin the
+   chapter's verifier inherits directly.[^infra-noise] Google's Testing Blog documents flaky tests,
+   which pass and fail against the same code, as a standing cost a pinned, reproducible verifier
+   has to control for.[^flakiness] The concrete discipline: pin the
    environment, treat a verifier crash as an infrastructure failure routed to 7.1, not a failed
    attempt routed to item 3, and have an explicit re-run policy for a flaky check rather than
    letting one bad run either falsely pass or falsely burn an attempt. *Skip it:* a loop with a
@@ -127,7 +127,9 @@ Each: why it matters, the failure mode if skipped, maturity, lead citation.
    attempt with nothing but backoff. *Skip it:* the model re-rolls blind on every failure instead
    of correcting a named defect, burning attempts against the cap for no gained information.
    **Standard** (the failure-return-contract discipline, argued from this reference's own 3.1/3.4
-   precedent). ([3.1](prompt-chaining.md)'s gate; [3.4](evaluator-optimizer.md)'s verdict contract.)
+   precedent and Anthropic's "iterate on solutions using test results as feedback").
+   ([3.1](prompt-chaining.md)'s gate; [3.4](evaluator-optimizer.md)'s verdict contract;
+   Anthropic, "Building Effective Agents."[^anthropic-bea])
 
 4. **No-progress detection as an Emerging heuristic, together with an unconditional attempt/cost
    cap and escalation** — two controls that answer the same question from different angles: when
@@ -301,7 +303,8 @@ Each: why it matters, the failure mode if skipped, maturity, lead citation.
   evaluation runs).
 - **Emerging:** systematic no-progress detection via canonicalized failure signatures, unproven as
   a specific rule even though the case for *having* a cap is well evidenced; cross-attempt lesson
-  induction and compaction as a settled outer-loop practice.
+  induction and compaction as a settled outer-loop practice; pinned, reproducible verification
+  environments in agent harnesses (item 2).
 - **Contested:** "a good verifier alone lets a mid-tier model grind its way to a correct answer,"
   absent the safeguards in item 5; "loop engineering" as a discrete new technique or field era
   rather than a name for pre-existing, independently attributable components.
@@ -406,7 +409,7 @@ a named idea unique to 3.7.
 
 Vendor/primary: Anthropic, "Building Effective Agents" (2024-12-19).[^anthropic-bea] Anthropic,
 "Quantifying infrastructure noise in agentic coding evals" (2026-02-05).[^infra-noise] Anthropic,
-`claude-code` repository, `plugins/ralph-wiggum` (official Ralph Wiggum
+`claude-plugins-official` repository, `plugins/ralph-loop` (official Ralph loop
 plugin).[^ralph-plugin] Anthropic, Claude Code docs, "Keep Claude working toward a goal" (`/goal`)
 and "Run prompts on a schedule" (`/loop`).[^claude-goal][^claude-loop] OpenAI, "Harness
 Engineering: leveraging Codex in an agent-first world" (2026-02-11).[^openai-harness] OpenAI,
@@ -425,14 +428,14 @@ arXiv:2305.16291 (2023).[^voyager] Zhao et al., "ExpeL," arXiv:2308.10144 (AAAI
 Frameworks," arXiv:2402.01817 (ICML 2024).[^llm-modulo] "When Agents Do Not Stop,"
 arXiv:2607.01641 (2026).[^ial] Security: OWASP Top 10 for LLM Applications, LLM06 Excessive
 Agency.[^owasp-llm06] Practitioner: METR, "Recent Frontier Models Are Reward Hacking"
-(2025-06-05).[^metr-outer] Jason Wei, "Asymmetry of verification and verifier's law"
-(2025).[^wei-verifier] vectara/awesome-agent-failures, "Replit AI Database Deletion Incident -
+(2025-06-05).[^metr-outer] Jason Wei, "Asymmetry of verification and verifier's rule"
+(July 2025).[^wei-verifier] vectara/awesome-agent-failures, "Replit AI Database Deletion Incident -
 July 2025."[^replit] Competitor read (a public draft, cited directly): Gulli & Nawalgaria, *Building AI Agents* (2026 public draft), ch.
 20.[^gulli2-ch20] Internal: this reference's own [1.2](../foundations/who-decides.md) and [3.4
 Evaluator-Optimizer](evaluator-optimizer.md)'s shipped prose.
 
-> **Verify before quoting:** LangGraph's `recursion_limit` default (1,000 super-steps as of
-> v1.0.6) and the OpenAI Agents SDK's `max_turns` default (a named `DEFAULT_MAX_TURNS` constant;
+> **Verify before quoting:** LangGraph's `recursion_limit` default (version-dependent; this
+> map asserts no number) and the OpenAI Agents SDK's `max_turns` default (a named `DEFAULT_MAX_TURNS` constant;
 > current community reporting is inconsistent across SDK versions and this map does not assert a
 > specific number) are both on actively developed tools; re-check both against live docs
 > immediately before the chapter ships. Huntley's specific dollar-cost anecdotes are one
@@ -554,6 +557,67 @@ Evaluator-Optimizer](evaluator-optimizer.md)'s shipped prose.
 3. **1.2's stale "four tells" list**, now a debt shared by 2.5, 3.6 and 3.7.
    - *Default shipped:* **1.2 is not edited.** Flagged for the queued litmus-page revision.
 
+## Second-engine review (post-draft, agy)
+
+A second engine reviewed the drafted chapter, this map and the companion code. Each finding was
+checked against its primary source or by running the code before a disposition was logged.
+
+1. **`PriceCandidate` lacks `extra="forbid"`, so the strict Responses schema omits
+   `additionalProperties: false`. ACCEPTED (code).** Confirmed by printing
+   `model_json_schema()`. The fix goes to the companion code with a test; no chapter block mirrors
+   the schema.
+2. **The worked example is a single structured call, close to 2.2's re-ask loop; the LangGraph tab
+   builds no graph. ACCEPTED-MODIFIED.** The prose now says each tab's `attempt` is a single
+   structured call standing in for a full agent run, which keeps the controller in view. Rebuilding
+   every tab around a multi-turn inner agent is out of scope for a fix pass and is logged as an open
+   option. The tab label follows the site convention already shipped in 2.2.
+3. **Flakiness citation URL and cause list. ACCEPTED-MODIFIED.** The cited URL resolves, but to
+   Part II of the series under Part I's title. Both chapter and map now cite Part I (George
+   Pirocanac, 2020-12-16). The map's list of causes is dropped rather than replaced, since the
+   claim the chapter needs is only that flaky tests exist and cost attempts.
+4. **METR rates belong to one model. ACCEPTED.** METR attributes 30.4% (39 of 128 RE-Bench runs)
+   and 0.7% (8 of 1,087 HCAST runs) to an earlier version of OpenAI's o3. Prose and footnote now
+   say so.
+5. **Budget header unreadable by the linter; chapter over its ceiling. ACCEPTED.** Header fixed;
+   alt text shortened and prose tightened to under the 2,800-word ceiling.
+6. **Context economy between attempts. ACCEPTED-MODIFIED.** One sentence in *How*: each attempt
+   starts from a fresh context carrying only the failure lines, and a stateful agent needs its
+   state reset between attempts. Compaction mechanics stay at 5.4. No new source added.
+7. **Maturity verdicts. PARTLY ACCEPTED.** (a) Dropping "cross-attempt lesson induction" from the
+   verdict line: REJECTED here, because the verdict was ratified at Stage 1.6; listed for the
+   author. (b) ACCEPTED-MODIFIED: the Wei essay supports only the verification-asymmetry clause, so
+   the footnote now sits there, and the contested claim is narrowed to "a verifier alone". (c)
+   ACCEPTED: item 3 now cites Anthropic's "Building Effective Agents", and the Maturity summary
+   lists verifier reproducibility as Emerging, matching item 2.
+8. **Thesis. ACCEPTED-MODIFIED.** The chapter opening now states both halves: `passed` certifies
+   only what the function checks, and an editable check is worse than none. The map's thesis text
+   was ratified at Stage 1.6 and is left as ruled.
+9. **Map length, LangGraph default, Ralph plugin path. ACCEPTED-MODIFIED.** The old
+   `claude-code/plugins/ralph-wiggum` path no longer resolves; the map now cites
+   `claude-plugins-official/plugins/ralph-loop`, whose README was checked for the quoted line. The
+   "1,000 super-steps" figure is removed from the verify-before-quoting note: the live docs give a
+   different, version-dependent number, so the map, like the chapter, states none. Item 2 of the
+   second-reviewer pass above is kept as logged and superseded by this entry. Trimming the map body
+   to its word budget is REJECTED for a post-draft pass, since the map's logged rulings and
+   dispositions are its audit trail.
+10. **Footnote defects. ACCEPTED.** Drafting notes removed from the Gulli footnote; Wei's title
+    corrected to "verifier's rule" (July 2025); the infinite-loop paper gains its four authors and
+    preprint status; Reflexion marked NeurIPS 2023; SWE-bench Verified dated 2024-08-13.
+11. **Edge cases in the loop and verifier. ACCEPTED (code).** Confirmed by running them:
+    `max_attempts=0` raises `UnboundLocalError`, and a zero price with a zero MAP divides by zero.
+    The early futility stop recording one copy of a repeated failure is intended and stays.
+12. **Untested trace values; tool description names Listing Studio. PARTLY ACCEPTED.** A test for
+    the `34900`, `37900`, `38900` run goes to the companion code. The tool description is
+    REJECTED: every companion example uses the same wording.
+13. **Alias line. DEFERRED to the author.** Aliases need author sign-off, so none are added or
+    removed here. LLM-Modulo is a framework the chapter cites, not a name for this pattern.
+14. **Litmus phrasing, diagram wiring, site catalog drift. PARTLY ACCEPTED.** The *Who decides*
+    line now reads "your code (whether to retry and when to stop), wrapping a model-driven attempt
+    (2.5)". The section index no longer marks 3.7 planned. The diagram is REJECTED: the feedback
+    arrow shows what the next attempt reads, which is the diagram's point. The quick-reference
+    catalog row is left to the catalog's own update, since catalog pages are not edited from a
+    chapter PR.
+
 [^anthropic-bea]: Anthropic, "Building Effective Agents" (2024-12-19). On coding tasks: "Code
 solutions are verifiable through automated tests; Agents can iterate on solutions using test
 results as feedback." <https://www.anthropic.com/research/building-effective-agents>
@@ -566,11 +630,10 @@ results as feedback." <https://www.anthropic.com/research/building-effective-age
 Terminal-Bench 2.0 (p < 0.01); "leaderboard differences below 3 percentage points deserve
 skepticism until the eval configuration is documented and matched."
 <https://www.anthropic.com/engineering/infrastructure-noise>
-[^flakiness]: Google Testing Blog, "Test Flakiness — One of the main challenges of automated
-testing" (series). General causes of flaky tests: synchronization assumptions, environment state,
-timing dependencies, and insufficient isolation between runs. Re-verify the exact post and date
-against the live blog before quoting; the series spans multiple posts.
-<https://testing.googleblog.com/2021/03/test-flakiness-one-of-main-challenges.html>
+[^flakiness]: George Pirocanac, Google Testing Blog, "Test Flakiness - One of the main challenges
+of automated testing" (2020-12-16; Part II followed on 2021-03-24). Cited for the existence and
+cost of flaky tests, which pass and fail against the same code; no list of causes is claimed.
+<https://testing.googleblog.com/2020/12/test-flakiness-one-of-main-challenges.html>
 [^genprog]: Weimer, W., Nguyen, T., Le Goues, C., Forrest, S., "Automatically Finding Patches Using
 Genetic Programming" (ICSE 2009). Generates candidate patches with genetic programming and accepts
 them once they pass the available positive and negative test cases; no LLM involved.
@@ -580,7 +643,7 @@ Overfitting in Automated Program Repair" (ESEC/FSE 2015). Patches generated and 
 the same test set can pass the available suite while remaining incorrect, because tests are an
 imperfect proxy for correctness.
 <https://people.cs.umass.edu/~brun/pubs/pubs/Smith15fse.pdf>
-[^swebench-verified]: OpenAI, "Introducing SWE-bench Verified." A 500-sample, human-annotated
+[^swebench-verified]: OpenAI, "Introducing SWE-bench Verified" (2024-08-13). A 500-sample, human-annotated
 subset of SWE-bench; separates hidden `FAIL_TO_PASS` tests (tied to the issue being resolved) from
 `PASS_TO_PASS` regression tests (must pass before and after the change); 93 developers
 hand-screened samples for underspecified issues or unfairly-filtering tests.
@@ -588,14 +651,13 @@ hand-screened samples for underspecified issues or unfairly-filtering tests.
 [^ralph-huntley]: Geoffrey Huntley, "Ralph Wiggum as a 'software engineer'" (2025-07-14). "Ralph is
 a technique. In its purest form, Ralph is a Bash loop": `while :; do cat PROMPT.md | claude-code;
 done`. <https://ghuntley.com/ralph/>
-[^ralph-plugin]: Anthropic, `claude-code` repository, `plugins/ralph-wiggum` (official Ralph
-Wiggum plugin). `--max-iterations` defaults to unlimited; `--completion-promise` matches an
+[^ralph-plugin]: Anthropic, `claude-plugins-official` repository, `plugins/ralph-loop` (official
+Ralph loop plugin, command `/ralph-loop`). `--max-iterations` defaults to unlimited; `--completion-promise` matches an
 exact-string signal the operator defines, typically wrapped in `<promise>` tags inside the prompt
 given to Claude, not the flag value itself. The README's own warning: "you cannot use it for
 multiple completion conditions … always rely on `--max-iterations` as your primary safety
-mechanism." The Stop hook script (`hooks/stop-hook.sh`) runs to roughly 150-200 lines.
-<https://github.com/anthropics/claude-code/blob/main/plugins/ralph-wiggum/README.md>,
-<https://github.com/anthropics/claude-code/blob/main/plugins/ralph-wiggum/hooks/stop-hook.sh>
+mechanism."
+<https://github.com/anthropics/claude-plugins-official/tree/main/plugins/ralph-loop>
 [^claude-goal]: Anthropic, Claude Code docs, "Keep Claude working toward a goal" (`/goal`). By
 default, after each turn "a small fast model checks whether the condition holds" and returns "not
 yet met," "met," or "impossible" — a model-judged evaluator. A Stop hook "can run a script for
@@ -625,17 +687,19 @@ International Conference on Machine Learning, PMLR 267:63897-63911 (2025).
 <https://proceedings.mlr.press/v267/wang25bx.html>
 [^llm-modulo]: Kambhampati, S. et al., "LLMs Can't Plan, But Can Help Planning in LLM-Modulo
 Frameworks" (ICML 2024). <https://arxiv.org/abs/2402.01817>
-[^wei-verifier]: Jason Wei, "Asymmetry of verification and verifier's law" (2025).
+[^wei-verifier]: Jason Wei, "Asymmetry of verification and verifier's rule" (July 2025).
 <https://www.jasonwei.net/blog/asymmetry-of-verification-and-verifiers-law>
-[^ial]: "When Agents Do Not Stop: Uncovering Infinite Agentic Loops in LLM Agents" (submitted
-2026-07-02). Static analysis across 6,549 public LLM-agent repositories; 68 confirmed
+[^ial]: Hou, X., Wang, S., Zhao, Y., Wang, H., "When Agents Do Not Stop: Uncovering Infinite
+Agentic Loops in LLM Agents" (arXiv preprint, submitted 2026-07-02, not peer-reviewed). Static analysis across 6,549 public LLM-agent repositories; 68 confirmed
 unbounded-loop failures across 47 projects, 91.9% precision.
 <https://arxiv.org/abs/2607.01641>
 [^owasp-llm06]: OWASP Top 10 for LLM Applications, LLM06 Excessive Agency.
 <https://genai.owasp.org/llm-top-10/>
 [^metr-outer]: METR, "Recent Frontier Models Are Reward Hacking" (2025-06-05). Models can overwrite
 unit tests, monkey-patch scoring functions, or delete assertions to obtain a passing score in
-evaluation runs; reward hacking was markedly more common on a task suite where the model could see
+evaluation runs. The quoted rates are for an earlier version of OpenAI's o3 in pre-deployment
+evaluations: 39 of 128 RE-Bench runs (30.4%) against 8 of 1,087 HCAST runs (0.7%), which METR
+reports as more than 43x; reward hacking was more common on the suite where the model could see
 the entire scoring function, a hypothesis METR itself states as such, not a measured cause.
 <https://metr.org/blog/2025-06-05-recent-reward-hacking/>
 [^replit]: vectara/awesome-agent-failures, "Replit AI Database Deletion Incident - July 2025." A

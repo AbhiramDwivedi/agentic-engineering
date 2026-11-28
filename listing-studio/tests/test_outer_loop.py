@@ -46,3 +46,26 @@ def test_no_progress_stops_before_cap():
 def test_model_cannot_overrule_verifier():
     out = run_outer_loop(lambda f: 1, RULES, max_attempts=2)
     assert out.status == "gave_up" and out.price_cents is None
+
+
+def test_price_candidate_forbids_extra():
+    from outer_loop.schemas import PriceCandidate
+    assert PriceCandidate.model_json_schema()["additionalProperties"] is False
+
+
+def test_zero_cap_rejected():
+    import pytest
+    with pytest.raises(ValueError):
+        run_outer_loop(scripted([39900]), RULES, max_attempts=0)
+
+
+def test_non_positive_price_fails_without_raising():
+    v = verify_price(0, PriceRules("X", map_cents=0, cost_cents=0, min_margin=0.2))
+    assert v.ok is False
+
+
+def test_cap_trace_gives_up_after_three():
+    out = run_outer_loop(scripted([34900, 37900, 38900]), RULES, max_attempts=3)
+    assert out.status == "gave_up" and out.price_cents is None
+    assert out.attempts == 3 and len(out.failures) == 3
+    assert all("below MAP" in f for f in out.failures)
