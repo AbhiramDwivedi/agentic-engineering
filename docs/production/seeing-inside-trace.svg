@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 650" width="800" height="650" role="img" aria-labelledby="ttl desc">
+<title id="ttl">One agent run as a parent-linked trace, with content kept in your process unless you opt in and redact it</title>
+<desc id="desc">One agent run drawn as a trace inside your process. A root span, invoke_agent listing-studio, has no parent. Beneath it sit three child spans, chat claude-sonnet-5-5, execute_tool lookup_sku and a second chat, and each carries the root's id as its parent; the model's replies decide how many children there are. A span exports as it closes, so the three children go out first and the root last. By default a span records its trace, span and parent ids, plus the model that answered, input and output tokens and the finish reason for a model call, or the tool name for a tool call. That record goes straight to export and across the process boundary to a trace store, often a third party, which rebuilds the tree from the parent ids. Prompts, replies and tool arguments meet an opt-in capture_content gate first, and it is off by default. Off, the content is never recorded and never leaves. On, it passes through a redaction step that turns an email address into [contact], and if the redactor fails it drops the content and keeps the ids, all before export.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 21px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .sub { font-size: 11.5px; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+  .mono-t { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; }
+  .num { font-size: 11px; font-weight: 700; }
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .model-box { fill: none; stroke-dasharray: 6 4; }
+  .wire { fill: none; stroke-width: 2; }
+  .wire-c { fill: none; stroke-width: 2; stroke-dasharray: 6 4; }
+  .ghost { fill: none; stroke-dasharray: 5 5; stroke-width: 1.5; }
+  .bound { fill: none; stroke-width: 1.5; stroke-dasharray: 8 5; }
+
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .num-bg { fill: #4f5b93; }
+  .num { fill: #eef1f9; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .wire, .wire-c { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .ghost { stroke: #aab2c4; }
+  .bound { stroke: #aab2c4; }
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+
+  @media (prefers-color-scheme: dark) {
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .num-bg { fill: #939ed4; }
+  .num { fill: #262b3d; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .wire, .wire-c { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .ghost { stroke: #5a6478; }
+  .bound { stroke: #5a6478; }
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+}
+</style>
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="649" rx="8"/>
+<text class="h1 txt" x="24" y="38">One run, one trace. Your code decides what leaves.</text>
+<text class="h2 txt-mute" x="24" y="60">The model's replies decide the tree's shape. Your code decides what each span records.</text>
+
+<!-- process boundary -->
+<rect class="bound" x="14" y="80" width="612" height="556" rx="10"/>
+<text class="tag-lbl txt-code" x="28" y="100">YOUR PROCESS</text>
+
+<!-- trace tree -->
+<text class="tag-lbl txt-mute" x="36" y="128">ONE TRACE ID</text>
+<rect class="code-box" x="36" y="138" width="262" height="52" rx="4"/>
+<text class="mono-s txt" x="48" y="159">invoke_agent listing-studio</text>
+<text class="sub txt-mute" x="48" y="178">root span &#183; no parent</text>
+<rect class="num-bg" x="272" y="144" width="20" height="18" rx="9"/><text class="num" x="282" y="157" text-anchor="middle">4</text>
+
+<rect class="model-box" x="62" y="206" width="250" height="206" rx="18"/>
+
+<rect class="code-box" x="74" y="216" width="224" height="52" rx="4"/>
+<text class="mono-s txt" x="86" y="237">chat claude-sonnet-5-5</text>
+<text class="sub txt-mute" x="86" y="256">asks for a tool</text>
+<rect class="num-bg" x="272" y="222" width="20" height="18" rx="9"/><text class="num" x="282" y="235" text-anchor="middle">1</text>
+
+<rect class="code-box" x="74" y="282" width="224" height="52" rx="4"/>
+<text class="mono-s txt" x="86" y="303">execute_tool lookup_sku</text>
+<text class="sub txt-mute" x="86" y="322">runs the tool</text>
+<rect class="num-bg" x="272" y="288" width="20" height="18" rx="9"/><text class="num" x="282" y="301" text-anchor="middle">2</text>
+
+<rect class="code-box" x="74" y="348" width="224" height="52" rx="4"/>
+<text class="mono-s txt" x="86" y="369">chat claude-sonnet-5-5</text>
+<text class="sub txt-mute" x="86" y="388">writes the answer</text>
+<rect class="num-bg" x="272" y="354" width="20" height="18" rx="9"/><text class="num" x="282" y="367" text-anchor="middle">3</text>
+
+<!-- parent pointers: each child points at the root -->
+<path class="wire" d="M74,242 L48,242 L48,194" marker-end="url(#arw)"/>
+<path class="wire" d="M74,308 L48,308 L48,242"/>
+<path class="wire" d="M74,374 L48,374 L48,308"/>
+<text class="sub txt-mute" x="24" y="432">every child carries the root's id as its parent</text>
+<text class="sub txt-model" x="24" y="450">the model's replies decide how many children</text>
+<text class="sub txt-mute" x="24" y="468">numbers: export order (a span exports as it closes)</text>
+
+<!-- always-recorded lane -->
+<path class="wire" d="M312,300 L336,300" marker-end="url(#arw)"/>
+<rect class="data-box" x="340" y="218" width="156" height="128" rx="6"/>
+<text class="card-t txt" x="352" y="240">Recorded by default</text>
+<text class="sub txt-mute" x="352" y="262">trace, span, parent ids</text>
+<text class="sub txt-mute" x="352" y="280">model that answered</text>
+<text class="sub txt-mute" x="352" y="298">input, output tokens</text>
+<text class="sub txt-mute" x="352" y="316">finish reason</text>
+<text class="sub txt-mute" x="352" y="334">tool name</text>
+<path class="wire" d="M496,282 L516,282" marker-end="url(#arw)"/>
+
+<!-- exporter -->
+<rect class="code-box" x="520" y="218" width="94" height="380" rx="4"/>
+<text class="card-t txt" x="567" y="396" text-anchor="middle">export</text>
+<text class="sub txt-mute" x="567" y="414" text-anchor="middle">as each</text>
+<text class="sub txt-mute" x="567" y="430" text-anchor="middle">span closes</text>
+
+<!-- across the boundary -->
+<path class="wire" d="M614,408 L652,408" marker-end="url(#arw)"/>
+<rect class="code-box" x="656" y="352" width="128" height="112" rx="4"/>
+<text class="card-t txt" x="668" y="376">trace store</text>
+<text class="sub txt-mute" x="668" y="396">often third party</text>
+<text class="sub txt-mute" x="668" y="420">rebuilds the tree</text>
+<text class="sub txt-mute" x="668" y="436">from parent ids</text>
+
+<!-- content lane -->
+<path class="wire-c" d="M100,476 L100,500" marker-end="url(#arw)"/>
+<rect class="data-box" x="30" y="504" width="142" height="62" rx="6"/>
+<text class="card-t txt" x="42" y="526">Content</text>
+<text class="sub txt-mute" x="42" y="544">prompts, replies</text>
+<text class="sub txt-mute" x="42" y="560">tool arguments</text>
+<path class="wire-c" d="M172,535 L192,535" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="196" y="504" width="130" height="62" rx="4"/>
+<text class="mono-s txt" x="207" y="526">capture_content</text>
+<text class="sub txt-mute" x="207" y="546">opt-in gate</text>
+<text class="sub txt-mute" x="207" y="561">off by default</text>
+<text class="sub txt-code" x="332" y="527">on</text>
+<path class="wire-c" d="M326,535 L352,535" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="356" y="488" width="152" height="94" rx="4"/>
+<text class="card-t txt" x="368" y="510">redact</text>
+<text class="sub txt-mute" x="368" y="530">email &#8594; [contact]</text>
+<text class="sub txt-mute" x="368" y="552">if the redactor fails:</text>
+<text class="sub txt-mute" x="368" y="568">drop content, keep ids</text>
+<path class="wire-c" d="M508,535 L516,535" marker-end="url(#arw)"/>
+
+<text class="sub txt-code" x="270" y="584">off</text>
+<path class="wire-c" d="M261,566 L261,594" marker-end="url(#arw)"/>
+<rect class="ghost" x="174" y="598" width="174" height="30" rx="4"/>
+<text class="sub txt-mute" x="261" y="617" text-anchor="middle">never recorded, never leaves</text>
+</svg>
