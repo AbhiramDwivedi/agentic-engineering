@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="800" height="560" role="img" aria-labelledby="ttl desc">
+<title id="ttl">An agent UI renders what the harness did, not what the model said</title>
+<desc id="desc">Two provider streams, Anthropic Messages events and OpenAI Responses events including an error inside an HTTP 200, cross a dashed line, your edge, into one translator, the only code that reads them. Of the seven kinds of UI event, the translator emits five: text, thinking, done, error and tool_call. The harness, which runs tools and makes writes wait for a person, is the only source of the other two, approval and tool_result. The interface reduces the events. The transcript reads "Price updated, all done!" and is display only; thinking is not displayed. The update_price step, setting the desk to 41900 cents, goes from running to awaiting approval and ends failed, because the tool raised. Approve, decline and stop send decisions back to the harness, bound to the call ID.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 20px; font-weight: 700; }
+  .h2 { font-size: 13px; }
+  .card-t { font-size: 13px; font-weight: 700; letter-spacing: .02em; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .sub { font-size: 11.5px; }
+  .mono-t { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; font-weight: 600; }
+  .quote { font-size: 13.5px; font-weight: 700; font-style: italic; }
+  .state { font-size: 12px; font-weight: 600; }
+  .verdict { font-size: 16px; font-weight: 800; letter-spacing: .04em; }
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .panel { stroke-width: 1.3; }
+  .wire { fill: none; stroke-width: 2; }
+  .wire-back { fill: none; stroke-width: 2.2; }
+  .edge { stroke-width: 1.6; stroke-dasharray: 6 5; }
+  .ghost { fill: none; stroke-dasharray: 4 4; stroke-width: 1.3; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .panel { fill: #ffffff; stroke: #c3c9d8; }
+  .btn { fill: #4f5b93; }
+  .btn-t { fill: #ffffff; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .txt-bad { fill: #b3261e; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-back { stroke: #4f5b93; }  .mk-back { fill: #4f5b93; }
+  .edge { stroke: #7e57c2; }
+  .ghost { stroke: #aab2c4; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .panel { fill: #1b1f29; stroke: #4a5266; }
+  .btn { fill: #939ed4; }
+  .btn-t { fill: #1b1f29; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .txt-bad { fill: #f2948c; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-back { stroke: #939ed4; }  .mk-back { fill: #939ed4; }
+  .edge { stroke: #b39ddb; }
+  .ghost { stroke: #5a6478; }
+  }
+</style>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+  <marker id="arwb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-back" d="M0,0 L10,5 L0,10 z"/></marker>
+</defs>
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="559" rx="8"/>
+
+<text class="h1 txt" x="16" y="34">An agent UI renders what the harness did, not what the model said</text>
+<text class="h2 txt-mute" x="16" y="56">Provider events are translated once at your edge. Step state comes from events. Decisions flow back.</text>
+
+<!-- column headers -->
+<text class="tag-lbl txt-model" x="16" y="92">THE MODEL, VIA PROVIDER</text>
+<text class="tag-lbl txt-code" x="250" y="92">YOUR CODE</text>
+<text class="tag-lbl txt-mute" x="420" y="92">UI EVENTS</text>
+<text class="tag-lbl txt-code" x="548" y="92">INTERFACE &#183; REDUCER</text>
+
+<!-- provider streams (model output) -->
+<rect class="model-box" x="16" y="108" width="206" height="104" rx="16"/>
+<text class="card-t txt" x="30" y="130">Anthropic Messages</text>
+<text class="mono-t txt" x="30" y="151">content_block_delta</text>
+<text class="mono-t txt" x="30" y="168">input_json_delta</text>
+<text class="mono-t txt" x="30" y="185">ping</text>
+<text class="sub txt-mute" x="30" y="202">args parse only at block stop</text>
+
+<rect class="model-box" x="16" y="228" width="206" height="104" rx="16"/>
+<text class="card-t txt" x="30" y="250">OpenAI Responses</text>
+<text class="mono-t txt" x="30" y="271">response.output_text.delta</text>
+<text class="mono-t txt" x="30" y="288">&#8230;function_call_arguments.done</text>
+<text class="mono-t txt" x="30" y="305">error</text>
+<text class="sub txt-mute" x="68" y="305">inside an HTTP 200</text>
+
+<text class="sub txt-model" x="16" y="358">The model decides what to say</text>
+<text class="sub txt-model" x="16" y="374">and which tool to call.</text>
+<text class="sub txt-mute" x="16" y="398">Nothing on the right reads</text>
+<text class="sub txt-mute" x="16" y="414">these event names.</text>
+
+<!-- your edge -->
+<line class="edge" x1="236" y1="100" x2="236" y2="440"/>
+<text class="sub txt-model" transform="translate(231,440) rotate(-90)">your edge</text>
+
+<path class="wire" d="M222,160 L248,180" marker-end="url(#arw)"/>
+<path class="wire" d="M222,280 L248,250" marker-end="url(#arw)"/>
+
+<!-- translator -->
+<rect class="code-box" x="250" y="108" width="152" height="194" rx="4"/>
+<text class="card-t txt" x="262" y="130">Translator</text>
+<text class="sub txt" x="262" y="152">the only code that</text>
+<text class="sub txt" x="262" y="167">reads provider events</text>
+<text class="sub txt-mute" x="262" y="190">one per provider,</text>
+<text class="sub txt-mute" x="262" y="205">same output</text>
+<text class="sub txt-mute" x="262" y="228">unknown types and</text>
+<text class="sub txt-mute" x="262" y="243">pings are dropped</text>
+<text class="sub txt-mute" x="262" y="266">tool_call only once</text>
+<text class="sub txt-mute" x="262" y="281">its args are complete</text>
+
+<!-- translator to harness -->
+<path class="wire" d="M326,302 L326,328" marker-end="url(#arw)"/>
+<text class="mono-t txt-mute" x="332" y="319">tool_call</text>
+
+<!-- harness -->
+<rect class="code-box" x="250" y="330" width="152" height="100" rx="4"/>
+<text class="card-t txt" x="262" y="351">Harness</text>
+<text class="sub txt" x="262" y="370">runs the tool; writes</text>
+<text class="sub txt" x="262" y="385">wait for a person</text>
+<text class="sub txt-mute" x="262" y="404">sole source of approval</text>
+<text class="sub txt-mute" x="262" y="419">and tool_result</text>
+
+<!-- UI event chips -->
+<g>
+  <path class="wire" d="M402,130 L418,130" marker-end="url(#arw)"/>
+  <rect class="data-box" x="420" y="119" width="88" height="22" rx="4"/><text class="mono-s txt" x="464" y="134" text-anchor="middle">text</text>
+  <path class="wire" d="M402,166 L418,166" marker-end="url(#arw)"/>
+  <rect class="data-box" x="420" y="155" width="88" height="22" rx="4"/><text class="mono-s txt" x="464" y="170" text-anchor="middle">thinking</text>
+  <path class="wire" d="M402,202 L418,202" marker-end="url(#arw)"/>
+  <rect class="data-box" x="420" y="191" width="88" height="22" rx="4"/><text class="mono-s txt" x="464" y="206" text-anchor="middle">done</text>
+  <path class="wire" d="M402,234 L418,234" marker-end="url(#arw)"/>
+  <rect class="data-box" x="420" y="223" width="88" height="22" rx="4"/><text class="mono-s txt" x="464" y="238" text-anchor="middle">error</text>
+  <path class="wire" d="M402,284 L418,284" marker-end="url(#arw)"/>
+  <rect class="data-box" x="420" y="273" width="88" height="22" rx="4"/><text class="mono-s txt" x="464" y="288" text-anchor="middle">tool_call</text>
+  <path class="wire" d="M402,355 L418,355" marker-end="url(#arw)"/>
+  <rect class="data-box" x="420" y="344" width="88" height="22" rx="4"/><text class="mono-s txt" x="464" y="359" text-anchor="middle">approval</text>
+  <path class="wire" d="M402,395 L418,395" marker-end="url(#arw)"/>
+  <rect class="data-box" x="420" y="384" width="88" height="22" rx="4"/><text class="mono-s txt" x="464" y="399" text-anchor="middle">tool_result</text>
+</g>
+
+<!-- interface -->
+<rect class="code-box" x="548" y="104" width="240" height="368" rx="4"/>
+
+<path class="wire" d="M508,130 L556,130" marker-end="url(#arw)"/>
+<rect class="panel" x="558" y="114" width="220" height="44" rx="4"/>
+<text class="quote txt" x="568" y="134">&#8220;Price updated, all done!&#8221;</text>
+<text class="sub txt-mute" x="568" y="150">transcript: model prose, display only</text>
+
+<path class="wire" d="M508,166 L556,170" marker-end="url(#arw)"/>
+<rect class="panel" x="558" y="162" width="220" height="24" rx="4" stroke-dasharray="4 4"/>
+<text class="sub txt-mute" x="568" y="178">reasoning: not displayed</text>
+
+<rect class="panel" x="558" y="246" width="220" height="166" rx="4"/>
+<text class="mono-s txt" x="568" y="266">update_price &#8594; 41900&#162;</text>
+<path class="wire" d="M508,284 L556,284" marker-end="url(#arw)"/>
+<text class="state txt-mute" x="568" y="288">running</text>
+<text class="sub txt-mute" x="568" y="318">step state is set only by</text>
+<text class="sub txt-mute" x="568" y="333">events, never by the transcript</text>
+<path class="wire" d="M508,355 L556,355" marker-end="url(#arw)"/>
+<text class="state txt-mute" x="568" y="359">awaiting approval</text>
+<path class="wire" d="M508,395 L556,395" marker-end="url(#arw)"/>
+<text class="verdict txt-bad" x="568" y="401">FAILED</text>
+<text class="sub txt-mute" x="638" y="400">the tool raised</text>
+
+<!-- controls -->
+<rect class="btn" x="558" y="424" width="70" height="28" rx="5"/><text class="sub btn-t" x="593" y="442" text-anchor="middle" font-weight="700">Approve</text>
+<rect class="btn" x="636" y="424" width="70" height="28" rx="5"/><text class="sub btn-t" x="671" y="442" text-anchor="middle" font-weight="700">Decline</text>
+<rect class="btn" x="714" y="424" width="64" height="28" rx="5"/><text class="sub btn-t" x="746" y="442" text-anchor="middle" font-weight="700">Stop</text>
+
+<!-- return path: two-way surface -->
+<path class="wire-back" d="M668,472 L668,492 L326,492 L326,432" marker-end="url(#arwb)"/>
+<text class="sub txt-code" x="340" y="486">approve / decline, bound to the call ID; stop</text>
+
+<!-- legend -->
+<g transform="translate(16,516)">
+  <rect class="model-box" x="0" y="0" width="40" height="22" rx="11"/>
+  <text class="sub txt-mute" x="48" y="15">the model decides</text>
+  <rect class="code-box" x="176" y="0" width="40" height="22" rx="4"/>
+  <text class="sub txt-mute" x="224" y="15">your code decides</text>
+  <rect class="data-box" x="352" y="0" width="40" height="22" rx="4"/>
+  <text class="sub txt-mute" x="400" y="15">a UI event, data in flight</text>
+</g>
+</svg>

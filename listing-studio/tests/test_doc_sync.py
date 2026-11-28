@@ -96,6 +96,19 @@ ROUTING_ANCHORS = {
     "routing-anthropic":  "router_anthropic.py",
 }
 
+# Chapter 6.3 — Streaming & Agent UX
+STREAMING_CHAPTER = os.path.join(ROOT, "docs", "io-boundary", "streaming-and-agent-ux.md")
+STREAMING_PKG = os.path.join(ROOT, "listing-studio", "streaming")
+
+STREAMING_ANCHORS = {
+    "stream-vocabulary":           "events.py",
+    "stream-translate-anthropic":  "translate.py",
+    "stream-translate-openai":     "translate.py",
+    "stream-approval":             "harness.py",
+    "stream-ui-state":             "harness.py",
+    "stream-consumer":             "harness.py",
+}
+
 # Chapter 1.4 — The Augmented LLM
 AUGMENTED_LLM_CHAPTER = os.path.join(ROOT, "docs", "foundations", "the-augmented-llm.md")
 AUGMENTED_LLM_PKG = os.path.join(ROOT, "listing-studio", "augmented_llm")
@@ -231,4 +244,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_streaming_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(STREAMING_CHAPTER))
+    for name, fname in STREAMING_ANCHORS.items():
+        region = _region(_read(os.path.join(STREAMING_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/io-boundary/streaming-and-agent-ux.md with "
+            f"listing-studio/streaming/{fname}."
         )
