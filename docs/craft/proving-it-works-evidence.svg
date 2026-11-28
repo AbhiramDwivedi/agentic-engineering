@@ -1,0 +1,206 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 590" width="800" height="590" role="img" aria-labelledby="ttl desc">
+<title id="ttl">An eval score is evidence only if its cases, its graders and its rate each pass one check</title>
+<desc id="desc">An eval pipeline in three columns, each headed by the condition that makes its score evidence. Column one, cases came from real failures: a feed row reading 250 (static 300), caught by a merchandiser before publish, becomes one of eight golden cases, each naming the failure it came from, one of them a do-nothing case; a dashed ghost box of cases someone imagined would not contain that row. Column two, graders were checked against people: a code grader checks the claimed weight is 250 lb, and a rounded model judge grades only what code cannot see. Two versions of that judge are scored against hand labels on a kappa scale from 0 to 1 with a bar at 0.6: the lenient judge sits at 0.50 and is not trusted, the careful judge at 0.75 and is trusted. Column three, the rate is read with its noise: the harness runs each case several times and reports a pass rate with a 95 percent interval. v1 passes 0.65 with interval 0.44 to 0.86, v2 passes 0.85 with interval 0.71 to 0.99, and the two bars overlap between 0.71 and 0.86. Below, the same eight cases read two ways: the dashboard shows 0.65 to 0.85, a 20-point win, while the gate, which is your code, calls it not distinguishable because v2's low end sits below v1's high end. A legend notes that the rounded shape is where the model decides, rectangles are where your code decides, and dashed boxes are data.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 21px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .col-t { font-size: 13.5px; font-weight: 700; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .sub { font-size: 11.5px; }
+  .num { font-size: 12px; font-weight: 700; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+  .big { font-size: 26px; font-weight: 800; }
+  .verdict { font-size: 22px; font-weight: 800; }
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .ghost { stroke-dasharray: 5 5; stroke-width: 1.5; }
+  .wire { fill: none; stroke-width: 2; }
+  .axis { stroke-width: 1.5; }
+  .bar { stroke-width: 5; stroke-linecap: round; }
+  .thresh { stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .mark { stroke-width: 2.5; stroke-linecap: round; fill: none; }
+  .rule { stroke-width: 1; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .ghost { fill: none; stroke: #aab2c4; }
+  .badge { fill: #4f5b93; }
+  .badge-t { fill: #eef1f9; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .txt-bad { fill: #b3423a; }
+  .wire, .axis { stroke: #97a0b5; }
+  .mk-wire { fill: #97a0b5; }
+  .rule { stroke: #e2e6ef; }
+  .bar-v1 { stroke: #97a0b5; }
+  .bar-v2 { stroke: #4f5b93; }
+  .dot-v1 { fill: #5b6377; }
+  .dot-v2 { fill: #4f5b93; }
+  .overlap { fill: #f2d9d6; }
+  .thresh { stroke: #4f5b93; }
+  .mark-bad { stroke: #b3423a; }
+  .mark-ok { stroke: #2e7d4f; }
+  .txt-ok { fill: #2e7d4f; }
+  .dot-ok { fill: #2e7d4f; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #161a22; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .ghost { stroke: #5a6478; }
+  .badge { fill: #939ed4; }
+  .badge-t { fill: #262b3d; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .txt-bad { fill: #ef8a80; }
+  .wire, .axis { stroke: #78829a; }
+  .mk-wire { fill: #78829a; }
+  .rule { stroke: #2b3140; }
+  .bar-v1 { stroke: #78829a; }
+  .bar-v2 { stroke: #939ed4; }
+  .dot-v1 { fill: #a2abc0; }
+  .dot-v2 { fill: #939ed4; }
+  .overlap { fill: #4a2b2e; }
+  .thresh { stroke: #939ed4; }
+  .mark-bad { stroke: #ef8a80; }
+  .mark-ok { stroke: #7bc79a; }
+  .txt-ok { fill: #7bc79a; }
+  .dot-ok { fill: #7bc79a; }
+  }
+</style>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" class="mk-wire"/>
+  </marker>
+</defs>
+
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="589" rx="10"/>
+
+<text class="h1 txt" x="20" y="36">A score is evidence only if all three hold</text>
+<text class="h2 txt-mute" x="20" y="58">Every solid rectangle is your code. The rounded model judge only returns pass or fail.</text>
+
+<text class="tag-lbl txt-code" x="20" y="90">EVIDENCE ONLY IF</text>
+
+<line class="rule" x1="270" y1="100" x2="270" y2="352"/>
+<line class="rule" x1="530" y1="100" x2="530" y2="352"/>
+
+<!-- Column 1: cases -->
+<circle class="badge" cx="32" cy="116" r="11"/>
+<text class="num badge-t" x="32" y="120" text-anchor="middle">1</text>
+<text class="col-t txt" x="52" y="114">Cases came from</text>
+<text class="col-t txt" x="52" y="131">real failures</text>
+
+<rect class="data-box" x="20" y="150" width="240" height="56" rx="3"/>
+<text class="card-t txt" x="32" y="171">Feed row a merchandiser caught</text>
+<text class="mono-s txt" x="32" y="194">"250 (static 300)"</text>
+
+<line class="wire" x1="140" y1="206" x2="140" y2="220" marker-end="url(#arw)"/>
+
+<rect class="data-box" x="20" y="224" width="240" height="62" rx="3"/>
+<text class="card-t txt" x="32" y="245">Golden set: 8 cases</text>
+<text class="sub txt-mute" x="32" y="263">each names the failure it came from</text>
+<text class="sub txt-mute" x="32" y="278">one is a do-nothing case</text>
+
+<rect class="ghost" x="20" y="298" width="240" height="46" rx="3"/>
+<text class="card-t txt-mute" x="32" y="317">Cases someone imagined</text>
+<text class="sub txt-mute" x="32" y="334">would not contain that row</text>
+
+<!-- Column 2: graders -->
+<circle class="badge" cx="292" cy="116" r="11"/>
+<text class="num badge-t" x="292" y="120" text-anchor="middle">2</text>
+<text class="col-t txt" x="312" y="114">Graders were checked</text>
+<text class="col-t txt" x="312" y="131">against people</text>
+
+<line class="wire" x1="260" y1="240" x2="278" y2="240" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="282" y="150" width="236" height="48" rx="2"/>
+<text class="card-t txt-code" x="294" y="170">Code grader</text>
+<text class="sub txt-mute" x="294" y="188">checks the claimed weight is 250 lb</text>
+
+<rect class="model-box" x="282" y="206" width="236" height="48" rx="16"/>
+<text class="card-t txt-model" x="296" y="226">Model judge</text>
+<text class="sub txt-mute" x="296" y="244">only where code cannot see</text>
+
+<text class="sub txt" x="282" y="276">judge vs hand labels, kappa</text>
+<line class="axis" x1="300" y1="304" x2="500" y2="304"/>
+<line class="axis" x1="300" y1="299" x2="300" y2="309"/>
+<line class="axis" x1="500" y1="299" x2="500" y2="309"/>
+<text class="sub txt-mute" x="292" y="308" text-anchor="end">0</text>
+<text class="sub txt-mute" x="508" y="308">1</text>
+<line class="thresh" x1="420" y1="290" x2="420" y2="316"/>
+<text class="sub txt-code" x="421" y="328" text-anchor="middle">bar 0.6</text>
+<!-- lenient 0.50 -->
+<path class="mark mark-bad" d="M394,298 L406,310 M406,298 L394,310"/>
+<text class="sub txt-bad" x="396" y="328" text-anchor="end">lenient 0.50</text>
+<text class="sub txt-bad" x="396" y="343" text-anchor="end">not trusted</text>
+<!-- careful 0.75 -->
+<circle class="dot-ok" cx="450" cy="304" r="6"/>
+<text class="sub txt-ok" x="446" y="328">careful 0.75</text>
+<text class="sub txt-ok" x="446" y="343">trusted</text>
+
+<!-- Column 3: rate -->
+<circle class="badge" cx="552" cy="116" r="11"/>
+<text class="num badge-t" x="552" y="120" text-anchor="middle">3</text>
+<text class="col-t txt" x="572" y="114">The rate is read</text>
+<text class="col-t txt" x="572" y="131">with its noise</text>
+
+<line class="wire" x1="518" y1="174" x2="538" y2="174" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="542" y="150" width="238" height="48" rx="2"/>
+<text class="card-t txt-code" x="554" y="170">Harness</text>
+<text class="sub txt-mute" x="554" y="188">runs each case several times</text>
+
+<rect class="overlap" x="702" y="230" width="30" height="72"/>
+<text class="sub txt-bad" x="717" y="318" text-anchor="middle">overlap</text>
+
+<text class="sub txt" x="552" y="226">v1  0.65 [0.44, 0.86]</text>
+<line class="bar bar-v1" x1="648" y1="240" x2="732" y2="240"/>
+<circle class="dot-v1" cx="690" cy="240" r="5"/>
+
+<text class="sub txt" x="552" y="266">v2  0.85 [0.71, 0.99]</text>
+<line class="bar bar-v2" x1="702" y1="280" x2="758" y2="280"/>
+<circle class="dot-v2" cx="730" cy="280" r="5"/>
+
+<line class="axis" x1="560" y1="302" x2="760" y2="302"/>
+<line class="axis" x1="560" y1="297" x2="560" y2="307"/>
+<line class="axis" x1="660" y1="297" x2="660" y2="307"/>
+<line class="axis" x1="760" y1="297" x2="760" y2="307"/>
+<text class="sub txt-mute" x="560" y="320" text-anchor="middle">0</text>
+<text class="sub txt-mute" x="660" y="320" text-anchor="middle">0.5</text>
+<text class="sub txt-mute" x="760" y="320" text-anchor="middle">1</text>
+<text class="sub txt-mute" x="552" y="343">pass rate, 95% interval</text>
+
+<!-- Bottom: two readings -->
+<line class="rule" x1="20" y1="366" x2="780" y2="366"/>
+<text class="tag-lbl txt-code" x="20" y="390">THE SAME EIGHT CASES, READ TWO WAYS</text>
+
+<rect class="ghost" x="20" y="404" width="330" height="96" rx="3"/>
+<text class="card-t txt-mute" x="36" y="427">What the dashboard shows</text>
+<text class="big txt-mute" x="36" y="463">0.65 → 0.85</text>
+<text class="sub txt-mute" x="36" y="487">a 20-point win, read without the bars</text>
+
+<path class="wire" d="M660,352 L660,396" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="400" y="404" width="380" height="96" rx="2"/>
+<text class="card-t txt-code" x="416" y="427">Gate, your code, calls it</text>
+<text class="verdict txt" x="416" y="460">not distinguishable</text>
+<text class="sub txt-mute" x="416" y="487">v2's low end 0.71 is below v1's high end 0.86</text>
+
+<!-- Legend -->
+<rect class="model-box" x="20" y="528" width="34" height="20" rx="8"/>
+<text class="sub txt-mute" x="62" y="542">the model decides</text>
+<rect class="code-box" x="190" y="528" width="34" height="20" rx="2"/>
+<text class="sub txt-mute" x="232" y="542">your code decides</text>
+<rect class="data-box" x="362" y="528" width="34" height="20" rx="2"/>
+<text class="sub txt-mute" x="404" y="542">data</text>
+<text class="sub txt-mute" x="20" y="572">By the fake's odds table v2 is better by under 4 points; eight cases cannot show it.</text>
+</svg>
