@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 800" width="760" height="800" role="img" aria-labelledby="ttl desc">
+<title id="ttl">Ingestion: your code routes the file, and a vision model reads only the pages code cannot</title>
+<desc id="desc">Two supplier files arrive: Northvale's CSV feed and the three-page Aldsworth spec-sheet PDF. Code sniffs each file's real type from its bytes, not its name; a file over the size cap or of an unknown type returns a failed status instead of raising. The CSV goes to a code reader that reads every cell exactly, so none of its eight cells reaches a model. The PDF goes to a page router in code that decides page by page: page 1 has a text layer and a table, and code reads both, so the 250-pound capacity is anchored to page 1, table 1, row 2; page 2 is a scan and page 3 is a dimension diagram, so only those two go to a rounded vision-model node, which reads the page image. Two of three pages reach the model. Every path ends in one typed document of elements, each carrying an anchor to the file and the cell or page it came from and a note of whether code or vision read it, plus a status of ok, partial or failed; a page the vision model cannot read makes the result partial and the rest is kept. Ingestion stops there. Extraction is a later step that reads the typed document and fills the listing's fields.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .h2 { font-size: 13px; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+  .sub { font-size: 11.5px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; }
+  .mono-b { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+  .count { font-size: 24px; font-weight: 800; }
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .data-box { stroke-dasharray: 5 4; }
+  .ghost { fill: none; stroke-dasharray: 5 5; stroke-width: 1.5; }
+  .wire { fill: none; stroke-width: 2; }
+  .wire-fail { fill: none; stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .rule { stroke-width: 1.5; stroke-dasharray: 6 5; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .ghost { stroke: #aab2c4; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .txt-fail { fill: #a3423a; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-model { stroke: #7e57c2; }  .mk-model { fill: #7e57c2; }
+  .wire-fail { stroke: #c0796f; }
+  .rule { stroke: #aab2c4; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #161922; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .ghost { stroke: #5a6478; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .txt-fail { fill: #e39a90; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-model { stroke: #b39ddb; }  .mk-model { fill: #b39ddb; }
+  .wire-fail { stroke: #b0756c; }
+  .rule { stroke: #5a6478; }
+  }
+</style>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+  <marker id="arw-m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-model" d="M0,0 L10,5 L0,10 z"/></marker>
+</defs>
+<rect class="page-bg" x="0.5" y="0.5" width="759" height="799" rx="8"/>
+
+<text class="h1 txt" x="30" y="38">Code routes the file; a model reads only the pages code cannot</text>
+<text class="h2 txt-mute" x="30" y="60">Parse, then extract. Ingestion ends in a typed document, and every value keeps its anchor.</text>
+
+<!-- inputs -->
+<rect class="data-box" x="90" y="86" width="200" height="50" rx="4"/>
+<text class="mono-b txt" x="190" y="107" text-anchor="middle">northvale.csv</text>
+<text class="sub txt-mute" x="190" y="125" text-anchor="middle">supplier feed, 2 desks</text>
+<rect class="data-box" x="400" y="86" width="240" height="50" rx="4"/>
+<text class="mono-b txt" x="520" y="107" text-anchor="middle">aldsworth-spec.pdf</text>
+<text class="sub txt-mute" x="520" y="125" text-anchor="middle">spec sheet, 3 pages</text>
+<path class="wire" d="M190,136 V164" marker-end="url(#arw)"/>
+<path class="wire" d="M520,136 V164" marker-end="url(#arw)"/>
+
+<!-- sniff -->
+<rect class="code-box" x="90" y="166" width="530" height="56"/>
+<text class="tag-lbl txt-code" x="104" y="184">YOUR CODE</text>
+<text class="card-t txt" x="355" y="189" text-anchor="middle">Sniff the real type</text>
+<text class="sub txt-mute" x="355" y="208" text-anchor="middle">from the bytes (%PDF, PK, &lt;html), never from the file name</text>
+<path class="wire-fail" d="M620,194 H644"/>
+<text class="sub txt-fail" x="650" y="182">too large or</text>
+<text class="sub txt-fail" x="650" y="197">unknown type:</text>
+<text class="sub txt-fail" x="650" y="212">status failed,</text>
+<text class="sub txt-fail" x="650" y="227">no raise</text>
+
+<path class="wire" d="M190,222 V262" marker-end="url(#arw)"/>
+<text class="mono txt-mute" x="198" y="246">csv / html</text>
+<path class="wire" d="M520,222 V262" marker-end="url(#arw)"/>
+<text class="mono txt-mute" x="528" y="246">pdf</text>
+
+<!-- code reader (left) -->
+<rect class="code-box" x="90" y="264" width="200" height="60"/>
+<text class="card-t txt" x="190" y="289" text-anchor="middle">Code reader</text>
+<text class="sub txt-mute" x="190" y="308" text-anchor="middle">reads every cell exactly</text>
+
+<!-- page router (right) -->
+<rect class="code-box" x="400" y="264" width="240" height="60"/>
+<text class="card-t txt" x="520" y="289" text-anchor="middle">Page router</text>
+<text class="sub txt-mute" x="520" y="308" text-anchor="middle">per page: text layer, or needs eyes?</text>
+
+<!-- pages -->
+<path class="wire" d="M437,324 V354" marker-end="url(#arw)"/>
+<path class="wire" d="M520,324 V354" marker-end="url(#arw)"/>
+<path class="wire" d="M603,324 V354" marker-end="url(#arw)"/>
+<rect class="data-box" x="400" y="356" width="74" height="50" rx="4"/>
+<text class="mono-b txt" x="437" y="377" text-anchor="middle">p.1</text>
+<text class="sub txt-mute" x="437" y="395" text-anchor="middle">text</text>
+<rect class="data-box" x="483" y="356" width="74" height="50" rx="4"/>
+<text class="mono-b txt" x="520" y="377" text-anchor="middle">p.2</text>
+<text class="sub txt-mute" x="520" y="395" text-anchor="middle">scan</text>
+<rect class="data-box" x="566" y="356" width="74" height="50" rx="4"/>
+<text class="mono-b txt" x="603" y="377" text-anchor="middle">p.3</text>
+<text class="sub txt-mute" x="603" y="395" text-anchor="middle">diagram</text>
+
+<path class="wire" d="M437,406 V436" marker-end="url(#arw)"/>
+<path class="wire wire-model" d="M520,406 V436" marker-end="url(#arw-m)"/>
+<path class="wire wire-model" d="M603,406 V436" marker-end="url(#arw-m)"/>
+
+<rect class="code-box" x="400" y="438" width="74" height="62"/>
+<text class="sub txt" x="437" y="464" text-anchor="middle">code reads</text>
+<text class="sub txt" x="437" y="480" text-anchor="middle">text layer</text>
+
+<rect class="model-box" x="483" y="438" width="157" height="62" rx="22"/>
+<text class="tag-lbl txt-model" x="561" y="458" text-anchor="middle">VISION MODEL</text>
+<text class="sub txt" x="561" y="476" text-anchor="middle">reads the page image</text>
+<text class="sub txt-mute" x="561" y="491" text-anchor="middle">no tools, no routing</text>
+
+<!-- counts -->
+<text class="count txt-model" x="652" y="470">2 of 3</text>
+<text class="sub txt-mute" x="652" y="488">pages reach</text>
+<text class="sub txt-mute" x="652" y="503">the model</text>
+
+<path class="wire" d="M190,324 V546" marker-end="url(#arw)"/>
+<text class="count txt-code" x="206" y="410">0 of 8</text>
+<text class="sub txt-mute" x="206" y="428">cells reach</text>
+<text class="sub txt-mute" x="206" y="443">the model</text>
+
+<path class="wire" d="M437,500 V546" marker-end="url(#arw)"/>
+<path class="wire" d="M561,500 V546" marker-end="url(#arw)"/>
+
+<!-- typed document -->
+<rect class="data-box" x="40" y="548" width="680" height="148" rx="4"/>
+<text class="card-t txt" x="56" y="571">Typed document: one element per value, each with an anchor</text>
+<text class="mono txt" x="56" y="597">field  height_range_in = "25-50"</text>
+<text class="mono txt-code" x="372" y="597">← northvale.csv · row 2, col height_range_in</text>
+<text class="mono txt" x="56" y="619">field  capacity_lbs = "250"</text>
+<text class="mono txt-code" x="372" y="619">← aldsworth-spec.pdf · p.1, table 1, row 2</text>
+<text class="mono txt" x="56" y="641">field  height_range_in = "25-50"</text>
+<text class="mono txt-code" x="372" y="641">← aldsworth-spec.pdf · page 3 · vision</text>
+<text class="mono txt" x="56" y="671">status ok | partial | failed</text>
+<text class="sub txt-mute" x="372" y="671">a page vision cannot read: partial, the rest kept</text>
+
+<!-- boundary -->
+<line class="rule" x1="40" y1="716" x2="720" y2="716"/>
+<text class="tag-lbl txt-mute" x="380" y="711" text-anchor="middle">INGESTION STOPS HERE</text>
+
+<rect class="ghost" x="190" y="728" width="380" height="34" rx="4"/>
+<text class="sub txt-mute" x="380" y="750" text-anchor="middle">Extraction, a later step, reads these elements and fills the listing</text>
+
+<!-- legend -->
+<rect class="code-box" x="40" y="776" width="22" height="14"/>
+<text class="sub txt-mute" x="68" y="788">rectangle: your code decides</text>
+<rect class="model-box" x="250" y="776" width="22" height="14" rx="7"/>
+<text class="sub txt-mute" x="278" y="788">rounded: the model decides</text>
+<rect class="data-box" x="460" y="776" width="22" height="14" rx="2"/>
+<text class="sub txt-mute" x="488" y="788">dashed: data</text>
+</svg>
