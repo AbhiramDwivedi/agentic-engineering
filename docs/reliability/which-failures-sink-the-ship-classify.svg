@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 530" width="820" height="530" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">Retry and graceful degradation: your code sorts each failed call into transient or terminal, and each gets a different answer</title>
+  <desc id="desc">A call to the primary model fails and enters a classifier box in your code, which sends it down one of two paths. Transient failures, such as a 408, a 429 rate limit, a 5xx, a 529 overload or a timeout on a call that is safe to replay, go to a backoff wait with jitter and loop back to the same call, inside an attempt and time budget. When those retries run out, the call steps down the fallback chain one rung, to the next model, whose answer comes back marked degraded. Terminal failures, such as a 400, 401, 403, 404 or 413, any spend cap, a refusal, a response cut off at max_tokens, or context overflow, exit straight to a clear error, because resending the same call changes nothing. Every box is a rectangle: your code makes each of these decisions, and the model decides nothing here.</desc>
+  <style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .h2 { font-size: 12.5px; }
+  .cat-t { font-size: 12.5px; font-weight: 800; letter-spacing: .08em; }
+  .box-t { font-size: 13px; font-weight: 700; }
+  .sub { font-size: 11px; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 600; }
+  .foot-t { font-size: 12.5px; font-weight: 700; }
+
+  .code-box, .cat-box, .out-box, .stop-box { stroke-width: 2; }
+  .cat-box { stroke-width: 1.5; }
+  .wire { fill: none; stroke-width: 2; }
+  .rule { stroke-width: 1; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .cat-box { fill: #f7f8fb; stroke: #ccd2e0; }
+  .out-box { fill: #e8ecf7; stroke: #4f5b93; stroke-dasharray: 5 4; }
+  .stop-box { fill: #fdf2f2; stroke: #c96b67; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-esc { fill: #c62828; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .rule { stroke: #e2e6ef; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .cat-box { fill: #1b1f29; stroke: #3a4155; }
+  .out-box { fill: #2c3350; stroke: #939ed4; }
+  .stop-box { fill: #2e1f1f; stroke: #c0625e; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-esc { fill: #ff8a80; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .rule { stroke: #2b3140; }
+  }
+  </style>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="mk-wire"/>
+    </marker>
+  </defs>
+
+  <rect class="page-bg" x="0.5" y="0.5" width="819" height="529" rx="10"/>
+
+  <!-- heading -->
+  <text class="h1 txt" x="40" y="36">Sort every failed call before you act on it</text>
+  <text class="h2 txt-mute" x="40" y="58">One classifier in your code, three different answers</text>
+
+  <!-- the call and the classifier -->
+  <rect class="code-box" x="40" y="84" width="210" height="52" rx="2"/>
+  <text class="box-t txt" x="145" y="108" text-anchor="middle">Call the primary model</text>
+  <text class="sub txt-mute" x="145" y="125" text-anchor="middle">a model or tool call</text>
+
+  <path class="wire" d="M 250 110 H 318" marker-end="url(#ar)"/>
+  <text class="sub txt-mute" x="284" y="102" text-anchor="middle">it fails</text>
+
+  <rect class="code-box" x="320" y="78" width="180" height="64" rx="2"/>
+  <text class="box-t txt" x="410" y="106" text-anchor="middle">Classify the failure</text>
+  <text class="sub txt-code" x="410" y="125" text-anchor="middle">your code, per error</text>
+
+  <!-- three branches -->
+  <path class="wire" d="M 370 142 V 162 H 145 V 180" marker-end="url(#ar)"/>
+  <path class="wire" d="M 450 142 V 162 H 675 V 180" marker-end="url(#ar)"/>
+
+  <!-- category headers -->
+  <rect class="cat-box" x="40" y="182" width="210" height="96" rx="2"/>
+  <text class="cat-t txt" x="145" y="204" text-anchor="middle">TRANSIENT</text>
+  <text class="sub txt-mute" x="145" y="222" text-anchor="middle">a wait may fix it</text>
+  <text class="mono-s txt-code" x="145" y="241" text-anchor="middle">408 · 429 rate limit · 5xx</text>
+  <text class="mono-s txt-code" x="145" y="259" text-anchor="middle">529 · replay-safe timeout</text>
+
+
+  <rect class="cat-box" x="570" y="182" width="210" height="96" rx="2"/>
+  <text class="cat-t txt" x="675" y="204" text-anchor="middle">TERMINAL</text>
+  <text class="sub txt-mute" x="675" y="222" text-anchor="middle">the same resend changes nothing</text>
+  <text class="mono-s txt-code" x="675" y="241" text-anchor="middle">400 · 401 · 403 · 404 · 413</text>
+  <text class="mono-s txt-code" x="675" y="259" text-anchor="middle">any spend cap · refusal</text>
+  <text class="mono-s txt-code" x="675" y="274" text-anchor="middle">max_tokens · context overflow</text>
+
+  <path class="wire" d="M 145 278 V 304" marker-end="url(#ar)"/>
+  <path class="wire" d="M 675 278 V 304" marker-end="url(#ar)"/>
+
+  <!-- actions -->
+  <rect class="code-box" x="40" y="306" width="210" height="60" rx="2"/>
+  <text class="box-t txt" x="145" y="331" text-anchor="middle">Wait, then call again</text>
+  <text class="sub txt-mute" x="145" y="351" text-anchor="middle">backoff + jitter, inside a budget</text>
+
+  <rect class="code-box" x="305" y="306" width="210" height="60" rx="2"/>
+  <text class="box-t txt" x="410" y="331" text-anchor="middle">Fall back one rung</text>
+  <text class="sub txt-mute" x="410" y="351" text-anchor="middle">the next model in the chain</text>
+
+  <rect class="stop-box" x="570" y="306" width="210" height="60" rx="2"/>
+  <text class="box-t txt-esc" x="675" y="331" text-anchor="middle">Stop with a clear error</text>
+  <text class="sub txt-mute" x="675" y="351" text-anchor="middle">the run ends; nothing is resent</text>
+
+  <!-- transient loop back to the same call -->
+  <path class="wire" d="M 40 336 H 24 V 110 H 38" marker-end="url(#ar)"/>
+  <text class="sub txt-mute" transform="translate(17 223) rotate(-90)" text-anchor="middle">back to the same call</text>
+
+  <!-- exhausted retries step down the chain -->
+  <path class="wire" d="M 250 336 H 303" marker-end="url(#ar)"/>
+  <text class="sub txt-mute" x="277" y="326" text-anchor="middle">retries</text>
+  <text class="sub txt-mute" x="277" y="352" text-anchor="middle">spent</text>
+
+  <!-- degraded answer -->
+  <path class="wire" d="M 410 366 V 392" marker-end="url(#ar)"/>
+  <rect class="out-box" x="305" y="394" width="210" height="52" rx="2"/>
+  <text class="box-t txt" x="410" y="416" text-anchor="middle">Answer, marked degraded</text>
+  <text class="mono-s txt-code" x="410" y="434" text-anchor="middle">degraded=True</text>
+
+  <!-- footer -->
+  <line class="rule" x1="40" y1="472" x2="780" y2="472"/>
+  <rect class="code-box" x="40" y="486" width="26" height="18" rx="2"/>
+  <text class="foot-t txt" x="78" y="500">Every box is a rectangle: your code makes each decision.</text>
+  <text class="sub txt-mute" x="78" y="518">The model only answers the calls. Whether to retry, fall back or stop is never its choice.</text>
+</svg>

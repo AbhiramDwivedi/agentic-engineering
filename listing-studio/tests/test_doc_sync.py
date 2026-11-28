@@ -83,6 +83,17 @@ PROMPT_CHAINING_ANCHORS = {
     "chain-anthropic":  "prompt_chaining_example.py",
 }
 
+# Chapter 7.1 — Retry & Graceful Degradation
+RESILIENCE_CHAPTER = os.path.join(ROOT, "docs", "reliability", "which-failures-sink-the-ship.md")
+RESILIENCE_PKG = os.path.join(ROOT, "listing-studio", "resilience")
+
+RESILIENCE_ANCHORS = {
+    "classify":    "classify.py",
+    "retry":       "retry.py",
+    "fallback":    "fallback.py",
+    "idempotent":  "idempotent.py",
+}
+
 # Chapter 3.2 — Routing & Dispatch
 ROUTING_CHAPTER = os.path.join(ROOT, "docs", "composition", "the-router-that-isnt.md")
 ROUTING_PKG = os.path.join(ROOT, "listing-studio", "routing")
@@ -231,4 +242,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_resilience_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(RESILIENCE_CHAPTER))
+    for name, fname in RESILIENCE_ANCHORS.items():
+        region = _region(_read(os.path.join(RESILIENCE_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/reliability/which-failures-sink-the-ship.md with "
+            f"listing-studio/resilience/{fname}."
         )
