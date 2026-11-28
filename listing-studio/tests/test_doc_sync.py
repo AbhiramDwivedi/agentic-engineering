@@ -130,6 +130,20 @@ def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
 
+# Chapter 7.2 — Observer
+OBSERVER_CHAPTER = os.path.join(ROOT, "docs", "reliability", "a-silent-failure-is-worse.md")
+OBSERVER_PKG = os.path.join(ROOT, "listing-studio", "observer")
+
+OBSERVER_ANCHORS = {
+    "observer-event":      "events.py",
+    "observer-emit":       "events.py",
+    "observer-step":       "events.py",
+    "observer-sink":       "events.py",
+    "observer-langgraph":  "observer_langgraph.py",
+    "observer-responses":  "observer_responses.py",
+    "observer-anthropic":  "observer_example.py",
+}
+
 
 def _region(src: str, name: str) -> str:
     m = re.search(
@@ -231,4 +245,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_observer_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(OBSERVER_CHAPTER))
+    for name, fname in OBSERVER_ANCHORS.items():
+        region = _region(_read(os.path.join(OBSERVER_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/reliability/a-silent-failure-is-worse.md with "
+            f"listing-studio/observer/{fname}."
         )
