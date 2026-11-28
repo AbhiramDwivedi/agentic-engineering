@@ -115,7 +115,7 @@ nav:
       - "3.7 The Outer Loop (planned)": composition/the-outer-loop.md
   - IV. The Craft of Control:
       - craft/index.md
-      - "4.1 Prompt Architecture & Management (planned)": craft/prompts-are-source-code.md
+      - "4.1 Prompt Architecture & Management": craft/prompts-are-source-code.md
       - "4.2 Evaluation (planned)": craft/proving-it-works.md
       - "4.3 Human-in-the-Loop (planned)": craft/human-in-the-loop.md
       - "4.4 Guardrails & Safety (planned)": craft/guardrails-and-safety.md
