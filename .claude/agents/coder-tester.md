@@ -43,7 +43,7 @@ tested.
    report that as a blocker rather than authoring prose to make the test pass.
 6. **Current models only.** When example code names a model, use a current ID; never invent one.
    As of 2026-11 the Anthropic default is `claude-sonnet-5-5`; the OpenAI default is `gpt-6.2-sol`
-   (developers.openai.com/api/docs/models, checked 2026-11-28); re-verify both before writing them. Do not retrofit IDs in already-shipped
+   (developers.openai.com/api/docs/models, checked 2026-11-27); re-verify both before writing them. Do not retrofit IDs in already-shipped
    chapters' code; flag the mismatch instead.
 7. **Show the guardrail the prose insists on.** If a chapter's gotchas name a safety rail (a loop
    cap, a validation step, an idempotency key), the anchored code demonstrates it, or carries a
