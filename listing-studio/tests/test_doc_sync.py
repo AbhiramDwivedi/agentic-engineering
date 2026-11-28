@@ -126,6 +126,22 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 4.5 — Reasoning & Thinking Budgets
+REASONING_CHAPTER = os.path.join(ROOT, "docs", "craft", "reasoning-and-thinking-budgets.md")
+REASONING_PKG = os.path.join(ROOT, "listing-studio", "reasoning_budget")
+
+REASONING_ANCHORS = {
+    "sweep-types":       "sweep.py",
+    "sweep-run":         "sweep.py",
+    "sweep-pick":        "sweep.py",
+    "sweep-cases":       "scripted.py",
+    "sweep-main":        "__main__.py",
+    "effort-langgraph":  "effort_langgraph.py",
+    "effort-responses":  "effort_responses.py",
+    "effort-anthropic":  "effort_example.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +247,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_reasoning_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(REASONING_CHAPTER))
+    for name, fname in REASONING_ANCHORS.items():
+        region = _region(_read(os.path.join(REASONING_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/craft/reasoning-and-thinking-budgets.md with "
+            f"listing-studio/reasoning_budget/{fname}."
         )
