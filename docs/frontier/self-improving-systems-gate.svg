@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" width="800" height="620" role="img" aria-labelledby="ttl desc">
+<title id="ttl">Self-improving systems: the model proposes an edit, your code decides whether it goes live</title>
+<desc id="desc">A rounded box, where the model decides, is the proposer: it reads failures in the feedback set and writes one edit. The edit lands on a candidate artifact inside a dashed boundary labelled editable surface; the artifact is one of a prompt file, a skill document, or a piece of code. The candidate crosses out of that boundary into a rectangle, where your code decides, that scores it on a selection set the proposer never sees. A second rectangle, the gate, asks whether the candidate beats the current version by a margin without breaking anything. On a fail, a rejection message carrying the score and the cases it broke goes back to the proposer, and the live system is untouched. On a pass, the candidate becomes a versioned diff, which the promotion step writes to the live system; the live system changes only through promotion. Three items carry a lock, meaning the proposer cannot read or write them, and all sit outside the editable surface: the evaluator, the held-out test set touched once at the end, and the promotion step. The model decides what to try; your code decides what is kept.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 21px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .card-t { font-size: 13px; font-weight: 700; letter-spacing: .02em; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .sub { font-size: 11.5px; }
+  .take { font-size: 13.5px; font-weight: 700; }
+  .code-box, .model-box, .art-box, .live-box { stroke-width: 2; }
+  .surface { fill: none; stroke-width: 2; stroke-dasharray: 7 5; }
+  .wire { fill: none; stroke-width: 2; }
+  .wire-fail { fill: none; stroke-width: 2; stroke-dasharray: 6 4; }
+  .lock-body { stroke-width: 1.6; }
+  .lock-shackle { fill: none; stroke-width: 1.8; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .art-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .live-box { fill: #f3f5f8; stroke: #5b6377; }
+  .surface { stroke: #7e57c2; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-fail { stroke: #b0566a; }  .mk-fail { fill: #b0566a; }
+  .txt-fail { fill: #a1465a; }
+  .lock-body { fill: #4f5b93; stroke: #4f5b93; }
+  .lock-shackle { stroke: #4f5b93; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .art-box { fill: #1b1f29; stroke: #5a6478; }
+  .live-box { fill: #23262f; stroke: #a2abc0; }
+  .surface { stroke: #b39ddb; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-fail { stroke: #e08a9b; }  .mk-fail { fill: #e08a9b; }
+  .txt-fail { fill: #e899a8; }
+  .lock-body { fill: #939ed4; stroke: #939ed4; }
+  .lock-shackle { stroke: #939ed4; }
+  }
+</style>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+  <marker id="arw-fail" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-fail" d="M0,0 L10,5 L0,10 z"/></marker>
+  <g id="lock"><path class="lock-shackle" d="M3,7 V4.5 a3.5,3.5 0 0 1 7,0 V7"/><rect class="lock-body" x="0.5" y="7" width="12" height="9" rx="1.5"/></g>
+</defs>
+
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="619" rx="8"/>
+<text class="h1 txt" x="30" y="40">The model proposes. Your code decides what goes live.</text>
+<text class="h2 txt-mute" x="30" y="64">Only the dashed surface is editable. What judges a candidate sits outside it.</text>
+
+<!-- Fail path: gate back to proposer -->
+<path class="wire-fail" d="M670,246 V137 H284" marker-end="url(#arw-fail)"/>
+<text class="sub txt-fail" x="475" y="128" text-anchor="middle">fail: rejection message (score, cases it broke)</text>
+<text class="sub txt-mute" x="475" y="155" text-anchor="middle">live system untouched</text>
+
+<!-- Proposer (model decides) -->
+<rect class="model-box" x="40" y="100" width="240" height="74" rx="24"/>
+<text class="tag-lbl txt-model" x="160" y="121" text-anchor="middle">MODEL DECIDES</text>
+<text class="card-t txt" x="160" y="141" text-anchor="middle">Proposer</text>
+<text class="sub txt-mute" x="160" y="159" text-anchor="middle">reads failures in the feedback set</text>
+
+<!-- Proposer writes into the editable surface -->
+<path class="wire" d="M90,174 V250" marker-end="url(#arw)"/>
+<text class="sub txt-mute" x="100" y="198">candidate edit</text>
+
+<!-- Editable surface -->
+<rect class="surface" x="30" y="212" width="260" height="146" rx="6"/>
+<text class="tag-lbl txt-model" x="276" y="232" text-anchor="end">EDITABLE SURFACE</text>
+<rect class="art-box" x="50" y="252" width="220" height="90" rx="3"/>
+<text class="card-t txt" x="160" y="274" text-anchor="middle">Candidate artifact</text>
+<text class="sub txt-mute" x="160" y="294" text-anchor="middle">one of: a prompt file,</text>
+<text class="sub txt-mute" x="160" y="311" text-anchor="middle">a skill document,</text>
+<text class="sub txt-mute" x="160" y="328" text-anchor="middle">or a piece of code</text>
+
+<!-- Candidate crosses out of the surface -->
+<path class="wire" d="M290,291 H328" marker-end="url(#arw)"/>
+
+<!-- Scorer (your code decides) -->
+<rect class="code-box" x="330" y="246" width="200" height="90" rx="2"/>
+<text class="tag-lbl txt-code" x="430" y="267" text-anchor="middle">YOUR CODE</text>
+<text class="card-t txt" x="430" y="287" text-anchor="middle">Scorer</text>
+<text class="sub txt-mute" x="430" y="305" text-anchor="middle">runs it on the selection set</text>
+<text class="sub txt-mute" x="430" y="322" text-anchor="middle">the proposer never sees</text>
+
+<path class="wire" d="M530,291 H568" marker-end="url(#arw)"/>
+
+<!-- Gate (your code decides) -->
+<rect class="code-box" x="570" y="246" width="200" height="90" rx="2"/>
+<text class="tag-lbl txt-code" x="670" y="267" text-anchor="middle">YOUR CODE</text>
+<text class="card-t txt" x="670" y="287" text-anchor="middle">Gate</text>
+<text class="sub txt-mute" x="670" y="305" text-anchor="middle">beats the current version</text>
+<text class="sub txt-mute" x="670" y="322" text-anchor="middle">by a margin, breaks nothing?</text>
+
+<!-- Pass path -->
+<path class="wire" d="M670,336 V376" marker-end="url(#arw)"/>
+<text class="sub txt-code" x="680" y="361" font-weight="700">pass</text>
+
+<rect class="code-box" x="570" y="378" width="200" height="52" rx="2"/>
+<text class="card-t txt" x="670" y="400" text-anchor="middle">Versioned diff</text>
+<text class="sub txt-mute" x="670" y="418" text-anchor="middle">reviewable, revertible</text>
+
+<path class="wire" d="M670,430 V456" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="570" y="458" width="200" height="56" rx="2"/>
+<use href="#lock" x="584" y="470"/>
+<text class="card-t txt" x="680" y="482" text-anchor="middle">Promotion step</text>
+<text class="sub txt-mute" x="680" y="501" text-anchor="middle">writes to the live system</text>
+
+<path class="wire" d="M670,514 V542" marker-end="url(#arw)"/>
+
+<rect class="live-box" x="570" y="544" width="200" height="52" rx="2"/>
+<text class="card-t txt" x="670" y="566" text-anchor="middle">Live system</text>
+<text class="sub txt-mute" x="670" y="584" text-anchor="middle">changes only through promotion</text>
+
+<!-- Locked items beside the scorer -->
+<rect class="code-box" x="330" y="378" width="200" height="52" rx="2"/>
+<use href="#lock" x="344" y="390"/>
+<text class="card-t txt" x="440" y="400" text-anchor="middle">Evaluator</text>
+<text class="sub txt-mute" x="440" y="418" text-anchor="middle">scoring code and config</text>
+
+<rect class="code-box" x="330" y="458" width="200" height="56" rx="2"/>
+<use href="#lock" x="344" y="470"/>
+<text class="card-t txt" x="440" y="482" text-anchor="middle">Held-out test set</text>
+<text class="sub txt-mute" x="440" y="501" text-anchor="middle">touched once, at the end</text>
+
+<!-- Legend -->
+<rect class="model-box" x="40" y="392" width="30" height="18" rx="8"/>
+<text class="sub txt" x="80" y="405">the model decides</text>
+<rect class="code-box" x="40" y="420" width="30" height="18" rx="2"/>
+<text class="sub txt" x="80" y="433">your code decides</text>
+<rect class="surface" x="40" y="448" width="30" height="18" rx="2"/>
+<text class="sub txt" x="80" y="461">what the proposer may edit</text>
+<use href="#lock" x="48" y="474"/>
+<text class="sub txt" x="80" y="487">the proposer cannot read or write it</text>
+
+<!-- Takeaway -->
+<text class="take txt-model" x="40" y="550">The model decides what to try.</text>
+<text class="take txt-code" x="40" y="574">Your code decides what is kept.</text>
+</svg>
