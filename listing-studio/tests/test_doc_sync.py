@@ -126,6 +126,20 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 4.3 — Human in the Loop
+HITL_CHAPTER = os.path.join(ROOT, "docs", "craft", "human-in-the-loop.md")
+HITL_PKG = os.path.join(ROOT, "listing-studio", "human_in_the_loop")
+
+HITL_ANCHORS = {
+    "hitl-gate":       "gate.py",
+    "hitl-request":    "request.py",
+    "hitl-store":      "pause_resume.py",
+    "hitl-step":       "pause_resume.py",
+    "hitl-langgraph":  "pause_resume_langgraph.py",
+    "hitl-responses":  "pause_resume_responses.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +245,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_hitl_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(HITL_CHAPTER))
+    for name, fname in HITL_ANCHORS.items():
+        region = _region(_read(os.path.join(HITL_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/craft/human-in-the-loop.md with "
+            f"listing-studio/human_in_the_loop/{fname}."
         )
