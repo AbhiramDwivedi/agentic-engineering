@@ -11,6 +11,7 @@ sits on the panel.
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -61,7 +62,7 @@ def _call_persona_safe(
     something -- and run_panel() reports the absence as a
     MissingSpecialist, never as a raised exception that takes the other
     two personas down."""
-    prompt = f"{persona} review of {listing.get('supplier_sku', 'this listing')}"
+    prompt = f"{persona} review of {json.dumps(listing, sort_keys=True, default=str)}"
     cost.calls[persona] = cost.calls.get(persona, 0) + 1
     cost.tokens[persona] = cost.tokens.get(persona, 0) + _approx_tokens(prompt)
     try:

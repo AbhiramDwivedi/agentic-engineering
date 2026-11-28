@@ -25,8 +25,8 @@ from .schemas import (
 # than a duller headline. PRECEDENCE must name every persona in ROSTER.
 PRECEDENCE = ["compliance", "pricing", "seo"]
 
-# A conflict escalates to a person when the persona whose claim would have
-# settled it never answered -- the panel does not rule in a missing
+# Escalate to a person whenever a persona in this set never answered,
+# whether or not a conflict arose: the panel does not rule in a mandatory
 # specialist's absence.
 ESCALATE_ON_MISSING = {"compliance"}
 
@@ -64,7 +64,8 @@ def reconcile(
         accepted.append(
             AcceptedClaim(field=field_name, value=winner_value, source_persona=winner_persona)
         )
-        for persona, value in ranked[1:]:
+        losers = [(p, v) for p, v in ranked[1:] if v != winner_value]
+        for persona, value in losers:
             rejected.append(
                 RejectedClaim(
                     field=field_name,
@@ -76,7 +77,7 @@ def reconcile(
         conflicts.append(
             Conflict(
                 field=field_name,
-                dissenting_personas=[p for p, _ in ranked[1:]],
+                dissenting_personas=[p for p, _ in losers],
                 winner=winner_persona,
                 rule="field-level precedence",
             )

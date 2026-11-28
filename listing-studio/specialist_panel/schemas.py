@@ -14,7 +14,8 @@ from pydantic import BaseModel, ConfigDict
 class PersonaClaim(BaseModel):
     """One specialist's proposed value for one field, and why. `field` is
     a dotted path into the Listing (e.g. "content_blocks.faq"), never free
-    text -- the reconciler matches claims by field, not by prose."""
+    text -- the reconciler matches claims by field, not by prose.
+    `content_blocks.<section>` addresses one block by its section name."""
     model_config = ConfigDict(extra="forbid")
 
     field: str

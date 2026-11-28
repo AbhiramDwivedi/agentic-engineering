@@ -38,7 +38,7 @@
 >
 > **_A specialist panel is a structural decision only where something decides, before any
 > specialist runs, which experts this particular input calls for. Run a fixed roster on every
-> input and what you have is parallel ensembling wearing job titles: often worth its calls, but it
+> input and what you have is parallel ensembling wearing job titles: it can be worth its calls, but it
 > earns that on demonstrated benefit, never on the word "specialist"._**
 >
 > The two original candidates are kept below as the wordings to switch to if the author rules
@@ -56,7 +56,7 @@
 
 ## The mental model (what the reader must leave with)
 
-[1.2 Who Decides?](../foundations/who-decides.md) defines the test this chapter must pass in one
+[1.2 Who Decides?](../../docs/foundations/who-decides.md) defines the test this chapter must pass in one
 sentence: "A structural decision is one that changes the control flow: which step runs next,
 whether to loop again, how many parallel branches to spawn, which path to take."[^who-decides-def]
 Apply that definition literally to a specialist panel and two very different mechanisms are on the
@@ -84,11 +84,11 @@ gaps against the current stub, which has no argued prose yet.
 1. **The litmus boundary, argued to a decision point, not resolved** — the chapter's spine
    question, and this map's central finding: as specified today, across three shipped chapters and
    the carrier bible, the reference does not agree with itself about what this pattern's model-made
-   decision is. [1.2 Who Decides?](../foundations/who-decides.md) states the tell in print: "**It
+   decision is. [1.2 Who Decides?](../../docs/foundations/who-decides.md) states the tell in print: "**It
    picks a persona.** The model chooses which kind of expert to reason as before it
    answers,"[^who-decides] language that describes a *selection* made before generation. [3.3
-   Orchestrator-Workers](../composition/fan-out.md) calls 3.5 "a **fixed set** of
-   personas,"[^fanout-crossref] and [3.4 Evaluator-Optimizer](../composition/evaluator-optimizer.md)
+   Orchestrator-Workers](../../docs/composition/fan-out.md) calls 3.5 "a **fixed set** of
+   personas,"[^fanout-crossref] and [3.4 Evaluator-Optimizer](../../docs/composition/evaluator-optimizer.md)
    calls it "**fixed personas** judging one input once,"[^eo-crossref] both describing the opposite
    of a selection. `meta/carrier-bible.md` §7 specifies the fixed reading exactly: three named
    personas that "reason independently, then a reconcile step merges them," every time, for every
@@ -103,14 +103,15 @@ gaps against the current stub, which has no argued prose yet.
      specialist run and then drops the ones whose output turned out to be out of scope is
      reconciliation wearing selection's clothes, not selection, and collapses into option B.
      Second, it has to be distinguished from two near neighbours that already own similar shapes:
-     [3.2 Routing & Dispatch](../composition/the-router-that-isnt.md)'s LLM routing picks one
+     [3.2 Routing & Dispatch](../../docs/composition/the-router-that-isnt.md)'s LLM routing picks one
      mutually exclusive category and sends the input down a single path; [3.3
-     Orchestrator-Workers](../composition/fan-out.md)'s dynamic half decides how many pieces to
+     Orchestrator-Workers](../../docs/composition/fan-out.md)'s dynamic half decides how many pieces to
      decompose an open-ended task into. A panel's selection, if it clears the bar, is neither: it is
      a multi-label admit-or-skip call over a small, fixed, *named* vocabulary of professional
      viewpoints (turn each of N named lenses on or off for this input), which is a real third shape
      if the chapter can show it, but this sweep found no vendor-named workflow describing that exact
-     shape. Solo Performance Prompting is the closest published evidence that dynamic,
+     shape (a single-pass selector that picks the seats before any runs; the OpenAI manager agent
+     selects specialists as it goes, inside a loop). Solo Performance Prompting is the closest published evidence that dynamic,
      input-conditioned persona identification is a real, working mechanism,[^spp] but SPP selects
      from an open vocabulary the model invents per task, sequentially, inside one context, not a
      small fixed named set, in parallel, across independent calls — extending its finding to this
@@ -136,7 +137,7 @@ gaps against the current stub, which has no argued prose yet.
      1.2's own four tells become three, and its worked table and running example both need a line
      removed;[^who-decides-def] the home-page architecture diagram renders 3.5 as a rounded
      ("model decides") node today and would need to become a rectangle;[^homepage-map] the
-     [quick-reference](../catalogs/quick-reference.md) table's "Specialist panel | the model" row
+     [quick-reference](../../docs/catalogs/quick-reference.md) table's "Specialist panel | the model" row
      would need to move columns; and 3.3's and 3.4's own published cross-references to 3.5 (both
      quoted above) would need a wording pass regardless of which option is chosen, since both
      currently assert, in already-shipped prose, that "the model decides" for 3.5.
@@ -181,7 +182,7 @@ gaps against the current stub, which has no argued prose yet.
    properly tuned single-agent baselines.[^mad-limits] *Skip it:* a team ships a panel that reads
    more thorough, never measures it against the one-call alternative, and cannot tell a real gain
    from a longer, more expensive answer that says the same thing three ways. **n/a** (methodology;
-   → [4.2 Evaluation](../craft/proving-it-works.md) for the full measurement depth).
+   → [4.2 Evaluation](../../docs/craft/proving-it-works.md) for the full measurement depth).
 4. **The persona-diversity ceiling: same model, correlated blind spots, and personas that do not
    reliably help** — the load-bearing skeptical finding, and the reason no unqualified positive
    maturity tier survives this sweep. Zheng et al. (EMNLP Findings 2024) tested 162 roles across
@@ -224,13 +225,13 @@ gaps against the current stub, which has no argued prose yet.
    an SEO-optimized headline inside an opaque reconcile call, and nothing in the output says a
    conflict ever happened. **n/a** (engineering discipline, reasoned from 3.3's and 3.4's own
    published rules plus the judge-bias literature above; → [4.2
-   Evaluation](../craft/proving-it-works.md) for judge-validation methodology in depth).
+   Evaluation](../../docs/craft/proving-it-works.md) for judge-validation methodology in depth).
 6. **Cost, merged with context economy: scales with panel width, not below it** — every persona
    call reads the input in full, so total spend scales with panel size plus one reconcile call, the
    same shape 3.3's fixed half has, not a lighter one: this is not necessarily cheaper than a
    dynamic fan-out that some inputs resolve to zero or one worker, and the chapter must not claim
    it is. Pass each specialist only the fields its own viewpoint needs, not the whole record, the
-   same context-economy discipline [1.5 Context Engineering](../foundations/context-engineering.md)
+   same context-economy discipline [1.5 Context Engineering](../../docs/foundations/context-engineering.md)
    already argues generally: a bloated shared context degrades attention as well as spending
    tokens, and a panel that hands every specialist everything pays both costs at once. State the
    shape (a small, fixed multiplier over one call, plus reconcile), not a number; this sweep found
@@ -239,65 +240,65 @@ gaps against the current stub, which has no argued prose yet.
    multi-criteria call before claiming the panel is worth its multiple. *Skip it:* a team assumes a
    small, bounded roster is cheap by comparison and never runs the one benchmark that would tell
    them whether the extra calls bought anything. **n/a** (arithmetic). (→ [8.4 Controlling
-   Cost](../production/controlling-cost.md); [1.5 Context
-   Engineering](../foundations/context-engineering.md).)
+   Cost](../../docs/production/controlling-cost.md); [1.5 Context
+   Engineering](../../docs/foundations/context-engineering.md).)
 
 ## Mention-and-link (one line, a pointer, not a section)
 
 - **The augmented-LLM atom** each persona-call is one instance of, already framed as "the same node
-  wearing different personas" → [1.4 The Augmented LLM](../foundations/the-augmented-llm.md).
+  wearing different personas" → [1.4 The Augmented LLM](../../docs/foundations/the-augmented-llm.md).
 - **Orchestrator-workers**, the sibling that decides a subtask count; distinguish precisely from
   option A's membership-selection shape (item 1) → [3.3
-  Orchestrator-Workers](../composition/fan-out.md).
+  Orchestrator-Workers](../../docs/composition/fan-out.md).
 - **LLM routing**, the sibling that picks one mutually exclusive category; distinguish precisely
   from option A's multi-label admit-or-skip shape (item 1) → [3.2 Routing &
-  Dispatch](../composition/the-router-that-isnt.md).
+  Dispatch](../../docs/composition/the-router-that-isnt.md).
 - **Evaluator-optimizer**, the sibling that loops on one draft against a verdict; this chapter's
   panel judges once, in parallel, with no revision round → [3.4
-  Evaluator-Optimizer](../composition/evaluator-optimizer.md).
+  Evaluator-Optimizer](../../docs/composition/evaluator-optimizer.md).
 - **Iterative, adversarial multi-agent debate** in depth (rounds of rebuttal, judge-managed
   argument), Mixture-of-Agents' layered aggregation in depth, and software-team role-play
   architectures (ChatDev, MetaGPT, CAMEL) named only in item 2 → [9.2
-  Multi-Agent](../frontier/more-than-one-agent.md) (coding-team variant also touches [9.6 Coding
-  Agents](../frontier/coding-agents.md)).
+  Multi-Agent](../../docs/frontier/more-than-one-agent.md) (coding-team variant also touches [9.6 Coding
+  Agents](../../docs/frontier/coding-agents.md)).
 - **LLM-as-judge methodology and panel-of-judges evaluation** (PoLL, judge-human agreement) in
-  depth → [4.2 Evaluation](../craft/proving-it-works.md).
+  depth → [4.2 Evaluation](../../docs/craft/proving-it-works.md).
 - **Security.** A fixed panel with no inter-agent messaging and no distinct tools or privileges per
   specialist is not a new attack surface: 3.3's own carrier instance already has every worker read
   the same shared listing, so a panel sharing one input is not a distinguishing risk, and the
   existing "treat outputs as untrusted" discipline already covers it → [2.1 Tool
-  Use](../the-unit/tool-use.md), [3.3 Orchestrator-Workers](../composition/fan-out.md). If a
+  Use](../../docs/the-unit/tool-use.md), [3.3 Orchestrator-Workers](../../docs/composition/fan-out.md). If a
   variant gives personas distinct tools, memory, or privileges, escalate properly to [4.6 Prompt
-  Injection & the Lethal Trifecta](../craft/prompt-injection.md) and OWASP's Agentic Top 10
+  Injection & the Lethal Trifecta](../../docs/craft/prompt-injection.md) and OWASP's Agentic Top 10
   ASI07/ASI08 rather than reasoning from this chapter's carrier case.
 - **Framework and daily-tool mechanics** (OpenAI Agents SDK, Google ADK, CrewAI) are anchors, not
   argument; see Reader-verifiable anchors below, and the Stage-2 code brief for exact API shapes.
 - **Structured output** as the typed contract each persona's verdict and the reconciler's merged
-  result rely on → [2.2 Structured Output](../the-unit/structured-output.md).
+  result rely on → [2.2 Structured Output](../../docs/the-unit/structured-output.md).
 - **Escalation when the panel can't be reconciled** → [4.3
-  Human-in-the-Loop](../craft/human-in-the-loop.md).
+  Human-in-the-Loop](../../docs/craft/human-in-the-loop.md).
 - **Cheap model per persona, stronger model for reconcile** → [8.2 Which
-  Model?](../production/which-model.md).
+  Model?](../../docs/production/which-model.md).
 - **Fine-tuning distinct persona models** rather than prompting one model into several roles →
-  [8.3 To Train or to Prompt](../production/train-or-prompt.md).
+  [8.3 To Train or to Prompt](../../docs/production/train-or-prompt.md).
 - **A fixed panel dressed as a decision** as the anti-pattern this chapter's Gotchas should feed,
   the direct sibling of 3.3's "fixed list in a planner's costume" → [Anti-Patterns
-  Catalog](../catalogs/anti-patterns.md).
+  Catalog](../../docs/catalogs/anti-patterns.md).
 
 ## Out of scope (name it, point out)
 
 - Iterative, adversarial multi-agent debate mechanics (rounds, rebuttal protocols, judge-managed
-  argument) → [9.2 Multi-Agent](../frontier/more-than-one-agent.md).
+  argument) → [9.2 Multi-Agent](../../docs/frontier/more-than-one-agent.md).
 - Mixture-of-Agents' layered architecture in depth, and ChatDev / MetaGPT / CAMEL as full
-  architectures → [9.2](../frontier/more-than-one-agent.md) / [9.6](../frontier/coding-agents.md);
+  architectures → [9.2](../../docs/frontier/more-than-one-agent.md) / [9.6](../../docs/frontier/coding-agents.md);
   name only here, per item 2.
 - LLM-as-judge methodology, PoLL's tuning, and judge-human agreement measurement → [4.2
-  Evaluation](../craft/proving-it-works.md).
+  Evaluation](../../docs/craft/proving-it-works.md).
 - Fine-tuning separate models per persona → [8.3 To Train or to
-  Prompt](../production/train-or-prompt.md).
+  Prompt](../../docs/production/train-or-prompt.md).
 - Full security treatment beyond the Gotcha-level pointer above: the OWASP Top 10 for Agentic
   Applications taxonomy in depth → [G. The Security Posture
-  Map](../catalogs/security-posture.md) (planned) and [4.6](../craft/prompt-injection.md).
+  Map](../../docs/catalogs/security-posture.md) (planned) and [4.6](../../docs/craft/prompt-injection.md).
 - Exact current API shapes for OpenAI Agents SDK, Google ADK, and CrewAI → the Stage-2 code brief
   and each vendor's own docs; this chapter cites the shape via Reader-verifiable anchors only.
 - Live benchmark numbers (AlpacaEval, MT-Bench leaderboards) → link, do not hardcode; they rot.
@@ -309,7 +310,10 @@ gaps against the current stub, which has no argued prose yet.
 - **Emerging:** the model (or a step ahead of the panel) deciding which persona's viewpoint applies
   per input, before execution — the mechanism that would make 1.2's published tell and option A
   literally true, evidenced narrowly by Solo Performance Prompting for GPT-4-class models and
-  unevidenced for the parallel, fixed-vocabulary form this chapter would need;[^spp] heterogeneous-
+  unevidenced for the parallel, fixed-vocabulary form this chapter would need;[^spp] with adjacent
+  negative evidence from Zheng et al., whose automatic best-persona-per-question selection performed
+  "no better than random selection" on factual QA (a different selection target: accuracy, not
+  which concerns an input raises);[^persona-null] heterogeneous-
   model synthesis (Mixture-of-Agents' own strongest result), real but not yet a workflow a mid-size
   team reaches for by default.[^moa]
 - **Contested:** same-model, prompt-only persona diversity as a reliable quality lever at all
@@ -317,7 +321,7 @@ gaps against the current stub, which has no argued prose yet.
   general-purpose improvement over single-agent baselines absent model heterogeneity (Smit et al.
   2024; arXiv:2502.08788);[^mad-limits][^mad-heterogeneity] billing a fixed panel run every time as
   the model "deciding" anything, the same over-orchestration failure
-  [3.2](../composition/the-router-that-isnt.md) and [3.3](../composition/fan-out.md) each name for
+  [3.2](../../docs/composition/the-router-that-isnt.md) and [3.3](../../docs/composition/fan-out.md) each name for
   their own neighbours.
 
 **No tier above carries an "Established" component**, and that is deliberate: this sweep found no
@@ -339,6 +343,12 @@ reconcile pass, with no selection step and no revision round. Every published na
 materially different mechanism on item 2's taxonomy, which is itself evidence for item 1's finding
 that "specialist panel" may be naming an assembly of borrowed pieces rather than one established
 pattern.
+
+**Nearest sourced external name, fixed-roster half only:** Anthropic's **parallelization
+(voting)** variant, "running the same task multiple times to get diverse outputs," instanced by
+several different prompts reviewing one piece of code.[^anthropic-bea] It also covers same-prompt
+repeated sampling, so it is broader than a persona panel. Whether it goes in the chapter's
+`*Also called:*` line is the author's call (Ruling 4); the chapter ships without one.
 
 **House terms** (the stub's own placeholders, not attributable to an external source):
 multi-persona reasoning; mixture-of-roles.
@@ -372,8 +382,9 @@ confusable neighbours, not alternate names):
 
 ## Reader-verifiable anchors
 
-- **The OpenAI Agents SDK's current, maintained orchestration docs** describe exactly this
-  chapter's shape as a live pattern: "a manager agent keeps control of the conversation and calls
+- **The OpenAI Agents SDK's current, maintained orchestration docs** describe the nearest vendor
+  pattern, though not the fixed-roster shape: a model manager decides per request which specialist
+  tools to call, inside its own agent loop, which puts it on the selection side of item 1: "a manager agent keeps control of the conversation and calls
   specialist agents through `Agent.as_tool()`," used "when you want one agent to own the final
   answer, combine outputs from multiple specialists, or enforce shared SDK guardrails in one
   place."[^oai-orchestration] This is the primary anchor: current core documentation, not an
@@ -384,8 +395,8 @@ confusable neighbours, not alternate names):
   combines their labelled outputs.[^oai-parallel] The notebook itself states plainly that it is "a
   toy example that you likely wouldn't parallelize in the real world" — cite it for the shape, not
   as evidence the pattern is production-proven.[^oai-parallel]
-- **Google's ADK, with a caveat.** `ParallelAgent` runs sub-agents concurrently in isolated
-  branches with no automatic state-sharing and no built-in aggregator, confirming the reconcile
+- **Google's ADK, with a caveat.** `ParallelAgent` runs sub-agents concurrently in branches that do
+  not share conversation history but do share one session state, with no built-in aggregator, confirming the reconcile
   step is always the caller's job, never the framework's.[^adk-parallel] Current ADK docs state
   that, starting in ADK 2.0 for Python and Go, templated workflow agents including
   `ParallelAgent` "have been superseded by more flexible workflow structures, including graph-based
@@ -445,7 +456,7 @@ arXiv:2307.07924;[^chatdev] MetaGPT, arXiv:2308.00352;[^metagpt] CAMEL, arXiv:23
 full text not independently verified this sweep.[^gulli-adp] Gulli & Nawalgaria, *Building AI
 Agents* (2026 public draft), ch. 6, title only, per publisher/author-circulated table of contents;
 no specific claim from its body is cited in this map. Andrew Ng, public posts naming four agentic
-design patterns (2024).[^ng] Internal: [1.2 Who Decides?](../foundations/who-decides.md) (the tell
+design patterns (2024).[^ng] Internal: [1.2 Who Decides?](../../docs/foundations/who-decides.md) (the tell
 this map finds inconsistent with 3.3/3.4's own text, and its own definition of a structural
 decision, quoted in the mental model); [3.3 Orchestrator-Workers coverage map](fan-out.md) (the
 voting-is-not-composition ruling); `meta/carrier-bible.md` §7 (the panel personas, and the fixed-
@@ -516,8 +527,7 @@ primary sources before being folded in; none was applied on the reviewer's say-s
    an LLM-ranker baseline, not "mechanical vote-aggregation"; and the paper's own ablation shows
    multiple different LLMs outperforming repeated single-model sampling. Maturity summary rewritten
    to Standard/Emerging/Contested with no Established component; frozen benchmark numbers dropped.
-4. **PARTIAL.** Operational detail with no public primary source, and a reference no reader could
-   check, were removed from the map body; the map cites public primary sources only from here on.
+4. **PARTIAL.** The map body cites public primary sources only.
    Production-grounding potential is retained but scoped exactly as 3.3's and 3.4's maps scope
    theirs (see Author-only questions), with no more operational detail than those maps carry.
 5. **ACCEPTED.** Added as must-cover item 3 (inside the requested top four): baselines, measures,
@@ -612,15 +622,15 @@ as a checklist.
      author can say whether a first-hand story exists here, and if so, scoped as 3.3 and 3.4 scope
      theirs: Listing Studio step 5 mechanics only, entirely in carrier terms.
 
-[^who-decides-def]: This reference, [1.2 Who Decides?](../foundations/who-decides.md): "A
+[^who-decides-def]: This reference, [1.2 Who Decides?](../../docs/foundations/who-decides.md): "A
 structural decision is one that changes the control flow: which step runs next, whether to loop
 again, how many parallel branches to spawn, which path to take."
-[^who-decides]: This reference, [1.2 Who Decides?](../foundations/who-decides.md): "It picks a
+[^who-decides]: This reference, [1.2 Who Decides?](../../docs/foundations/who-decides.md): "It picks a
 persona. The model chooses which kind of expert to reason as before it answers."
-[^fanout-crossref]: This reference, [3.3 Orchestrator-Workers](../composition/fan-out.md): "it
+[^fanout-crossref]: This reference, [3.3 Orchestrator-Workers](../../docs/composition/fan-out.md): "it
 hands the same input to a fixed set of personas and reconciles their views, so the model picks the
 lens on the work and never the count of workers."
-[^eo-crossref]: This reference, [3.4 Evaluator-Optimizer](../composition/evaluator-optimizer.md):
+[^eo-crossref]: This reference, [3.4 Evaluator-Optimizer](../../docs/composition/evaluator-optimizer.md):
 "[3.5 The Specialist Panel] runs fixed personas over one input once and nothing revises."
 [^carrier-bible]: `meta/carrier-bible.md`, §7: "For step 5 (content blocks) and anywhere
 multi-persona reasoning appears, the three specialist personas are commerce ones... They reason
@@ -653,11 +663,11 @@ comparing "single-proposer" (repeated sampling from one model at temperature 0.7
 better results." Leaderboard scores are snapshot and not repeated here; see the live source.
 Open-source implementation: github.com/togethercomputer/moa. <https://arxiv.org/abs/2406.04692>
 [^selfconsistency]: Wang, X. et al., "Self-Consistency Improves Chain of Thought Reasoning in
-Language Models" (2022). Samples multiple reasoning paths from one prompt (no persona variation)
+Language Models" (ICLR 2023). Samples multiple reasoning paths from one prompt (no persona variation)
 and selects the most consistent final answer by marginalizing over samples; a deterministic
 vote/marginalization, not a model-rendered aggregation. <https://arxiv.org/abs/2203.11171>
 [^debate]: Du, Y., Li, S., Torralba, A., Tenenbaum, J.B., Mordatch, I., "Improving Factuality and
-Reasoning in Language Models through Multiagent Debate" (2023). N agents independently answer,
+Reasoning in Language Models through Multiagent Debate" (ICML 2024). N agents independently answer,
 then see each other's responses and revise over multiple rounds (a standard setup: 3 agents, 2
 rounds); debate, not a single-pass panel. <https://arxiv.org/abs/2305.14325>
 [^divergent]: Liang, T. et al., "Encouraging Divergent Thinking in Large Language Models through
@@ -677,7 +687,8 @@ going MAD? A Look at Multi-Agent Debate Strategies for LLMs" (ICML 2024). Multi-
 systems do not reliably outperform self-consistency or ensembling baselines; some MAD systems
 (e.g. Multi-Persona) perform better only after hyperparameter tuning, suggesting sensitivity rather
 than inherent superiority. <https://arxiv.org/abs/2311.17371>
-[^mad-heterogeneity]: "Stop Overvaluing Multi-Agent Debate -- We Must Rethink Evaluation and
+[^mad-heterogeneity]: Zhang, H., Cui, Z., Chen, J., Wang, X., Zhang, Q., Wang, Z., Wu, D., Hu, S.,
+"Stop Overvaluing Multi-Agent Debate -- We Must Rethink Evaluation and
 Embrace Model Heterogeneity" (submitted 2025-02-12, rev. 2025-06-21). Systematic evaluation of 5
 MAD methods across 9 benchmarks and 4 foundation models: MAD often fails to outperform single-agent
 Chain-of-Thought and Self-Consistency baselines despite far higher inference cost; proposes
@@ -686,7 +697,9 @@ Heter-MAD (heterogeneous foundation models) as a consistent fix. <https://arxiv.
 System Prompts Do Not Improve Performances of Large Language Models" (EMNLP Findings 2024). 162
 roles across 6 relationship types and 8 expertise domains, tested against 2,410 factual questions
 across 4 model families: adding any persona to a system prompt yields no accuracy gain on
-fact-based QA, and usually slightly worsens it. <https://arxiv.org/abs/2311.10054>
+fact-based QA, and usually slightly worsens it. The abstract adds that automatically identifying
+the best persona "is challenging, with predictions often performing no better than random
+selection." <https://arxiv.org/abs/2311.10054>
 [^selfpref]: Panickssery, A., Bowman, S., Feng, S., "LLM Evaluators Recognize and Favor Their Own
 Generations" (NeurIPS 2024). Self-recognition ability correlates with self-preference bias. A
 related but distinct finding from the judge-bias paper below, not a replication of it. Reused from
@@ -714,9 +727,11 @@ SDK." Four specialized agents (features, pros/cons, sentiment, recommendation) r
 plainly: "this notebook present[s] a toy example that you likely wouldn't parallelize in the real
 world." <https://developers.openai.com/cookbook/examples/agents_sdk/parallel_agents>
 [^adk-parallel]: Google, Agent Development Kit docs, "Parallel agents" (workflow agents).
-`ParallelAgent` runs sub-agents concurrently, each in its own execution branch with no automatic
-sharing of conversation history or state between branches; execution is deterministic and not
-controlled by a model. <https://google.github.io/adk-docs/agents/workflow-agents/parallel-agents/>
+`ParallelAgent` runs sub-agents concurrently, each in its own execution branch: "there is no
+automatic sharing of conversation history between these branches," but "Session state is shared:
+all branches run against the same session." Execution is deterministic and not controlled by a
+model. The page now carries a deprecation notice ("Use graph-based workflows").
+<https://adk.dev/agents/workflow-agents/parallel-agents/>
 [^adk-superseded]: Google, ADK docs (current): "Starting in ADK 2.0 for Python and Go, templated
 workflows have been superseded by more flexible workflow structures, including graph-based
 workflows and dynamic workflows." Verify which workflow style the reader's ADK version ships before
@@ -734,4 +749,64 @@ Model Society" (NeurIPS 2023). Named only. <https://arxiv.org/abs/2303.17760>
 Systems* (2025). Chapter 7, "Multi-Agent Collaboration," per the publisher's public table of
 contents; full chapter text not independently read or verified this sweep.
 [^ng]: Ng, A., public posts (2024) naming four agentic design patterns: Reflection, Tool Use,
-Planning, and Multi-Agent Collaboration.
+Planning, and Multi-Agent Collaboration. First of the series: "Agentic Design Patterns Part 1"
+(The Batch, 2024-03-20). <https://www.deeplearning.ai/the-batch/how-agents-can-improve-llm-performance/>
+
+## Second-engine review (post-draft, agy)
+
+An independent second engine reviewed the drafted chapter, its map, and the companion code. Each
+finding was checked against the primary source or the code and tests before it was folded in.
+
+1. **Taxonomy placements (accepted).** The chapter's neighbour paragraph undercounted. Now: PoLL
+   moves model diversity only (its scores are pooled by max voting or averaging, a deterministic
+   rule); Mixture-of-Agents moves diversity and aggregation, and interaction once layered; debate
+   moves context and interaction, and Liang et al. add a judge; SPP moves membership, context, and
+   interaction. The map's own grid already placed them this way.
+2. **Agreeing claims recorded as overruled (accepted, code).** Confirmed in `reconcile()`: on a
+   two-against-one split, the persona that agreed with the winner is listed as rejected and as a
+   dissenter. Fix and a 2-vs-1 test go to the companion code, with the chapter's mirrored block.
+3. **Zheng et al.'s automatic-selection result (accepted-modified).** The abstract does report
+   automatic best-persona selection "no better than random selection." It is now cited in the
+   chapter and in the maturity summary as adjacent negative evidence, scoped: that selection targets
+   factual accuracy per question, not which concerns an input raises. The Emerging tier for
+   dynamic selection stays at the Stage 1.6 ruling; a downgrade to Contested is left to the author.
+4. **`Agent.as_tool()` placement (accepted-modified).** The SDK docs describe LLM-driven
+   orchestration where the manager decides which specialists to call. The chapter and map now place
+   it on the selection side, chosen as the loop runs, and the "no vendor" claim is narrowed to a
+   single-pass selector that picks the seats before any runs.
+5. **ADK `ParallelAgent` state (accepted).** The current page says conversation history is not
+   shared between branches but session state is. Chapter, map, and footnote corrected; the footnote
+   now points at the current docs URL and quotes its deprecation notice.
+6. **Trace and code drift (accepted-modified).** Prose fixed: trace step 1 now says each seat gets
+   the full listing (which the provider prompts send), and step 2 matches the test fixtures. The
+   token estimate that ignores the listing, and a test pinning the trace's pricing-failure run, go
+   to the companion code.
+7. **Thesis (accepted-modified).** The unsupported "often worth its calls" is softened to "can be
+   worth its calls." The opening now states that the split must beat one well-scoped call, without
+   adopting the reviewer's replacement thesis, which would reverse a Stage 1.6 ruling.
+8. **Alias line (accepted-modified).** Anthropic's voting variant is added to Aliases as the
+   nearest sourced external name. The suggested line carried a house term and neighbours Ruling 4
+   excludes, so the chapter still ships without an alias line; that call is the author's.
+9. **MAST categories (accepted).** The chapter misstated them. It now says two of the three,
+   system specification and inter-agent misalignment, sit outside any single call.
+10. **Write scope and escalation (accepted-modified).** The chapter now says a total precedence
+    order never escalates a conflict by itself, that `escalate` fires on a missing compliance seat
+    regardless of conflict, and that no per-seat field allowlist is enforced. The misleading code
+    comment goes to the companion code; enforcement is not added.
+11. **Citations (accepted-modified).** Added the debate-heterogeneity authors, ICML 2024 for Du et
+    al. (confirmed in the proceedings), ICLR 2023 for self-consistency in the map, and a public URL
+    for Ng's patterns post. Mixture-of-Agents keeps its 2024 preprint date: no ICLR 2025 listing
+    could be confirmed from a primary source.
+12. **`conflicts` label (accepted).** Diagram label, its description, and the alt text now match
+    the schema field.
+13. **Map length (rejected).** The map is the Stage 1 record with its review dispositions; a
+    rewrite after the chapter is drafted would erase that trail for no reader benefit.
+14. **Litmus wording (accepted).** The lens line now reads "the model (which seats run, where
+    selection is dynamic)," the Ruling 5 split with the ambiguity removed.
+15. **Code diet and docstrings (rejected for this pass).** Docstring trimming touches every module
+    and the doc-synced blocks for a style gain; deferred rather than bundled with correctness fixes.
+16. **Map links and notes (accepted-modified).** Chapter links in the map now resolve from
+    `meta/coverage/` to `docs/`, and the removal note in the earlier review log is reworded.
+    Pipeline stage names are kept: they are the public pipeline's own labels.
+17. **`content_blocks` addressing (accepted, code comment).** The carrier types it as a list; the
+    claims address blocks by section name. A one-line note in the schema goes to the companion code.

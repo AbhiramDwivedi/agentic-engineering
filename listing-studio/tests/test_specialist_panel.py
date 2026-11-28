@@ -19,6 +19,7 @@ All tests are offline: no API key, no network call.
   compile-checked via py_compile; they are not executed (they need API
   keys and the heavy provider SDKs, which are not test dependencies).
 """
+import json
 import os
 import py_compile
 
@@ -27,7 +28,7 @@ from pydantic import ValidationError
 
 from specialist_panel.ablation import AblationResult, run_ablation
 from specialist_panel.reconcile import PRECEDENCE, reconcile
-from specialist_panel.roster import ROSTER, CallStats, PanelRun, run_panel
+from specialist_panel.roster import ROSTER, CallStats, PanelRun, _approx_tokens, run_panel
 from specialist_panel.schemas import (
     MissingSpecialist,
     PanelDecision,
@@ -142,6 +143,49 @@ def test_run_panel_reports_per_persona_call_count_and_tokens():
     assert all(n == 1 for n in run.cost.calls.values())
     assert all(t > 0 for t in run.cost.tokens.values())
     assert run.cost.total_tokens == sum(run.cost.tokens.values())
+
+
+def test_failed_call_token_estimate_counts_the_whole_listing():
+    def failing(persona: str, listing: dict) -> PersonaVerdict:
+        raise RuntimeError("down")
+
+    floor = _approx_tokens(json.dumps(ALDSWORTH_LISTING, sort_keys=True, default=str))
+    small = run_panel(failing, ALDSWORTH_LISTING)
+    big = run_panel(failing, {**ALDSWORTH_LISTING, "description": "word " * 400})
+    assert all(t >= floor for t in small.cost.tokens.values())
+    assert big.cost.total_tokens > small.cost.total_tokens
+
+
+def test_trace_run_pricing_fails_compliance_wins_no_escalation():
+    def persona_fn(persona: str, listing: dict) -> PersonaVerdict:
+        if persona == "pricing":
+            raise RuntimeError("timeout")
+        return {"seo": SEO_VERDICT, "compliance": COMPLIANCE_VERDICT}[persona]
+
+    run = run_panel(persona_fn, ALDSWORTH_LISTING)
+    assert run.missing == [MissingSpecialist(persona="pricing", reason="call failed or timed out")]
+    assert run.cost.total_calls == 3
+    decision = reconcile(run.verdicts, run.missing)
+    faq = [c for c in decision.accepted if c.field == "content_blocks.faq"]
+    assert [c.source_persona for c in faq] == ["compliance"]
+    assert len(decision.rejected) == 1
+    assert decision.rejected[0].source_persona == "seo"
+    assert decision.rejected[0].reason.startswith("overruled by compliance")
+    assert len(decision.conflicts) == 1
+    assert decision.escalate is False
+
+
+def test_reconcile_two_against_one_rejects_only_the_dissenter():
+    same = "Rated to 250 lbs. WARNING: Prop 65."
+    verdicts = {
+        "compliance": _verdict("compliance", [("content_blocks.faq", same, "required")]),
+        "pricing": _verdict("pricing", [("content_blocks.faq", same, "agrees")]),
+        "seo": SEO_VERDICT,
+    }
+    decision = reconcile(verdicts, [])
+    assert [c.source_persona for c in decision.accepted] == ["compliance"]
+    assert [r.source_persona for r in decision.rejected] == ["seo"]
+    assert decision.conflicts[0].dissenting_personas == ["seo"]
 
 
 # ---------------------------------------------------------------------------
