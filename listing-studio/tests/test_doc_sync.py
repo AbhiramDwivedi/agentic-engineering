@@ -126,6 +126,22 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 4.4 — Guardrails & Safety
+GUARDRAILS_CHAPTER = os.path.join(ROOT, "docs", "craft", "guardrails-and-safety.md")
+GUARDRAILS_PKG = os.path.join(ROOT, "listing-studio", "guardrails")
+
+GUARDRAILS_ANCHORS = {
+    "guard-verdict":     "verdict.py",
+    "guard-schema":      "checks.py",
+    "guard-claims":      "checks.py",
+    "guard-leaks":       "checks.py",
+    "guard-classifier":  "classifier.py",
+    "guard-classify":    "suite.py",
+    "guard-suite":       "suite.py",
+    "guard-pipeline":    "pipeline.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +247,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_guardrails_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(GUARDRAILS_CHAPTER))
+    for name, fname in GUARDRAILS_ANCHORS.items():
+        region = _region(_read(os.path.join(GUARDRAILS_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/craft/guardrails-and-safety.md with "
+            f"listing-studio/guardrails/{fname}."
         )
