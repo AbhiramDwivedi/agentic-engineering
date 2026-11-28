@@ -126,6 +126,20 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 2.5 — The Agent Loop
+AGENT_LOOP_CHAPTER = os.path.join(ROOT, "docs", "the-unit", "the-agent-loop.md")
+AGENT_LOOP_PKG = os.path.join(ROOT, "listing-studio", "agent_loop")
+
+AGENT_LOOP_ANCHORS = {
+    "loop-types":      "loop.py",
+    "loop-run":        "loop.py",
+    "loop-tools":      "tools.py",
+    "loop-langgraph":  "agent_loop_langgraph.py",
+    "loop-responses":  "agent_loop_responses.py",
+    "loop-anthropic":  "agent_loop_example.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +245,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_agent_loop_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(AGENT_LOOP_CHAPTER))
+    for name, fname in AGENT_LOOP_ANCHORS.items():
+        region = _region(_read(os.path.join(AGENT_LOOP_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/the-unit/the-agent-loop.md with "
+            f"listing-studio/agent_loop/{fname}."
         )
