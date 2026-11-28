@@ -159,12 +159,12 @@ nav:
   - Catalogs & Appendices:
       - "A. The Anti-Patterns Catalog": catalogs/anti-patterns.md
       - "B. Pattern Quick-Reference": catalogs/quick-reference.md
-      - "C. Decision Frameworks (planned)": catalogs/decision-frameworks.md
-      - "D. State of Play 2026 (planned)": catalogs/state-of-play.md
+      - "C. Decision Frameworks": catalogs/decision-frameworks.md
+      - "D. State of Play 2026": catalogs/state-of-play.md
       - "E. Glossary": catalogs/glossary.md
-      - "F. The Hardening Checklist (planned)": catalogs/hardening-checklist.md
-      - "G. The Security Posture Map (planned)": catalogs/security-posture.md
-      - "H. Reading Paths (planned)": catalogs/reading-paths.md
-      - "I. The Incident File (planned)": catalogs/incident-file.md
-      - "J. Changes (planned)": catalogs/changes.md
+      - "F. The Hardening Checklist": catalogs/hardening-checklist.md
+      - "G. The Security Posture Map": catalogs/security-posture.md
+      - "H. Reading Paths": catalogs/reading-paths.md
+      - "I. The Incident File": catalogs/incident-file.md
+      - "J. Changes": catalogs/changes.md
   - Contributing: contributing.md
