@@ -125,6 +125,16 @@ FAN_OUT_ANCHORS = {
     "fanout-anthropic":  "fan_out_example.py",
 }
 
+# Chapter 8.5 — Locks, PII & Identity
+LOCKS_PII_CHAPTER = os.path.join(ROOT, "docs", "production", "locks-pii-identity.md")
+LOCKS_PII_PKG = os.path.join(ROOT, "listing-studio", "concurrency")
+
+LOCKS_PII_ANCHORS = {
+    "lease-fencing":     "lease.py",
+    "occ-version-check": "occ.py",
+    "pii-redact":        "redact.py",
+}
+
 
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
@@ -231,4 +241,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_locks_pii_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(LOCKS_PII_CHAPTER))
+    for name, fname in LOCKS_PII_ANCHORS.items():
+        region = _region(_read(os.path.join(LOCKS_PII_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/production/locks-pii-identity.md with "
+            f"listing-studio/concurrency/{fname}."
         )
