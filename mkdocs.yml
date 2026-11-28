@@ -140,7 +140,7 @@ nav:
       - "7.3 Checkpointing (planned)": reliability/stopping-gracefully.md
   - VIII. Operating in Production:
       - production/index.md
-      - "8.1 Observability (planned)": production/seeing-inside.md
+      - "8.1 Observability": production/seeing-inside.md
       - "8.2 Which Model? (planned)": production/which-model.md
       - "8.3 To Train or to Prompt (planned)": production/train-or-prompt.md
       - "8.4 Controlling Cost (planned)": production/controlling-cost.md
