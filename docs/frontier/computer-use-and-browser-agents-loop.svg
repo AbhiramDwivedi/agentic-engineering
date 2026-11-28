@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="800" height="560" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">Computer use: the model chooses each UI action; your code observes, executes and verifies</title>
+  <desc id="desc">A loop diagram. Your code, drawn as rectangles, captures an observation (a screenshot or an accessibility snapshot) and sends it to the model; the model, drawn rounded, chooses the next UI action as a tool call; your code executes that action in an isolated browser, returns the result or a structured error if it failed, and observes again. The model never touches the machine. Outside the loop, a separate rectangle owned by your code takes the downloaded file and verifies the end state (the file exists, parses, and every row is the right region) rather than trusting the model's "done". Only on a pass does the file reach the Repricer downstream; on a failure the run ends as a structured failure and yesterday's prices stay, flagged stale.</desc>
+  <style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 18px; font-weight: 700; }
+  .h2 { font-size: 13px; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .card-t { font-size: 15px; font-weight: 700; }
+  .sub { font-size: 12.5px; }
+  .note { font-size: 13px; font-style: italic; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
+  .code-box, .model-box, .gate-box { stroke-width: 2; }
+  .gate-box { stroke-width: 3; }
+  .loop-edge { fill: none; stroke-width: 1.5; stroke-dasharray: 6 5; }
+  .wire, .wire-back, .wire-file { fill: none; stroke-width: 2; }
+  .wire-back { stroke-dasharray: 7 5; }
+
+  /* Painted, not transparent: the host page may be toggled to a theme this
+     drawing did not follow, and unpainted text would vanish into it. */
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .gate-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .loop-edge { stroke: #aab2c4; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .txt-bad { fill: #c62828; }
+  .txt-good { fill: #256b29; }
+  .txt-back { fill: #b35c1e; }
+  .txt-file { fill: #00796b; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-back { stroke: #e07b39; }  .mk-back { fill: #e07b39; }
+  .wire-file { stroke: #00796b; }  .mk-file { fill: #00796b; }
+  .wire-good { stroke: #2e7d32; fill: none; stroke-width: 2.5; }  .mk-good { fill: #2e7d32; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .gate-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .loop-edge { stroke: #5a6478; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .txt-bad { fill: #ff8a80; }
+  .txt-good { fill: #a5d6a7; }
+  .txt-back { fill: #ffb74d; }
+  .txt-file { fill: #4db6ac; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-back { stroke: #ffb74d; }  .mk-back { fill: #ffb74d; }
+  .wire-file { stroke: #4db6ac; }  .mk-file { fill: #4db6ac; }
+  .wire-good { stroke: #66bb6a; }  .mk-good { fill: #66bb6a; }
+  }
+  </style>
+  <rect class="page-bg" x="0.5" y="0.5" width="799" height="559" rx="8"/>
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="arwBack" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-back" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="arwFile" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-file" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="arwGood" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-good" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+
+  <!-- Heading and legend -->
+  <text class="h1 txt" x="24" y="34">The model chooses each action. Your code owns everything around it.</text>
+  <text class="h2 txt-mute" x="24" y="56">Rounded = the model decides · rectangle = your code decides</text>
+
+  <!-- The loop boundary -->
+  <rect class="loop-edge" x="24" y="76" width="752" height="292" rx="10"/>
+  <text class="tag-lbl txt-mute" x="40" y="98">THE LOOP</text>
+
+  <!-- 1 Observe (your code) -->
+  <rect class="code-box" x="48" y="114" width="250" height="96"/>
+  <text class="tag-lbl txt-code" x="64" y="136">YOUR CODE</text>
+  <text class="card-t txt" x="64" y="160">1 · Observe</text>
+  <text class="sub txt-mute" x="64" y="182">captures a screenshot or an</text>
+  <text class="sub txt-mute" x="64" y="198">accessibility snapshot</text>
+
+  <!-- 2 Model chooses (the model) -->
+  <rect class="model-box" x="502" y="114" width="250" height="96" rx="26"/>
+  <text class="tag-lbl txt-model" x="526" y="136">THE MODEL</text>
+  <text class="card-t txt" x="526" y="160">2 · Picks the next action</text>
+  <text class="mono txt-mute" x="526" y="184">click(ref) · type · Enter</text>
+
+  <!-- 3 Execute (your code) -->
+  <rect class="code-box" x="502" y="254" width="250" height="96"/>
+  <text class="tag-lbl txt-code" x="518" y="276">YOUR CODE</text>
+  <text class="card-t txt" x="518" y="300">3 · Execute</text>
+  <text class="sub txt-mute" x="518" y="322">runs the action in an</text>
+  <text class="sub txt-mute" x="518" y="338">isolated browser</text>
+
+  <!-- Observe -> Model -->
+  <path class="wire" d="M298,162 L498,162" marker-end="url(#arw)"/>
+  <text class="sub txt-mute" x="400" y="152" text-anchor="middle">observation</text>
+
+  <!-- Model -> Execute -->
+  <path class="wire" d="M627,210 L627,250" marker-end="url(#arw)"/>
+  <text class="sub txt-mute" x="617" y="236" text-anchor="end">action, as a tool call</text>
+
+  <!-- Execute -> Observe: the loop closes -->
+  <path class="wire-back" d="M502,316 L173,316 L173,214" marker-end="url(#arwBack)"/>
+  <text class="sub txt-back" x="338" y="306" text-anchor="middle">result, or a structured error</text>
+  <text class="sub txt-back" x="338" y="336" text-anchor="middle">if it failed · observe again</text>
+
+  <!-- The point inside the loop -->
+  <text class="note txt-mute" x="338" y="250" text-anchor="middle">The model never touches the machine.</text>
+
+  <!-- The file leaves the loop -->
+  <path class="wire-file" d="M627,350 L627,388 L213,388 L213,406" marker-end="url(#arwFile)"/>
+  <text class="sub txt-file" x="420" y="381" text-anchor="middle">the downloaded file</text>
+
+  <!-- 4 Verify (your code, outside the loop) -->
+  <rect class="gate-box" x="48" y="410" width="330" height="100"/>
+  <text class="tag-lbl txt-code" x="64" y="432">YOUR CODE, OUTSIDE THE LOOP</text>
+  <text class="card-t txt" x="64" y="456">4 · Verify the end state</text>
+  <text class="sub txt-mute" x="64" y="478">file exists, parses, every row is the</text>
+  <text class="sub txt-mute" x="64" y="494">right region. Not the model's “done”.</text>
+
+  <!-- Verify -> Downstream on pass -->
+  <path class="wire-good" d="M378,460 L498,460" marker-end="url(#arwGood)"/>
+  <text class="sub txt-good" x="440" y="450" text-anchor="middle">pass</text>
+
+  <!-- Downstream (your code) -->
+  <rect class="code-box" x="502" y="410" width="250" height="100"/>
+  <text class="tag-lbl txt-code" x="518" y="432">DOWNSTREAM</text>
+  <text class="card-t txt" x="518" y="456">The Repricer</text>
+  <text class="sub txt-mute" x="518" y="478">reads the file only after</text>
+  <text class="sub txt-mute" x="518" y="494">the check passes</text>
+
+  <!-- Fail path -->
+  <text class="sub txt-bad" x="48" y="536">fail: the run ends as a structured failure; yesterday's prices stay, flagged stale</text>
+</svg>
