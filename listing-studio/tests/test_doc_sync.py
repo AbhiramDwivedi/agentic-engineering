@@ -126,6 +126,18 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 9.1 — Long-Running Agents
+CAMPAIGN_CHAPTER = os.path.join(ROOT, "docs", "frontier", "when-you-want-autonomy.md")
+CAMPAIGN_PKG = os.path.join(ROOT, "listing-studio", "campaign")
+
+CAMPAIGN_ANCHORS = {
+    "campaign-progress":  "run.py",
+    "campaign-budget":    "run.py",
+    "campaign-accept":    "run.py",
+    "campaign-session":   "run.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +243,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_campaign_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(CAMPAIGN_CHAPTER))
+    for name, fname in CAMPAIGN_ANCHORS.items():
+        region = _region(_read(os.path.join(CAMPAIGN_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/frontier/when-you-want-autonomy.md with "
+            f"listing-studio/campaign/{fname}."
         )

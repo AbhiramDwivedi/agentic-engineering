@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="800" height="560" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">A long-running campaign: the model proposes inside each session, and only your code writes the progress file every session starts from</title>
+  <desc id="desc">A relaunch wrapper, drawn as a rectangle, starts a fresh session. Inside the session a rounded model node reads a snapshot of the progress file and proposes a result for the next task. A rectangular acceptance check in your code rules on the candidate: on a pass it writes a completion record to the progress file, on a fail it counts the attempt, and after three failures it writes an escalation record that routes to a person. The progress file, also a rectangle, holds the task list, the completion records, the cumulative spend and the escalations, and the next session starts by reading it.</desc>
+  <style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 20px; font-weight: 700; }
+  .h2 { font-size: 13px; }
+  .card-t { font-size: 13px; font-weight: 700; }
+  .sub { font-size: 11.5px; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+  .code-box, .model-box, .gate-box, .row-box, .person-box { stroke-width: 2; }
+  .gate-box { stroke-width: 3; }
+  .row-box { stroke-width: 1.2; }
+  .frame { fill: none; stroke-width: 1.5; stroke-dasharray: 6 5; }
+  .wire, .wire-good, .wire-bad, .wire-copy, .wire-loop { fill: none; stroke-width: 2; }
+  .wire-copy { stroke-dasharray: 5 4; }
+  .wire-loop { stroke-width: 2.5; }
+
+  /* Painted, not transparent: the host page may be toggled to a theme this
+     drawing did not follow, and unpainted text would vanish into it. */
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box, .gate-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .row-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .person-box { fill: #fff4ec; stroke: #b35c1e; }
+  .frame { stroke: #97a0b5; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-model { fill: #5e35b1; }
+  .txt-good { fill: #256b29; }
+  .txt-bad { fill: #b35c1e; }
+  .txt-loop { fill: #00796b; }
+  .wire { stroke: #97a0b5; }       .mk-wire { fill: #97a0b5; }
+  .wire-copy { stroke: #7e57c2; }  .mk-copy { fill: #7e57c2; }
+  .wire-good { stroke: #2e7d32; }  .mk-good { fill: #2e7d32; }
+  .wire-bad { stroke: #e07b39; }   .mk-bad { fill: #e07b39; }
+  .wire-loop { stroke: #00796b; }  .mk-loop { fill: #00796b; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box, .gate-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .row-box { fill: #1b1f29; stroke: #5a6478; }
+  .person-box { fill: #3a2a1e; stroke: #ffb74d; }
+  .frame { stroke: #78829a; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-model { fill: #c5b3ec; }
+  .txt-good { fill: #a5d6a7; }
+  .txt-bad { fill: #ffb74d; }
+  .txt-loop { fill: #4db6ac; }
+  .wire { stroke: #78829a; }       .mk-wire { fill: #78829a; }
+  .wire-copy { stroke: #b39ddb; }  .mk-copy { fill: #b39ddb; }
+  .wire-good { stroke: #66bb6a; }  .mk-good { fill: #66bb6a; }
+  .wire-bad { stroke: #ffb74d; }   .mk-bad { fill: #ffb74d; }
+  .wire-loop { stroke: #4db6ac; }  .mk-loop { fill: #4db6ac; }
+  }
+  </style>
+  <rect class="page-bg" x="0.5" y="0.5" width="799" height="559" rx="8"/>
+  <defs>
+    <marker id="aw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="ac" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-copy" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-good" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-bad" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="al" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-loop" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+
+  <text class="h1 txt" x="24" y="34">Who says the campaign is done?</text>
+  <text class="h2 txt-mute" x="24" y="56">The model only proposes. Your code writes the file, and every fresh session starts from that file.</text>
+
+  <!-- relaunch wrapper -->
+  <rect class="code-box" x="24" y="80" width="200" height="56" rx="3"/>
+  <text class="card-t txt" x="40" y="103">Relaunch wrapper</text>
+  <text class="sub txt-mute" x="40" y="122">starts a fresh session</text>
+
+  <!-- loop back: the file feeds the next session -->
+  <path class="wire-loop" d="M658,160 V108 H230" marker-end="url(#al)"/>
+  <text class="sub txt-loop" x="262" y="100">the next session starts by reading the file</text>
+
+  <!-- session frame -->
+  <rect class="frame" x="24" y="160" width="480" height="326" rx="10"/>
+  <text class="tag-lbl txt-mute" x="262" y="181">ONE SESSION · FRESH CONTEXT</text>
+  <path class="wire" d="M124,136 V186" marker-end="url(#aw)"/>
+
+  <!-- code picks the task and enforces the stops -->
+  <rect class="code-box" x="44" y="192" width="200" height="72" rx="3"/>
+  <text class="card-t txt" x="58" y="214">Next pending task</text>
+  <text class="sub txt-mute" x="58" y="233">stops if steps run out</text>
+  <text class="sub txt-mute" x="58" y="250">or the campaign budget is spent</text>
+  <path class="wire" d="M244,228 H278" marker-end="url(#aw)"/>
+
+  <!-- model proposes -->
+  <rect class="model-box" x="284" y="192" width="200" height="72" rx="28"/>
+  <text class="card-t txt-model" x="300" y="214">Model proposes a price</text>
+  <text class="sub txt-mute" x="300" y="233">works from a copy of the file;</text>
+  <text class="sub txt-mute" x="300" y="250">edits to it are dropped</text>
+
+  <!-- copy arrow from file to model -->
+  <path class="wire-copy" d="M540,228 H490" marker-end="url(#ac)"/>
+  <text class="sub txt-model" x="509" y="220">copy</text>
+
+  <!-- model to check -->
+  <path class="wire" d="M384,264 V300" marker-end="url(#aw)"/>
+
+  <!-- acceptance check -->
+  <rect class="gate-box" x="164" y="306" width="240" height="64" rx="3"/>
+  <text class="card-t txt" x="180" y="328">Acceptance check (your code)</text>
+  <text class="sub txt-mute" x="180" y="346">right SKU, at or above the floor,</text>
+  <text class="sub txt-mute" x="180" y="362">within the maximum price move</text>
+
+  <!-- pass: completion record -->
+  <path class="wire-good" d="M404,322 H460 V284 H534" marker-end="url(#ag)"/>
+  <text class="sub txt-good" x="414" y="314">pass</text>
+
+  <!-- fail: count, escalate on the third -->
+  <path class="wire-bad" d="M200,370 V398" marker-end="url(#ab)"/>
+  <text class="sub txt-bad" x="208" y="390">fail</text>
+  <rect class="code-box" x="44" y="404" width="256" height="64" rx="3"/>
+  <text class="card-t txt" x="58" y="426">Count the failed attempt</text>
+  <text class="sub txt-mute" x="58" y="445">after 3 failures, write an</text>
+  <text class="sub txt-mute" x="58" y="461">escalation record and move on</text>
+  <path class="wire-bad" d="M300,434 H534" marker-end="url(#ab)"/>
+  <text class="sub txt-bad" x="372" y="426">3rd failure</text>
+
+  <!-- progress file -->
+  <rect class="code-box" x="540" y="160" width="236" height="304" rx="3"/>
+  <text class="card-t txt" x="556" y="182">Progress file</text>
+  <text class="sub txt-mute" x="556" y="200">written only by your code</text>
+
+  <rect class="row-box" x="552" y="212" width="212" height="44" rx="2"/>
+  <text class="mono txt" x="564" y="231">tasks</text>
+  <text class="sub txt-mute" x="564" y="248">every SKU in the campaign</text>
+
+  <rect class="row-box" x="552" y="262" width="212" height="44" rx="2"/>
+  <text class="mono txt-good" x="564" y="281">done</text>
+  <text class="sub txt-mute" x="564" y="298">accepted results only</text>
+
+  <rect class="row-box" x="552" y="312" width="212" height="44" rx="2"/>
+  <text class="mono txt" x="564" y="331">attempts</text>
+  <text class="sub txt-mute" x="564" y="348">failed checks per SKU</text>
+
+  <rect class="row-box" x="552" y="362" width="212" height="44" rx="2"/>
+  <text class="mono txt" x="564" y="381">spent</text>
+  <text class="sub txt-mute" x="564" y="398">total across every session</text>
+
+  <rect class="row-box" x="552" y="412" width="212" height="44" rx="2"/>
+  <text class="mono txt-bad" x="564" y="431">escalations</text>
+  <text class="sub txt-mute" x="564" y="448">waiting for a person</text>
+
+  <!-- to a person -->
+  <path class="wire-bad" d="M658,464 V494" marker-end="url(#ab)"/>
+  <rect class="person-box" x="540" y="500" width="236" height="44" rx="3"/>
+  <text class="card-t txt" x="556" y="518">A person</text>
+  <text class="sub txt-mute" x="556" y="535">takes over each escalated SKU</text>
+
+  <!-- outcome line -->
+  <text class="sub txt-mute" x="24" y="514">Each session ends complete, budget, step limit or stuck.</text>
+  <text class="sub txt" x="24" y="533">The file says which. The agent's own notes never count.</text>
+</svg>
