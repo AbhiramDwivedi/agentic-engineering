@@ -102,7 +102,7 @@ nav:
       - "2.2 Structured Output": the-unit/structured-output.md
       - "2.3 Skills": the-unit/skills.md
       - "2.4 MCP": the-unit/mcp.md
-      - "2.5 The Agent Loop (planned)": the-unit/the-agent-loop.md
+      - "2.5 The Agent Loop": the-unit/the-agent-loop.md
       - "2.6 The Harness (planned)": the-unit/the-harness.md
   - III. Composition:
       - composition/index.md

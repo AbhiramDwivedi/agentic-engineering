@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" width="800" height="700" role="img" aria-labelledby="ttl desc">
+<title id="ttl">The agent loop: the model picks each step and when to stop, your code decides which of five exits the run took</title>
+<desc id="desc">A rounded box at the top is the model: it reads everything so far and picks the next step, a tool call or a stop. Below it a rectangle is your code, which branches on how the turn ended. On tool_use, your code runs each call and sends any failure back as an error result the model can read, then asks two questions. If the same call has failed three times, the run exits stalled. If the step cap is reached, it exits ceiling. Otherwise the results are appended and the model is called again. On end_turn, the model's claim of done goes to a code check: was a price queued, at or above the 39900 floor? Yes gives clean, the only exit that is an answer. No gives false_done. Any other stop reason, such as max_tokens or refusal, exits abnormal_stop with no answer. A strip along the bottom traces one real run for the Aldsworth desk: get_competitor_prices times out and comes back as an error, the model retries and gets 41900, 44500 and 39900, check_price passes 41900, submit_for_review queues 41900, and at step 5 the model ends its turn, the check confirms 41900 is queued above the floor, and the run exits clean. Steps 1 to 4 went around the tool_use loop; step 5 went through the check.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .h2 { font-size: 13px; }
+  .bt { font-size: 13px; font-weight: 700; }
+  .b { font-size: 12.5px; }
+  .s { font-size: 11.5px; }
+  .tag { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+  .mono-s { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; }
+  .num { font-size: 12px; font-weight: 800; }
+  .code-box, .model-box, .exit-ok, .exit-bad { stroke-width: 2; }
+  .exit-ok { stroke-width: 3; }
+  .data-box { stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .wire { fill: none; stroke-width: 2; }
+  .loop { fill: none; stroke-width: 2; }
+  .rule { stroke-width: 1.5; fill: none; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .exit-ok { fill: #e9f5ef; stroke: #2e7d5b; }
+  .exit-bad { fill: #fbfbfd; stroke: #aab2c4; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .txt-ok { fill: #2e7d5b; }
+  .txt-bad { fill: #a3444f; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .loop { stroke: #7e57c2; }  .mk-loop { fill: #7e57c2; }
+  .rule { stroke: #aab2c4; }
+  .dot { fill: #4f5b93; }  .dot-txt { fill: #ffffff; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .exit-ok { fill: #1d3329; stroke: #7fd1a8; }
+  .exit-bad { fill: #1b1f29; stroke: #5a6478; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .txt-ok { fill: #7fd1a8; }
+  .txt-bad { fill: #e8909a; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .loop { stroke: #b39ddb; }  .mk-loop { fill: #b39ddb; }
+  .rule { stroke: #5a6478; }
+  .dot { fill: #939ed4; }  .dot-txt { fill: #21222c; }
+  }
+</style>
+<defs>
+<marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+<marker id="arl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-loop" d="M0,0 L10,5 L0,10 z"/></marker>
+</defs>
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="699" rx="8"/>
+
+<!-- heading and legend -->
+<text class="h1 txt" x="30" y="36">The model picks each step. Your code names the ending.</text>
+<rect class="model-box" x="30" y="54" width="34" height="18" rx="9"/>
+<text class="s txt-mute" x="72" y="67">the model decides</text>
+<rect class="code-box" x="200" y="54" width="34" height="18" rx="2"/>
+<text class="s txt-mute" x="242" y="67">your code decides</text>
+
+<!-- model -->
+<rect class="model-box" x="60" y="92" width="320" height="62" rx="22"/>
+<text class="tag txt-model" x="220" y="112" text-anchor="middle">MODEL</text>
+<text class="b txt" x="220" y="130" text-anchor="middle">reads everything so far, picks the next step:</text>
+<text class="b txt" x="220" y="146" text-anchor="middle">call a tool, or stop</text>
+<path class="wire" d="M220,154 L220,186" marker-end="url(#arw)"/>
+
+<!-- branch on stop reason -->
+<rect class="code-box" x="60" y="190" width="320" height="50" rx="3"/>
+<text class="bt txt" x="220" y="211" text-anchor="middle">Your code branches on how the turn ended</text>
+<text class="mono-s txt-code" x="220" y="229" text-anchor="middle">tool_use, end_turn, or anything else</text>
+
+<!-- end_turn to the check -->
+<path class="wire" d="M380,204 L436,204" marker-end="url(#arw)"/>
+<text class="mono-s txt-mute" x="408" y="197" text-anchor="middle">end_turn</text>
+<rect class="code-box" x="440" y="182" width="330" height="58" rx="3"/>
+<text class="bt txt" x="605" y="204" text-anchor="middle">The model says done. Your code checks:</text>
+<text class="b txt" x="605" y="223" text-anchor="middle">a price queued, at or above the 39900 floor?</text>
+<path class="wire" d="M520,240 L520,262" marker-end="url(#arw)"/>
+<text class="s txt-mute" x="528" y="256">yes</text>
+<path class="wire" d="M690,240 L690,262" marker-end="url(#arw)"/>
+<text class="s txt-mute" x="698" y="256">no</text>
+<rect class="exit-ok" x="440" y="266" width="160" height="46" rx="3"/>
+<text class="mono txt-ok" x="520" y="285" text-anchor="middle">clean</text>
+<text class="s txt-ok" x="520" y="302" text-anchor="middle">the only answer</text>
+<rect class="exit-bad" x="610" y="266" width="160" height="46" rx="3"/>
+<text class="mono txt" x="690" y="285" text-anchor="middle">false_done</text>
+<text class="s txt-bad" x="690" y="302" text-anchor="middle">claim fails: no answer</text>
+
+<!-- anything else -->
+<path class="wire" d="M380,228 L412,228 L412,348 L436,348" marker-end="url(#arw)"/>
+<rect class="exit-bad" x="440" y="326" width="330" height="44" rx="3"/>
+<text class="mono txt" x="456" y="345">abnormal_stop</text>
+<text class="s txt-bad" x="456" y="361">max_tokens, refusal, pause_turn: no answer</text>
+
+<!-- tool_use path -->
+<path class="wire" d="M220,240 L220,276" marker-end="url(#arw)"/>
+<text class="mono-s txt-mute" x="228" y="262">tool_use</text>
+<rect class="code-box" x="60" y="280" width="320" height="50" rx="3"/>
+<text class="b txt" x="220" y="301" text-anchor="middle">Run each call. A failure goes back to the</text>
+<text class="b txt" x="220" y="318" text-anchor="middle">model as an error result it can read.</text>
+<path class="wire" d="M220,330 L220,380" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="100" y="384" width="240" height="40" rx="3"/>
+<text class="bt txt" x="220" y="409" text-anchor="middle">Same call failed 3 times?</text>
+<path class="wire" d="M340,404 L436,404" marker-end="url(#arw)"/>
+<text class="s txt-mute" x="388" y="397" text-anchor="middle">yes</text>
+<rect class="exit-bad" x="440" y="382" width="330" height="44" rx="3"/>
+<text class="mono txt" x="456" y="401">stalled</text>
+<text class="s txt-bad" x="456" y="417">same failure again: no answer</text>
+
+<path class="wire" d="M220,424 L220,450" marker-end="url(#arw)"/>
+<text class="s txt-mute" x="228" y="442">no</text>
+<rect class="code-box" x="100" y="454" width="240" height="40" rx="3"/>
+<text class="bt txt" x="220" y="479" text-anchor="middle">Step cap reached?</text>
+<path class="wire" d="M340,474 L436,474" marker-end="url(#arw)"/>
+<text class="s txt-mute" x="388" y="467" text-anchor="middle">yes</text>
+<rect class="exit-bad" x="440" y="452" width="330" height="44" rx="3"/>
+<text class="mono txt" x="456" y="471">ceiling</text>
+<text class="s txt-bad" x="456" y="487">cap hit first: no answer</text>
+
+<!-- the loop back -->
+<path class="loop" d="M100,474 L38,474 L38,123 L56,123" marker-end="url(#arl)"/>
+<text class="s txt-model" transform="translate(30,300) rotate(-90)" text-anchor="middle">no: append the results, call the model again</text>
+
+<!-- trace strip -->
+<line class="rule" x1="30" y1="516" x2="770" y2="516"/>
+<text class="bt txt" x="30" y="540">One real run: the Aldsworth desk, floor 39900</text>
+
+<g>
+<rect class="data-box" x="26" y="554" width="140" height="70" rx="4"/>
+<circle class="dot" cx="42" cy="570" r="9"/><text class="num dot-txt" x="42" y="574" text-anchor="middle">1</text>
+<text class="mono-s txt" x="36" y="590" style="font-size:9.5px">get_competitor_prices</text>
+<text class="s txt-mute" x="36" y="606">feed times out</text>
+<text class="s txt-bad" x="36" y="620">is_error: true</text>
+</g>
+<g>
+<rect class="data-box" x="178" y="554" width="140" height="70" rx="4"/>
+<circle class="dot" cx="194" cy="570" r="9"/><text class="num dot-txt" x="194" y="574" text-anchor="middle">2</text>
+<text class="mono-s txt" x="188" y="590" style="font-size:9.5px">get_competitor_prices</text>
+<text class="s txt-mute" x="188" y="606">retried: ok</text>
+<text class="mono-s txt" x="188" y="620">41900 44500 39900</text>
+</g>
+<g>
+<rect class="data-box" x="330" y="554" width="140" height="70" rx="4"/>
+<circle class="dot" cx="346" cy="570" r="9"/><text class="num dot-txt" x="346" y="574" text-anchor="middle">3</text>
+<text class="mono-s txt" x="360" y="574">check_price</text>
+<text class="mono-s txt" x="340" y="595">41900</text>
+<text class="s txt-mute" x="340" y="612">passes the floor</text>
+</g>
+<g>
+<rect class="data-box" x="482" y="554" width="140" height="70" rx="4"/>
+<circle class="dot" cx="498" cy="570" r="9"/><text class="num dot-txt" x="498" y="574" text-anchor="middle">4</text>
+<text class="s txt-mute" x="512" y="574">tool call</text>
+<text class="mono-s txt" x="492" y="595">submit_for_review</text>
+<text class="s txt-mute" x="492" y="612">41900 queued</text>
+</g>
+<g>
+<rect class="exit-ok" x="634" y="554" width="140" height="70" rx="4"/>
+<circle class="dot" cx="650" cy="570" r="9"/><text class="num dot-txt" x="650" y="574" text-anchor="middle">5</text>
+<text class="mono-s txt" x="664" y="574">end_turn</text>
+<text class="s txt" x="644" y="595">check: 41900 queued</text>
+<text class="mono txt-ok" x="644" y="613">clean</text>
+</g>
+<path class="wire" d="M166,589 L176,589" marker-end="url(#arw)"/>
+<path class="wire" d="M318,589 L328,589" marker-end="url(#arw)"/>
+<path class="wire" d="M470,589 L480,589" marker-end="url(#arw)"/>
+<path class="wire" d="M622,589 L632,589" marker-end="url(#arw)"/>
+
+<path class="rule" d="M26,634 L26,642 L622,642 L622,634"/>
+<text class="s txt-mute" x="324" y="658" text-anchor="middle">steps 1 to 4: tool_use, around the loop</text>
+<path class="rule" d="M634,634 L634,642 L774,642 L774,634"/>
+<text class="s txt-mute" x="704" y="658" text-anchor="middle">step 5: end_turn, the check</text>
+<text class="b txt" x="30" y="686">The model chose every step, including the retry. Your code ran each call and judged the ending.</text>
+</svg>
