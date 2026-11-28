@@ -125,6 +125,16 @@ FAN_OUT_ANCHORS = {
     "fanout-anthropic":  "fan_out_example.py",
 }
 
+# Chapter 8.4 — Controlling Cost
+COST_CHAPTER = os.path.join(ROOT, "docs", "production", "controlling-cost.md")
+COST_PKG = os.path.join(ROOT, "listing-studio", "cost")
+
+COST_ANCHORS = {
+    "cost-prefix":   "prompt.py",
+    "cost-cascade":  "cascade.py",
+    "cost-budget":   "budget.py",
+}
+
 
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
@@ -231,4 +241,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_cost_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(COST_CHAPTER))
+    for name, fname in COST_ANCHORS.items():
+        region = _region(_read(os.path.join(COST_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/production/controlling-cost.md with "
+            f"listing-studio/cost/{fname}."
         )
