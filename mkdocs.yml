@@ -126,7 +126,7 @@ nav:
       - "5.1 State, Not Memory (planned)": knowledge/state-not-memory.md
       - "5.2 Retrieval (RAG) (planned)": knowledge/retrieval-rag.md
       - "5.3 Memory (planned)": knowledge/real-memory.md
-      - "5.4 Compaction (planned)": knowledge/compaction-and-the-window.md
+      - "5.4 Compaction": knowledge/compaction-and-the-window.md
   - VI. The I/O Boundary:
       - io-boundary/index.md
       - "6.1 Ingestion (planned)": io-boundary/getting-the-mess-in.md
