@@ -141,7 +141,7 @@ nav:
   - VIII. Operating in Production:
       - production/index.md
       - "8.1 Observability (planned)": production/seeing-inside.md
-      - "8.2 Which Model? (planned)": production/which-model.md
+      - "8.2 Which Model?": production/which-model.md
       - "8.3 To Train or to Prompt (planned)": production/train-or-prompt.md
       - "8.4 Controlling Cost (planned)": production/controlling-cost.md
       - "8.5 Locks, PII & Identity (planned)": production/locks-pii-identity.md
