@@ -154,7 +154,7 @@ nav:
       - "9.3 The Protocol Landscape (planned)": frontier/protocol-landscape.md
       - "9.4 Sandboxing (planned)": frontier/sandboxing.md
       - "9.5 Computer Use & Browser Agents (planned)": frontier/computer-use-and-browser-agents.md
-      - "9.6 Coding Agents (planned)": frontier/coding-agents.md
+      - "9.6 Coding Agents": frontier/coding-agents.md
       - "9.7 Self-Improving Systems (planned)": frontier/self-improving-systems.md
   - Catalogs & Appendices:
       - "A. The Anti-Patterns Catalog": catalogs/anti-patterns.md

@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-labelledby="ttl desc">
+<title id="ttl">A coding agent: the model chooses each action, your code decides which actions are allowed</title>
+<desc id="desc">A rounded model node proposes the next search, edit or command. A rectangular harness of permission rules and a PreToolUse hook either blocks it, returning the reason to the model, or passes it into a sandbox. There, commands run tests, lint and type-check, and the results return to the model. The hook keeps the tests out of the model's write reach, and a rectangular human review reads the diff before merge.</desc>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+  <marker id="arr-c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-code" d="M0,0 L10,5 L0,10 z"/></marker>
+</defs>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .card-t { font-size: 14px; font-weight: 700; }
+  .sub { font-size: 12px; }
+  .lbl { font-size: 12px; font-weight: 600; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+  .code-box, .model-box, .data-box { stroke-width: 2; }
+  .bound { fill: none; stroke-width: 2; stroke-dasharray: 7 5; }
+  .wire, .wire-c { fill: none; stroke-width: 2; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .lock-box { fill: #fbfbfd; stroke: #4f5b93; stroke-width: 2; }
+  .bound { stroke: #4f5b93; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .wire-c { stroke: #4f5b93; } .mk-code { fill: #4f5b93; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .lock-box { fill: #1b1f29; stroke: #939ed4; }
+  .bound { stroke: #939ed4; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .wire-c { stroke: #939ed4; } .mk-code { fill: #939ed4; }
+  }
+</style>
+
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="499" rx="10"/>
+
+<text class="h1 txt" x="24" y="36">The model chooses each action. Your code decides which ones run.</text>
+<rect class="model-box" x="24" y="52" width="26" height="16" rx="7"/>
+<text class="sub txt-mute" x="58" y="65">model decides</text>
+<rect class="code-box" x="170" y="52" width="26" height="16"/>
+<text class="sub txt-mute" x="204" y="65">your code decides</text>
+
+<!-- Model -->
+<rect class="model-box" x="24" y="140" width="160" height="130" rx="22"/>
+<text class="card-t txt-model" x="104" y="176" text-anchor="middle">Model</text>
+<text class="sub txt" x="104" y="202" text-anchor="middle">chooses the next</text>
+<text class="sub txt" x="104" y="220" text-anchor="middle">search, edit or</text>
+<text class="sub txt" x="104" y="238" text-anchor="middle">command</text>
+
+<!-- Harness -->
+<rect class="code-box" x="264" y="110" width="210" height="196"/>
+<text class="card-t txt-code" x="369" y="134" text-anchor="middle">Harness</text>
+<rect class="data-box" x="278" y="148" width="182" height="60"/>
+<text class="lbl txt" x="369" y="172" text-anchor="middle">Permission rules</text>
+<text class="sub txt-mute" x="369" y="192" text-anchor="middle">deny, then ask, then allow</text>
+<rect class="data-box" x="278" y="222" width="182" height="70"/>
+<text class="mono txt" x="369" y="246" text-anchor="middle">PreToolUse hook</text>
+<text class="sub txt-mute" x="369" y="264" text-anchor="middle">exit 2 blocks the call</text>
+<text class="sub txt-mute" x="369" y="281" text-anchor="middle">and says why</text>
+
+<!-- model -> harness, harness -> model -->
+<path class="wire" d="M184,180 L262,180" marker-end="url(#arr)"/>
+<text class="sub txt-mute" x="224" y="172" text-anchor="middle">proposes</text>
+<path class="wire-c" d="M264,246 L186,246" marker-end="url(#arr-c)"/>
+<text class="lbl txt-code" x="224" y="266" text-anchor="middle">blocked:</text>
+<text class="sub txt-code" x="224" y="282" text-anchor="middle">reason back</text>
+
+<!-- Sandbox -->
+<rect class="bound" x="510" y="86" width="266" height="250" rx="4"/>
+<text class="lbl txt-code" x="524" y="106">Sandbox boundary</text>
+<path class="wire-c" d="M474,180 L508,180" marker-end="url(#arr-c)"/>
+<text class="sub txt-code" x="491" y="172" text-anchor="middle">allowed</text>
+
+<rect class="data-box" x="524" y="118" width="238" height="112"/>
+<text class="lbl txt" x="643" y="138" text-anchor="middle">Repository</text>
+<rect class="data-box" x="534" y="150" width="104" height="66"/>
+<text class="sub txt" x="586" y="178" text-anchor="middle">source files</text>
+<text class="sub txt-mute" x="586" y="196" text-anchor="middle">model edits</text>
+<rect class="lock-box" x="648" y="150" width="104" height="66"/>
+<text class="mono txt" x="700" y="178" text-anchor="middle">tests/</text>
+<text class="sub txt-code" x="700" y="196" text-anchor="middle">hook-protected</text>
+
+<rect class="data-box" x="524" y="244" width="238" height="76"/>
+<text class="lbl txt" x="643" y="268" text-anchor="middle">Commands run</text>
+<text class="sub txt-mute" x="643" y="288" text-anchor="middle">tests, lint, type-check</text>
+<text class="sub txt-mute" x="643" y="306" text-anchor="middle">against the edited code</text>
+
+<!-- results back to model -->
+<path class="wire" d="M600,336 L600,382 L104,382 L104,272" marker-end="url(#arr)"/>
+<text class="lbl txt" x="350" y="404" text-anchor="middle">results return to the model</text>
+<text class="sub txt-mute" x="350" y="422" text-anchor="middle">partial feedback: tests can be wrong or miss requirements</text>
+
+<!-- diff to human review -->
+<path class="wire-c" d="M700,336 L700,418" marker-end="url(#arr-c)"/>
+<text class="sub txt-code" x="708" y="372">the diff</text>
+<rect class="code-box" x="600" y="420" width="176" height="60"/>
+<text class="card-t txt-code" x="688" y="444" text-anchor="middle">Human review</text>
+<text class="sub txt" x="688" y="464" text-anchor="middle">reads the diff before merge</text>
+</svg>
