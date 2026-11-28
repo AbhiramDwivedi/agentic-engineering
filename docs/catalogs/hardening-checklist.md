@@ -111,7 +111,7 @@ will run again.
 
 **Chapter:** [8.1 Observability](../production/seeing-inside.md) · **Maturity: Established**
 
-Trace and monitor non-deterministic runs so you can debug what the model actually did.
+Trace and monitor non-deterministic runs so you can debug what the model did.
 
 1. Every run is a trace tree: a root span for the run, a child for each model call and tool
    call, with parent ids carried across every process boundary.

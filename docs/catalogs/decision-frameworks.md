@@ -2,10 +2,10 @@
 
 > **The decision it resolves:** the recurring "which should I pick?" calls, in one place.
 
-The site's decision guides, aggregated as quick reference. The core four are workflow or agent,
-framework or raw SDK, which model, and train or prompt. Four more sit beside them: whether to
-send a judgment to a decision model, when to add a second agent, state or memory, and how to
-route. Each entry gives the default, what moves you off it, the verdict from the chapter's trust
+This page collects the site's decision guides for quick reference. The core four are workflow or agent,
+framework or raw SDK, which model, and train or prompt. Six more sit beside them: whether to
+send a judgment to a decision model, when to add a second agent, state or memory, how to
+route, whether to build or rent the runtime, and whether to let a system improve itself. Each entry gives the default, what moves you off it, the verdict from the chapter's trust
 line, and the chapter that argues it in full.
 
 ## At a glance
@@ -20,6 +20,8 @@ line, and the chapter that argues it in full.
 | One agent or several? | one agent | Contested | 9.2 Multi-Agent |
 | State or memory? | typed state first | Established | 5.1 State, Not Memory |
 | Dispatch or routing? | a dictionary when the input already carries a label | Standard (static dispatch) · Established (LLM routing) | [3.2 Routing & Dispatch](../composition/the-router-that-isnt.md) |
+| Build or rent the runtime? | build the queue, lease and supervisor once, then rent if the operating load is what you want rid of | Established (the shapes) / Emerging (managed platforms) | 8.7 Deployment & Runtimes |
+| Let it improve itself? | offline prompt optimization against your existing eval | Emerging / Contested | 9.7 Self-Improving Systems |
 
 ## The core four
 
@@ -95,7 +97,7 @@ the task and come back at the second step or the first user.
 you adopt a model, and the replacement run through the same comparison early in the notice
 window. A public leaderboard measures someone else's cases.
 
-**Maturity: Established** (vendor-documented method and retirement policies; tier routers are
+**Maturity: Established** (vendor-documented method and retirement policies; tier routers and advisor pairings are
 Emerging).
 
 Chapter: 8.2 Which Model?
@@ -127,7 +129,7 @@ RLVR and prompt optimizers are Emerging, LoRA parity and small-beats-frontier Co
 Chapter: 8.3 To Train or to Prompt. Choosing the model comes first (8.2 Which Model?); tuning
 changes the model you already picked.
 
-## Four more that recur
+## Six more that recur
 
 ### Decision model or generation?
 
@@ -175,6 +177,34 @@ in the [quick-reference](quick-reference.md).
 
 **Maturity: Standard (static dispatch) · Established (LLM routing).** Chapter:
 [3.2 Routing & Dispatch](../composition/the-router-that-isnt.md).
+
+### Build or rent the runtime?
+
+Whichever you choose, the shape is the same: return a job id for anything that might outlive a
+request, put an idempotency key on every side effect, cap concurrency and restarts, and keep
+progress outside the worker so a deploy or a crash costs a step and leaves the run intact. Write
+the queue, the lease and the supervisor once yourself, so you know exactly what you would hand
+over. Then rent if the operating load is what you want rid of. Renting trades that load against
+control, access to raw state and traces, and portability, and data residency can force the
+answer. A host takes the loop, the sandbox, the session store and the restarts; the budget, the
+permissions, the retention and the trust boundary stay in your code.
+
+**Maturity: Established (the shapes) / Emerging (managed platforms)** (sync, stream and async
+with leases and idempotency are settled; the hosted agent platforms are young and partly in
+beta). Chapter: 8.7 Deployment & Runtimes.
+
+### Let it improve itself?
+
+Start with offline prompt optimization against the eval you already have, with an explicit
+selection set, a sealed test set, and the winning prompt reviewed as a diff. Move to skill or
+playbook evolution only when you have an execution-based check and a pruning habit. Keep agents
+that rewrite their own code and harness in the lab until someone publishes a production
+replication. On every rung the evaluator and the promotion step stay outside the optimizer's
+reach, and a gain counts only when it holds on data the optimizer never selected on.
+
+**Maturity: Emerging / Contested** (eval-driven prompt tuning is Established; prompt optimizers
+and skill, context and harness editing are Emerging; self-modifying agents in production are
+Contested). Chapter: 9.7 Self-Improving Systems.
 
 ## How to use this page
 

@@ -1,6 +1,6 @@
 # State of Play, 2026
 
-> **The decision it resolves:** what does the fast-moving landscape look like *right now*?
+> **The decision it resolves:** where do the fast-moving parts of the field stand *right now*?
 
 *Last reviewed: 2026-11.*
 
@@ -109,6 +109,36 @@ The attacks are better understood than the defences, and the law is ahead of its
 | Delegation and per-run credentials for agents | Emerging | Locks and tenant isolation are standard. OAuth has the vocabulary, a 2025 position paper argues for extending it to agents, and the protocol guidance for agent tools is still being revised between dated spec releases. | 2026-11 | 8.5 Locks, PII & Identity |
 | Enforcement and AI-specific standards | Emerging | The core runtime controls are Established. ISO/IEC 42001 was first published in December 2023, and the EU AI Act's obligations apply in phases, so its enforcement practice is still forming. | 2026-11 | 8.6 Governance & Compliance |
 
+## Price tables (dated 2026-11)
+
+8.4 Controlling Cost keeps prices out of the chapter because they rot, and points here for them.
+The figures below come from the vendor pages that chapter cites, as read on 2026-11-28. Rates are
+multiples of the model's ordinary input price. Check the live page before you budget against any
+of them.
+
+**Prompt caching**
+
+| Vendor | Write premium | Read rate | Lifetime |
+|---|---|---|---|
+| Anthropic | 1.25x for the 5-minute lifetime; 2x for the 1-hour lifetime | 0.1x on most models; 0.05x on Claude Opus 5.5 and Claude Sonnet 5.5; 0.025x on Claude Fable 5.1 and 5.2 and Claude Mythos 5.1 and 5.2 | 5 minutes by default, refreshed at no cost on each use; 1 hour at additional cost[^anthropic-caching] |
+| OpenAI (GPT-5.6 and later) | 1.25x for the default 30-minute lifetime; 2.5x for the 12-hour lifetime (Responses API) | 0.1x on most of these models; 0.05x on GPT-6.1 Sol, GPT-6.1 Terra, GPT-6.2 Astra and GPT-6.2 Sol | 30 minutes by default, or 12 hours; caching starts at 1,024 tokens[^openai-caching] |
+| OpenAI (GPT-5.5 and earlier) | No cache-write charge | Set per model | GPT-5.5: typically around 30 minutes, up to 24 hours. Earlier models: around 5 to 10 minutes of inactivity in memory, up to one hour, or up to 24 hours with extended retention on the models that support it[^openai-caching] |
+| Google | Not stated | Not stated | Not stated |
+
+Google caches implicitly on Gemini 2.5 and newer and passes the savings on automatically, but the
+page 8.4 cites gave no discount rate, write charge, storage price or explicit-cache lifetime when it
+was read.[^google-caching] Those cells stay empty until a cited source states them.
+
+**Batch**
+
+| Vendor | Discount | Window |
+|---|---|---|
+| Anthropic | 50 percent; stacks with caching, but cache hits within a batch are best-effort | Up to 24 hours[^anthropic-batch] |
+| OpenAI | 50 percent | 24-hour completion window[^openai-batch] |
+| Google | Not stated | Not stated |
+
+8.4 cites no source for a Google batch tier, so this page gives no figure for one.
+
 ## Due for re-review
 
 Rows dated before 2026-11 come from chapters that have not been re-read since. The oldest are
@@ -116,3 +146,9 @@ Rows dated before 2026-11 come from chapters that have not been re-read since. T
 and [2.4 MCP](../the-unit/mcp.md) (2026-06), then 3.4 Evaluator-Optimizer (2026-08) and 3.5 The
 Specialist Panel (2026-09). The MCP row matters most: 9.3 The Protocol Landscape, reviewed in
 November, lists MCP revision 2026-07-28 as Emerging, and 2.4 predates that revision.
+
+[^anthropic-caching]: Anthropic, "Prompt caching" (Claude Platform docs, read 2026-11-28). Prefix order, multipliers (with per-model exceptions to the 0.1x read rate), invalidation rules, the silent minimum, and the usage fields. <https://platform.claude.com/docs/en/build-with-claude/prompt-caching>
+[^openai-caching]: OpenAI, "Prompt caching" (API docs, read 2026-11-28). Minimum length, write rates and lifetimes for GPT-5.6 and later, `prompt_cache_key`, and the static-first advice. <https://developers.openai.com/api/docs/guides/prompt-caching>
+[^google-caching]: Google, "Context caching" (Gemini API docs, read 2026-11-28). Implicit caching on by default for Gemini 2.5 and newer; explicit caching on supported models. The page as read gave no discount rate. <https://aistudio.google.com/docs/caching>
+[^anthropic-batch]: Anthropic, "Batch processing" (Claude Platform docs, read 2026-11-28). The 50 percent discount, batch limits, the 24-hour expiry, best-effort cache hits within batches, and a price table listing output at five times input for each model. <https://platform.claude.com/docs/en/build-with-claude/batch-processing>
+[^openai-batch]: OpenAI, "Batch API" (API docs, read 2026-11-28). The 50 percent discount, the 24-hour completion window, and the request and file-size limits. <https://developers.openai.com/api/docs/guides/batch>

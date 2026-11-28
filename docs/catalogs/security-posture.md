@@ -1,11 +1,11 @@
 # The Security Posture Map
 
-> **The decision it resolves:** across all these patterns, what can an attacker actually do, and where is each defense taught?
+> **The decision it resolves:** across all these patterns, what can an attacker do, and where is each defense taught?
 
 <small class="chapter-meta">*Last reviewed:* 2026-11</small>
 
-The security twin of the [Hardening Checklist](hardening-checklist.md): one scannable page framed
-by the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/), mapping each
+This is the security twin of the [Hardening Checklist](hardening-checklist.md): one page, framed
+by the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/), that maps each
 threat class to the chapter that argues its defense in full, so a pattern chapter can point here
 instead of re-teaching the same threat. Security stays woven through the individual chapters; this
 page sits over that coverage and adds nothing the chapters do not argue.
@@ -45,6 +45,21 @@ through content it reads; 4.6 treats it as the agentic counterpart of LLM01, and
 Task Decomposition covers it for a plan the model writes. **Memory & Context Poisoning (ASI06)**
 is a planted entry that carries into every later session; 9.1 Long-Running Agents argues it, and
 5.3 Memory builds the poisoning gate on the write path.
+
+## Two surfaces outside both lists
+
+- **The evaluator in a self-improving loop.** Once a system is rewarded for raising a score, the
+  cheapest path to a higher score may run through the scorer. 9.7 Self-Improving Systems argues
+  the defense: an authority boundary your code enforces, where the optimizer edits only a declared
+  surface and the evaluator, test data, permissions, hooks and promotion step sit outside it,
+  with a sealed test set the optimizer cannot read. Poisoned feedback becoming a poisoned update
+  is the injection risk again. Verdict: Emerging / Contested (eval-driven prompt tuning is
+  Established; prompt optimizers and skill, context and harness editing are Emerging;
+  self-modifying agents in production are Contested).
+- **The deployment's inbound edges.** 8.7 Deployment & Runtimes checks the signature on every
+  inbound webhook and allow-lists any callback URL a client supplies, since that callback is a
+  server-side request forgery door. Verdict: Established (the shapes) / Emerging (managed
+  platforms).
 
 ## Where the defenses land
 

@@ -144,7 +144,7 @@ Chapters still in review are named here by number in plain text, and gain links 
 8. 9.7 Self-Improving Systems: Start with offline prompt optimization against your existing eval;
    self-modifying agents in production are Contested.
 9. [The Anti-Patterns Catalog](anti-patterns.md) and the
-   [Pattern Quick-Reference](quick-reference.md). One page each, for the review meeting.
+   [Pattern Quick-Reference](quick-reference.md). Each is one page, for the review meeting.
 
 ## For the reader who already runs agents all day
 

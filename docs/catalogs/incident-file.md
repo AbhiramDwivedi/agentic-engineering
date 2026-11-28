@@ -21,7 +21,7 @@ personal-agent exposure or a scale claim that later failed review, so neither ha
 | [Cursor writes its own MCP config](#cursor-mcp-config) | August 2025 | a config write that meant running code | treating that write as execution | 9.6, [2.4](../the-unit/mcp.md) |
 | [GitHub MCP leaks non-public repositories](#github-mcp) | May 2025 | all three legs of the trifecta in one session | removing a leg; approvals people read | 4.6, 4.3 |
 | [EchoLeak in Microsoft 365 Copilot](#echoleak) | June 2025 | an injection classifier, evaded | constraint by design | 4.6, 5.2 |
-| [Slack AI exfiltration](#slack-ai) | August 2024 | retrieval mixing public and restricted text | treating the index as untrusted | 5.2 |
+| [Slack AI exfiltration](#slack-ai) | August 2024 | retrieval mixing public and private text | treating the index as untrusted | 5.2 |
 | [Perplexity Comet follows a hidden comment](#comet) | August 2025 | page content not separated from the request | host isolation, scoped session authority | 9.5 |
 | [Poisoned memories in ChatGPT and Gemini](#memory-poisoning) | 2024, 2025 | the model wrote its own future prompt | a write gate your code labels | 5.3 |
 | [Auto-GPT escapes its container](#auto-gpt-escape) | June 2023 | the container's own definition mounted writable | filesystem and network isolation | 9.4 |
@@ -78,14 +78,14 @@ execution.[^mcp-cve]
 
 **What would have caught it.** 9.6 Coding Agents names the gap: a config file the agent could write
 even though writing it meant running code. A write that executes needs the same gate as execution.
-The harness practices are **Established (the harness practices)** in 9.6.
+9.6 grades the harness practices **Established (the harness practices)**.
 
 ## Injection and exfiltration
 
 ### GitHub MCP leaks non-public repositories { #github-mcp }
 
 In Invariant Labs' May 2025 demonstration, an issue planted in a public GitHub repository steered an
-agent holding a token for non-public repositories into copying their data into a public pull
+agent holding a token for private repositories into copying private data into a public pull
 request.[^pi-invariant] Invariant calls it "a fundamental architectural issue" and notes that many
 users already choose an "Always Allow" policy and stop monitoring individual actions.[^hitl-invariant]
 
@@ -111,7 +111,7 @@ by design, such as removing a leg of the trifecta, are deterministic where they 
 ### Slack AI exfiltration { #slack-ai }
 
 In August 2024 PromptArmor showed a message posted in a public Slack channel, retrieved alongside a
-secret from a restricted one, making Slack AI render a link that carried the secret out.[^rag-slack]
+secret from a private one, making Slack AI render a link that carried the secret out.[^rag-slack]
 
 **What would have caught it.** 5.2 treats whatever is in the index as untrusted input: whoever can
 write to the corpus can steer the answers. It grades defenses against poisoning and injection as
@@ -181,8 +181,8 @@ chapter is **Established**.
 CVE-2025-54136), prompt injection to execution (CurXecute, CVE-2025-54135), and the postmark-mcp
 package incident of September 2025.[^mcp-cve]
 
-**What would have caught it.** Pinning tool definitions, so a server that changes a definition after
-you approved it is caught. 2.4 grades pinning Emerging, because it is guidance rather than a settled
+**What would have caught it.** Pinning tool definitions, which catches a server that changes a
+definition after you approved it. 2.4 grades pinning Emerging, because it is guidance rather than a settled
 part of the protocol.
 
 ### LangChain template injection { #langchain-template }
