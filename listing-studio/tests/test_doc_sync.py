@@ -126,6 +126,21 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 7.3 — Checkpointing
+CHECKPOINTING_CHAPTER = os.path.join(ROOT, "docs", "reliability", "stopping-gracefully.md")
+CHECKPOINTING_PKG = os.path.join(ROOT, "listing-studio", "checkpointing")
+
+CHECKPOINTING_ANCHORS = {
+    "ckpt-step":       "checkpoint.py",
+    "ckpt-saver":      "checkpoint.py",
+    "ckpt-run":        "checkpoint.py",
+    "ckpt-keys":       "checkpoint.py",
+    "ckpt-journal":    "checkpoint.py",
+    "ckpt-langgraph":  "checkpoint_langgraph.py",
+    "ckpt-receiver":   "receiver.py",
+    "ckpt-model":      "scripted.py",
+}
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +246,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_checkpointing_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(CHECKPOINTING_CHAPTER))
+    for name, fname in CHECKPOINTING_ANCHORS.items():
+        region = _region(_read(os.path.join(CHECKPOINTING_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/reliability/stopping-gracefully.md with "
+            f"listing-studio/checkpointing/{fname}."
         )
