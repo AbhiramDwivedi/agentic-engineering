@@ -136,7 +136,7 @@ teaching object because it exercises everything at once and is mundane enough no
 
 - **Attributes** that matter and are often missing or messy in the feed: `height_range_in`
   (25-50), `desktop_size_in` (60×30), `weight_capacity_lbs` (250), `motor` (dual), `presets` (4),
-  `color` (walnut / white / black).
+  `color` (walnut / white / black), `leg_material` (steel — one the raw feed commonly leaves blank).
 - **Compliance** with real teeth, even for furniture: a BIFMA stability/durability claim, a
   `weight_capacity_lbs` rating you must not overstate (a wrong number is a liability and a returns
   wave), pinch-point warnings, and a Prop 65 warning (formaldehyde in the MDF top). Plus
