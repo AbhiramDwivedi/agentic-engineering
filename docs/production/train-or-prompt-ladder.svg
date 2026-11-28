@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 640" width="800" height="640" role="img" aria-labelledby="ttl desc">
+<title id="ttl">Train or prompt: diagnose the gap, then climb the ladder only as far as the eval says</title>
+<desc id="desc">A decision ladder. A failing behavior enters a diagnosis box that sorts it into a knowledge gap, a behavior gap or a cost gap. Knowledge gaps go sideways to retrieval, where the facts stay in documents, and a barred line shows they never reach training. Behavior gaps climb a ladder of rectangles, cheapest first: write the eval, then prompt, then context, then prompt optimization, and reach training only at the top. Between rungs the eval is re-run, and you climb only when it has plateaued; at every rung, an eval that passes means stop. Cost gaps go to a smaller model, which may be a tuned one, drawn as a dashed link to the training rung. Every box is a rectangle, because your team and your code make each call.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 19px; font-weight: 700; }
+  .h2 { font-size: 13px; }
+  .card-t { font-size: 14px; font-weight: 700; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+  .sub { font-size: 12px; }
+  .note { font-size: 11px; }
+  .code-box, .data-box { stroke-width: 2; }
+  .top-box { stroke-width: 3; }
+  .data-box { stroke-dasharray: 5 4; }
+  .wire { fill: none; stroke-width: 2; }
+  .ghost { fill: none; stroke-dasharray: 5 5; stroke-width: 1.6; }
+  .bar { stroke-width: 3; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .top-box { fill: #e3e7f6; stroke: #3f4a80; }
+  .data-box { fill: #fbfbfd; stroke: #aab2c4; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-stop { fill: #2e7d4f; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .stop-wire { fill: none; stroke-width: 1.6; stroke: #2e7d4f; }  .mk-stop { fill: #2e7d4f; }
+  .ghost { stroke: #8a93a8; }
+  .bar { stroke: #b2453c; }  .txt-bar { fill: #b2453c; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .top-box { fill: #2e3550; stroke: #b0b9e8; }
+  .data-box { fill: #1b1f29; stroke: #5a6478; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-stop { fill: #7fcf9f; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .stop-wire { stroke: #7fcf9f; }  .mk-stop { fill: #7fcf9f; }
+  .ghost { stroke: #7a849c; }
+  .bar { stroke: #e57f74; }  .txt-bar { fill: #e57f74; }
+  }
+</style>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+  <marker id="arw-stop" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-stop" d="M0,0 L10,5 L0,10 z"/></marker>
+</defs>
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="639" rx="8"/>
+
+<text class="h1 txt" x="24" y="34">Diagnose the gap, then climb only as far as the eval says</text>
+<text class="h2 txt-mute" x="24" y="56">Every box is a rectangle: your team and your code make each call. Nothing here hands control to the model.</text>
+
+<!-- cost axis -->
+<path class="wire" d="M262,402 L262,96" marker-end="url(#arw)"/>
+<text class="note txt-mute" transform="translate(252,250) rotate(-90)" text-anchor="middle">each rung costs more</text>
+
+<!-- ladder rungs, top to bottom -->
+<rect class="top-box" x="290" y="86" width="220" height="50" rx="4"/>
+<text class="card-t txt" x="400" y="108" text-anchor="middle">Training</text>
+<text class="sub txt-mute" x="400" y="126" text-anchor="middle">SFT, preference, RFT</text>
+
+<rect class="code-box" x="290" y="158" width="220" height="50" rx="4"/>
+<text class="card-t txt" x="400" y="180" text-anchor="middle">Prompt optimization</text>
+<text class="sub txt-mute" x="400" y="198" text-anchor="middle">an optimizer searches the prompt</text>
+
+<rect class="code-box" x="290" y="230" width="220" height="50" rx="4"/>
+<text class="card-t txt" x="400" y="252" text-anchor="middle">Context</text>
+<text class="sub txt-mute" x="400" y="270" text-anchor="middle">the missing facts into the window</text>
+
+<rect class="code-box" x="290" y="302" width="220" height="50" rx="4"/>
+<text class="card-t txt" x="400" y="324" text-anchor="middle">Prompt</text>
+<text class="sub txt-mute" x="400" y="342" text-anchor="middle">instructions and examples</text>
+
+<rect class="code-box" x="290" y="374" width="220" height="50" rx="4"/>
+<text class="card-t txt" x="400" y="396" text-anchor="middle">Write the eval</text>
+<text class="sub txt-mute" x="400" y="414" text-anchor="middle">real inputs, a scorer, a baseline</text>
+
+<!-- climbs between rungs -->
+<path class="wire" d="M340,374 L340,354" marker-end="url(#arw)"/>
+<text class="note txt-code" x="350" y="368">baseline in hand</text>
+<path class="wire" d="M340,302 L340,282" marker-end="url(#arw)"/>
+<text class="note txt-code" x="350" y="296">eval re-run: plateaued</text>
+<path class="wire" d="M340,230 L340,210" marker-end="url(#arw)"/>
+<text class="note txt-code" x="350" y="224">eval re-run: plateaued</text>
+<path class="wire" d="M340,158 L340,138" marker-end="url(#arw)"/>
+<text class="note txt-code" x="350" y="152">eval re-run: plateaued</text>
+
+<!-- stop exits -->
+<path class="stop-wire" d="M510,111 L534,111" marker-end="url(#arw-stop)"/><text class="note txt-stop" x="540" y="115">passes: stop</text>
+<path class="stop-wire" d="M510,183 L534,183" marker-end="url(#arw-stop)"/><text class="note txt-stop" x="540" y="187">passes: stop</text>
+<path class="stop-wire" d="M510,255 L534,255" marker-end="url(#arw-stop)"/><text class="note txt-stop" x="540" y="259">passes: stop</text>
+<path class="stop-wire" d="M510,327 L534,327" marker-end="url(#arw-stop)"/><text class="note txt-stop" x="540" y="331">passes: stop</text>
+
+<!-- diagnosis -->
+<rect class="code-box" x="270" y="470" width="260" height="62" rx="4"/>
+<text class="card-t txt" x="400" y="496" text-anchor="middle">Diagnose the failure</text>
+<text class="sub txt-mute" x="400" y="516" text-anchor="middle">knowledge, behavior or cost?</text>
+
+<!-- behavior branch up into the ladder -->
+<path class="wire" d="M400,470 L400,428" marker-end="url(#arw)"/>
+<text class="tag-lbl txt-code" x="410" y="452">BEHAVIOR GAP</text>
+
+<!-- input -->
+<rect class="data-box" x="290" y="574" width="220" height="40" rx="6"/>
+<text class="sub txt" x="400" y="599" text-anchor="middle">A failing behavior</text>
+<path class="wire" d="M400,574 L400,536" marker-end="url(#arw)"/>
+
+<!-- knowledge branch -->
+<path class="wire" d="M270,501 L210,501" marker-end="url(#arw)"/>
+<rect class="code-box" x="24" y="466" width="182" height="70" rx="4"/>
+<text class="tag-lbl txt-code" x="40" y="486">KNOWLEDGE GAP</text>
+<text class="card-t txt" x="40" y="507">Retrieval</text>
+<text class="sub txt-mute" x="40" y="525">facts stay in documents</text>
+<path class="ghost" d="M115,466 L115,128"/>
+<line class="bar" x1="95" y1="124" x2="135" y2="124"/>
+<text class="note txt-bar" x="115" y="110" text-anchor="middle">never reaches training</text>
+
+<!-- cost branch -->
+<path class="wire" d="M530,501 L590,501" marker-end="url(#arw)"/>
+<rect class="code-box" x="594" y="466" width="182" height="70" rx="4"/>
+<text class="tag-lbl txt-code" x="610" y="486">COST GAP</text>
+<text class="card-t txt" x="610" y="507">Smaller model</text>
+<text class="sub txt-mute" x="610" y="525">may be a tuned one</text>
+<path class="ghost" d="M685,466 L685,96 L514,96" marker-end="url(#arw)"/>
+<text class="note txt-mute" x="695" y="300">tuned via</text>
+<text class="note txt-mute" x="695" y="315">training</text>
+</svg>
