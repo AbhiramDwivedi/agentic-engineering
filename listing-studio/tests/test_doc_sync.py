@@ -126,6 +126,21 @@ FAN_OUT_ANCHORS = {
 }
 
 
+# Chapter 4.1 — Prompt Architecture & Management
+PROMPT_MGMT_CHAPTER = os.path.join(ROOT, "docs", "craft", "prompts-are-source-code.md")
+PROMPT_MGMT_PKG = os.path.join(ROOT, "listing-studio", "prompt_management")
+
+PROMPT_MGMT_ANCHORS = {
+    "prompt-template":   "template.py",
+    "prompt-config":     "release.py",
+    "prompt-eval":       "release.py",
+    "prompt-release":    "release.py",
+    "prompt-langgraph":  "prompt_management_langgraph.py",
+    "prompt-responses":  "prompt_management_responses.py",
+    "prompt-anthropic":  "prompt_management_example.py",
+}
+
+
 def _read(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return f.read().replace("\r\n", "\n")
@@ -231,4 +246,15 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"chapter code for {name!r} (from {fname}) does not match the source.\n"
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
+        )
+
+
+def test_prompt_management_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(PROMPT_MGMT_CHAPTER))
+    for name, fname in PROMPT_MGMT_ANCHORS.items():
+        region = _region(_read(os.path.join(PROMPT_MGMT_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/craft/prompts-are-source-code.md with "
+            f"listing-studio/prompt_management/{fname}."
         )
