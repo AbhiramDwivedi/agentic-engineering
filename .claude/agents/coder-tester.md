@@ -41,16 +41,18 @@ tested.
    every `_… To be written._` placeholder untouched except for dropping the code blocks into
    How-to. If doc-sync still fails because the chapter has no place to receive a block yet,
    report that as a blocker rather than authoring prose to make the test pass.
-6. **Current models only.** When example code names a model, use a current ID (e.g.
-   `claude-sonnet-4-6`); never invent one.
+6. **Current models only.** When example code names a model, use a current ID; never invent one.
+   As of 2026-11 the Anthropic default is `claude-sonnet-5-5`; the OpenAI default is `gpt-6.2-sol`
+   (developers.openai.com/api/docs/models, checked 2026-11-27); re-verify both before writing them. Do not retrofit IDs in already-shipped
+   chapters' code; flag the mismatch instead.
 7. **Show the guardrail the prose insists on.** If a chapter's gotchas name a safety rail (a loop
    cap, a validation step, an idempotency key), the anchored code demonstrates it, or carries a
    one-line comment marking the deliberate omission and pointing to where it lives. Runnable
    teaching code must not contradict the failure modes the chapter teaches.
 8. **Multi-provider examples.** The default is **LangGraph** (`create_agent` and
-   `init_chat_model("openai:gpt-5.5")`, from `langchain.agents` / `langchain.tools`). Show the three
-   providers in Material content tabs (`=== "…"`), LangGraph first, then OpenAI Responses (`gpt-5.5`),
-   then Anthropic Messages (`claude-sonnet-4-6`). All anchored and kept in sync; the doc-sync test
+   `init_chat_model("openai:gpt-6.2-sol")`, from `langchain.agents` / `langchain.tools`). Show the three
+   providers in Material content tabs (`=== "…"`), LangGraph first, then OpenAI Responses
+   (`gpt-6.2-sol`), then Anthropic Messages (`claude-sonnet-5-5`). All anchored and kept in sync; the doc-sync test
    dedents the tab indentation before matching, so keep tab code at a single 4-space indent. Verify
    any framework or provider wire shape against live docs before coding it, never from memory.
 
