@@ -232,3 +232,28 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
         )
+
+
+# Chapter 4.6 — Prompt Injection & the Lethal Trifecta
+INJECTION_CHAPTER = os.path.join(ROOT, "docs", "craft", "prompt-injection.md")
+INJECTION_PKG = os.path.join(ROOT, "listing-studio", "injection")
+
+INJECTION_ANCHORS = {
+    "injection-record":     "quarantine.py",
+    "injection-quarantine": "quarantine.py",
+    "injection-guard":      "guard.py",
+    "injection-langgraph":  "dual_llm_langgraph.py",
+    "injection-responses":  "dual_llm_responses.py",
+    "injection-anthropic":  "dual_llm_anthropic.py",
+}
+
+
+def test_injection_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(INJECTION_CHAPTER))
+    for name, fname in INJECTION_ANCHORS.items():
+        region = _region(_read(os.path.join(INJECTION_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/craft/prompt-injection.md with "
+            f"listing-studio/injection/{fname}."
+        )
