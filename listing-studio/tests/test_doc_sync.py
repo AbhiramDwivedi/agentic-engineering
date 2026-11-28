@@ -232,3 +232,28 @@ def test_fan_out_chapter_code_matches_tested_source():
             f"Re-sync docs/composition/fan-out.md with "
             f"listing-studio/fan_out/{fname}."
         )
+
+
+# Chapter 3.6 — Planning & Task Decomposition
+PLANNING_CHAPTER = os.path.join(ROOT, "docs", "composition", "planning.md")
+PLANNING_PKG = os.path.join(ROOT, "listing-studio", "planning")
+
+PLANNING_ANCHORS = {
+    "plan-schema":     "plan.py",
+    "plan-validate":   "plan.py",
+    "plan-run":        "execute.py",
+    "plan-langgraph":  "planning_langgraph.py",
+    "plan-responses":  "planning_responses.py",
+    "plan-anthropic":  "planning_example.py",
+}
+
+
+def test_planning_chapter_code_matches_tested_source():
+    blocks = _python_blocks(_read(PLANNING_CHAPTER))
+    for name, fname in PLANNING_ANCHORS.items():
+        region = _region(_read(os.path.join(PLANNING_PKG, fname)), name)
+        assert region in blocks, (
+            f"chapter code for {name!r} (from {fname}) does not match the source.\n"
+            f"Re-sync docs/composition/planning.md with "
+            f"listing-studio/planning/{fname}."
+        )
