@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 680" width="800" height="680" role="img" aria-labelledby="ttl desc">
+<title id="ttl">Three ways a second agent enters a system, sorted by who holds control after the hop</title>
+<desc id="desc">Three rows show three ways a second agent enters a system. In the top row, a rectangle for your code sends the same job to three workers and merges what they return; your code holds control throughout. In the middle row, a rounded node for the main agent calls a specialist agent the way it would call a tool, the specialist returns an answer, and the arrow of control loops back to the main agent. In the bottom row, a rounded node for one agent passes the conversation to a peer agent, the arrow of control moves with it; nothing hands it back by default, and a bracket over the arrow asks what history crossed. A label under the bottom row marks it as the only one of the three that changes who owns the conversation.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .h1 { font-size: 21px; font-weight: 700; }
+  .h2 { font-size: 13.5px; }
+  .tag-lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .box-t { font-size: 13px; font-weight: 700; }
+  .sub { font-size: 11.5px; }
+  .lg { font-size: 11.5px; }
+  .verdict { font-size: 12px; font-weight: 700; }
+  .payoff { font-size: 14px; font-weight: 800; letter-spacing: .06em; }
+  .code-box, .model-box { stroke-width: 2; }
+  .wire { fill: none; stroke-width: 2; }
+  .ctl { fill: none; stroke-width: 4; stroke-linecap: round; }
+  .bracket { fill: none; stroke-width: 1.5; }
+  .rule { stroke-width: 1; }
+
+  .page-bg { fill: #ffffff; stroke: #e2e6ef; stroke-width: 1; }
+  .code-box { fill: #eef1f9; stroke: #4f5b93; }
+  .model-box { fill: #f4ecfc; stroke: #7e57c2; }
+  .txt { fill: #1f2430; }
+  .txt-mute { fill: #5b6377; }
+  .txt-code { fill: #4f5b93; }
+  .txt-model { fill: #7e57c2; }
+  .txt-ctl { fill: #303f9f; }
+  .wire { stroke: #97a0b5; }  .mk-wire { fill: #97a0b5; }
+  .ctl { stroke: #303f9f; }   .mk-ctl { fill: #303f9f; }
+  .bracket { stroke: #5b6377; }
+  .rule { stroke: #e2e6ef; }
+
+  @media (prefers-color-scheme: dark) {
+  .page-bg { fill: #21222c; stroke: #2b3140; }
+  .code-box { fill: #262b3d; stroke: #939ed4; }
+  .model-box { fill: #332a4a; stroke: #b39ddb; }
+  .txt { fill: #e6e8ee; }
+  .txt-mute { fill: #a2abc0; }
+  .txt-code { fill: #939ed4; }
+  .txt-model { fill: #b39ddb; }
+  .txt-ctl { fill: #8c9eff; }
+  .wire { stroke: #78829a; }  .mk-wire { fill: #78829a; }
+  .ctl { stroke: #8c9eff; }   .mk-ctl { fill: #8c9eff; }
+  .bracket { stroke: #a2abc0; }
+  .rule { stroke: #2b3140; }
+  }
+</style>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-wire" d="M0,0 L10,5 L0,10 z"/></marker>
+  <marker id="arc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path class="mk-ctl" d="M0,0 L10,5 L0,10 z"/></marker>
+</defs>
+<rect class="page-bg" x="0.5" y="0.5" width="799" height="679" rx="8"/>
+
+<text class="h1 txt" x="40" y="42">Who holds control after the hop?</text>
+<text class="h2 txt-mute" x="40" y="64">Three ways a second agent enters a system. Follow the thick arrow.</text>
+
+<!-- legend -->
+<rect class="code-box" x="40" y="80" width="26" height="16" rx="3"/>
+<text class="lg txt-mute" x="72" y="92">your code decides</text>
+<rect class="model-box" x="200" y="80" width="26" height="16" rx="8"/>
+<text class="lg txt-mute" x="232" y="92">a model decides</text>
+<path class="ctl" d="M360,88 L396,88" marker-end="url(#arc)"/>
+<text class="lg txt-mute" x="406" y="92">who holds control</text>
+<path class="wire" d="M540,88 L572,88" marker-end="url(#arw)"/>
+<text class="lg txt-mute" x="580" y="92">work or messages passing</text>
+
+<line class="rule" x1="40" y1="108" x2="760" y2="108"/>
+
+<!-- row 1: your code fans out -->
+<text class="tag-lbl txt-code" x="40" y="132">1 &#183; YOUR CODE FANS OUT</text>
+<rect class="code-box" x="40" y="168" width="140" height="60" rx="6"/>
+<text class="box-t txt" x="110" y="194" text-anchor="middle">your code</text>
+<text class="sub txt-mute" x="110" y="212" text-anchor="middle">sends the same job</text>
+
+<rect class="model-box" x="300" y="143" width="130" height="34" rx="17"/>
+<text class="sub txt" x="365" y="164" text-anchor="middle">worker</text>
+<rect class="model-box" x="300" y="181" width="130" height="34" rx="17"/>
+<text class="sub txt" x="365" y="202" text-anchor="middle">worker</text>
+<rect class="model-box" x="300" y="219" width="130" height="34" rx="17"/>
+<text class="sub txt" x="365" y="240" text-anchor="middle">worker</text>
+
+<path class="wire" d="M180,190 L296,160" marker-end="url(#arw)"/>
+<path class="wire" d="M180,198 L296,198" marker-end="url(#arw)"/>
+<path class="wire" d="M180,206 L296,236" marker-end="url(#arw)"/>
+<path class="wire" d="M430,160 L546,190" marker-end="url(#arw)"/>
+<path class="wire" d="M430,198 L546,198" marker-end="url(#arw)"/>
+<path class="wire" d="M430,236 L546,206" marker-end="url(#arw)"/>
+
+<rect class="code-box" x="550" y="168" width="160" height="60" rx="6"/>
+<text class="box-t txt" x="630" y="194" text-anchor="middle">your code</text>
+<text class="sub txt-mute" x="630" y="212" text-anchor="middle">merges what returns</text>
+
+<path class="ctl" d="M110,232 L110,264 L630,264 L630,236" marker-end="url(#arc)"/>
+<text class="verdict txt-ctl" x="370" y="284" text-anchor="middle">control stays with your code throughout</text>
+
+<line class="rule" x1="40" y1="300" x2="760" y2="300"/>
+
+<!-- row 2: specialist as a tool -->
+<text class="tag-lbl txt-model" x="40" y="324">2 &#183; A SPECIALIST CALLED AS A TOOL</text>
+<rect class="model-box" x="40" y="350" width="180" height="60" rx="30"/>
+<text class="box-t txt" x="130" y="376" text-anchor="middle">main agent</text>
+<text class="sub txt-mute" x="130" y="394" text-anchor="middle">decides to consult</text>
+
+<rect class="model-box" x="480" y="350" width="200" height="60" rx="30"/>
+<text class="box-t txt" x="580" y="376" text-anchor="middle">specialist agent</text>
+<text class="sub txt-mute" x="580" y="394" text-anchor="middle">called like a tool</text>
+
+<path class="wire" d="M220,366 L476,366" marker-end="url(#arw)"/>
+<text class="sub txt-mute" x="348" y="358" text-anchor="middle">asks a question</text>
+<path class="wire" d="M480,394 L224,394" marker-end="url(#arw)"/>
+<text class="sub txt-mute" x="348" y="412" text-anchor="middle">returns an answer</text>
+
+<path class="ctl" d="M90,412 C90,452 170,452 170,418" marker-end="url(#arc)"/>
+<text class="verdict txt-ctl" x="196" y="444">control comes back to the main agent</text>
+
+<line class="rule" x1="40" y1="470" x2="760" y2="470"/>
+
+<!-- row 3: handoff to a peer -->
+<text class="tag-lbl txt-model" x="40" y="494">3 &#183; A HANDOFF TO A PEER</text>
+<rect class="model-box" x="40" y="530" width="180" height="60" rx="30"/>
+<text class="box-t txt" x="130" y="556" text-anchor="middle">agent</text>
+<text class="sub txt-mute" x="130" y="574" text-anchor="middle">decides to hand off</text>
+
+<rect class="model-box" x="480" y="530" width="200" height="60" rx="30"/>
+<text class="box-t txt" x="580" y="556" text-anchor="middle">peer agent</text>
+<text class="sub txt-mute" x="580" y="574" text-anchor="middle">owns the rest</text>
+
+<path class="bracket" d="M240,530 L240,521 L456,521 L456,530"/>
+<path class="bracket" d="M348,521 L348,514"/>
+<text class="sub txt" x="348" y="508" text-anchor="middle" font-style="italic">what history crossed?</text>
+
+<path class="ctl" d="M224,560 L470,560" marker-end="url(#arc)"/>
+<text class="sub txt-mute" x="348" y="580" text-anchor="middle">hands over the conversation</text>
+<text class="verdict txt-ctl" x="348" y="604" text-anchor="middle">control moves with it; nothing hands it back by default</text>
+
+<line class="rule" x1="40" y1="622" x2="760" y2="622"/>
+<text class="payoff txt-ctl" x="400" y="652" text-anchor="middle">ONLY SHAPE 3 CHANGES WHO OWNS THE CONVERSATION</text>
+</svg>
